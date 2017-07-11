@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="css/global.css" />
+<script src="js/jquery-1.7.1.js"></script>
+<script src="js/template.js"></script>
+<script src="js/iscroll.js"></script>
+<script src="js/helper.js"></script>
+<script src="js/main.js"></script>
+
+<script id="t_a" type="text/html">
+
+<ul>
+
+    <% for (var i = 0,len = list.length; i < len; i ++) { var item = list[i]; %>
+
+		<li class="<%= item.className %>">
+			<a href="<%= item.href %>">
+				<label><%= item.name %></label>
+				<span><%= item.coun %></span>
+			</a
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+
+<script id="t_b" type="text/html">
+
+<ul>
+
+    <% for (var i = 0,len = list.length; i < len; i ++) { var item = list[i]; %>
+
+		<li class="<%= item.className %>"><a href="<%= item.href %>"><label><%= item.name %></label><span><%= item.coun %></span></a></li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+<script id="t_c" type="text/html">
+
+<ul>
+
+    <% for (var i = 0,len = list.length; i < len; i ++) { var item = list[i]; %>
+
+		<li class="<%= item[7] %>">
+		<span>主机： </span><a href="<%= item[9] %>"><%= item[0] %></a><label class="<%= item[8] %>"></label>
+		<p><span>事件项： </span><%= item[1] %></p>
+		<p><span>持续时间： </span><%= item[4] %></p>
+		<p><span>上次检查： </span><%= item[5] %></p>
+		<button>查看状态信息</button>
+		<div><%= item[6] %></div>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+<style>
+#updateTime {
+    float: left;
+    margin-left: 0.5em;
+    color: #fff;
+	font-size:0.8em;
+}
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+.caution{
+	color:#F93;
+}
+</style>
+</head>
+<body>
+	<div id="header">
+    	<h2 id="title"><span>Madhouse Monitor</span><a href="javascript:void (0);" id="home">Home</a></h2>
+	</div>
+    <div id="wrapper">
+        <div id="scroller">
+            <div id="mainbody">
+                <div id="content">
+                    <h3><a href="monitorEvent.html">监控事件</a></h3>
+                    <div id="event_listen">
+                    </div>
+                    <h3><a href="serverList.html">主机</a></h3>
+                    <div id="server_listen">
+                    </div>
+                    <h3><span>待处理事件列表</span></h3>
+                    <div id="unhandled">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="control_bar">
+            <span id="updateTime">
+                <label>上次更新： </label>
+                <span></span>
+            </span>
+            <a href="javascript:void(0);" id="top">top</a>
+        </div>	
+    </div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/about.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/ajax_post.js"></script>
+    <style type="text/css">
+    #iptable td{ width:320px; padding:2px; font-family:georgia;}
+    #queryIpBtn {float:right;margin-right:60%;height:22px}
+    </style>
+    <script type="text/javascript">
+    ///////////////////////////////trim函数////////////////////////////////////////
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g,"");
+    }
+    String.prototype.ltrim = function() {
+        return this.replace(/^\s+/,"");
+    }
+    String.prototype.rtrim = function() {
+        return this.replace(/\s+$/,"");
+    }
+    //////////////////////////////ip2long函数//////////////////////////////////////
+    function ip2long (IP) {
+        // http://kevin.vanzonneveld.net
+        // +   original by: Waldo Malqui Silva
+        // +   improved by: Victor
+        // +    revised by: fearphage (http://http/my.opera.com/fearphage/)
+        // +    revised by: Theriault
+        // *     example 1: ip2long('192.0.34.166');
+        // *     returns 1: 3221234342
+        // *     example 2: ip2long('0.0xABCDEF');
+        // *     returns 2: 11259375
+        // *     example 3: ip2long('255.255.255.256');
+        // *     returns 3: false
+        var i = 0;
+        // PHP allows decimal, octal, and hexadecimal IP components.
+        // PHP allows between 1 (e.g. 127) to 4 (e.g 127.0.0.1) components.
+        IP = IP.match(/^([1-9]\d*|0[0-7]*|0x[\da-f]+)(?:\.([1-9]\d*|0[0-7]*|0x[\da-f]+))?(?:\.([1-9]\d*|0[0-7]*|0x[\da-f]+))?(?:\.([1-9]\d*|0[0-7]*|0x[\da-f]+))?$/i); // Verify IP format.
+        if (!IP) {
+            return false; // Invalid format.
+        }
+        // Reuse IP variable for component counter.
+        IP[0] = 0;
+        for (i = 1; i < 5; i += 1) {
+            IP[0] += !! ((IP[i] || '').length);
+            IP[i] = parseInt(IP[i]) || 0;
+        }
+        // Continue to use IP for overflow values.
+        // PHP does not allow any component to overflow.
+        IP.push(256, 256, 256, 256);
+        // Recalculate overflow of last component supplied to make up for missing components.
+        IP[4 + IP[0]] *= Math.pow(256, 4 - IP[0]);
+        if (IP[1] >= IP[5] || IP[2] >= IP[6] || IP[3] >= IP[7] || IP[4] >= IP[8]) {
+            return false;
+        }
+        return IP[1] * (IP[0] === 1 || 16777216) + IP[2] * (IP[0] <= 2 || 65536) + IP[3] * (IP[0] <= 3 || 256) + IP[4] * 1;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+    </script>
+  </head>
+  <body>
+    <div class="bar">监控面板</div>
+    <div class="title"><span id="wizard2Span"></span>IP管理</div>
+    <div class="form_container">
+      <div id="Tips"><div></div><cite></cite></div>	 
+      <hr/>
+      <form id="ip_form" onsubmit="return false">
+        <div class="tabs">
+          <div id="tabs_content">
+            <div><b>IP搜索(搜索IP地址的地理位置和运营商)<!--目前共条记录--></b></div>
+          </div>
+        </div>
+        <hr/>
+        <!--<h5>监控MySQL创建线程数</h5>-->
+        <ul id="ipForn" style="width:95%;">
+          <li>
+            <span id="hostIp"></span>
+          </li>
+          <li>
+            在下面输入框中输入您要查询的IP地址，点击查询按钮即可查询该IP所属的区域。
+          </li>
+          <li>
+            <label class="tag">查询的IP：</label><input type="text" value="" name="queryIp" /><input type="button" value="查询"  onclick="reqIpDetail()" id="queryIpBtn" />
+          </li>
+          <li>
+            <table id="iptable">
+              <tr>
+                <td>项目</td><td>属性</td>
+              </tr>
+              <tr>
+                <td>IP地址:</td><td id="ipAddr"></td>
+              </tr>
+              <tr>
+                <td>国家代码:</td><td id="countryCode"></td>
+              </tr>
+              <tr>
+                <td>国家名:</td><td id="country"></td>
+              </tr>
+              <tr>
+                <td>省代码:</td><td id="provinceCode"></td>
+              </tr>
+              <tr>
+                <td>所在省:</td><td id="province"></td>
+              </tr>
+              <tr>
+                <td>市代码:</td><td id="cityCode"></td>
+              </tr>
+              <tr>
+                <td>所在市:</td><td id="city"></td>
+              </tr>
+              <tr>
+                <td>运营商代码:</td><td id="carrierCode"></td>
+              </tr>
+              <tr>
+                <td>运营商:</td><td id="carrier"></td>
+              </tr>
+              <tr>
+                <td>用户类型代码:</td><td id="usertype"></td>
+              </tr>
+              <tr>
+                <td>描述信息:</td><td id="desc"></td>
+              </tr>
+              <tr>
+                <td>IP分布范围:</td><td id="iprange"></td>
+              </tr>
+              <tr>
+                <td>查询速度:</td><td id="querySpeed"></td>
+              </tr>
+            </table>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <script>
+    function reqHostIp() {
+      var version=url_params("version");
+      var domain=domainURI(document.location.href); 
+      get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/ipsetting/@hostip","#hostIp","loading_small.gif",get_host_ip_Callback) 
+    }
+
+    function get_host_ip_Callback(json, textStatus, jqXHR) { // 获取请求的IP地址 
+      console.log(json)
+        if (jqXHR.status==200) {
+            $('#hostIp').html('您的IP地址是：['+json+']')
+        }
+    }
+
+    function reqIpDetail() {
+      var version=url_params("version")
+      var domain=domainURI(document.location.href)
+      var qIp=$('input[name=queryIp]').val()
+      qIp=qIp.trim()
+      get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/ipsetting/@self/"+ip2long(qIp),"#ip_form","loading_small.gif",get_ip_detail_Callback) 
+    }
+
+    function get_ip_detail_Callback(json, textStatus, jqXHR) { //获取IP的详细信息
+      console.log(json)
+        if (jqXHR.status==200) {
+        var qIp=$('input[name=queryIp]').val();
+        qIp=qIp.trim();
+          $('#ipAddr').html(qIp);
+          $.each(json,function(key,value) {
+            switch (key) {
+            case('countryCode'):
+              $('#countryCode').html(value);
+              break;
+            case('country'):
+              $('#country').html(value);
+              break;
+            case('provinceCode'):
+              $('#provinceCode').html(value);
+              break;
+            case('province'):
+              $('#province').html(value);
+              break;
+            case('cityCode'):
+              $('#cityCode').html(value);
+              break;
+            case('city'):
+              $('#city').html(value);
+              break;
+            case('carrierCode'):
+              $('#carrierCode').html(value);
+              break;
+            case('carrier'):
+              $('#carrier').html(value);
+              break;
+            case('usertype'):
+              $('#usertype').html(value);
+              break;
+            case('desc'):
+              $('#desc').html(value);
+              break;
+              case('iprange'):
+              $('#iprange').html(value);
+              break;
+              case('querySpeed'):
+              $('#querySpeed').html(value);
+              break;
+            default:
+              break;
+            }
+          });
+          return true;
+        }
+      alert('获取服务器数据失败!');
+      console.log('no exist');
+    }
+    $(document).ready(function(){
+    reqHostIp();
+    } )
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/about.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/ajax_post.js"></script>
+    <script type="text/javascript" src="../js/json2.js"></script>
+    <script type="text/javascript" src="../js/configure/monitorWizard3_5.js"></script>
+  </head>
+  <body>
+    <div class="bar">监控面板</div>
+    <div class="title"><span id="wizard2Span"></span>MDN监控向导 -第三步</div>
+    <div class="form_container">
+      <div id="Tips"><div></div><cite></cite></div>	 
+      <hr/>
+      <form id="mdn_form" onsubmit="return false">
+        <div class="tabs">
+          <div class="tabs_content_wizard">
+            <span class="monitorItem" id="mdn_png"></span>
+          </div>
+        </div>
+        <div class="tabs">
+          <div id="tabs_content">
+            <div><b>DNS监控项目</b></div>
+          </div>
+        </div>
+        <hr/>
+        <h5>DNS Resolvation</h5>
+<!--{{{ each block start-->
+        <h5><input type=checkbox name="dns_resovation_monitored_0" />监控DNS解析（A记录）</h5>
+        <ul name="dns_resovation_0" style="width:95%;" class="dns_resovation_data">
+          <li>
+            <label class="tag">全称域名:</label><input type="text" value="" name="dns_fqdn_0" />
+            <br/>
+            <cite>输入完整的域名信息</cite>
+          </li>
+          <li>
+            <label class="tag">使用DNS服务器:</label><input type="text" value="" name="dns_ip_0" />
+            <br/>
+            <cite>默认使用互联网DNS服务器,如使用自己的DNS服务器须输入IP</cite>
+          </li>
+          <li>
+            <label class="tag">监控频率:</label><input type="text" value="" name="dns_duration_0" />秒
+            <br/>
+            <cite>输入客户端查询DNS解析的间隔</cite>
+          </li>
+          <li>
+            <label class="tag">重试:</label><input type="text" value="" name="dns_retry_0" />次
+            <br/>
+            <cite>解析失败重试后确认报警的次数</cite>
+          </li>
+          <li>
+            <input type="button" value="+" style="width:20px;height:20px" onclick="addDnsARecordBlockRow()" /><label class="tag" style="width:60px;padding-top:0px;margin-top:2px;">继续添加</label>
+          </li>
+        </ul>
+        <hr/>
+<!--}}} each block end-->
+        <div id='addon'>
+        </div>
+        <ul>
+          <li style="padding-top:40px">
+            <input type="button" value="上一步" id="prevStep" />
+            <input type="button" style="margin-left:40px" value="下一步" id="nextStep" />
+          </li>
+        </ul>
+      </div> 	
+    </form>
+  </body>
+</html>

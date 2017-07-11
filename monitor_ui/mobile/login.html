@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="css/global.css" />
+<script src="js/jquery-1.7.1.js"></script>
+<script src="js/base.js"></script>
+
+<style>
+#body {
+	margin:1em;
+}
+input[type="text"], input[type="password"] {
+	display:block;
+	width:100%;
+	border-radius:0.5em;
+	line-height:2;
+	margin-bottom:1em;
+}
+.box{
+	margin:0.5em 0 0 0;
+}
+button {
+	padding:0.5em 1em;
+	border-radius:0.5em;
+	border:solid 1px #a7bac5;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,248,1)), color-stop(50%,rgba(216,225,231,1)), color-stop(51%,rgba(181,198,208,1)), color-stop(100%,rgba(224,239,249,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* Chrome10+,Safari5.1+ */}
+button:hover{
+	color:#fff;
+	border:solid 1px #09F;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(59, 103, 158, 1)), color-stop(50%, rgba(43, 136, 217, 1)), color-stop(51%, rgba(32, 124, 202, 1)), color-stop(100%, rgba(125, 185, 232, 1))); 
+	background: -webkit-linear-gradient(top, rgba(59, 103, 158, 1) 0%, rgba(43, 136, 217, 1) 50%, rgba(32, 124, 202, 1) 51%, rgba(125, 185, 232, 1) 100%);
+}
+#loginForm{display:none;}
+#error{
+	
+}
+</style>
+</head>
+<body>
+	<div id="header">
+    	<h2 id="title"><span>Madhouse Monitor</span></h2>
+	</div>
+	<br />
+<div id="body">
+  <div id="login"></div>
+  <div id="loginForm">
+    <label>用户名：</label>
+    <input type="text" name="username" placeholder="username" autofocus required />
+    <label>密码：</label>
+    <input type="password" name="passwd" placeholder="password" required/>
+    <div class="box">
+    <input type="checkbox" name="keeplogin" checked=checked />
+    <label>保持登录状态</label>
+    </div>
+    <div class="box">
+      <button id="register">注册</button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id="loginsubmit">登录</button>
+    </div>
+  </div>
+</div>
+<script>
+
+$(function(){
+    var version = urlParams("version");
+    var domain = domainURI();
+	
+    var conf_1 = {
+        url: "http://" + domain + "/mmsapi" + version + "/get/login/@self",
+        success: function(json, textStatus, jqXHR){
+            if (jqXHR.status == 200) {
+				alert('已经登陆.');
+                location.href = "main.html?version=" + version;
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+			$('#login').empty();
+            if (jqXHR.status == 401) {
+                $("#loginForm").show();
+            }
+        }
+    };
+    
+	//检测是否登录
+    $('#login').getData(conf_1);
+	
+	//登录
+    $('#loginsubmit').click(function(){
+        var data,
+			conf,
+			error,
+			username = $("input[name='username']").val(),
+			passwd = $("input[name='passwd']").val(), 
+			keeplogin = $("input[name='keeplogin']")[0].checked;
+			
+            error = $("#error");
+            if (error.length != 0) {
+                error.remove();
+            }	
+			
+        if (username == "" || passwd == "") {
+            $('<div id="error" class="bubble">请输入用户名或者密码</div>').insertBefore($("#loginForm label:first-child"));
+        }
+        else {
+            data = {
+                "username": username,
+                "passwd": passwd,
+                "keeplogin": keeplogin ? 1 : 0
+            };
+			conf = {
+				data:data,
+				loading:{style:'border-radius:0.5em;'},
+				url:"http://" + domain + "/mmsapi" + version + "/update/login/@self",
+                success: function(json, textStatus, jqXHR){
+                    if (jqXHR.status == 200) {
+                        location.href = "main.html?version=" + version;
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    if (jqXHR.status == 401) {
+                        var error = $("#error");
+                        if (error.length != 0) {
+                            error.remove();
+                        }
+                        $('<div id="error" class="bubble">您输入的用户名或密码不正确。</div>').insertBefore($("#loginForm label:first-child"));
+                    }
+                }								
+			};
+			
+			//ajax提交用户名与密码
+			$(this).postData(conf);
+			
+        }
+		
+    });
+	
+});
+</script>
+</body>
+</html>

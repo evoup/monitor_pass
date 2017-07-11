@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>UE</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+<script id="t_a" type="text/html">
+	<table class="table_1">
+	<tr><td>日期</td><td>监测点</td><td>所在地</td><td>所属运营商</td><td>平均耗时（每下载10KBs）</td><td>下载次数</td><td>速度评估</td></tr>
+    <% for (var i in list) { var item = list[i]; %>
+
+		<tr>
+		<td><%= i %></td>
+		<td><%= item.url %></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>		
+		</tr>
+
+    <% } %>
+	<table>
+</script>
+
+
+<style type="text/css">
+#siteList{ line-height:1.8;}
+#siteList table a{color:blue;}
+#siteList table a:hover{color:red;}
+</style>
+</head>
+<body>
+    <header>
+        <h1>访问速度监测</h1>
+        <div id="toolbar">
+                <div class="btn-group box_1">
+                    <button class="btn" id="refresh">
+                        <i class="icon-refresh"></i> 刷新
+                    </button>
+                    <button class="btn" id="set">
+                      <i class="icon-cog"></i>  设置
+                    </button>
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+        </div> 
+    </header>
+
+    <div id="mainbody">
+        <div class="row">
+            <div class="span4">
+                <h4 class="siteName"></h4>
+                <p id="url">
+                </p>
+            </div>
+            <div class="span7" id="speedDes">
+                <cite style="background:#28ab17;">
+                </cite>
+                <span>非常快(<0.5s)</span>
+                <cite style="background:#ff9900;">
+                </cite>
+                <span>较快(0.5s~1s)</span>
+                <cite style="background:#ffcc00;">
+                </cite>
+                <span>一般(1~1.5s)</span>
+                <cite style="background:#660000;">
+                </cite>
+                <span>较慢(1.5s~2s)</span>
+                <cite style="background:#ff0000;">
+                </cite>
+                <span>非常慢(>2s)</span>
+            </div>
+        </div>
+        <br/>
+        <div id="report">
+        </div>
+    </div>
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+    
+    var siteName = urlParams('id');
+    
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    var conf_1 = {
+        url: _url + '/get/speed/@self/' + siteName
+    };
+    
+    var $report = $('#report');
+    //页面初始化
+    $('.siteName').text(siteName);
+    /////////////////////////////////////////////////////
+    
+    //成功取得数据后格式化显示
+    $report.bind('ajax.success', function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        data = {
+            list: json
+        };
+        
+        html = template('t_a', data);
+        $th.html(html);
+        
+    });
+    
+    
+    //请求服务器监听数据
+    $report.getData(conf_1);
+    
+});
+    
+</script>
+</body>
+</html>

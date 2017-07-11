@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/about.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/jqModal.css"/>
+		<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+		<script type="text/javascript" src="../js/base.js"></script>
+		<script type="text/javascript" src="../js/ajax_post.js"></script>
+		<script type="text/javascript" src="../js/jqModal.js"></script>
+    <script type="text/javascript" src="../js/server/action.js"></script>
+    <script type="text/javascript" src="../js/server/edit_server.js"></script>
+  </head>
+  <body>
+   <div class="bar">监控面板</div>
+   <div class="title">修改服务器</div>
+	 <div id="Tips"><div></div><cite></cite></div>
+   <div class="form_container">
+		<form id="modify_server_form" onsubmit="return false"> 
+    <div class="tabs">
+         <div class="tabs_menu">
+         <ul>
+           <li id="tabs1">常规设置</li>
+           <li id="tabs2">隶属服务器组</li>
+           <li id="tabs3">监控项</li>
+         </ul>
+         </div>
+         <div class="tabs_content">
+           <div id="tabs1_content" style="display:block;">
+             <ul>
+              <li>
+                <label class="tag">服务器名：</label>
+								<input type="text" name="server_name" readonly disabled/><br/><!--readonly disabled-->
+                <cite>与之关联的服务器的名字</cite>
+              </li>
+							<li>
+							  <label class="tag">别名：</label>
+								<input type="text" name="alias"><br/>
+								<cite>简短的描述</cite>
+							</li>
+						  <li>
+                <label class="tag">IP：</label>
+                <input type="text" name="ip"><br/>
+                <cite>输入该服务器的IP地址</cite>
+              </li>	
+							
+							<!--li>
+               <label class="tag">服务器类型：</label>
+               <input type="checkbox" name="generic"/>generic
+               <input type="checkbox" name="mysql"/>mysql
+               <input type="checkbox" name="serving"/>serving
+               <input type="checkbox" name="daemon"/>daemon
+               <input type="checkbox" name="report"/>report
+               <br/>
+               <cite>这是服务器监控的类型</cite>
+            </li-->
+            <li>
+             <label class="tag">认证方式：</label>
+						 <select name="auth_type">
+						   <option value="0">无认证</option>
+							 <option value="1">令牌认证</option>
+						 </select>
+             <br/>
+             <cite>访问服务端的认证方式</cite>
+            </li>
+            <li>
+             <label class="tag">上传方向：</label>
+             <select name="upload_direction"></select>
+             <br/>
+             <cite>指定优先上传监控信息的那台服务器（如果该服务端不可到达，客户端会尝试其他服务端。）</cite>
+            </li>
+            <li>
+             <label class="tag">监控：</label>
+						 <select name="monitored">
+						   <option value="0">否</option>
+							 <option value="1">是</option>
+						 </select>
+             <br/>
+             <cite>被纳入监控范围内的服务器，服务端才会检查上传事件和报警。</cite>
+            </li>
+            <li>
+             <label class="tag">备注：</label>
+             <textarea name="memo" style="width:300px;height:150px;"></textarea>
+             <br/>
+             <cite>可选的备注信息</cite>
+           </li>
+		   <li>
+		   	<label class="tag">机房所在地区：</label>
+			<select name="district"></select>
+		   </li>
+		   <li>
+		   	<label class="tag">运营商：</label>
+			<select name="carrier"></select>
+		   </li>
+          </ul>
+          </div>
+          <div id="tabs2_content" style="display:none;">
+           <p style="margin-left:0px;">该服务器目前隶属的服务器组：</p>
+           <div id="addedGroupBox"></div> 
+					 <p style="margin:80px 0px 20px 10px;"><a href="#" id="add_memberButton" class="jqModal"><img src="../images/edit-server-config.png" alt="修改隶属服务器" title="修改隶属服务器"/></a></p>
+				  </div>
+          <div id="tabs3_content" style="display:none;">
+             <p style="margin-bottom:10px;margin-top:20px;">从下表选择需要监控的类型，点击明细可以进行该监控类别的监控项目进行设置</p>
+             <ul class="monitorList">
+               <li>
+               <input type="checkbox" id="isAll_generic" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="generic_png"></div>
+                   <section class="details_text">
+                     Generic
+                     <a href="#" class="jqModal" id="generic">>>明细</a>
+                     <p>监控常规的服务器，包括服务器常规性能指标，mysql,memcache mdb端口等</p>
+                   </section>
+                 </section>
+                </li>
+               <li>
+                 <input type="checkbox" id="isAll_mysql" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/mysql.png"/-->
+								   <div class="monitorItem" id="mysql_png"></div>
+                   <section class="details_text">
+                     MySQL
+                     <a href="#" class="jqModal" id="mysql">>>明细</a>
+                     <p>监控Mysql数据库服务器，包括线程、流量和表库等</p>
+                   </section>
+                 </section>
+               </li>
+               <li>
+                 <input type="checkbox" id="isAll_serving" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="serving_png"></div>
+                   <section class="details_text">
+                     Serving
+                     <a href="#" class="jqModal" id="serving">>>明细</a>
+                     <p>监控Serving（包括delivering）投放和其他应用服务器节点状态信息</p>
+                   </section>
+                 </section>
+               </li>
+               <li>
+                 <input type="checkbox" id="isAll_daemon" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="daemon_png"></div>
+                   <section class="details_text">
+                      Daemon
+                     <a href="#" class="jqModal" id="daemon">>>明细</a>
+                     <p>监控守护进程应用服务器和管理界面的信息</p>
+                   </section>
+                 </section>
+               </li>
+               <li>
+                 <input type="checkbox" id="isAll_report" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="report_png"></div>
+                   <section class="details_text">
+                     Report
+                     <a href="#" class="jqModal" id="report">>>明细</a>
+                     <p>监控报表服务器，处理日志的性能</p>
+                   </section>
+                 </section>
+               </li>
+               <li>
+                 <input type="checkbox" id="isAll_mdn" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="mdn_png"></div>
+                   <section class="details_text">
+                      MDN
+                     <a href="#" class="jqModal" id="mdn">>>明细</a>
+                     <p>监控MDN(移动发布网络)和traffic server的节点状态信息</p>
+                   </section>
+                 </section>
+               </li>
+               <li>
+                 <input type="checkbox" id="isAll_hdfs" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="hdfs_png"></div>
+                   <section class="details_text">
+                     HDFS
+                     <a href="#" class="jqModal" id="hdfs">>>明细</a>
+                     <p>监控Hadoop HDFS的节点状态信息</p>
+                   </section>
+                 </section>
+              </li>
+               <li>
+                 <input type="checkbox" id="isAll_jail" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="jail_png"></div>
+                   <section class="details_text">
+                      FreeBSD Jail
+                    <a href="#" class="jqModal" id="jail">>>明细</a>
+                     <p>监控FreeBSD Jail的运行状态信息</p>
+                   </section>
+                 </section>
+              </li>
+              <li>
+                 <input type="checkbox" id="isAll_mdb" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="mdb_png"></div>
+                   <section class="details_text">
+                     MDB
+                     <a href="#" class="jqModal" id="mdb">>>明细</a>
+                     <p>监控MadHouse DB的运行状态信息</p>
+                   </section>
+                 </section>
+              </li>
+              <li>
+                 <input type="checkbox" id="isAll_gslb" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								  <div class="monitorItem" id="load_png"></div>
+                   <section class="details_text">
+                      Global Load
+                     <a href="#" class="jqModal" id="gslb">>>明细</a>
+                     <p>监控全局负载均衡架构的节点状态信息</p>
+                   </section>
+                 </section>
+              </li>
+              <li>
+                 <input type="checkbox" id="isAll_security" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="security_png"></div>
+                   <section class="details_text">
+                     Security
+                     <a href="#" class="jqModal" id="security">>>明细</a>
+                     <p>监控全局网络应用和系统的安全性</p>
+                   </section>
+                 </section>
+              </li>
+              <li>
+                 <input type="checkbox" id="isAll_monitor" style='display:none;'/>
+                 <section class="details">
+								 <!--img src="../images/servers/server.png"/-->
+								   <div class="monitorItem" id="monitor_png"></div>
+                   <section class="details_text">
+                     Mad Monitor
+                     <a href="#" class="jqModal" id="monitor">>>明细</a>
+                     <p>监控本地监控服务器的性能</p>
+                   </section>
+                 </section>
+              </li>
+             </ul>
+           </div>
+       </div>
+			</div>
+       <input type="submit" value="保存"/>
+		   <input id="return" type="reset" value="返回"/>
+		 </form>
+	 </div>
+	  <div class="window">
+     <div class="jqmWindow" id="dialog">
+       <a href="#" class="jqmClose" style="float:right;"><img  src="../images/deleteTab.png" style="-webkit-transform:translate(36px,-36px);-moz-transform:translate(36px,-36px);"/></a>
+			 <div id="jqmContent"></div>
+
+		 <!--p>添加服务器到服务器组</p>
+     <ul class="usergroup_select">
+       <li>
+       <label>可选服务器组</label><br/>
+        <select size="8" id="usergroup_optional"  multiple="multiple"></select>
+       </li>
+       <li>
+       <a href="javascript:void(0)"><img id="add_option" src="../images/arrow.png" style="-webkit-transform:translateY(-80px);"/></a>
+       <a href="javascript:void(0)"><img id="del_option" src="../images/arrowLeft.png" /></a>     
+      </li>
+       <li>
+       <label>已加入的服务器组</label><br/>
+        <select id="add_usergroup_old" size="8" multiple="multiple"></select>
+       </li>
+       <li>
+        <div class="jqmClose">
+         <input type="button" id="add_user_submit" value="确定"/>
+         <input type="button" id="add_user_reset"  value="取消"/>
+        </div>
+      </li>
+     </ul-->
+   </div>
+   </div>
+   <script type="text/javascript">
+    $(document).ready(function(){
+      Tabs();
+      $("#dialog").jqm();
+    });
+   </script> 
+ </body>
+</html>

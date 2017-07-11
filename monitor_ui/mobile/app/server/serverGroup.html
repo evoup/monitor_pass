@@ -1,0 +1,153 @@
+<script id="serverGroup_t_a" type="text/html">
+
+<ul class="list_3">
+
+    <% for (var i in list) { var item = list[i];
+			var className = item[3]*1 > 0 ? item[4]*1 > 0 ? 'icon_warning':'icon_caution' :  item[4]*1 > 0 ? 'icon_warning':'icon_up';
+	 %>
+
+		<li class="<%= cl %>">
+		<p><a href="javascript:void (0);"><%= i %></a><label class="<%= className %>"></label></p>
+		<div class="box">
+		<p><span>在线数：</span><%= item[0] %></p>
+		<p><span>宕机数：</span><%= item[1] %></p>
+		<p><span>正常事件数：</span><%= item[2] %></p>
+		<p><span>注意事件数：</span><%= item[3] %></p>
+		<p><span>严重事件数：</span><%= item[4] %></p>
+		<% if(item[5] != 0) { %>
+		<p><button class="modify" data-param="<%= i %>">修改</button>&nbsp;&nbsp;&nbsp;<button class="delete" data-param="<%= i %>">删除</button></p>
+		<% } %>
+		</div>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+<div id="server_group">
+</div>
+
+<div class="botMenu">
+        <a href="javascript:void(0);" id="show">显示列表详情</a>
+        <a href="javascript:void(0);" id="add">添加服务器组</a>
+		<a href="javascript:void(0);" class="top">top</a>
+</div>		
+		
+<script>
+$(function(){
+	
+    var version = urlParams('version');
+    var domain = domainURI();
+	
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    var conf_1 = {
+        url: _url + "/get/serverGroup/@all"
+    };
+	
+	var call = function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        if (json == null) {
+            $th.html('<div class="error">服务器返回的数据为空</div>');
+            return;
+        }
+        
+        ///////////////////////////////////////////
+        data = {
+            list: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('serverGroup_t_a', data);
+        $th.html(html);
+		
+		///////////////////////////////////////////
+		
+		$th.find('li .box').hide();
+		
+		$th.find('li p:first-child').toggle(function(){
+			$(this).next('.box').slideDown('fast');
+		},function(){
+			$(this).next('.box').slideUp('fast');
+		});
+		
+		$th.find('button.modify').click(function(){
+			var name = $(this).attr('data-param');
+			location.href = 'modifyServers.html?version=' + urlParams('version'); 
+		});
+
+		$th.find('button.delete').click(function(){
+			var name = $(this).attr('data-param');
+			var conf = {url:_url + "/delete/serverGroup/@self/" + name};
+			if(confirm('确定删除！')){
+				$(this).parentsUntil('li').parent().delData(conf);
+			}
+						
+		});		
+        
+    };
+	
+	
+    var title = '服务器组';
+    var layerId = 'serverGroup';
+    
+    var $parent = $('#' + layerId);
+    var $serverGroup = $parent.find('#server_group');
+	
+	$serverGroup.bind('ajax.success', call);
+	
+    
+    $parent.find('#show').toggle(function(){
+        $(this).text('隐藏列表详情');
+        $serverGroup.find('li .box').show();
+    }, function(){
+        $(this).text('显示列表详情');
+        $serverGroup.find('li .box').hide();
+    });
+    
+    $parent.find('#add').click(function(){
+        location.href = '#server-addServers';
+        ;
+    })
+    
+    
+    
+	/////////////////////////////////////////////
+	
+    var controler = {
+        botMenu: $parent.find('.botMenu'),
+        pullDownAction: function(){
+			this.recover();
+        },		
+        init: function(param){
+            this.recover = function(){
+				$('#title').text(title);
+				
+				$serverGroup.getData(conf_1);
+			};
+            
+            this.recover();
+            this.botMenu.appendTo(app.face.footer);
+        }
+
+        
+    };
+	
+	
+	/////////////////////////////////////////////////
+	
+	var layer = extend(app.face[layerId],controler);
+	layer.init();		
+	
+	
+});
+	
+</script>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>SmartMad Monitor</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css">
+
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+    	<% var json = json || {}; %>
+				<form class="form-horizontal" id="form" onsubmit="return false;">
+					 <fieldset>
+                		<legend>
+                    		站点信息
+                		</legend>					 	
+                        <div class="control-group">
+                            <label class="control-label" for="site">
+                               		 站点：
+                            </label>
+                            <div class="controls">
+                                <input type="text" name="site" maxlength="24" class="validate[required,custom[onlyLetterNumber]] text-input" value="<%= json.name || '' %>" <%= json.name ? ' readonly' : '' %> >
+                                <p class="help-block">
+                                    	站点名必须是长度不大于24的英文字母和数字并且不包含空格.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="url">
+                                URL地址：
+                            </label>
+                            <div class="controls">
+                                <input type="text" name="url" class="validate[required,custom[url]] text-input" value="<%= json.url || '' %>" style="width:420px;">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="type">
+                               	 统计类型：
+                            </label>
+                            <div class="controls">
+                                <label class="radio inline">
+                                    <input type="radio" name="type" value="1"<%= !json.type || json.type == 1  ? 'checked' : '' %>/>访问
+                                </label>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <label class="radio inline">
+                                    <input type="radio" name="type" value="2"<%= json.type == 2 ? 'checked' : '' %>/>下载
+                                </label>
+                            </div>
+                        </div>					
+									
+						
+                        <div class="form-actions">
+                            <button class='btn btn-info' name="submit"> 保存 </button>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<button class='btn' name="return"> 返回 </button>
+							<input type="reset" style="display:none;">
+                        </div>
+				</fieldset>
+			</form>
+    </script>
+	
+</head>
+<body>
+    <header>
+		<h1><span id="title">修改站点  &nbsp;&nbsp;&gt;&gt;</span>&nbsp;&nbsp;<span id="siteId"></span></h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+        </div>
+    </header>	
+	
+    <div id="mainbody">
+    	<div id="formBox"></div>
+    </div>
+	
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>OK</h3>
+  </div>
+  <div class="modal-body">
+  	
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" name="return"  data-dismiss="modal">返回</a>
+    <a href="#" class="btn btn-info" id="nextAdd"  data-dismiss="modal">继续添加</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+	var siteId = urlParams('id') || '';
+    
+	//判断是修改还是创建
+	var submitUrl = _url + (siteId ? '/update/testspeed_site/@self/' : '/create/testspeed_site/@self/');
+	
+	var submitSuccessCall = function(){
+		$('#modal').modal('show').find('.modal-body').html('添加成功!');
+	};	
+	
+	
+	var siteCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		
+		if(json[siteId]){
+			json[siteId].name = siteId;
+		}
+		
+		///////////////////////////////////////////////
+		
+        data = {
+            json: json[siteId]
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+		
+		///////////////////////////////////////////////
+		//表单验证
+		$('#form').validationEngine();		
+
+	};	
+	
+    var siteConf = {
+		url: _url + '/get/testspeed_site/@self/' + siteId
+	};
+	
+	
+	
+	////////////////////////////////////////////////////////
+	//event bind
+	////////////////////////////////////////////////////////	
+	$('body')
+	.delegate('button[name="submit"]', 'click', function(){
+        var conf = {};
+        		
+		//表单验证
+		if(!$('#form').validationEngine('validate')){
+			return;
+		}	
+		
+        conf.data = {
+            site: $('input[name="site"]').val(),
+            url: $('input[name="url"]').val(),
+            type: $('input[name="type"]:checked').val()
+        };
+        
+        if (!siteId) {
+            conf.success = submitSuccessCall;
+        }
+		
+		conf.url = submitUrl + conf.data.site;	
+		
+        $(this).postData(conf);
+    })	
+	.delegate('[name="return"]', 'click', function(){
+	    location.href = 'siteList.html?version=' + version;
+	 })
+	 .delegate('#nextAdd','click',function(){
+	 	$('input[type="reset"]').click();
+	 });
+	 
+	 	
+	////////////////////////////////////////////////////////
+	//init
+	//判断是添加站点还是修改站点
+	////////////////////////////////////////////////////////	
+    
+    if (siteId) {
+    	$('#siteId').text(siteId);
+        $('#formBox').bind('ajax.success', siteCall).getData(siteConf);
+    }
+    else {
+		$('#title').text('添加站点');
+    	$('#formBox').bind('ajax.success', siteCall).trigger('ajax.success',[{}]);
+    }
+    
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<script id="serverList_t_a" type="text/html">
+
+<ul class="list_3">
+
+    <% for (var i in list) { var item = list[i]; %>
+
+		<li class="<%= item[7] %>">
+		<p><a href="<%= item[5] %>"><%= i %></a><label><%= item[7] %></label></p>
+		<div class="box">
+		<p><span>IP：</span><%= item[1] %></p>
+		<p><span>上次上传时间：</span><%= item[2] %></p>
+		<p><span>监控节点：</span><%= item[3] %></p>
+		<p><span>总计在线时间：</span><%= item[4] %></p>
+		<p class="t_r"><a href="<%= item[6] %>">查看监测事件 >> </a></p>
+		</div>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+
+<div id="server_list">
+</div>
+
+<div class="botMenu">
+    <a href="javascript:void(0);" id="show">隐藏列表详情</a>
+    <a href="javascript:void(0);" id="see_all">查看所有服务器</a>
+    <a href="javascript:void(0);" id="search">搜索</a>
+    <a href="javascript:void(0);" class="top">top</a>
+</div>
+
+<script>
+$(function(){
+	
+    var version = urlParams('version');
+    var domain = domainURI();
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+	var status;
+    var conf_1;
+    
+    var call = function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        if (json == null) {
+            $th.html('<div class="error">服务器返回的数据为空</div>');
+            return;
+        }
+        
+        $.each(json, function(k, v){
+            v.push('#server-serverStatus?name=' + k);
+            v.push('#monitor-monitorEvent?selector=' + k);
+            switch (v[0]) {
+                case "0":
+                    v.push("宕机");
+                    break;
+                case "1":
+                    v.push("在线");
+                    break;
+                case "2":
+                    v.push("注意");
+                    break;
+                case "3":
+                    v.push("严重");
+                    break;
+                case "4":
+                    v.push("注意+严重");
+                    break;
+                case "5":
+                    v.push("未监控");
+                    break;
+            }
+        });
+        
+        ///////////////////////////////////////////
+        data = {
+            list: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('serverList_t_a', data);
+        $th.html(html);
+        
+        //////////////////////////////////////////
+        //$('#server_list li .box').hide();
+        $parent.find('#server_list li a').click(function(e){
+            e.stopPropagation();
+        })
+        
+        $parent.find('#server_list li p:first-child').toggle(function(){
+            $(this).next('.box').slideDown('fast');
+        }, function(){
+            $(this).next('.box').slideUp('fast');
+        });
+        
+    };
+    ///////////////////////////////////////////////////////////
+	
+	var title = '服务器';
+	var layerId = 'serverList';
+    
+    var $parent = $('#' + layerId);
+    var $serverList = $parent.find('#server_list');
+    
+    $serverList.bind('ajax.success', call);
+	
+	
+	
+	/////////////////////////////////////////////////////////////		
+    $parent.find('#show').toggle(function(){
+        $(this).text('显示列表详情');
+        $parent.find('#server_list li .box').hide();
+        
+    }, function(){
+        $(this).text('隐藏列表详情');
+        $parent.find('#server_list li .box').show();
+    });
+    
+    $parent.find('#see_all').click(function(){
+        $serverList.getData({
+            url: _url + "/get/server/@all"
+        });
+    });
+    
+    $parent.find('#search').click(function(){
+        //$serverList.getData(ajax_conf({url:_url + "/get/server/@all"}));
+    });
+    
+    $parent.find('#add').click(function(){
+        location.href = '#server-addServers';
+        ;
+    });
+	
+	
+	//////////////////////////////////////////////////////
+    
+    var controler = {
+        botMenu: $('#serverList .botMenu'),
+        pullDownAction: function(){
+            this.recover();
+        },
+        init: function(){
+            this.recover = function(){
+				$('#title').text(title);
+				
+                status = urlParams('status') || '';
+                conf_1 = {
+                    url: _url + "/get/server/@all" + status
+                };
+                
+                //请求服务器监听数据
+                $serverList.getData(conf_1);
+            };
+			
+			this.recover();
+            this.botMenu.appendTo(app.face.footer);
+        }
+        
+        
+    };
+	
+	
+	
+	/////////////////////////////////////////////////
+	
+	var layer = extend(app.face[layerId],controler);
+	layer.init();		
+	
+	
+	
+    
+});
+</script>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>monitor-configure-wizard</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+<style>
+</style>	
+</head>
+    <body>
+    <header>
+        <h1>监控向导</h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+        </div>
+    </header>	    	
+		
+		
+    <div id="mainbody" name="monitorWizard">
+        <header class="page-header">
+            <h3>监控向导  &nbsp;&nbsp;<span id="monitorOption"></span> &nbsp;&gt;&gt; 第二步 </h3>
+            <p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p>
+        </header>
+		
+		<div id="monitor_option">
+				<div class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label" for="name"> 主机名： </label>
+                            <div class="controls">
+                                <input type="text" name="host" id="host" value="" >
+                                <p class="help-block">输入要进行监控向导的服务器的主机名</p>
+                            </div>
+                        </div>	
+						<div class="form-actions">
+							<button class='btn' name="prev"> 上一步  </button>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  				<button class='btn' name="next"> 下一步  </button>
+        				</div>
+				<div>		
+		</div>
+    </div>
+	
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var _url = 'http://' + domain + '/mmsapi' + version;
+	
+	var monitorOptionMap = smartMad.monitorOptionMap; 
+	
+	var cls = urlParams('cls') || '';
+	
+	
+	$('#monitorOption').text(monitorOptionMap[cls] && monitorOptionMap[cls][0]);
+	
+	////////////////////////////////////////////////
+	//init
+	////////////////////////////////////////////////
+	
+    $('#monitor_option').delegate('button[name="next"]', 'click', function(){
+        var host = $('#host').val();
+        var conf = {
+			url: _url + '/get/server/@all',
+			type: 'get',
+            success: function(json, textStatus, jqXHR){
+				//alert(JSON.stringify(json));
+				if(json[host]){
+					location.href = 'monitorWizardStep3_' + monitorOptionMap[cls][2] + '.html?version=' + version + "&cls=" + cls + "&host=" + host;
+				}else{
+					alert('您输入的服务器不存在监控列表中，请先从客户端进行上传!');
+				}
+                 
+            }
+        };
+		
+        if (host) {
+            $(this).postData(conf);
+        }
+        else {
+            alert('请输入服务器名称!');
+        }
+    })
+	.delegate('button[name="prev"]', 'click', function(){
+		location.href='monitorWizard.html?cls=' + cls + '&version=' + version;
+	});
+	
+	/*监听回车键*/
+	$('#host').enterPress(function(){
+		$('button[name="next"]').click();
+		return false;
+	})
+	
+
+});
+</script>		
+</body>
+</html>

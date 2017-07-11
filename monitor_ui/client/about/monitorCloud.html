@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+     <meta charset="utf-8"/>
+     <title>overview</title>
+		 <link rel="stylesheet" type="text/css" href="../css/about.css"/>
+		 <link rel="stylesheet" type="text/css" href="../css/3d.css"/>
+		 <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+		 <script type="text/javascript" src="../js/base.js"></script>
+		 <script type="text/javascript" src="../js/ajax_post.js"></script>
+		 <script type="text/javascript" src="../js/3d.js"></script>
+		 <script type="text/javascript" src="../js/about/monitorCloud.js"></script>
+	   <style type="text/css">
+		   .notes{
+			  width:100%;
+				height:30px;
+				margin:5px 0px 0px 0px;
+			}
+			.notes ul{
+				padding:0px;
+				margin:0px;
+				text-align:center;
+				color:#222222;
+        font-size:12px;
+			}
+			.notes ul li{
+				display:inline-block;
+				list-style:none;
+				width:80px;
+				height:12px;
+			  margin:6px 20px 6px 0px;
+			}
+			.notes ul li p{
+				margin:-2px 4px 0px 0px;
+				padding:0px;
+			  display:inline-block;
+				width:15%;
+				height:90%;
+        border:1px solid #c0c0c0;
+			  vertical-align:middle;
+			  
+			}
+		 </style>
+	</head>
+	<body>
+		   <div class="bar">监控面板</div>
+	     <div class="table_container" style="margin:0px 10px 0px 40px;width:94%;">
+				 <div class="subtitle">监控状态云<div class="zoomIcon"></div></div>
+         <div class="alertCloud">
+					 <div id="div1"></div>
+				 </div>
+				 <div class="notes">
+					 <ul>
+						 <li><p style="background:#8B0000;"></p>宕机</li>
+						 <li><p style="background:#B2FF5F"></p>正常</li>
+						 <li><p style="background:#FFFF00"></p>注意</li>
+						 <li><p style="background:#FF7F00"></p>严重</li>
+						 <li><p style="background:#ff3030"></p>注意+严重</li>
+					   <li><p style="background:#FFFFFF"></p>未监控</li>
+					 </ul>
+				 </div>
+       </div>
+  	 
+  </body>
+</html>

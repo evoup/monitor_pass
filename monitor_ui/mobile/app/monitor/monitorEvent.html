@@ -1,0 +1,231 @@
+<script id="event_t_a" type="text/html">
+
+<ul class="list_3">
+
+    <% var map = ['down','正常','注意','紧急'];
+	 for (var i = 0,len = records.length; i < len; i++) { var item = records[i]; %>
+
+		<li class="<%= '' %>">
+		<p><span>主机：</span><a href="<%= item[7] %>"><%= item[0] %></a><label><%= map[item[3]] %></label></p>
+		<p><span>监控事件：</span><%= item[1] %></p>
+		<p><span>状态：</span><%= map[item[3]] %></p>
+		<p><span>持续时间：</span><%= item[4] %></p>
+		<p><span>上次检查：</span><%= item[5] %></p>
+		<p><span>状态信息：</span><%= item[6] || '---' %></p>
+		</li>
+
+    <% } %>
+
+</ul>
+
+<div id="page_info">
+	<select name='line_per_page'><option value='5'>5 Per Page</option><option value='10'>10 Per Page</option><option value='15'>15 Per Page</option><option value='20'>20 Per Page</option><option value='50'>50 Per Page</option><option value='100'>100 Per Page</option></select>
+	<span>共<em id="total_page"><%= page_info.total_pages %></em>页</span>
+	<br />
+	<span id="first_page">第一页</span>
+	<span id="prev_page">上一页</span> 
+	<span id="next_page">下一页</span>
+	<span id="last_page">最末页</span>
+	<br />
+	<span>第 <input type="text" size="4" value="<%= page_info.current_page %>" name="current_page">页 </span><span id="go">转到</span> 
+</div>
+
+</script>
+
+
+<div id="event_list">
+</div>
+
+<div class="botMenu">
+    <span class="group"><a href="javascript:void(0);" data-status="warning">严重</a><a href="javascript:void(0);" data-status="caution">注意</a><a href="javascript:void(0);" data-status="ok">正常</a></span>
+    <a href="javascript:void(0);" data-status="search">搜索</a>
+    <a href="javascript:void(0);" class="top">top</a>
+</div>
+
+
+<script>
+$(function(){
+	
+    var version = urlParams('version');
+    var domain = domainURI();
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    var status;
+    var selector;
+    var conf_1;
+    
+    var call = function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        var _conf = {
+            type: 'post',
+            url: _url + "/get/event" + status + "/@all"
+        };
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        if (json == null) {
+            $th.html('<div class="error">服务器返回的数据为空</div>');
+            return;
+        }
+        
+        $.each(json.records, function(k, v){
+            v.push('#server-serverStatus?name=' + v[0]);
+        });
+        
+        ///////////////////////////////////////////
+        data = json;
+        
+        html = template('event_t_a', data);
+        $th.html(html);
+        
+        ///////////////////////////////////////////
+        
+        
+        //分页程序
+        if ($parent.find("#total_page").text() * 1 <= 1) {
+            $parent.find('#page_info').hide();
+            return;
+        }
+        
+        $parent.find("#next_page").click(function(){
+            var current = Number($parent.find("input[name='current_page']").val()), next = current + 1, line_per_page = $parent.find("select[name='line_per_page']").val(), total = $parent.find("#total_page").text();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": next
+            };
+            var conf = $.extend(true, {
+                data: info
+            }, _conf);
+            if (current != total) {
+                $eventList.getData(conf);
+            }
+        });
+        
+        
+        $parent.find("#prev_page").click(function(){
+            var current = Number($parent.find("input[name='current_page']").val());
+            var prev = current - 1, line_per_page = $parent.find("select[name='line_per_page']").val();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": prev
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf);
+            if (current != 1) {
+                $eventList.getData(conf);
+            }
+        });
+        
+        
+        $parent.find("#go").click(function(){
+            var current = Number($("input[name='current_page']").val()), line_per_page = $parent.find("select[name='line_per_page']").val(), total = $parent.find("#total_page").text();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": current
+            };
+            var conf = $.extend(true, {
+                data: info
+            }, _conf);
+            if (current >= 1 && current <= total) {
+                $eventList.getData(conf);
+            }
+        });
+        
+        
+        $parent.find("#first_page").click(function(){
+            var line_per_page = $parent.find("select[name='line_per_page']").val();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": 1
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf);
+            $eventList.getData(conf);
+        });
+        
+        
+        $parent.find("#last_page").click(function(){
+            var line_per_page = $parent.find("select[name='line_per_page']").val(), last_page = $parent.find("#total_page").text();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": last_page
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf);
+            $eventList.getData(conf);
+        });
+        
+    };
+    
+    var title = '监控事件';
+	var layerId = 'monitorEvent'
+    
+    var $parent = $('#' + layerId);
+    var $eventList = $parent.find('#event_list');
+    
+    $eventList.bind('ajax.success', call);
+	
+	
+    $parent.find('.botMenu .group a').click(function(){
+        var $th = $(this);
+        var status = $th.attr('data-status');
+        $th.addClass('current').siblings().removeClass('current');
+        
+        if (status) {
+            $eventList.getData({
+                url: _url + "/get/event" + status + "/@all"
+            });
+        }
+        
+    });
+	
+	/////////////////////////////////////////////////////
+	
+    var controler = {
+        botMenu: $parent.find('.botMenu'),
+        pullDownAction: function(){
+            this.recover();
+        },
+        init: function(param){
+            this.recover = function(){
+                $('#title').text(title);
+                
+                status = urlParams('eventStatus') || '';
+                selector = urlParams('selector') || '';
+                conf_1 = {
+                    url: _url + "/get/event" + status + "/@all" + (selector ? '/' + selector : ''),
+                    isTips: 1
+                };
+                
+                $eventList.getData(conf_1);
+                
+                
+                if (status) {
+                    this.botMenu.find('.group a[data-status="' + status + '"]').addClass('current').siblings().removeClass('current');
+                }
+                else {
+                    this.botMenu.find('.group a').removeClass('current');
+                }
+            };
+            
+            this.recover();
+            this.botMenu.appendTo(app.face.footer);
+            
+        }
+        
+        
+    };
+	
+	/////////////////////////////////////////////////
+	var layer = extend(app.face[layerId],controler);
+	layer.init();	
+		
+    
+});
+</script>

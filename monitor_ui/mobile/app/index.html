@@ -1,0 +1,38 @@
+                <dl id="nav" class="list_4">
+                	<dt>概览</dt>
+               		<dd><a href="#main">监控状态</a></dd>
+					<dt>服务器</dt>
+               		<dd><a href="#server-serverList">服务器列表</a></dd>
+					<dd><a href="#server-serverGroup">服务器组列表</a></dd>
+                	<dt>监控事件</dt>
+               		<dd><a href="#monitor-monitorEvent">监控事件</a></dd>
+					<dd><a href="">事件日志</a></dd>
+					<dt>配置</dt>
+               		<dd><a href="">常规设置</a></dd>
+					<dd><a href="">邮件设置</a></dd>
+					<dd><a href="">报警设置</a></dd>
+					<dd><a href="">扫描设置</a></dd>	
+					<dd><a href="">事件设置</a></dd>
+					<dd><a href="">用户设置</a></dd>	
+					<dd><a href="">用户组设置</a></dd>
+					<dd><a href="">监控向导</a></dd>	
+					<dd><a href="">IP管理</a></dd>
+					<dd><a href="">MADN管理</a></dd>	
+					<dt></dt>											
+               </dl>
+<script>
+	
+$(function(){
+	
+	$('#nav dt').toggle(function(){
+		$(this).nextUntil('dt').slideDown('fast');
+		
+	},function(){
+		$(this).nextUntil('dt').slideUp('fast');
+		
+	});
+})	
+
+</script>	
+</body>
+</html>

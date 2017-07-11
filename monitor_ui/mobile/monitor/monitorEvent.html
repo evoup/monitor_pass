@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="../css/global.css" />
+<script src="../js/jquery-1.7.1.js"></script>
+<script src="../js/template.js"></script>
+<script src="../js/iscroll.js"></script>
+<script src="../js/helper.js"></script>
+<script src="../js/monitor/monitorEvent.js"></script>
+
+<script id="t_c" type="text/html">
+
+<ul class="list_3">
+
+    <% var map = ['down','正常','注意','紧急'];
+	 for (var i = 0,len = records.length; i < len; i++) { var item = records[i]; %>
+
+		<li class="<%= '' %>">
+		<p><span>主机：</span><a href="<%= item[7] %>"><%= item[0] %></a><label><%= map[item[3]] %></label></p>
+		<p><span>监控事件：</span><%= item[1] %></p>
+		<p><span>状态：</span><%= map[item[3]] %></p>
+		<p><span>持续时间：</span><%= item[4] %></p>
+		<p><span>上次检查：</span><%= item[5] %></p>
+		<p><span>状态信息：</span><%= item[6] || '---' %></p>
+		</li>
+
+    <% } %>
+
+</ul>
+
+<div id="page_info">
+	<select name='line_per_page'><option value='5'>5 Per Page</option><option value='10'>10 Per Page</option><option value='15'>15 Per Page</option><option value='20'>20 Per Page</option><option value='50'>50 Per Page</option><option value='100'>100 Per Page</option></select>
+	<span>共<em id="total_page"><%= page_info.total_pages %></em>页</span>
+	<br />
+	<span id="first_page">第一页</span>
+	<span id="prev_page">上一页</span> 
+	<span id="next_page">下一页</span>
+	<span id="last_page">最末页</span>
+	<br />
+	<span>第 <input type="text" size="4" value="<%= page_info.current_page %>" name="current_page">页 </span><span id="go">转到</span> 
+</div>
+
+</script>
+
+
+<style>
+
+</style>
+</head>
+<body>
+<div id="header">
+    <h2 id="title"><a href="javascript:history.back();void (0);" id="back">返回</a><span>监控事件</span><a href="javascript:void (0);" id="home">Home</a></h2>
+</div>
+<div id="wrapper">
+    <div id="scroller">
+        <div id="mainbody">
+        	<div id="content">
+            	<div id="event_list">
+            	</div>
+			</div>
+        </div>
+    </div>
+</div>
+<div id="footer">
+    <div id="control_bar">
+ 		<span class="group"><a href="javascript:void(0);" data-status="warning">严重</a><a href="javascript:void(0);"  data-status="caution">注意</a><a href="javascript:void(0);" data-status="ok">正常</a></span><a href="javascript:void(0);" data-status="search">搜索</a><a href="javascript:void(0);" id="top">top</a></div>
+    </div>
+</div>
+</body>
+</html>

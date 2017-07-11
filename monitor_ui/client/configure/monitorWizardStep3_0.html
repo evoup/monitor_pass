@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>monitor-configure-wizard</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+ <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+        <% var services = json.services, processes = json.processes, i, item; %>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#1" data-toggle="tab">服务器监控项目</a>
+                </li>
+                <li>
+                    <a href="#2" data-toggle="tab">系统服务监控项目</a>
+                </li>
+                <li>
+                    <a href="#3" data-toggle="tab">进程监控项目</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                    <form class="form-horizontal" id="form" onsubmit="return false;">
+                        <fieldset>
+                            <legend>
+                               	 服务器监控项目
+                            </legend>
+                            <% for (i in json) { item = json[i];
+                            if(i != 'services'  && i != 'processes'){ %>
+                            <div class="control-group">
+                                <h5>
+                                    <label class="checkbox inline">
+                                        <input type="checkbox" name="<%= i %>" value="" <%= item.monitored ? 'checked' : '' %>/>&nbsp;<%= map[i][0] %>
+                                    </label>
+									<span class="help-inline">( <%= map[i][1] %> )</span>
+								</h5>
+                                <div class="input-append">
+                                    <label class="checkbox inline">
+                                        <%= map[i][2] %>：
+                                    </label>
+                                    <input type="text" name="<%= i + '-caution' %>" value="<%= item.caution %>" /><span class="add-on"><%= map[i][4] %></span>
+                                </div>
+                                <div class="input-append">
+                                    <label class="checkbox inline">
+                                        <%= map[i][3] %>：
+                                    </label>
+                                    <input type="text" name="<%= i + '-warning' %>" value="<%= item.warning %>" /><span class="add-on"><%= map[i][4] %></span>
+                                </div>
+                            </div>
+                            <% } } %>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane active" id="2">
+                    <% if( services ) { %>
+                    <fieldset>
+                        <legend>
+                            	系统服务监控项目
+                        </legend>
+                        <br/>
+                        <table class="table table-striped table-bordered table-condensed"  id="services">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        	是否监控
+                                    </th>
+                                    <th>
+                                        	服务名
+                                    </th>
+                                    <th>
+                                        	端口号
+                                    </th>
+                                    <th>
+                                        	主机(不填为本地)
+                                    </th>
+                                    <th>
+                                        telnet探测
+                                    </th>
+                                    <th>
+                                       	 添加项目
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (i in services) { item = services[i]; %>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="" <%= item[0]*1 ? 'checked' : '' %>/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="" value="<%= i %>" />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="" value="<%= item[1] %>" />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="" value="<%= item[2] %>" />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" <%= item[3]*1 ? 'checked' : '' %>/>
+                                    </td>
+                                    <td>
+                                        <button class="btn" name="add" title="添加新的监控项目">
+                                            +
+                                        </button>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <% } %>
+                    </fieldset>
+                </div>
+                <div class="tab-pane active" id="3">
+                    <% if( processes ) { %>
+                    <fieldset>
+                    <legend>
+                        	进程监控项目（仅监控运行）
+                    </legend>
+                    <br/>
+                    <table class="table table-striped table-bordered table-condensed" id="processes">
+                        <thead>
+                            <tr>
+                                <th>
+                                    	是否监控
+                                </th>
+                                <th>
+                                    	显示名称
+                                </th>
+                                <th>
+                                    	进程名
+                                </th>
+                                <th>
+                                    	是否为java进程
+                                </th>
+                                <th>
+                                    	添加项目
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (i in processes) { item = processes[i]; %>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="" <%= item[0]*1 ? 'checked' : '' %>/>
+                                </td>
+                                <td>
+                                    <input type="text" name="" value="<%= i %>" />
+                                </td>
+                                <td>
+                                    <input type="text" name="" value="<%= item[1] %>" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="" <%= item[2]*1 ? 'checked' : '' %> />
+                                </td>
+                                <td>
+                                    <button class="btn" name="add" title="添加新的监控项目">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class='btn' name="prev">
+                	上一步 
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class='btn' name="next">
+                	下一步 
+            </button>
+        </div>
+    </script>
+
+ <!-- template
+    ================================================== -->
+    <script id="t_b" type="text/html">
+    	<h4>监控向导 -最后一步</h4>
+    	<p>主机<%= o.host %>更新<%= o.cls %>类型的设置完毕！</p>
+		<p>点击应用来更新配置</p>
+		 <div class="form-actions">
+            <button class='btn' name="prev3">
+                	上一步 
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;		 	
+			<button class='btn' name="submit"> 应用  </button>
+        </div>
+    </script>
+		
+<style type="text/css">
+	#step4,#finish{
+		display:none;
+	}
+	.control-group{
+		padding-bottom:10px;
+		border-bottom:solid 1px #eee;
+	}
+	.control-group h5 {
+		margin-bottom:10px;
+		font-weight:400;
+	}
+	h5 .help-inline{
+		padding:7px 0 0 10px;;
+	}	
+	.input-append{
+		width:320px;
+	}
+	.input-append label{
+		width:120px;
+	}	
+	.input-append input{
+		width:80px;
+	}
+	td input[type]{
+		margin-bottom:0;
+	}
+	
+.input-prepend .add-on, .input-append .add-on{
+	width:30px;
+}	
+	
+#form .control-group:last-child{
+	border:none;
+}	
+
+</style>	
+</head>
+
+    <body>
+    <header>
+        <h1>监控向导</h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+        </div>
+    </header>	    	
+		
+    <div id="mainbody" name="monitorWizard">
+        <header class="page-header">
+            <h3>监控向导  &nbsp;&nbsp;<span id="monitorOption"></span> &nbsp;&gt;&gt; <span id="stepStatus"></span> </h3>
+            <p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p>
+        	<i></i>
+		</header>
+		
+		<div id="set"></div>
+		<div id="step4"></div>
+		<div id="finish">ok!</div>		
+    </div>
+	
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script>	
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var _url = 'http://' + domain + '/mmsapi' + version;
+	
+	var monitorOptionMap = smartMad.monitorOptionMap; 
+	var genericOptionMap = smartMad.genericOptionMap;
+	
+	var cls = urlParams('cls') || '';
+	var host = urlParams('host') || '';
+	
+	var $stepStatus = $('#stepStatus');
+	
+    var call = function(e, json){
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////
+		
+        data = {
+            json: json,
+			map : genericOptionMap
+        };
+		
+		///////////////////////////////////////////
+		
+        html = template('t_a', data);
+        $th.html(html);		
+    };
+	
+	var conf = {
+		url: _url + '/get/detailSetting/@' + cls + '/' + host
+	};
+	
+	////////////////////////////////////////////////
+	//init
+	////////////////////////////////////////////////
+	
+	$stepStatus.text('第三步');
+	
+	
+	$('#monitorOption').text(monitorOptionMap[cls][0]);
+	$('.page-header i').addClass('icon40-' + cls);
+	
+	
+    $('#set').bind('ajax.success',call).getData(conf);
+	
+	////////////////////////////////////////////////
+	//event bind
+	////////////////////////////////////////////////	
+	
+	$(document.body)
+	.delegate('button[name="add"]', 'click', function(){
+		var tr = $(this).parent().parent();
+		var tbody = tr.parent();
+		tr.clone(true).appendTo(tbody).find(':checkbox').attr('checked',false).end().find('input[type="text"]').val('');
+    })
+	.delegate('button[name="prev"]', 'click', function(){
+		location.href='monitorWizardStep2.html?cls=' + cls + '&version=' + version;
+	})	
+	.delegate('button[name="next"]', 'click', function(){
+		$stepStatus.text('最后一步');
+		$('#set').fadeOut(500,function(){
+			var step4 = $('#step4');
+			if(step4.html()){
+				step4.fadeIn(500);
+			}else{
+				step4.getHtml({url:'include/step4.html'},{o:{host:host,cls:cls}}).fadeIn(500);
+			}
+			
+		});
+    })
+	.delegate('button[name="prev3"]', 'click', function(){
+		$stepStatus.text('第三步');
+		$('#step4').fadeOut(500,function(){
+			$('#set').fadeIn(500);
+		});
+    })		
+	.delegate('button[name="submit"]', 'click', function(){
+		var str = '';
+        var conf = {
+            url: _url + '/update/detailSetting/@' + cls + '/' + host,
+            success: function(json, textStatus, jqXHR){
+                $stepStatus.text('完成');
+                $('#step4').fadeOut(500, function(){
+                    $('#finish').getHtml({
+                        url: 'include/finish.html'
+                    }).fadeIn(500);
+                });
+            },
+            data: {
+            }
+        };
+		for(var i in genericOptionMap){
+			if(i == 'services'){
+				//str += '&services=';
+				str = '';
+				$('#services tbody tr').each(function(i){
+					str += i==0 ? '' : '#';
+					var td = $(this).find('td');
+					str += !!td.eq(0).find(':checkbox').attr('checked')*1 + '|';
+					str += td.eq(1).find(':text').val() + '|';
+					str += td.eq(2).find(':text').val() + '|';
+					str += td.eq(3).find(':text').val() + '|';
+					str += !!td.eq(4).find(':checkbox').attr('checked')*1;
+				});
+				conf.data['services'] = str;
+			}else if( i == 'processes'){
+				//str += '&processes=';
+				str = '';
+				$('#processes tbody tr').each(function(i){
+					str += i==0 ? '' : '#';
+					var td = $(this).find('td');
+					str += !!td.eq(0).find(':checkbox').attr('checked')*1 + '|';
+					str += td.eq(1).find(':text').val() + '|';
+					str += td.eq(2).find(':text').val() + '|';
+					str += !!td.eq(3).find(':checkbox').attr('checked')*1;
+				});
+				conf.data['processes'] = str;				
+			}else{
+				//str += '&' + i + '=';
+				str = '';
+				str += !!$(':checkbox[name="' + i + '"]').attr('checked')*1 + '|';
+				str += $(':text[name="' + i + '-caution"]').val() + '|';
+				str += $(':text[name="' + i + '-warning"]').val();
+				conf.data[i] = str;
+			}
+		}
+		
+		//str = str.replace(/^&/,'');
+		//conf.data = str;
+		//console.log(JSON.stringify(conf.data));
+		$(this).postData(conf);
+		
+    })
+	.delegate('button[name="return"]', 'click', function(){
+		location.href='monitorWizard.html?version=' + version;
+	})
+	.delegate('button[name="reset"]', 'click', function(){
+		$stepStatus.text('第三步');
+		$('#finish').fadeOut(500,function(){
+			$('#set').fadeIn(500);
+		});
+	});			
+			
+			
+});
+
+</script>	
+</body>
+</html>

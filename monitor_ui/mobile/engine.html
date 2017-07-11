@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="css/global.css" />
+<script src="js/jquery-1.7.1.js"></script>
+<script src="js/template.js"></script>
+<script src="js/helper.js"></script>
+<script src="js/server/engine.js"></script>
+
+<script id="t_c" type="text/html">
+
+<ul class="list_3">
+
+    <% for (var i in list) { var item = list[i]; %>
+
+		<li class="<%= item[7] %>">
+		<p><span>主机：</span><a href="<%= item[5] %>"><%= i %></a><label><%= item[7] %></label></p>
+		<p><span>IP：</span><%= item[1] %></p>
+		<p><span>上次上传时间：</span><%= item[2] %></p>
+		<p><span>监控节点：</span><%= item[3] %></p>
+		<p><span>总计在线时间：</span><%= item[4] %></p>
+		<p class="t_r"><a href="<%= item[6] %>">查看监测事件 >> </a></p>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+<style>
+
+</style>
+</head>
+<body>
+<h2 id="title"><a href="javascript:history.back();void (0);" id="back">返回</a>服务器<a href="main.html" id="home">Home</a></h2>
+<div id="body">
+	<div id="control"><input type="text" name="search"><button id="search">搜索</button></div>
+  <h3>服务器列表</h3>
+  <div id="server_list">
+
+  </div>
+</div>
+</body>
+</html>

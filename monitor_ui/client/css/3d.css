@@ -1,0 +1,15 @@
+/*body{background-color:#3A4954;}*/
+html{-webkit-text-size-adjust:none;}
+#div1 { position:relative; width:80%; height:360px; margin: 5px auto 0; font-family:Arail;}
+#div1 a {position:absolute; top:0px; left:0px; font-family: Microsoft YaHei; color:#fff; 
+font-weight:bold; text-decoration:none; padding: 1px 2px;-webkit-transition:all 0.2s linear; }
+#div1 a:hover {border: 1px solid #FFFFFF;text-decoration:underline; /*background: #FFFFFF;*/-webkit-transform:scale(1.5); }
+#div1 .lake {color:#8B0000; } /*0 down*/
+#div1 .lime {color:#B2FF5F; }     /*1 正常 */
+#div1 .yellow {color:#FFFF00;} /*2 黄色警报*/
+#div1 .red  {color: #FF7F00;}       /*3 红色警报*/
+#div1 .orange{color:#ff3030;}  /*4 红色+黄色警报*/
+#div1 .gray {color:#FFFFFF;}     /*5 未监控 */
+p { font-size: 12px Microsoft YaHei; text-align: center; color: #ba0c0c; }
+p a { font-size: 10px; color: #ba0c0c; }
+p a:hover { color: red;}
