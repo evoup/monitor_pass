@@ -1,0 +1,332 @@
+;;;;;;;;;;;;
+; 常规设置 ;
+;;;;;;;;;;;;
+[general]
+version=""                              ;版本
+work_mode=1                             ;本配置文件的工作方式,0为本地模式(仅供调试),1为分布式模式(仅仅读取mdb_host,mdb_sendtimeout,mdb_recvtimeout)
+debug_level=5                           ;调试等级,数字越大记录越详细，1~5个等级 
+down_over_time=60                       ;超过秒数没有收到客户端上传的消息，视为down机
+watchdog_url="http://example.com/watchdog" ;watchdog的url，watchdog是部署在监控服务端机房外的，检查监控服务可靠性的一个CGI
+client_sleep_time=8                     ;客户端的请求间隔秒数 
+send_daily_mail=1                       ;是否每天发送服务器工作状态邮件
+send_daily_mail_time="12:00:00"         ;每天几点几分几秒发送
+save_upload_log=1                       ;是否记录客户机上传log信息,1记录，0不记录 
+upload_log_facility="LOG_LOCAL3"        ;客户端上传syslog syslog_facility 
+upload_log_level="LOG_DEBUG"            ;客户端上传syslog syslog_level
+scan_log_facility="LOG_LOCAL3"          ;服务端扫描syslog syslog_facility 
+scan_log_level="LOG_ALERT"              ;服务端扫描syslog syslog_level
+save_update_log=1                       ;是否记录客户机更新log信息,1记录，0不记录 
+upload_log_facility="LOG_LOCAL3"        ;客户端更新syslog syslog_facility 
+upload_log_level="LOG_INFO"             ;客户端更新syslog syslog_level
+
+mdb_host="127.0.0.1:9090|localhost:9090" ;hbase服务器IP
+mdb_sendtimeout=2000                    ;hbase服务器发送超时:默认2秒
+mdb_recvtimeout=2000                    ;hbase服务器接收超时:默认2秒
+send_mail_type=0                        ;邮件发送方式,0为sendmail（php的默认mail函数），1为使用smtp
+smtp_server="mail.madhouse-inc.com"     ;smtp服务器地址
+smtp_port=25                            ;smtp服务器端口
+smtp_domain="madhouse-inc.com"          ;smtp的域名
+smtp_username="someone@madhouse-inc.com" ;smtp用户名
+smtp_password="password"                  ;smtp密码 
+smtp_auth=1                             ;smtp认证
+smtp_timeout=40                         ;smtp超时秒数
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 监控服务器列表设置                                          ;
+; 1为generic,2为mysql，3为serving(delivering)，4为daemon      ;
+; 5为report,其他为自定义组（自定义组按照该组监控项设置工作）  ;
+; 多个服务器用,分割                                           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[server_list]
+type_1="" ;TODO这里即使少定义也会有 
+type_2=""
+type_3=""
+type_4=""
+type_5=""
+
+[not_monitored]
+
+[server_group]
+;freebsd_server="monitoradmin,op-1#11111111111111111111111111111111|001111111111111111111111111|1111111111111|11111|11111|||||||"
+;gnu_server="monitoradmin,op-1#11111111111111111111111111111111|001111111111111111111111111|1111111111111|11111|11111|||||||"
+
+[host_monitor_detail] ;服务器的监控明细(哪些项目监控)
+
+[host_monitor_item_detail] ;服务器的监控明细项列表(各项监控指标)
+
+[group_monitor_detail] ;服务器组的监控明细项列表
+
+[user_group]
+;monitoradmin="monitoradmin"
+;op-1="yinjia"
+
+[user]
+;monitoradmin="monitoradmin@mail.madhouse-inc.com"
+;yinjia="yinjia@mail.madhouse-inc.com"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 邮件发送设置                       ;
+; (设置方法：[]后加一个邮件地址)     ;
+; mail_from 邮件发送者               ;
+; mail_to_caution 黄色警报邮件接收者 ;
+; mail_to_warning 红色警报邮件接收者 ;
+; mail_cc_caution 黄色警报邮件接收者 ;
+; mail_cc_warning 红色警报邮件接收者 ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[mail]
+mail_from = "monitorserver2@madhouse-inc.com"
+sender_name = "MONITOR_ALARM"
+
+;mail_to_caution[] = "13512160886@139.com"
+;mail_to_caution[] = "odin@gmail.com"
+;mail_to_caution[] = "15821209415@139.com"
+mail_to_caution[] = "yinjia@madhouse-inc.com"
+;mail_to_caution[] = "evoex@126.com"
+
+;mail_to_warning[] = "13581681398@139.com" 
+;mail_to_warning[] = "13512160886@139.com" 
+;mail_to_warning[] = "odinmanlee@gmail.com"
+;mail_to_warning[] = "15821209415@139.com"
+mail_to_warning[] = "yinjia@madhouse-inc.com"
+;mail_to_warning[]= "evoex@126.com"
+
+;mail_cc_caution[] = "xuyunfeng@madhouse-inc.com"
+
+;mail_cc_warning[] = "odin@madhouse-inc.com"
+;mail_cc_warning[] = "xuyunfeng@madhouse-inc.com"
+
+
+;;;;;;;;;;;;;;;;
+; 报警间隔设置 ;
+;;;;;;;;;;;;;;;;
+[alarm_interval]
+all_default_gp_down     = 0 ;所有默认组的服务器宕机的报警间隔秒数 
+all_cust_gp_down        = 0 ;所有自定义组的服务器宕机的报警间隔秒数 
+one_default_gp_down     = 0 ;单个默认组全部服务器都宕机的报警间隔秒数 
+one_cust_gp_down        = 0 ;单个自定义组全部服务器都宕机的报警间隔秒数 
+one_default_server_down = 0 ;单台默认组中的服务器宕机的报警间隔秒数 
+one_cust_server_down    = 0 ;单台自定义组中的服务器宕机的报警间隔秒数 
+general_server_event    = 0 ;通常的服务器事件（非down）
+recover_notifiction     = 1 ;是否需要发送恢复通知（0为不需要，1为需要）
+
+;;;;;;;;;;;;;;;;
+; 监控事件设置 ;
+;;;;;;;;;;;;;;;;
+;服务器事件
+[disk_range]  
+normal_start  =  0                               ;normal磁盘容量下限
+normal_end    =  97                              ;normal磁盘容量上限
+caution_start =  97                              ;caution磁盘容量下限
+caution_end   =  100                             ;caution磁盘容量上限
+warn_start    =  100                             ;warn磁盘容量下限
+;warn_end      =  9999                           ;warn磁盘容量上限
+normal_word   =  ""                              ;normal邮件告知文字 
+caution_word  =  "%s: Disk %s usage is %d%%"     ;caution邮件告知文字 
+warn_word     =  "%s: Disk %s usage is %d%%"     ;warn邮件告知文字 
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[disk_inode]  
+normal_start  =  0                               ;normal磁盘INode容量下限
+normal_end    =  90                              ;normal磁盘INode容量上限
+caution_start =  90                              ;caution磁盘INode容量下限
+caution_end   =  100                             ;caution磁盘INode容量上限
+warn_start    =  100                             ;warn磁盘INode容量下限
+;warn_end      =  9999                           ;warn磁盘INode容量上限
+normal_word   =  ""                              ;normal邮件告知文字 
+caution_word  =  "%s: Disk %s usage is %d%%"     ;caution邮件告知文字 
+warn_word     =  "%s: Disk %s usage is %d%%"     ;warn邮件告知文字 
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[load_average]
+normal_start  = 0                                ;normal Load Average (1min)下限
+normal_end    = 10                               ;normal Load Average (1min)上限
+caution_start = 10                               ;caution Load Average (1min)下限 
+caution_end   = 100                              ;caution Load Average (1min)上限
+warn_start    = 100                              ;warn Load Average (1min)下限
+;warn_end     = 9999                             ;warn Load Average (1min)上限
+normal_word   = ""                               ;normal Load Average (1min)告知文字
+caution_word  = "%s: load (%s) is larger than 10,server performance may be reduced"  ;caution Load Average (1min)告知文字
+warn_word     = "%s: load (%s) is larger than 100,server performance may be reduced" ;warn Load Average (1min)告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[memory_usage_percent]
+normal_start  = 0                                ;normal内存使用率下限
+normal_end    = 98                               ;normal内存使用率上限
+caution_start = 98                               ;caution内存使用率下限
+;caution_end   = 9999
+warn_start    = 100                              ;warn内存使用率下限(unused)    
+normal_word   = ""                               ;normal内存使用率告知文字
+caution_word  = "%s: Memory usage is %01.2f%%"   ;caution内存使用率告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[running_process_num]
+normal_start  = 0                                ;normal进程数下限
+normak_end    = 250                              ;normal进程数上限
+caution_start = 250                              ;caution进程数上限 
+caution_end   = 500                              ;caution进程数上限
+warn_start    = 500                              ;warn进程数上限
+;warn_end     = 9999
+normal_word   = ""                               ;normal进程数告知文字
+caution_word  = "%s: The total number of processes is %d" ;caution进程数告知文字
+warn_word     = "%s: The total number of processes is %d" ;warn进程数告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[tcpip_service]
+normal_status = 1                                ;normal TCP/IP服务端口状态正常
+caution_status = 0                               ;caution TCP/IP服务端口状态异常
+normal_word   = ""                               ;normal TCP/Ip服务端口告知文字
+caution_word  = "%s: TCP/IP service %s port %d CORRUPTED" ;caution TCP/IP服务端口端口告知文字 
+scan_opt      = "0|2|3"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[tcpip_connections]
+normal_start  = 0                                ;normal TCP/IP连接数下限
+normal_end    = 7000                             ;normal TCP/IP连接数上限
+caution_start = 7000                             ;caution TCP/IP连接数下限
+caution_end   = 10000                            ;caution TCP/IP连接数上限
+warn_start    = 10000                            ;warn TCP/IP连接数
+normal_word   = ""                               ;normal TCP/IP连接数告知文字
+caution_word  = "%s: Total number of TCP/IP connections is %s , New connections may have trouble being created" ;caution TCP/IP连接数告知文字
+warn_word     = "%s: Total number of TCP/IP connections is %s , New connections may have trouble being created" ;warn TCP/IP连接数告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[network_flow]
+normal_start  = 0                                ;normal 网卡流量下限(单位byte)
+normal_end    = 52428800                         ;normal 网卡流量上限(单位byte)
+caution_start = 52428800                         ;caution 网卡流量下限(单位byte)
+warn_start    = 104857600                        ;warn 网卡流量下限(单位byte)(unused) 
+normal_word   = ""                               ;normal 网卡流量告知文字
+caution_word  = "%s: %s network interface flow is %sbyte/s ,in is %sbyte/s,out is %sbyte/s" ;caution 网卡流量告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+;serving node事件
+[serving_request]
+normal_start  = 0                                ;normal 单台负荷每秒request数下限
+normal_end    = 500                              ;normal 单台负荷每秒request数上限
+caution_start = 500                              ;caution 单台负荷每秒request数下限 
+warn_start    = 1000                             ;warn   单台负荷每秒request数下限(unused)
+normal_word   = ""                               ;normal 单台负荷每秒request告知文字
+caution_word  = "%s: request num is more than 500 reqs/s,current request number is %s reqs/s" ;caution 单台负荷每秒request告知文字
+scan_opt      = "0|0|1"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[serving_loginfo]
+caution_word  = "%s: loginfo creation failed! May be not any request incoming." ;caution 日志生成状态告知文字
+scan_opt      = "0|10|3"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[serving_deliver]
+normal_status  = 1                               ;normal 广告发布状态正常
+caution_status = 0                               ;caution 广告发布状态异常(单台)
+warn_status    = 2                               ;warning 广告发布状态异常（多台）
+normal_word    = ""                              ;normal 广告发布告知文字
+caution_word   = "%s: ad deliver CORRUPTED,engine status is %s" ;caution 广告发布告知文字 
+warn_word      = "more than one server deliver CORRUPTED" ;warning 广告发布告知文字 
+scan_opt       = "0|10|2"                       ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[serving_fillrate]
+caution_word = "%s: fillrate is %01.2f%%, less than %s%%" ;caution 填充率异常告知文字
+caution_start=5                    ;caution 广告填充率下限
+warn_start=0                       ;warn 广告填充率下限
+scan_opt = "0|10|5"                ;扫描间隔秒数|守望问题事件秒数|重试次数|波动次数        
+
+;daemon事件
+[daemon_webserver]
+normal_status  = 1                               ;normal webserver状态正常 
+warn_status    = 0                               ;warning webserver状态异常
+warn_word      = "%s: webserver status CORRUPTED" ;warning webserver状态异常告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[daemon_daemon]
+normal_status  = 1                               ;normal daemon状态正常 
+warn_status    = 0                               ;warning daemon状态异常
+warn_word      = "%s: daemon status CORRUPTED"    ;warning daemon状态异常告知文字
+scan_opt       = "0|5|3"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[daemon_login]
+normal_status  = 1                               ;normal login状态正常 
+warn_status    = 0                               ;warning login状态异常
+warn_word      = "%s: login status CORRUPTED"     ;warning login状态异常告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[daemon_adserv]
+normal_status  = 1                               ;normal login状态正常
+warn_status    = 0                               ;warning login状态异常
+warn_word      = "%s: adserv status CORRUPTED"    ;warning login状态异常告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[daemon_errorlog]
+normal_status  = 1                               ;normal errorlog状态正常 
+warn_status    = 0                               ;warning errorlog状态异常
+warn_word      = "%s: error log status CORRUPTED" ;warning errorlog状态异常告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+;db事件
+[mysql_db_connections]
+normal_start   = 0
+normal_end     = 500
+caution_start  = 500
+caution_end    = 1000
+warn_start     = 1000
+normal_word    = ""
+caution_word   = "%s:db connections is more than 500,%s connections now"  ;caution 数据库连接数量告知文字
+warn_word      = "%s:db connections is more than 1000,%s connections now" ;warning 数据库连接数量告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[mysql_db_threads]
+normal_start   = 0
+normal_end     = 500
+caution_start  = 500
+caution_end    = 1000
+warn_start     = 1000
+normal_word    = ""
+caution_word   = "%s:db threads is more than 500,%s threads were created"  ;caution mysql数据库线程数量告知文字
+warn_word      = "%s:db threads is more than 1000,%s threads were created" ;warning mysql数据库线程数量告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[mysql_master_slave]
+warn_status    = 0
+warn_word      = "%s:MySQL database down!"       ;warning mysql MASTER SLAVE告知文字
+scan_opt       = "0|10|14"                       ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[mysql_key_table]
+caution_word="%s:table %s size too large!"       ;warning mysql key table告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[mysql_seconds_behind_master]
+normal_start   = 0
+normal_end     = 1000
+caution_start  = 1000
+caution_end    = 5000 
+warn_start     = 5000 
+normal_word    = ""
+caution_word   = "%s:db slave seconds behind master is more than 500,%s now"  ;caution 数据库slave延迟告知文字
+warn_word      = "%s:db slave seconds behind master is more than 5000,%s now" ;warning 数据库slave延迟告知文字
+scan_opt       = "0|0|1"                         ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+;report事件
+[report_wait_process_log_num]
+normal_start  = 0                                 ;normal 待处理log下限
+normal_end    = 100                               ;normal 待处理log上限
+caution_start = 100                               ;caution 待处理log下限
+warn_start    = 1000                              ;warn 待处理log下限
+normal_word   = ""                                ;normal 待处理log告知文字
+;caution 待处理log告知文字
+caution_word  = "%s:Too many logs need to processed,there are %s logs,platform stability may be reduced and reporting functions may not function correctly"
+scan_opt      = "0|0|1"                           ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+;madn事件
+[madn_availability]
+normal_status = "2XX|3XX"                         ;normal返回的状态码
+warn_word     = "%s: madn(%s to %s) access unavailable!"       ;warning madn告知文字
+scan_opt      = "0|10|3"                          ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+;hadoop事件
+[dfs_datanode_copyBlockOp_avg_time]
+caution_start = 3000                              ;caution 复制快平均时间
+warn_start    = 4000                              ;warning 复制快平均时间
+caution_word  = "%s:datanode copyBlockOp average time too long,current is:%s" ;caution copyBlockOp告知文字
+scan_opt      = "0|0|1"                           ;扫描间隔秒数|守望问题事件秒数|重试次数
+
+[dfs_datanode_heartBeats_avg_time]
+caution_start = 80                                ;caution 向namenode汇报平均时间 
+warn_start    = 80                                ;warning 向namenode汇报平均时间 
+caution_word  = "%s:datanode heartBeats average time too long,current is:%s" ;caution heartBeats告知文字 
+scan_opt      = "0|0|1"

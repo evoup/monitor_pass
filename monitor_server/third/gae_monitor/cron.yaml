@@ -1,0 +1,4 @@
+cron:
+- description: warning mail out 
+  url: /report
+  schedule: every 2 minutes

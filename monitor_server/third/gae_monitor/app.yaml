@@ -1,0 +1,15 @@
+application: yourappid
+version: 1
+runtime: python
+api_version: 1
+
+inbound_services:
+- mail
+
+handlers:
+- url: /_ah/mail/.+
+  script: processmail.py
+  login: admin
+
+- url: /report
+  script: report.py
