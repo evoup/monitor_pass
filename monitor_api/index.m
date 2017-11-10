@@ -17,6 +17,7 @@ define(__THRIFT_ROOT, dirname(__FILE__).'/thrift');
 //error_reporting(E_ALL | E_STRICT);
 error_reporting(0);
 $conf = parse_ini_file(dirname(__FILE__).'/conf/api.conf'); //配置文件 
+list($mdb_host, $mdb_port) = explode(':', $conf['mdb_host']);
 $hadoopConf = parse_ini_file(dirname(__FILE__).'/conf/hadoop.conf',true); //hbase有关信息配置 
 
 /* {{{ 载入常数
