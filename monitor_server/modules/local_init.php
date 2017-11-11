@@ -25,6 +25,9 @@ memcache_host="127.0.0.1:11211"
 client_fpm_stop="/usr/local/etc/rc.d/phpfpm_monitor_client stop"
 client_fpm_start="/usr/local/etc/rc.d/phpfpm_monitor_client start"
 EOT;
+    $mkdirStr="mkdir -p ".__ADDON_ROOT."/".__CONF_SUBPATH;
+    echo $mkdirStr."\n";
+    exec($mkdirStr);
     file_put_contents(__CONF_FILE2,$iniStr);
     echo "please edit ".__CONF_FILE2."\n";
     doExit("please edit ".__CONF_FILE2);
