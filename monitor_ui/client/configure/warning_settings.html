@@ -218,7 +218,8 @@ $(function(){
 	//init
 	////////////////////////////////////////////////////////
 	
-	$('#set_form').bind('ajax.success', formCall);
+  //$('#set_form').bind('ajax.success', formCall);
+	$('#set_form').bind('ajax.success', formCall).getData(formConf);
 	
 	$('#selEngine')
 	.bind('ajax.success', function(e,json){
@@ -236,7 +237,6 @@ $(function(){
 	.getData({
 		url: smartMad._url + smartMad.api.getStaMonengine
 	});
-	
 	
 });
 </script>
