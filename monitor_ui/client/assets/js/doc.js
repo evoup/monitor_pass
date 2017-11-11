@@ -2,7 +2,11 @@
  * 截取域名
  */ 
 function domainURI(){
-    return location.hostname;
+    if (location.port != 80) {
+      return location.hostname + ":" + location.port;
+    } else {
+      return location.hostname;
+    } 
 }
 
 
