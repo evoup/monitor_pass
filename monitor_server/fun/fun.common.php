@@ -720,7 +720,7 @@ function killZkCliProc() {
     SaveSysLog('[KillZkCliProc][conf:'.__CONF_FILE2."]");
     list($zkcli_host,$zkcli_port)=explode(':',$tmpConf['zookeeper_host']);
     SaveSysLog("[KillZkCliProc][zkcli_host:{$zkcli_host}][zkcli_port:{$zkcli_port}]");
-    $shell="/usr/local/sbin/lsof -i:{$zkcli_port} | awk '{print $2\" \"$9}'";
+    $shell="lsof -i:{$zkcli_port} | awk '{print $2\" \"$9}'";
     SaveSysLog("[KillZkCliProc][shell:{$shell}]");
     @exec($shell,$lsofInfo,$lsofStat);
     if ($lsofStat==0) {
