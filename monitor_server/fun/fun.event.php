@@ -310,7 +310,7 @@ function reloadNeedFixList() {
                         $content .= "<a href='".$snapshot_url_prefix."/monitorui/mobile/mail.html?snapshotid=de437&server={$serv}&version={$version}'>>>SNAPSHOT</a>";
                         mail2Admin($mail_from, $mail_to_caution, $mail_cc_caution, $subject, date("M-d-Y/H:i:s", time())." $content",$event,array(__ALARM_TARGET_SERVER,$serv));
                         if ($event==sprintf("%04s",__EVCODE997W)) {
-                            writeMq($serv,__HOST_STATUS_UP);
+                            //writeMq($serv,__HOST_STATUS_UP);
                         } 
                     }
                     /* }}} */
@@ -387,7 +387,7 @@ function changeNeedfixServerEvent() {
                                     $content .= "<a href='".$snapshot_url_prefix."/monitorui/mobile/mail.html?snapshotid=de437&server={$serv}&version={$version}'>>>SNAPSHOT</a>";
                                     mail2Admin($mail_from, $mail_to_caution, $mail_cc_caution, $subject, date("M-d-Y/H:i:s", time())." $content","$ev_num"."$ev_lev",array(__ALARM_TARGET_SERVER,$serv));
                                     if ($ev_num.$ev_lev==sprintf("%04s",__EVCODE997W)) {
-                                        writeMq($serv, __HOST_STATUS_UP);
+                                        //writeMq($serv, __HOST_STATUS_UP);
                                     }
                                 }
                                 /* }}} */
@@ -642,82 +642,84 @@ function resolvedEventcleaner() {
 }
 
 /**
- *@brief 写状态消息队列
+ *@brief 往智能路由系统使用的ｒｅｄｉｓ队列写状态消息队列（已经废除）
  *@param $srv 服务器名
  *@param $status 状态，0宕机，1恢复在线
  */
-function writeMq($srv,$status) {
-    global $module_name;
-    switch ($status) {
-    case(__HOST_STATUS_UP):
-    case(__HOST_STATUS_DOWN):
-        // 核对状态
-        $realHostStat=hostIsOnline($srv)?__HOST_STATUS_UP:__HOST_STATUS_DOWN;
-        if ($status!=$realHostStat) {
-            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][realHostStat:$realHostStat][exception,will not write]", 4);
-            return false;
-        }
-        // 获取provideIp
-        try {
-            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $srv, 'info:ip');
-            $provide_ip=$arr[0]->value;
-            if (empty($provide_ip)) {
-                throw new Exception("no provide_ip!");
-            }
-        } catch (Exception $e) {
-            SaveSysLog("[$module_name][writeMq][srv:$srv][get provide_ip fail][cause:$e]", 4);
-            return false;
-        }
-        // 获取load
-        try {
-            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_SERVER, $srv, 'info:generic_summary_load');
-            $serverload=$arr[0]->value;
-        } catch (Exception $e) {
-            SaveSysLog("[$module_name][writeMq][srv:$srv][get load fail][cause:$e]", 4);
-            return false;
-        }
-        // 写入
-        try {
-            $GLOBALS['redis_client']->select(__MQ_TABLE);
-            //{opt}|edgesserver|provide_ip|serveralive|serverload|new_ip|carrier|location|timestamp|grp1#grp2
-            $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_STATUSCHANGE."|$srv|$provide_ip|$status|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
-            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][ok]", 4);
-        } catch (Exception $e) {
-            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][fail][cause:$e]", 4);
-        }
-        return true;
-        break;
-    case(__HOST_STATUS_NEWADD):
-        try {
-            if (!is_object($GLOBALS['redis_client'])) {
-                include_once(realpath(dirname(__FILE__).'/../').'/GPL/predis/Predis.php');
-                $localIniSetting=parse_ini_string(file_get_contents(__CONF_FILE2));
-                list($redis_ip,$redis_port)=explode(':',$localIniSetting['redis_host']);
-                // redis
-                $single_server = array(
-                    'host'     => $redis_ip,
-                    'port'     => $redis_port,
-                    'database' => 15
-                );
-
-                if ( !is_object($GLOBALS['redis_client']) ) {
-                    $GLOBALS['redis_client'] = new Predis_Client($single_server);
-                }
-                $GLOBALS['redis_client']->select(__MQ_TABLE);
-            }
-            // 判断是否是新的
-            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $srv, "info:last_upload");
-            if (!empty($arr[0]->value)) {
-                $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_STATUSCHANGE."|$srv|$provide_ip|".__HOST_STATUS_UP."|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
-                SaveSysLog("[$module_name][writeMq][srv:$srv][status:recover][ok]", 4);
-            } else {
-                $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_NEWADD."|$srv|$provide_ip|".__HOST_STATUS_UP."|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
-                SaveSysLog("[$module_name][writeMq][srv:$srv][status:add][ok]", 4);
-            }
-        } catch (Exception $e) {
-            SaveSysLog("[$module_name][writeMq][srv:$srv][status:add][fail][cause:$e]", 4);
-        }
-        break;
-    }
-}
+/*
+ *function writeMq($srv,$status) {
+ *    global $module_name;
+ *    switch ($status) {
+ *    case(__HOST_STATUS_UP):
+ *    case(__HOST_STATUS_DOWN):
+ *        // 核对状态
+ *        $realHostStat=hostIsOnline($srv)?__HOST_STATUS_UP:__HOST_STATUS_DOWN;
+ *        if ($status!=$realHostStat) {
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][realHostStat:$realHostStat][exception,will not write]", 4);
+ *            return false;
+ *        }
+ *        // 获取provideIp
+ *        try {
+ *            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $srv, 'info:ip');
+ *            $provide_ip=$arr[0]->value;
+ *            if (empty($provide_ip)) {
+ *                throw new Exception("no provide_ip!");
+ *            }
+ *        } catch (Exception $e) {
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][get provide_ip fail][cause:$e]", 4);
+ *            return false;
+ *        }
+ *        // 获取load
+ *        try {
+ *            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_SERVER, $srv, 'info:generic_summary_load');
+ *            $serverload=$arr[0]->value;
+ *        } catch (Exception $e) {
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][get load fail][cause:$e]", 4);
+ *            return false;
+ *        }
+ *        // 写入
+ *        try {
+ *            $GLOBALS['redis_client']->select(__MQ_TABLE);
+ *            //{opt}|edgesserver|provide_ip|serveralive|serverload|new_ip|carrier|location|timestamp|grp1#grp2
+ *            $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_STATUSCHANGE."|$srv|$provide_ip|$status|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][ok]", 4);
+ *        } catch (Exception $e) {
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][status:$status][fail][cause:$e]", 4);
+ *        }
+ *        return true;
+ *        break;
+ *    case(__HOST_STATUS_NEWADD):
+ *        try {
+ *            if (!is_object($GLOBALS['redis_client'])) {
+ *                include_once(realpath(dirname(__FILE__).'/../').'/GPL/predis/Predis.php');
+ *                $localIniSetting=parse_ini_string(file_get_contents(__CONF_FILE2));
+ *                list($redis_ip,$redis_port)=explode(':',$localIniSetting['redis_host']);
+ *                // redis
+ *                $single_server = array(
+ *                    'host'     => $redis_ip,
+ *                    'port'     => $redis_port,
+ *                    'database' => 15
+ *                );
+ *
+ *                if ( !is_object($GLOBALS['redis_client']) ) {
+ *                    $GLOBALS['redis_client'] = new Predis_Client($single_server);
+ *                }
+ *                $GLOBALS['redis_client']->select(__MQ_TABLE);
+ *            }
+ *            // 判断是否是新的
+ *            $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $srv, "info:last_upload");
+ *            if (!empty($arr[0]->value)) {
+ *                $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_STATUSCHANGE."|$srv|$provide_ip|".__HOST_STATUS_UP."|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
+ *                SaveSysLog("[$module_name][writeMq][srv:$srv][status:recover][ok]", 4);
+ *            } else {
+ *                $GLOBALS['redis_client']->rpush(__MQ_KEY,__MQ_PREFIX_OPT_NEWADD."|$srv|$provide_ip|".__HOST_STATUS_UP."|$serverload||||".microtime_float2().'|'.join('#',belongCustomizeGroup($srv)));
+ *                SaveSysLog("[$module_name][writeMq][srv:$srv][status:add][ok]", 4);
+ *            }
+ *        } catch (Exception $e) {
+ *            SaveSysLog("[$module_name][writeMq][srv:$srv][status:add][fail][cause:$e]", 4);
+ *        }
+ *        break;
+ *    }
+ *}
+ */
 ?>

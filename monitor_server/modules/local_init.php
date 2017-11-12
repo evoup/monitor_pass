@@ -54,8 +54,8 @@ $single_redis_server = array(
     'database' => 15
 );
 
-$GLOBALS['redis_client'] = new Predis_Client($single_redis_server);
-$GLOBALS['redis_client']->select(__MQ_TABLE);
+//$GLOBALS['redis_client'] = new Predis_Client($single_redis_server);
+//$GLOBALS['redis_client']->select(__MQ_TABLE);
 $GLOBALS['zookeeper_host']=$localIniSetting['zookeeper_host'];
 define(__ZOOKEEPER_NODENAME, gethostname());
 /* {{{ 系统信号

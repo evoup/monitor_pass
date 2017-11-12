@@ -168,7 +168,7 @@ function mdbSetAliveServerList($serv_name, $serv_type) {
                 $arrIp = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $serv_name, 'info:ip');
                 if (empty($arrIp[0]->value)) {
                     mdb_set(__MDB_TAB_HOST, "info:ip", $serv_name, getIp()); // 第一次进来记录ip 
-                    writeMq($serv_name,__HOST_STATUS_NEWADD);
+                    //writeMq($serv_name,__HOST_STATUS_NEWADD);
                     SaveSysLog("[$module_name][$fun_name][add new server {$serv_name} to serv list]",4);
                 } else {
                     /* >> don not write mq!在线的队列需要到恢复时再写! << */

@@ -56,7 +56,7 @@ if (false===$notDownServer) {
             if ($b_mail) {
                 SaveSysLog("[$module_name][sending][event_code:$evcode]:[one default server down:$down_srv]",4);
                 mail2Admin($mail_from, $mail_to_caution, $mail_cc_caution, $subject, date("M-d-Y/H:i:s", time())." $content",$evcode,array(__ALARM_TARGET_SERVER,$down_srv),true);
-                writeMq($down_srv,__HOST_STATUS_DOWN);
+                //writeMq($down_srv,__HOST_STATUS_DOWN);
             } else {
                 SaveSysLog("[$module_name][not send due in interval time][event_code:$evcode]:[one default server down:$down_srv]",4);
             }
@@ -104,7 +104,7 @@ if (false===$notDownCustServer) {
             if ($b_mail) {
                 SaveSysLog("[$module_name][sending][event_code:$evcode]:[customize group:$group_name][server down:$down_srv]",4);
                 mail2Admin($mail_from, $mail_to_caution, $mail_cc_caution, $subject, date("M-d-Y/H:i:s", time())." $content",$evcode,array(__ALARM_TARGET_SERVER,$down_srv),true);
-                writeMq($down_srv,__HOST_STATUS_DOWN);
+                //writeMq($down_srv,__HOST_STATUS_DOWN);
             } else {
                 SaveSysLog("[$module_name][not send due in interval time][event_code:$evcode]:[customize group:$group_name][server down:$down_srv]",4);
             }
@@ -133,7 +133,7 @@ if (false===$notDownRest) {
             if ($b_mail) {
                 SaveSysLog("[$module_name][notDownRest][sending][event_code:$evcode]:[group:$group_name][server down:$down_srv]",4);
                 mail2Admin($mail_from, $mail_to_caution, $mail_cc_caution, $subject, date("M-d-Y/H:i:s", time())." $content", $evcode, array(__ALARM_TARGET_SERVER,$down_srv), true);
-                writeMq($down_srv,__HOST_STATUS_DOWN);
+                //writeMq($down_srv,__HOST_STATUS_DOWN);
             } else {
                 SaveSysLog("[$module_name][not send due in interval time][event_code:$evcode]:[customize group:$group_name][server down:$down_srv]",4);
             }

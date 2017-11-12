@@ -81,7 +81,7 @@ function SaveSysLog($data, $debug_lev=4, $syslog_facility='LOG_LOCAL1', $syslog_
     }
 
     if ($debug_lev<=$debug_level) {
-        @define_syslog_variables();
+        if (function_exists("define_syslog_variables")) define_syslog_variables();
         openlog($syslog_tag,LOG_PID,constant($syslog_facility));
         syslog(constant($syslog_level),"[$stag]".$data."[".__VERSION."]");
         closelog();
@@ -573,7 +573,7 @@ function daemonize() {
     clearstatcache();
     /*}}}*/
     registerSignal('master');
-    killZkCliProc();
+    //killZkCliProc();
     if ($pid = pcntl_fork() > 0) {
         // 扫描干扫描的
         if (function_exists('setproctitle')) {
