@@ -12,5 +12,5 @@
   | Last-Modified: 2012-07-10 23:34:38
   +----------------------------------------------------------------------+
 */
-$this->create('/monitor_server/'.__ZOOKEEPER_NODENAME,'nodeContents',array(0=>$acl),Zookeeper::EPHEMERAL);
+@$this->create('/monitor_server/'.__ZOOKEEPER_NODENAME,'nodeContents',array(0=>$acl),Zookeeper::EPHEMERAL);
 ?>

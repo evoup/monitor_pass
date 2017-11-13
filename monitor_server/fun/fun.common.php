@@ -594,32 +594,32 @@ function daemonize() {
         usleep(10000);
         while (true) {
             // 子进程尝试获取父进程的文件锁，如果能获取证明父进程挂了，需要退出！
-            if (flock($master_pid_fp=fopen($pid_file,'r'), LOCK_NB | LOCK_EX)) {
+            if (@flock($master_pid_fp=fopen($pid_file,'r'), LOCK_NB | LOCK_EX)) {
                 exit();
             }
-            if ($GLOBALS['stag']!=file_get_contents(__ADDON_ROOT.'/monitorSrv.work')) {
+            if (@$GLOBALS['stag']!=file_get_contents(__ADDON_ROOT.'/monitorSrv.work')) {
                 exit();
             }
-            file_put_contents(__ADDON_ROOT.'/zkcli.work',time());
+            @file_put_contents(__ADDON_ROOT.'/zkcli.work',time());
             if ($count<100) { // 防止wcpu占用过大
                 $count++;
             } else {
                 // 写入redis告诉父进程子进程操作仍在继续，（for 扩展僵死等异常）
-                SaveSysLog("[$module_name][daemonize][zk proc][will set alive status]",3);
-                file_put_contents(__ADDON_ROOT.'/zkcli.work',time());
+                @SaveSysLog("[$module_name][daemonize][zk proc][will set alive status]",3);
+                @file_put_contents(__ADDON_ROOT.'/zkcli.work',time());
                 try {
-                    $znd=$zk->getChildren('/monitor_server');
-                    SaveSysLog("[$module_name][daemonize][zk proc][znd:".serialize($znd)."][my node:".__ZOOKEEPER_NODENAME."]",3);
+                    @$znd=$zk->getChildren('/monitor_server');
+                    @SaveSysLog("[$module_name][daemonize][zk proc][znd:".serialize($znd)."][my node:".__ZOOKEEPER_NODENAME."]",3);
                     if (!in_array(__ZOOKEEPER_NODENAME,$znd) || count($znd)>1) { // 可能存在挂断之后cron起多个节点同时在线，此时主动退，更好的方式是实现一个锁，参见《基于zookeeper的分布式lock实现》http://agapple.iteye.com/blog/1184040
-                        SaveSysLog("[$module_name][daemonize][zk proc][detect another server is online,exit]",3);
-                        killZkCliProc();
-                        exit();
+                        @SaveSysLog("[$module_name][daemonize][zk proc][detect another server is online,exit]",3);
+                        @killZkCliProc();
+                        @exit();
                     }
                 } catch (Exception $e) {
-                    SaveSysLog("[$module_name][daemonize][zk proc][Exception:".$e->getMessage()."]",3);
-                    exit(); // 有异常直接退
+                    @SaveSysLog("[$module_name][daemonize][zk proc][Exception:".$e->getMessage()."]",3);
+                    //exit(); // 有异常直接退
                 }
-                SaveSysLog("[$module_name][daemonize][zk proc][recounter]",3);
+                @SaveSysLog("[$module_name][daemonize][zk proc][recounter]",3);
                 $count=0;
             }
             usleep(100000);

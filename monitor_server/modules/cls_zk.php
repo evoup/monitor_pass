@@ -23,7 +23,7 @@ class zookeeper_instance extends Zookeeper {
                 "scheme"=>"world",
                 "id"=>"anyone"
             );
-            $this->create('/monitor_server','',array(0=>$acl),NULL); // 创建永久性一级节点代表监控服务端
+            @$this->create('/monitor_server','',array(0=>$acl),NULL); // 创建永久性一级节点代表监控服务端
             $znode=$this->getChildren('/monitor_server'); // 获取节点下的服务器
             if ((is_array($znode) && !empty($znode) && $znode[0]!=__ZOOKEEPER_NODENAME) || count($znode)>1) { // 如果有不是本机的服务器主动退
                 SaveSysLog("[$module_name][class.zookeeper_instance][server node existed,won`t scan and exit]",3);
