@@ -13,8 +13,8 @@
   | Last-Modified: 2011-10-13 15:45:18
   +----------------------------------------------------------------------+
  */
-define(__THRIFT_ROOT,'../thrift');
-define(__MDB_HOST,'172.16.30.201');
+define(__THRIFT_ROOT,'../GPL/thrift');
+define(__MDB_HOST,'datanode2');
 define(__MDB_PORT,'9090');
 define(__MDB_SENDTIMEOUT, '10000');  //10 seconds
 define(__MDB_RECVTIMEOUT, '10000');  //10 seconds
