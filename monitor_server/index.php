@@ -68,8 +68,8 @@ if (!$runCli)
         include_once('modules/daily.php');
         break;
     case('scan'): // 处理收集到的监控信息 
-        while (true)
-        {
+        //while (true)
+        //{
             include_once("fun/fun.engine.php");
             include_once('GPL/predis/Predis.php');
             include("modules/local_init.php");
@@ -102,7 +102,7 @@ if (!$runCli)
                 gc_collect_cycles();
             }
             sleep(__SCAN_INTERVAL);
-        }
+        //}
         break;
     }
 }

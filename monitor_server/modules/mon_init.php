@@ -103,7 +103,7 @@ if (empty($controller_type) && $argv[1]!='daily') {
         doExit();
     } else {
         if (!$GLOBALS['daemoned']) {
-            daemonize();
+            //daemonize();
             $GLOBALS['daemoned'] = true; // 扫描时以守护进程形式出现
         }
     }

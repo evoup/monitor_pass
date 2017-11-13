@@ -266,17 +266,17 @@ mdb_set(__MDB_TAB_ENGINE, __MDB_COL_SCAN_DURATION, __KEY_SCAN_DURATION, $scan_du
 /* }}} */
 /* {{{ 如果子进程由于某些原因出现卡住等问题，退出
  */
-if (!$notFirstScan) {
-    if (time()-($zk_last_alive_time=@file_get_contents(__ADDON_ROOT.'/zkcli.work'))>30) {
-        $pid=file_get_contents($pid_file2);
-        shell_exec("/bin/kill -9 {$pid}");
-        SaveSysLog("[$module_name][child process occur stuck.force kill,then exit!]", 4);
-        exit();
-    }
-} else {
-    $notFirstScan=true;
-    sleep(3); // 等待一会儿，子进程需要设置alive
-}
+//if (!$notFirstScan) {
+    //if (time()-($zk_last_alive_time=@file_get_contents(__ADDON_ROOT.'/zkcli.work'))>30) {
+        //$pid=file_get_contents($pid_file2);
+        //shell_exec("/bin/kill -9 {$pid}");
+        //SaveSysLog("[$module_name][child process occur stuck.force kill,then exit!]", 4);
+        //exit();
+    //}
+//} else {
+    //$notFirstScan=true;
+    //sleep(3); // 等待一会儿，子进程需要设置alive
+//}
 /* }}} */
 if (is_object($GLOBALS['redis_client'])) $GLOBALS['redis_client']->quit();
 SaveSysLog("[$module_name][all done.]",4);

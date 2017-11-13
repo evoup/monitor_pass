@@ -1,6 +1,7 @@
 # coding: utf-8
 import logging
 import time
+import subprocess
 from os.path import basename, join
  
 from zkclient import ZKClient, zookeeper, watchmethod
@@ -80,6 +81,10 @@ class GJZookeeper(object):
             while 1 : 
               time.sleep(5)
               print "do scan"
+              shell = "/usr/local/php5_new/bin/php /var/www/html/monitor_pass/monitor_server/index.php scan"
+              # subprocess.call(shell)
+              proc = subprocess.Popen(shell, shell=True, stdout=subprocess.PIPE)
+              script_response = proc.stdout.read()
         else:
             self.say("%s is masters, I'm slave" % self.masters)
  
