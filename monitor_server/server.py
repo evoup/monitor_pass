@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+import time
 from os.path import basename, join
  
 from zkclient import ZKClient, zookeeper, watchmethod
@@ -14,7 +15,7 @@ log = logging
 class GJZookeeper(object):
  
     ZK_HOST = "zk1:2181"
-    ROOT = "/app"
+    ROOT = "/monitor_server"
     WORKERS_PATH = join(ROOT, "workers")
     MASTERS_NUM = 1
     TIMEOUT = 10000
@@ -76,6 +77,9 @@ class GJZookeeper(object):
         if self.path in self.masters:
             self.is_master = True
             self.say("I've become master!")
+            while 1 : 
+              time.sleep(5)
+              print "do scan"
         else:
             self.say("%s is masters, I'm slave" % self.masters)
  
