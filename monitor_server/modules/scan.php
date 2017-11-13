@@ -278,6 +278,6 @@ if (!$notFirstScan) {
     sleep(3); // 等待一会儿，子进程需要设置alive
 }
 /* }}} */
-$GLOBALS['redis_client']->quit();
+if (is_object($GLOBALS['redis_client'])) $GLOBALS['redis_client']->quit();
 SaveSysLog("[$module_name][all done.]",4);
 ?>
