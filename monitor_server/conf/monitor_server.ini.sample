@@ -19,7 +19,7 @@ save_update_log=1                       ;是否记录客户机更新log信息,1�
 upload_log_facility="LOG_LOCAL3"        ;客户端更新syslog syslog_facility 
 upload_log_level="LOG_INFO"             ;客户端更新syslog syslog_level
 
-mdb_host="127.0.0.1:9090|localhost:9090" ;hbase服务器IP
+mdb_host="datanode2:9090|datanode2:9090" ;hbase服务器IP
 mdb_sendtimeout=2000                    ;hbase服务器发送超时:默认2秒
 mdb_recvtimeout=2000                    ;hbase服务器接收超时:默认2秒
 send_mail_type=0                        ;邮件发送方式,0为sendmail（php的默认mail函数），1为使用smtp
