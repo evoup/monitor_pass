@@ -91,7 +91,7 @@ if (empty($controller_type) && $argv[1]!='daily') {
     if (!file_exists($pid_file)) {
         makeDir($pid_file,"0755",0,'f');
     }
-    $last_pid = file_get_contents($pid_file);
+    $last_pid = @file_get_contents($pid_file);
     if (!flock($master_pid_fp=fopen($pid_file,'w'), LOCK_NB | LOCK_EX)) {
         SaveSysLog("[$module_name][last scan process exists,last pid:$last_pid]",1); 
         if (!empty($last_pid)) {
