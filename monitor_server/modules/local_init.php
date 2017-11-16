@@ -17,10 +17,10 @@ $module_name='local_init';
 
 if (!file_exists(__CONF_FILE2)) {
     $iniStr=<<<EOT
-zookeeper_host="127.0.0.1:2181"
+zookeeper_host="zk1:2181"
 redis_host="127.0.0.1:6379"
-api_url_prefix="http://domain"
-ui_url_prefix="http://domain"
+api_url_prefix="http://monitor.mdn2x.net:8004/mmsapi1.0"
+ui_url_prefix="http://monitor.mdn2x.net:8004"
 memcache_host="127.0.0.1:11211"
 client_fpm_stop="/usr/local/etc/rc.d/phpfpm_monitor_client stop"
 client_fpm_start="/usr/local/etc/rc.d/phpfpm_monitor_client start"
