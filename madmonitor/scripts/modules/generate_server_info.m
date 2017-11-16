@@ -314,9 +314,9 @@ if ($netStat==0) {
         $interfaces[$if_name]="${if_in} ${if_out}";                                                                        
     }                                                                                                                   
 }
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$res][traffic_info:$traffic_info][traffic_stat:$traffic_stat]");
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[traffic_info2:".json_encode($traffic_info)."]");
-    foreach ($interfaces as $if_name=>$traffic_info) {
+    $byte_in=0;
+    $byte_out=0;
+    foreach ($interfaces as $if_name=>$traffic_inout) {
         $traffic_stamp=time();
         list($part_in,$part_out)=explode(' ',$traffic_inout);
         DebugInfo(3,$debug_level,"[$process_name][$module_name]::[$if_name]-[part_in:$part_in]-[part_out:$part_out]");
