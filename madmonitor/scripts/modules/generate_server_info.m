@@ -296,7 +296,7 @@ $traffic=array();
 //以下phc不能编译，用正则
 //$command_if="{$_ifconfig} | grep -w \"\<UP\" | grep -v lo0";
 file_put_contents(__PROC_ROOT.'/work/__ifconfig.info','');
-$command_if="{$_ifconfig} > ".__PROC_ROOT."/work/__ifconfig.info & sleep {$_ifconfig_timeout} ; kill $! >> /dev/null 2>&1";
+$command_if="{$_ifconfig} | grep 'Link' > ".__PROC_ROOT."/work/__ifconfig.info & sleep {$_ifconfig_timeout} ; kill $! >> /dev/null 2>&1";
 DebugInfo(2,$debug_level,"[$process_name][$module_name]::[command_if:$command_if]");
 @exec($command_if,$if_info,$if_stat);
 $res=file_get_contents(__PROC_ROOT.'/work/__ifconfig.info');
@@ -314,14 +314,12 @@ if (!$_monitor_linux) { //freebsd的netstat版本确定
     $flag_freebsd_netstat_oldversion=($temp_version>8)?0:1;
     DebugInfo(2,$debug_level,"[$process_name][$module_name]::[osversion:{$temp_version}][oldnetstat:{$flag_freebsd_netstat_oldversion}]");
 }
+$if_info=array_filter($if_info);
 foreach ($if_info as $if_string) {
-    if (!preg_match("/.*<UP.*/",$if_string,$match)) {
-        continue;
-    }
     if (preg_match("/.*lo0.*/",$if_string,$match)) { //排除lo0
         continue;
     }
-    list($if_name,)=explode(':',$if_string);
+    list($if_name,)=explode(' ',$if_string); 
     DebugInfo(2,$debug_level,"[$process_name][$module_name]::[if_string:$if_string][if_name:$if_name]");
     $byte_in=0;$byte_out=0;
     file_put_contents(__PROC_ROOT.'/work/__netstat.info','');
