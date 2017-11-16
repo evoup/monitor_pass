@@ -58,10 +58,10 @@ if (true===buildConf($conf_file,$array_conf)) {
 /* all */
 
 //操作系统支持
-$_monitor_linux=($array_conf['monitor_linux']==='1')?true:false;
+$_monitor_linux=($array_conf['monitor_freebsd']==='1')?false:true;
 //主机名
 $_server_name=empty($array_conf['server_name'])?'no_name':$array_conf['server_name'];
-$_grep=empty($array_conf['path_grep'])?'/usr/bin/grep':$array_conf['path_grep'];
+$_grep=file_exists("/bin/grep")?"/bin/grep":"/usr/bin/grep";
 //ip作为主机名后缀依据
 $determinIp=NULL;
 $_ifconfig=empty($array_conf['path_ifconfig'])?'/sbin/ifconfig':$array_conf['path_ifconfig'];
@@ -226,7 +226,8 @@ $_nc=empty($array_conf['path_nc'])?'/usr/bin/nc':$array_conf['path_nc'];
 $_printf=empty($array_conf['path_printf'])?'/usr/bin/printf':$array_conf['path_printf'];
 $_df=empty($array_conf['path_df'])?'/bin/df':$array_conf['path_df'];
 $_awk=empty($array_conf['path_awk'])?'/usr/bin/awk':$array_conf['path_awk'];
-$_netstat=empty($array_conf['path_netstat'])?'/usr/bin/netstat':$array_conf['path_netstat'];
+//$_netstat=empty($array_conf['path_netstat'])?'/usr/bin/netstat':$array_conf['path_netstat'];
+$_netstat=file_exists('/bin/netstat')?"/bin/netstat":"/usr/bin/netstat";
 $_wc=empty($array_conf['path_wc'])?'/usr/bin/wc':$array_conf['path_wc'];
 $_ifconfig=empty($array_conf['path_ifconfig'])?'/sbin/ifconfig':$array_conf['path_ifconfig'];
 $_ipfw=empty($array_conf['path_ipfw'])?'/sbin/ipfw':$array_conf['path_ipfw'];
