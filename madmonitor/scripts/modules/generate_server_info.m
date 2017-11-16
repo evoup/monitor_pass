@@ -293,79 +293,52 @@ if ($_monitor_linux) {
 
 //if stat
 $traffic=array();
-//以下phc不能编译，用正则
-//$command_if="{$_ifconfig} | grep -w \"\<UP\" | grep -v lo0";
-file_put_contents(__PROC_ROOT.'/work/__ifconfig.info','');
-$command_if="{$_ifconfig} | grep 'Link' > ".__PROC_ROOT."/work/__ifconfig.info & sleep {$_ifconfig_timeout} ; kill $! >> /dev/null 2>&1";
-DebugInfo(2,$debug_level,"[$process_name][$module_name]::[command_if:$command_if]");
-@exec($command_if,$if_info,$if_stat);
-$res=file_get_contents(__PROC_ROOT.'/work/__ifconfig.info');
-if (empty($res)) {
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[command_if:$command_if][run time out!]");
-    exit();
+unset($netInfo);
+@exec('cat /proc/net/dev', $netInfo, $netStat); // 目前不考虑非linux                                                    
+if ($netStat==0) {                                                                                                         
+    //[0] => Inter-|   Receive                                                |  Transmit                                  
+    //[1] =>  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    //[2] =>     lo:   14491     177    0    0    0     0          0         0    14491     177    0    0    0     0       0          0
+    //[3] =>   eth0: 11659952    8391    0    0    0     0          0         0   323403    4942    0    0    0     0       0          0
+    array_shift($netInfo);                                                                                                 
+    array_shift($netInfo);                                                                                                 
+    foreach ($netInfo as $ifLine) {                                                                                        
+        //echo $ifLine;                                                                                                    
+        $items=preg_split('/\s+/', ltrim($ifLine));                                                                        
+        $if_name=$items[0];                                                                                                
+        $if_in=$items[1];                                                                                                  
+        $if_out=$items[9];                                                                                                 
+        if ($if_name=='lo:') {                                                                                                                                          
+            continue;                                                                                                      
+        }                                                                                                                  
+        $interfaces[$if_name]="${if_in} ${if_out}";                                                                        
+    }                                                                                                                   
 }
-$if_info=explode("\n",$res); //用shell重定向得到的结果替代函数返回的结果 
-DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$res][if_info:$if_info][if_stat:$if_stat]");
-DebugInfo(2,$debug_level,"[$process_name][$module_name]::[if_info2:".json_encode($if_info)."]");
-/*{{{用了kill $!不用exec第三个参数返回值判断，注意*/
-list($temp_version,$temp_arch)=explode(" ", $os_version_info[0]);
-if (!$_monitor_linux) { //freebsd的netstat版本确定 
-    $temp_version=floatval($temp_version);
-    $flag_freebsd_netstat_oldversion=($temp_version>8)?0:1;
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[osversion:{$temp_version}][oldnetstat:{$flag_freebsd_netstat_oldversion}]");
-}
-$if_info=array_filter($if_info);
-foreach ($if_info as $if_string) {
-    if (preg_match("/.*lo0.*/",$if_string,$match)) { //排除lo0
-        continue;
-    }
-    list($if_name,)=explode(' ',$if_string); 
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[if_string:$if_string][if_name:$if_name]");
-    $byte_in=0;$byte_out=0;
-    file_put_contents(__PROC_ROOT.'/work/__netstat.info','');
-    if ($flag_freebsd_netstat_oldversion) {
-        $command_traffic="$_netstat -inb -I $if_name | $_grep -v \"^Name\" | $_awk '{print $7 \" \" $10}' > ".__PROC_ROOT."/work/__netstat.info & sleep {$_netstat_timeout} ; kill $! >> /dev/null 2>&1";
-    } else {
-        $command_traffic="$_netstat -inb -I $if_name | $_grep -v \"^Name\" | $_awk '{print $8 \" \" $11}' > ".__PROC_ROOT."/work/__netstat.info & sleep {$_netstat_timeout} ; kill $! >> /dev/null 2>&1";
-    }
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[command_traffic:$command_traffic]");
-    @exec($command_traffic,$traffic_info,$traffic_stat);
-    $res=file_get_contents(__PROC_ROOT.'/work/__netstat.info');
-    if (empty($res)) {
-        DebugInfo(2,$debug_level,"[$process_name][$module_name]::[command_traffic:$command_traffic][run time out!]");
-        exit();
-    }
-    $traffic_info=explode("\n",$res); //用shell重定向得到的结果替代函数返回的结果 
     DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$res][traffic_info:$traffic_info][traffic_stat:$traffic_stat]");
     DebugInfo(2,$debug_level,"[$process_name][$module_name]::[traffic_info2:".json_encode($traffic_info)."]");
-
-    $traffic_stamp=time();
-    foreach ($traffic_info as $traffic_inout) {
+    foreach ($interfaces as $if_name=>$traffic_info) {
+        $traffic_stamp=time();
         list($part_in,$part_out)=explode(' ',$traffic_inout);
         DebugInfo(3,$debug_level,"[$process_name][$module_name]::[$if_name]-[part_in:$part_in]-[part_out:$part_out]");
         $byte_in+=$part_in;
         $byte_out+=$part_out;
-    }
-    DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$if_name]-[in:$byte_in]-[out:$byte_out]");
-    //count traffic
-    if ($last_traffic[$if_name]['stamp']>0 && 0<($traffic_duration=$traffic_stamp-$last_traffic[$if_name]['stamp'])) {
-        if (0<($traffic_in=$byte_in-$last_traffic[$if_name]['in'])) {
-            $if_in=ceil($traffic_in/$traffic_duration);
+        DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$if_name]-[in:$byte_in]-[out:$byte_out]");
+        //count traffic
+        if ($last_traffic[$if_name]['stamp']>0 && 0<($traffic_duration=$traffic_stamp-$last_traffic[$if_name]['stamp'])) {
+            if (0<($traffic_in=$byte_in-$last_traffic[$if_name]['in'])) {
+                $if_in=ceil($traffic_in/$traffic_duration);
+            }
+            if (0<($traffic_out=$byte_out-$last_traffic[$if_name]['out'])) {
+                $if_out=ceil($traffic_out/$traffic_duration);
+            }
+            $traffic[]="$if_name,$if_in,$if_out";
+            $total_traffic+=$if_in+$if_out;
+            DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$if_name]-[in:$if_in B/s]-[out:$if_out B/s]"); //　有bug的瞬时流量统计，不过没传generic罢了 
         }
-        if (0<($traffic_out=$byte_out-$last_traffic[$if_name]['out'])) {
-            $if_out=ceil($traffic_out/$traffic_duration);
-        }
-        $traffic[]="$if_name,$if_in,$if_out";
-        $total_traffic+=$if_in+$if_out;
-        DebugInfo(2,$debug_level,"[$process_name][$module_name]::[$if_name]-[in:$if_in B/s]-[out:$if_out B/s]");
+        $last_traffic[$if_name]['stamp']=$traffic_stamp;
+        $last_traffic[$if_name]['in']=$byte_in;
+        $last_traffic[$if_name]['out']=$byte_out;
     }
-    $last_traffic[$if_name]['stamp']=$traffic_stamp;
-    $last_traffic[$if_name]['in']=$byte_in;
-    $last_traffic[$if_name]['out']=$byte_out;
-    unset($traffic_info);
-}
-/*}}}*/
-unset($if_info);
 
 //make update string
 $server_str=__FLAG_SERVER.__SOURCE_SPLIT_TAG1.$_server_name.__SOURCE_SPLIT_TAG1;
