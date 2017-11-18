@@ -26,6 +26,9 @@ if ($_monitor_linux) {
     if ($df_stat==0) {
         array_shift($df_info);
         foreach ($df_info as $partition_info) {
+            if (empty($partition_info) || sizeof(explode(" ", $partition_info))<2) {
+                continue;
+            }
             list($per_capacity,$partition)=explode(' ',$partition_info);
             $capacity=str_replace('%','',$per_capacity);
             $tmp_array_partition[$partition]['capacity']=$capacity;
@@ -42,6 +45,9 @@ if ($_monitor_linux) {
     if ($df_stat==0) {
         array_shift($df_info);
         foreach ($df_info as $partition_info) {
+            if (empty($partition_info) || sizeof(explode(" ", $partition_info))<2) {
+                continue;
+            }
             list($per_iused,$partition)=explode(' ',$partition_info);
             $iused=str_replace('%','',$per_iused);
             $tmp_array_partition[$partition]['iused']=$iused;
