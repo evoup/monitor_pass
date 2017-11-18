@@ -81,7 +81,10 @@ if ($_monitor_linux) {
 }
 
 //tcp connections
-$command_tcp="$_netstat -an | $_grep -i 'established' | grep -i 'tcp' | $_wc -l";
+//$command_tcp="$_netstat -an | $_grep -i 'established' | grep -i 'tcp' | $_wc -l";
+$command_tcp=<<<EOT
+ss -ant | awk '{++s[$1]} END {for(k in s) print k,s[k]}' | grep 'ESTAB' | awk '{print $2}'
+EOT;
 @exec($command_tcp,$tcp_info,$tcp_stat);
 if ($tcp_stat==0) {
     $tcp_connections=(int)trim($tcp_info[0]);
