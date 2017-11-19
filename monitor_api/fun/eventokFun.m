@@ -52,7 +52,7 @@ case(__SELECTOR_MASS):
     /* 遍历服务器，显示全部正常的事件 */
     foreach ($host_arr as $host) {
         try { // 判断事件是否存在 
-            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('event:'));
+            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('event'));
             $arr = $arr[0]->columns;
             foreach ($arr as $eventCode => $eventVal) {
                 $eventCode = substr($eventCode, -4);
@@ -67,7 +67,7 @@ case(__SELECTOR_MASS):
     }
     foreach ($host_arr as $host) {
         // 从即时表中取出该host的监控信息，可能不及时，暂时先这么处理 // TODO  
-        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
         $uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
         for ($current_event=0; $current_event<$event_num; $current_event++) {
             $event_id = str_pad($current_event, __NUM_EVENTCODE, "0", STR_PAD_LEFT); // 构造本行的事件(不足以0补充 )

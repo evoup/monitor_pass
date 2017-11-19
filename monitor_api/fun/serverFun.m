@@ -267,7 +267,7 @@ case(__SELECTOR_SINGLE):
         }
         $conf['alias'] = __NO_ALIAS;
         try {
-            $arr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $row_key, array('config:'));
+            $arr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $row_key, array('config'));
             foreach (array_keys((array)$arr[0]->columns) as $server_conf) {
                 switch ($server_conf) {
                 case('config:alias'):
@@ -285,7 +285,7 @@ case(__SELECTOR_SINGLE):
             $err = true;
         }
         try {
-            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('groupid:'));
+            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('groupid'));
             foreach (array_keys((array)$arr[0]->columns) as $tmp) {
                 list(,$groupName) = explode(":", $tmp); 
                 $memberGroupArr[] = $groupName;
@@ -475,7 +475,7 @@ case(__SELECTOR_SINGLE_DETAIL):
             $arr = $GLOBALS['mdb_client']->get($table_name, $row_key, 'generic:cpu_idle');
             $cpu_idle =  empty($arr[0]->value) ?0 :$arr[0]->value;
             $cpu_usage = sprintf('%01.2f', 100 *($cpu_use + $cpu_nice + $cpu_system)/($cpu_use + $cpu_nice + $cpu_system + $cpu_idle));
-            $res = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $row_key, array('generic:'));
+            $res = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $row_key, array('generic'));
             $arr = $res[0]->columns;
             foreach ($arr as $tmpKey => $tmpVal ) {
                 list($item,$node,$something) = explode('-', $tmpKey);
@@ -545,7 +545,7 @@ case(__SELECTOR_SINGLE_SETTING):
 
         DebugInfo("[server][read server setting][row_key:{$GLOBALS['rowKey']}]", 3);
         try {
-            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('config:'));
+            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('config'));
             foreach (array_keys((array)$arr[0]->columns) as $server_conf) {
                 switch ($server_conf) {
                 case('config:alias'):
@@ -749,7 +749,7 @@ function getBelongServerGroup($host_name) {
         return array();
     }
     try {
-        $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('groupid:'));
+        $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $GLOBALS['rowKey'], array('groupid'));
         foreach (array_keys((array)$arr[0]->columns) as $tmp) {
             list(, $groupName) = explode(":", $tmp); 
             $memberGroupArr[] = $groupName;

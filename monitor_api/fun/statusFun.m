@@ -143,10 +143,10 @@ case (__SELECTOR_MONHEALTH):
     $warning_event = 0;
     $total_event = $host_nums*count($event_map_table)/__EVENT_TOTAL_STATUS; 
     do {
-        $host = array_shift(&$host_arr);
+        $host = array_shift($host_arr);
         try {
             if (!empty($host)) {
-                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
                 if (!empty($arr)) {
                     $events = $arr[0]->columns;
                     if (array_filter($events)) {
@@ -223,12 +223,12 @@ case (__SELECTOR_MOBCLIENT):
     $warning_event = 0;
     $total_event = count($host_arr)*count($event_map_table)/__EVENT_TOTAL_STATUS; 
     do {
-        $host = array_shift(&$host_arr);
+        $host = array_shift($host_arr);
         try {
             if (!empty($host)) {
-                $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+                $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
                 $uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
-                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
                 if (!empty($arr)) {
                     $events = $arr[0]->columns;
                     if (array_filter($events)) {

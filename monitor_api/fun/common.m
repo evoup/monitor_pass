@@ -666,7 +666,7 @@ function getHostOnlineDownStatus() {
 function getActiveEvents($hst_arr) {
     foreach ((array)array_keys($hst_arr) as $row_key) {
         try {
-            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $row_key, array("event:"));
+            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $row_key, array("event"));
             $res=array_filter((array)($res[0]->columns));
             if (!empty($res)) {
                 foreach ($res as $event => $TCellobj) {

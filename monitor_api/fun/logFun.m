@@ -48,7 +48,7 @@ try {
 if(!$err) {
     foreach((array)$host_arr as $row_key) {
         try{
-            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $row_key, array("event:"));
+            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $row_key, array("event"));
             $res=array_filter((array)($res[0]->columns));
             if(!empty($res)) {
                 foreach($res as $event => $TCellobj) {
@@ -96,7 +96,7 @@ if(!$err) {
 if(!$err) {
     foreach($host_arr as $row_key) {
         try{
-            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER_HISTORY, $row_key, array("event:"));
+            $res=$GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER_HISTORY, $row_key, array("event"));
             $res=array_filter((array)($res[0]->columns));
             if(!empty($res)) {
                 foreach($res as $event => $TCellobj) {
@@ -150,7 +150,7 @@ if(!$err) {
     foreach($last_arr as $ts => $srv) {
         foreach($srv as $srv_name => $eventArr) {
             if(@!$info_readed[$srv_name]) { //确保只读一次，否则性能低下 
-                $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER_HISTORY, $srv_name, array('info:'));
+                $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER_HISTORY, $srv_name, array('info'));
                 $info_readed[$srv_name] = true;
             }
             foreach($eventArr as $event => $statusArr) {

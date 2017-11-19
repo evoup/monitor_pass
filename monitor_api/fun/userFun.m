@@ -313,7 +313,7 @@ case(__OPERATION_DELETE): //删除一个用户
         /* 得到每组的成员存入usergroup_arr2数组 */
         if (!$err) {
             foreach ((array)$usergroup_arr as $group_name) {
-                $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_USERGROUP, $group_name, array('member:'));
+                $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_USERGROUP, $group_name, array('member'));
                 $tmpArr = $tmpArr[0]->columns;
                 foreach ((array)array_keys($tmpArr) as $tmpMemberName) {
                     list(,$mb) = explode(':', $tmpMemberName);

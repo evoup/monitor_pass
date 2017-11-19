@@ -76,7 +76,7 @@ function saveProviceIpChangeMessage($server,$pip,$cip,$location,$carrier) {
              $serveralive = $arr[0]->value>0?1:0;
              DebugInfo("[saveProviceIpChangeMessage][server status:$serveralive]",3);
              // 获取load信息
-             $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER,$server,array('info:'));
+             $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER,$server,array('info'));
              $res = $arr[0]->columns;
              $serverload = $res['info:generic_summary_load']->value;
              openMq();

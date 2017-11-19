@@ -45,7 +45,7 @@ case(__OPERATION_READ):
             }
             ////////////////////////////////////////////////////
             try {
-                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_MWS_USER, $row,array('security:'));
+                $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_MWS_USER, $row,array('security'));
                 foreach ($arr[0]->columns as $colName=>$colInfo) {
                     if (substr($colName,0,strlen('security:KP:'))=='security:KP:') {
                         $secretKeyId = substr($colName,strlen('security:KP:'));

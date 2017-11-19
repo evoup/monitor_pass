@@ -58,10 +58,10 @@ case(__SELECTOR_MASS):
             try {
                 if (!empty($host)) {
                     /* 取出该host的监控信息,从即时信息表取出 */
-                    $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+                    $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
                     $uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
 
-                    $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+                    $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
                     $arr = $arr[0]->columns;
                     foreach ($arr as $eventCode => $eventVal) {
                         $eventCode = substr($eventCode, -4); // 事件代码 

@@ -65,14 +65,14 @@ case(__SELECTOR_MASS): // 带分页查询全部事件
     do {
         for ($row = 0; $row < $line_per_page; $row++) { // 遍历行
             if ($NextServer) {
-                $host = array_shift(&$host_arr); // 递推下一server 
+                $host = array_shift($host_arr); // 递推下一server 
 
                 /* 得到本host的事件状态 */
                 //if (@!$readed[$host] && $current_page-1==$page_index) { // 防止多次读取同一个事件 
                 if (@!$readed[$host]) { // 防止多次读取同一个事件 
                     try {
                         if (!empty($host)) {
-                            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+                            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
                             $readed[$host] = true;
                         }
                     } catch (Exception $e) { }
@@ -94,7 +94,7 @@ case(__SELECTOR_MASS): // 带分页查询全部事件
                 if ($current_page-1==$page_index) { // 当前页才计算 
                     if (@!$info_readed[$host]) { // 确保只读一次，否则性能低下 
                         // 取出该host的监控信息,从即时信息表取出,构造各种事件的描述
-                        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+                        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
                         $uiWordArr = getEventUIDesc($host, $rs[0]->columns,false); // 对于即时表，info列族内的监控项列，不带timestamp，第三个参数传false
                         $info_readed[$host] = true;
                     }
@@ -193,7 +193,7 @@ case(__SELECTOR_SINGLE): // 查询一种事件
         if (@!$readed[$host]) { // 防止多次读取同一个事件 
             try {
                 if (!empty($host)) {
-                    $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+                    $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
                     $readed[$host] = true;
                 }
             } catch (Exception $e) { }
@@ -212,7 +212,7 @@ case(__SELECTOR_SINGLE): // 查询一种事件
         $event_id = str_pad($GLOBALS['rowKey'], __NUM_EVENTCODE, "0", STR_PAD_LEFT); // 构造本行的事件(不足以0补充 )
         $evClass=__EVENT_CLASS_NORMAL;
         $evDuration='N/A';
-        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
         $uiWordArr = getEventUIDesc($host, $rs[0]->columns,false); // 对于即时表，info列族内的监控项列，不带timestamp，第三个参数传false
         if (@$event_arr[$host][$event_id.__SUFFIX_EVENT_CAUTION]) { // 本行存在注意事件 
             $evClass=__EVENT_CLASS_CAUTION;
@@ -228,7 +228,7 @@ case(__SELECTOR_SINGLE): // 查询一种事件
             //$event_desc= $uiWordArr[$host][$event_id];
             $event_desc = $uiWordArr[$host][str_pad($event_id.'n', __NUM_EVENTCODE, "0", STR_PAD_LEFT)];
         }
-        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+        $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
         $uiWordArr = getEventUIDesc($host, $rs[0]->columns,false); // 对于即时表，info列族内的监控项列，不带timestamp，第三个参数传false
         $outArr[]=array(
             $host,
@@ -293,11 +293,11 @@ case(__SELECTOR_UNHANDLED): // 查询待处理事件
         if (in_array($host, explode(',', $_CONFIG['not_monitored']['not_monitored']))) { // 不监控的不要 
             continue;
         }
-        $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+        $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
         $events = $arr[0]->columns;
         if (!empty($events)) {
             /* 取出该host的监控信息,从即时信息表取出 */ //TODO 这里取可能存在不及时的问题，暂时不考虑 
-            $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info:'));
+            $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
             $uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
             foreach ($events as $eventCode => $eventVal) {
                 $eventCode = substr($eventCode, -4);

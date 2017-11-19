@@ -560,7 +560,7 @@ function getGroupCount($group) {
             }
             /*}}}*/
             /*{{{获取事件*/
-            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event:"));
+            $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
             if ($arr) {
                 $arr=$arr[0]->columns;
                 foreach ($arr as $tmpEvent=>$tmpArr) {

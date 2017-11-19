@@ -85,7 +85,7 @@ case(__OPERATION_CREATE):
         /* {{{ 扫描每组的成员存入usergroup_arr2数组
          */
         foreach ((array)$usergroup_arr as $group_name) {
-            $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $group_name, array('member:'));
+            $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $group_name, array('member'));
             $tmpArr = $tmpArr[0]->columns;
             foreach ((array)array_keys($tmpArr) as $tmpMemberName) {
                 list(,$mb) = explode(':', $tmpMemberName);
@@ -536,7 +536,7 @@ case(__OPERATION_UPDATE): //修改操作
          */
         if (!$err) {
             foreach ((array)$usergroup_arr as $group_name) {
-                $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_USERGROUP, $group_name, array('member:'));
+                $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_USERGROUP, $group_name, array('member'));
                 $tmpArr = $tmpArr[0]->columns;
                 foreach ((array)array_keys($tmpArr) as $tmpMemberName) {
                     list(,$mb) = explode(':', $tmpMemberName);
@@ -617,7 +617,7 @@ case(__OPERATION_DELETE): //删除操作
         /* {{{ 扫描每组的成员存入usergroup_arr2数组
          */
         foreach ((array)$usergroup_arr as $group_name) {
-            $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $group_name, array('member:'));
+            $tmpArr = $GLOBALS['mdb_client']->getRowWithColumns($table_name, $group_name, array('member'));
             $tmpArr = $tmpArr[0]->columns;
             foreach ((array)array_keys($tmpArr) as $tmpMemberName) {
                 list(,$mb) = explode(':', $tmpMemberName);
