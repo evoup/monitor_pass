@@ -117,7 +117,8 @@ $(function(){
 	///////////////////////////////////////////////////////////
     $('body')
 	.delegate('#add','click',function(){
-        location.href = 'editUserGroup.html?version=' + smartMad.version;
+        //location.href = 'editUserGroup.html?version=' + smartMad.version;
+        location.href = 'add_edit_usergroup.html?version=' + smartMad.version;
     })
 	.delegate('button[name="modify"]','click',function(){
         var name = $(this).attr('data-name');

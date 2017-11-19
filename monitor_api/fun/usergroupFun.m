@@ -45,13 +45,17 @@ case(__OPERATION_CREATE):
         /* 判断权限字符串*/
         if (!$err) {
             $arr = explode('|', $usergroup_setting['privilege']);
+            //print_r($arr);
             foreach ($arr as $privilege_item) {
                 list($tmp_privilege_key, $tmp_privilege_val) = explode('#', $privilege_item);
                 //检查权限CRUD范围
                 $err = in_array($tmp_privilege_val, range(__MONITOR_PRIVILEGE_OPERATION_MINNUM,__MONITOR_PRIVILEGE_OPERATION_MAXNUM))?false :true;
                 $privileges[$tmp_privilege_key] = $tmp_privilege_val; //获取全部上传权限项 
             }
+            //print_r($valid_privilege_key);
+            //print_r($privileges);
             foreach ($valid_privilege_key as $needed) {
+                list(,$needed)=explode("_", $needed);
                 if (!in_array($needed, array_keys($privileges))) { //检查权限项是否传满 
                     $err = true;
                 }
@@ -210,6 +214,169 @@ case(__OPERATION_READ): //查询操作
              */
         case(__SELECTOR_SINGLE):
             $GLOBALS['rowKey'] = urldecode($GLOBALS['rowKey']); 
+            //////////////////如果是空的代表要添加用户组//////////////////////
+            if (empty($GLOBALS['rowKey'])) {
+                $privilegeParams=<<<EOT
+[
+  "描述",
+  {
+    "enginestatus": [
+      "监控引擎状态",
+      "1|2",
+      ""
+    ],
+    "cloudview": [
+      "监控状态云",
+      "1|2",
+      ""
+    ],
+    "mdbstatus": [
+      "MDB状态",
+      "1|2",
+      ""
+    ],
+    "healthstatus": [
+      "全局health",
+      "1|2",
+      ""
+    ],
+    "eventsummary": [
+      "事件概览",
+      "1|2",
+      ""
+    ],
+    "topological": [
+      "拓扑结构",
+      "1|2",
+      ""
+    ],
+    "serversummary": [
+      "服务器列表/客户端概览",
+      "1|2",
+      ""
+    ],
+    "serverList": [
+      "服务器列表",
+      "1|2",
+      ""
+    ],
+    "serverSingle": [
+      "单台服务器",
+      "1|2|3|4|5|6",
+      ""
+    ],
+    "serverGroupList": [
+      "服务器组列表",
+      "1|2",
+      ""
+    ],
+    "serverGroup": [
+      "服务器组",
+      "1|2|3|4|5|6",
+      ""
+    ],
+    "monitorEvent": [
+      "监控事件",
+      "1|2",
+      ""
+    ],
+    "eventLog": [
+      "监控日志",
+      "1|2",
+      ""
+    ],
+    "site": [
+      "测速站点",
+      "1|2|3|4|5|6",
+      ""
+    ],
+    "siteList": [
+      "站点列表",
+      "1|2",
+      ""
+    ],
+    "sitespeedList": [
+      "站点访问速度列表",
+      "1|2",
+      ""
+    ],
+    "sitespeedSingle": [
+      "单个站点访问速度",
+      "1|2",
+      ""
+    ],
+    "generalSet": [
+      "常规设置",
+      "1|2|4",
+      ""
+    ],
+    "emailSet": [
+      "邮件设置",
+      "1|2|4",
+      ""
+    ],
+    "alarmSet": [
+      "报警设置",
+      "1|2|4",
+      ""
+    ],
+    "scanSet": [
+      "扫描设置",
+      "1|2|4",
+      ""
+    ],
+    "eventSet": [
+      "事件设置",
+      "1|2|4",
+      ""
+    ],
+    "userList": [
+      "用户列表",
+      "1|2|4",
+      ""
+    ],
+    "user": [
+      "用户设置",
+      "1|2|3|4|5|6",
+      ""
+    ],
+    "usergroupList": [
+      "用户组列表",
+      "1|2",
+      ""
+    ],
+    "usergroup": [
+      "用户组设置",
+      "1|2|3|4|5|6",
+      ""
+    ],
+    "monitorWizard": [
+      "监控向导",
+      "1|2",
+      ""
+    ],
+    "ipManagement": [
+      "IP管理",
+      "1|2",
+      ""
+    ],
+    "madnManagement": [
+      "MADN管理",
+      "1|2|4",
+      ""
+    ]
+  },
+  {
+    "userA": "描述A",
+    "userB": "描述B"
+  }
+]
+EOT;
+echo $privilegeParams;
+                $GLOBALS['httpStatus'] = __HTTPSTATUS_OK; //查询成功返回200 
+                break;
+            }
+            //////////////////////////////////////////////////////////////////
             switch ($GLOBALS['rowKey']) {
                 /* {{{ 查询单个用户组时GET
                  */
