@@ -4,9 +4,9 @@
 	<artifactId>monitor_pass</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<modules>
-		<module>monitor-data-collect</module>
-	</modules>
+	<!--<modules>-->
+		<!--<module>monitor-data-collect</module>-->
+	<!--</modules>-->
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -67,6 +67,26 @@
 				<artifactId>jcl-over-slf4j</artifactId>
 				<version>1.7.2</version>
 			</dependency>
+
+		<!-- Application Context (depends on spring-core, spring-expression, spring-aop, 
+			spring-beans) This is the central artifact for Spring's Dependency Injection 
+			Container and is generally always defined -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 
