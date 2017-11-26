@@ -1,6 +1,5 @@
 package com.evoupsight.monitorPass.dataCollector.handlers;
 
-import com.evoupsight.monitorPass.dataCollector.server.Main;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
