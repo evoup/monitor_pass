@@ -32,15 +32,18 @@ define(__LOGTAG_DELIVER, 'MadDeliver');
 define(__LOGTAG_PF,      'pf_monitor');
 define(__LOGTAG_LOG,     'access_monitor');
 
+$hostname=php_uname('n');
 $array_conf=Array(
-    'server_name'   => '', 
+    'server_name'   => $hostname, 
     'proc_life'     => __PROC_LIFE,
     'sleep'         => __SLEEP,
     'upload_url'    => '',
-    'upload_host'   => '',
-    'upload_port'   => '',
-    'upload_version'=> '',
-    'upload_suffix' => ''
+    'upload_host'   => '172.18.0.30',
+    'upload_port'   => '80',
+    'upload_version'=> 'monitor_server2r1_1',
+    'upload_suffix' => 'm1',
+    'send_host'     => '172.18.0.1',
+    'send_port'     => '8090'
 );
 
 /* {{{ 安全监控

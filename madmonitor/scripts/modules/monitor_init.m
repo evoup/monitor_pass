@@ -165,6 +165,12 @@ if ($upload_url==='null') {
     DebugInfo(1,$debug_level,"[use upload url][upload_url:$upload_url]");
 }
 /*}}}*/
+
+/*{{{socket方式发送配置*/
+$socket_send_server=$array_conf['send_host'];
+$socket_send_port=$array_conf['send_port'];
+/*}}}*/
+
 /*{{{测速配置*/
 $testspeedconf_suffix=$array_conf['testspeedconf_suffix'];
 if (!empty($testspeedconf_suffix)) {

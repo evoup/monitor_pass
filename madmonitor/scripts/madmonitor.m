@@ -28,6 +28,10 @@ list($process_name,$ext_name)=explode('.',basename(__FILE__));
 include_once('modules/monitor_init.m');
 
 chdir($work_dir);
+if (!empty($socket_send_server) && !empty($socket_send_port)) {
+    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+    socket_connect($socket, $socket_send_server, $socket_send_port);
+}
 while ($run) {
     $now=time();
 
@@ -83,6 +87,9 @@ while ($run) {
 
     //上传信息
     if (!empty($upload_str)) {
+        if (!empty($socket_send_server) && !empty($socket_send_port)) {
+            socket_send($socket,'foo',3,0);
+        }
         $command_upload="$_curl -d \"$upload_str\" -H \"Host: $http_host\" \"$upload_url\" 2>>/dev/null";
         DebugInfo(3,$debug_level,"[$process_name]::[command_upload:$command_upload]");
         @exec($command_upload);
