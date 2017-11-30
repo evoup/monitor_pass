@@ -12,10 +12,7 @@ import io.netty.handler.codec.string.StringEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import java.net.InetSocketAddress;
@@ -39,7 +36,10 @@ import java.util.Set;
  */
 @Configuration
 @ComponentScan("com.evoupsight")
-@PropertySource("classpath:netty-server.properties")
+@PropertySources({
+		@PropertySource("classpath:netty-server.properties"),
+		@PropertySource("data-collector.properties")
+})
 public class SpringConfig {
 
 	@Value("${boss.thread.count}")
