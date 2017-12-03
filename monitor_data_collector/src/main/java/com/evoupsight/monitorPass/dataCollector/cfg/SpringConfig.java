@@ -38,7 +38,8 @@ import java.util.Set;
 @ComponentScan("com.evoupsight")
 @PropertySources({
 		@PropertySource("classpath:netty-server.properties"),
-		@PropertySource("data-collector.properties")
+		@PropertySource("data-collector.properties"),
+		@PropertySource("kafka-client.properties")
 })
 public class SpringConfig {
 
