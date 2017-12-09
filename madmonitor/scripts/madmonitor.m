@@ -90,8 +90,19 @@ while ($run) {
     //上传信息
     if (!empty($upload_str)) {
         if (!empty($socket_send_server) && !empty($socket_send_port)) {
-            print_r($server_metrics);
-            socket_send($socket,'foo',3,0);
+            $msg=null;
+            $msg['request']="agent data";
+            $msg['data']=null;
+            $msg['time']=time();
+            $msg['hostname']=$server_metrics['m_server'];
+            foreach($server_metrics as $server_metric=>$value) {
+                $metric['key']=$server_metric;
+                $metric['value']=$value;
+                $msg['data'][]=$metric;
+                $metric=null;
+            }
+            $msg=json_encode($msg);
+            socket_send($socket,$msg,strlen($msg),0);
         }
         $command_upload="$_curl -d \"$upload_str\" -H \"Host: $http_host\" \"$upload_url\" 2>>/dev/null";
         DebugInfo(3,$debug_level,"[$process_name]::[command_upload:$command_upload]");
