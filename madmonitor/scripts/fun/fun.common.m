@@ -189,15 +189,45 @@ function findString($orig_string,$tag1,$tag2=null) {
     }
 }
 
-function ArrayToDotNotation($arr) {
-    $ritit = new RecursiveIteratorIterator(new RecursiveArrayIterator($arr));
-    $result = array();
-    foreach ($ritit as $leafValue) {
-        $keys = array();
-        foreach (range(0, $ritit->getDepth()) as $depth) {
-            $keys[] = $ritit->getSubIterator($depth)->key();
-            }
-        $result[ join('.', $keys) ] = $leafValue;
+/**
+ * @brief 转换成点命名法，用于kv传值
+ * @return 经过转换的值
+ */
+function arrayToDotNotation($arr, $narr = array(), $nkey = '') {
+    foreach ($arr as $key => $value) {
+        if (is_array($value)) {
+            $narr = array_merge($narr, arrayToDotNotation($value, $narr, $nkey . $key . '.'));
+        } else {
+            $narr[$nkey . $key] = $value;
+        }
     }
+
+    return $narr;
 }
+
+/**                                                                                                                     
+ *@brief 转换到Kb，不带单位                                                                                             
+ *@return 不带单位的Kb数                                                                                                
+ */                                                                                                                     
+function convertToKb($capacity) {                                                                                                                                       
+    $unit = strtoupper(substr($capacity, -1));                                                                          
+    $num = substr($capacity, 0, strlen($capacity)-1);                                                                   
+    switch ($unit) {                                                                                                    
+    case("P"):                                                                                                          
+        $num = $num*1099511627776;                                                                                      
+        break;                                                                                                          
+    case("T"):                                                                                                          
+        $num = $num*1073741824;                                                                                         
+        break;                                                                                                          
+    case("G"):                                                                                                          
+        $num = $num*1048576;                                                                                            
+        break;                                                                                                          
+    case("M"):                                                                                                          
+        $num = $num*1024;                                                                                               
+        break;                                                                                                          
+    default:                                                                                                            
+        break;                                                                                                          
+    }                                                                                                                   
+    return $num;                                                                                                        
+}                                       
 ?>

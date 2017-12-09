@@ -364,6 +364,9 @@ $server_str.=$str_summary.__SOURCE_SPLIT_TAG2.$str_cpu.__SOURCE_SPLIT_TAG2.$str_
 
 if (!empty($server_str)) {
     $upload_str=$server_str;
+    $server_metrics=new clsGeneric($server_str);
+    @$server_metrics=$server_metrics->getAllInfo();
+    $server_metrics=arrayToDotNotation($server_metrics);
     unset($server_str);
 }
 ?>

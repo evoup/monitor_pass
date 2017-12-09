@@ -19,6 +19,7 @@
   +----------------------------------------------------------------------------+
  */
 include_once('inc/inc.monitor.m');
+include_once('inc/inc.domain.m');
 include_once('fun/fun.common.m');
 include_once('fun/fun.fs.m');
 include_once('fun/fun.mcd.m');
@@ -49,6 +50,7 @@ while ($run) {
     $upload_str='';
 
     //读取服务器信息
+    include_once('modules/domain/cls_generic.php');
     include('modules/generate_server_info.m');
 
     //读取DB信息
@@ -88,6 +90,7 @@ while ($run) {
     //上传信息
     if (!empty($upload_str)) {
         if (!empty($socket_send_server) && !empty($socket_send_port)) {
+            print_r($server_metrics);
             socket_send($socket,'foo',3,0);
         }
         $command_upload="$_curl -d \"$upload_str\" -H \"Host: $http_host\" \"$upload_url\" 2>>/dev/null";
