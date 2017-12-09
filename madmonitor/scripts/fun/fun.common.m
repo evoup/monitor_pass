@@ -188,4 +188,16 @@ function findString($orig_string,$tag1,$tag2=null) {
         return ($offset1>$offset2)?substr($orig_string,0,$offset2):substr($orig_string,0,$offset1);
     }
 }
+
+function ArrayToDotNotation($arr) {
+    $ritit = new RecursiveIteratorIterator(new RecursiveArrayIterator($arr));
+    $result = array();
+    foreach ($ritit as $leafValue) {
+        $keys = array();
+        foreach (range(0, $ritit->getDepth()) as $depth) {
+            $keys[] = $ritit->getSubIterator($depth)->key();
+            }
+        $result[ join('.', $keys) ] = $leafValue;
+    }
+}
 ?>
