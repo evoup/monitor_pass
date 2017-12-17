@@ -1,0 +1,31 @@
+*** madmonitor2.orig	2013-08-13 16:58:29.000000000 +0800
+--- rel/madmonitor2/bin/madmonitor2	2013-08-13 17:02:18.000000000 +0800
+***************
+*** 36,41 ****
+--- 36,61 ----
+      VMARGS_PATH="$RUNNER_ETC_DIR/vm.args"
+  fi
+  
++ #{{{ Get OS name
++ OS=`uname`
++ case $OS in
++     Linux) IP=`ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'`;;
++ FreeBSD|OpenBSD) IP=`ifconfig  | grep -E 'inet.[0-9]' | grep -v '127.0.0.1' | awk '{ print $2}'` ;;
++ SunOS) IP=`ifconfig -a | grep inet | grep -v '127.0.0.1' | awk '{ print $2} '` ;;
++ *) IP="127.0.0.1";;
++ esac
++ MYNODE_NAME=`echo  madmonitor2@$IP | awk '{ print $1}'`
++ echo "current node:" $MYNODE_NAME
++ if [ -f $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args ]; then
++     echo "release vm.args file empty,recopy"
++     cp -f $RUNNER_BASE_DIR/../files/vm.args $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args
++ else
++     echo "find release vm.args file"
++ fi
++ sed  "s/-name.*/-name $MYNODE_NAME/g" $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args > $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args.now
++ mv $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args.now $RUNNER_BASE_DIR/releases/$APP_VSN/vm.args
++ #}}}
++ 
+  # Use releases/VSN/sys.config if it exists otherwise use etc/app.config
+  if [ -e "$RUNNER_BASE_DIR/releases/$APP_VSN/sys.config" ]; then
+      CONFIG_PATH="$RUNNER_BASE_DIR/releases/$APP_VSN/sys.config"
