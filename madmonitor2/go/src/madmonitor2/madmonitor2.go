@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+
     var hLog *log.Logger
     hLog = core.Init()
     common.Log(hLog, "main][init done")
