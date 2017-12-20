@@ -8,13 +8,12 @@
 package inc
 
 import (
-	"fmt"
 	"os"
 )
 
 const (
     LOG_SUFFIX   = "madmonitor2"
-    SVN_VERSION  = "1630"
+    CLIENT_VERSION  = "2.0.0.1630"
     PROC_NAME    = "madmonitor2"
     PROC_ROOT    = "/services/monitor2_deal"
     CONF_FILE    = "madmonitor2.ini"
@@ -31,7 +30,7 @@ const (
 )
 
 
-func gConf() {
+func GenConf() map[string]string{
 	data, _ := os.Hostname()
 	proc_life := __PROC_LIFE
 	sleep := __SLEEP
@@ -47,5 +46,7 @@ func gConf() {
 		"send_host"  : "172.18.0.1",
 		"send_port"   : "8090",
 	}
-	fmt.Print(mapConf)
+	return mapConf
 }
+
+

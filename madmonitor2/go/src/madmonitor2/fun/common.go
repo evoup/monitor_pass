@@ -163,7 +163,7 @@ func LogInit() *log.Logger {
 
 // use syslog log item
 func Log(l *log.Logger, s string) {
-    l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.SVN_VERSION + "]")
+    l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.CLIENT_VERSION + "]")
 }
 
 // create directory

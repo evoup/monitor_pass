@@ -14,9 +14,23 @@ import (
     "madmonitor2/fun"
     "madmonitor2/inc"
     "fmt"
+    "time"
+    "flag"
 )
 
+var StartTime = time.Now()
+
 func Init() *log.Logger {
+	var version *bool
+	version = flag.Bool("version", false, "0.1")
+
+	flag.Parse()
+
+	if *version {
+		fmt.Printf("Version %s\n", inc.CLIENT_VERSION)
+		os.Exit(0)
+	}
+
     hLog := common.LogInit()
     common.Log(hLog, "core.Init][Initiating server........................")
     /** make sure only one process running **/
