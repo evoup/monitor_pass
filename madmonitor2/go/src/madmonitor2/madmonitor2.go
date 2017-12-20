@@ -11,7 +11,7 @@ import (
 func main() {
     var hLog *log.Logger
     hLog = core.Init()
-    common.Log(hLog, "main][init done")
+    common.Log(hLog, "main][init done",1, 4)
     fmt.Println(common.UnixMicro())
     for ;; {
         time.Sleep(5)

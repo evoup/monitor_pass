@@ -59,7 +59,7 @@ func SingleProc(pidFile string) bool{
     fd,_:=syscall.Open(pidFile,os.O_RDWR|os.O_CREATE,0644)
     err:=syscall.Flock(fd, syscall.LOCK_EX|syscall.LOCK_NB)
     if err != nil {
-        Log(hLog, "common.SingleProc][err:"+err.Error())
+        Log(hLog, "common.SingleProc][err:"+err.Error(), 1, 4)
         return false
     }
     return true
@@ -70,13 +70,13 @@ func Daemonize(nochdir int, noclose int) error {
     hLog = LogInit()
     var ret, ret2 uintptr
     var err error
-    Log(hLog, fmt.Sprintf("common.Daemonize][current ppid:%d", syscall.Getppid()))
+    Log(hLog, fmt.Sprintf("common.Daemonize][current ppid:%d", syscall.Getppid()), 1,4)
 
     //already a daemon
     if syscall.Getppid() == 1 {
         return nil
     }
-    Log(hLog, "common.Daemonize][will daemonize")
+    Log(hLog, "common.Daemonize][will daemonize",1 ,4)
 
     //fork off the parent process
     ret, ret2, err = syscall.RawSyscall(syscall.SYS_FORK, 0, 0, 0)
@@ -84,10 +84,10 @@ func Daemonize(nochdir int, noclose int) error {
         var s string
         s = fmt.Sprintf("%T", err)
         if s != "syscall.Errno" {
-            Log(hLog, "common.Daemonize][fork err:"+s)
+            Log(hLog, "common.Daemonize][fork err:"+s,1,4)
             return err
         } else {
-            Log(hLog, "common.Daemonize][fork no err:"+err.Error())
+            Log(hLog, "common.Daemonize][fork no err:"+err.Error(),1,4)
             //no problem see http://www.ibm.com/developerworks/aix/library/au-errnovariable/
         }
     }
@@ -101,22 +101,22 @@ func Daemonize(nochdir int, noclose int) error {
     if ret > 0 {
         os.Exit(0)
     }
-    Log(hLog, "common.Daemonize][forked,we in forked process")
+    Log(hLog, "common.Daemonize][forked,we in forked process",1,4)
 
     /* Change the file mode mask */
     _ = syscall.Umask(0)
-    Log(hLog, "common.Daemonize][umask zero")
+    Log(hLog, "common.Daemonize][umask zero",1,4)
 
     //create a new SID for the child process
     s_ret, s_errno := syscall.Setsid()
     if s_ret < 0 || s_errno != nil {
         log.Printf("common.Daemonize][Error: syscall.Setsid errno: %d", s_errno)
     }
-    Log(hLog, "common.Daemonize][sid seted")
+    Log(hLog, "common.Daemonize][sid seted",1,4)
 
     if nochdir == 0 {
         os.Chdir("/")
-        Log(hLog, "common.Daemonize][chdir to root")
+        Log(hLog, "common.Daemonize][chdir to root",1,4)
     }
 
     if noclose == 0 {
@@ -126,13 +126,13 @@ func Daemonize(nochdir int, noclose int) error {
             syscall.Dup2(int(fd), int(os.Stdin.Fd()))
             syscall.Dup2(int(fd), int(os.Stdout.Fd()))
             syscall.Dup2(int(fd), int(os.Stderr.Fd()))
-            Log(hLog, "common.Daemonize][fs closed")
+            Log(hLog, "common.Daemonize][fs closed",1,4)
         }
     }
 
     pid_file:=inc.PROC_ROOT+"/"+inc.RUN_SUBPATH+inc.PROC_NAME+".pid"
     FilePutContent(pid_file,fmt.Sprintf("%d",os.Getpid()))
-    Log(hLog, "common.Daemonize][daemonize done")
+    Log(hLog, "common.Daemonize][daemonize done",1,4)
     return nil
 }
 
@@ -162,7 +162,7 @@ func LogInit() *log.Logger {
 }
 
 // use syslog log item
-func Log(l *log.Logger, s string) {
+func Log(l *log.Logger, s string, debug_level_orig int, debug_level_input int) {
     l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.CLIENT_VERSION + "]")
 }
 
@@ -176,12 +176,12 @@ func MakeDir(path string, mask string) {
     cmd := exec.Command(app, arg0,arg1)
     _, err := cmd.Output()
     if err != nil {
-        Log(hLog, "common.MakeDir][path:"+path)
-        Log(hLog, "common.MakeDir]["+fmt.Sprintf("%T", err))
+        Log(hLog, "common.MakeDir][path:"+path, 2,4)
+        Log(hLog, "common.MakeDir]["+fmt.Sprintf("%T", err), 2,4)
         // Do exit
         return
     }
-    Log(hLog, "common.MakeDir][dir:"+path+" created")
+    Log(hLog, "common.MakeDir][dir:"+path+" created", 2,4)
 }
 
 // exists returns whether the given file or directory exists or not
