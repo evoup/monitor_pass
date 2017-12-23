@@ -16,11 +16,9 @@
 package common
 
 import (
-    "madmonitor2/inc"
     "encoding/base64"
     "fmt"
     "log"
-    "log/syslog"
     "os"
     "os/exec"
     "syscall"
@@ -62,7 +60,7 @@ func UnixMicro() int64 {
 }
 // Check if no other proc
 func SingleProc(pidFile string) bool{
-    hLog := LogInit()
+    hLog := GetLogger()
     fd,_:=syscall.Open(pidFile,os.O_RDWR|os.O_CREATE,0644)
     err:=syscall.Flock(fd, syscall.LOCK_EX|syscall.LOCK_NB)
     if err != nil {
@@ -74,7 +72,7 @@ func SingleProc(pidFile string) bool{
 
 func Daemonize(nochdir int, noclose int, pid_file string) error {
     var hLog *log.Logger
-    hLog = LogInit()
+    hLog = GetLogger()
     var ret, ret2 uintptr
     var err error
     Log(hLog, fmt.Sprintf("common.Daemonize][current ppid:%d", syscall.Getppid()), 1, Debug_level)
@@ -160,24 +158,10 @@ func base64Decode(src []byte) ([]byte, error) {
     return coder.DecodeString(string(src))
 }
 
-// syslog init
-func LogInit() *log.Logger {
-    Log, err := syslog.NewLogger(syslog.LOG_DEBUG, log.Lmicroseconds)
-    if err != nil {
-        log.Fatal(err)
-    }
-    return Log
-}
-
-// use syslog log item
-func Log(l *log.Logger, s string, debug_level_orig int, debug_level_input int) {
-    l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.CLIENT_VERSION + "]")
-}
-
 // create directory
 func MakeDir(path string, mask string) {
     var hLog *log.Logger
-    hLog = LogInit()
+    hLog = GetLogger()
     app := "/bin/mkdir"
     arg0 := "-p"
     arg1 := path

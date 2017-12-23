@@ -45,7 +45,7 @@ func Init() *log.Logger {
 
 	common.Debug_level = *Debug_level
 
-	hLog := common.LogInit()
+	hLog := common.GetLogger()
 	common.Log(hLog, "core.Init][Initiating server........................", 4, *Debug_level)
 	/** make sure only one process running **/
 	var pid_file = *Pidfile

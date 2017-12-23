@@ -20,7 +20,7 @@ import (
 )
 //Get file content
 func FileGetContent(filePath string) string {
-	hLog := LogInit()
+	logger := GetLogger()
 	bool_existed := FileExists(filePath)
 	if !bool_existed {
 		return ""
@@ -28,7 +28,7 @@ func FileGetContent(filePath string) string {
 	fin, err := os.Open(filePath)
 	defer fin.Close()
 	if err != nil {
-		Log(hLog, "common.fs.FilePutContent][file path:"+filePath+"][open err",1, Debug_level)
+		Log(logger, "common.fs.FilePutContent][file path:"+filePath+"][open err",1, Debug_level)
 		os.Exit(0)
 	}
 	buf := make([]byte, 1024)
@@ -44,12 +44,12 @@ func FileGetContent(filePath string) string {
 }
 
 func FilePutContent(fileName string, data string) bool {
-	hLog := LogInit()
-	Log(hLog, "common.fs.FilePutContent][fileName:"+fileName,1, Debug_level)
+	logger := GetLogger()
+	Log(logger, "common.fs.FilePutContent][fileName:"+fileName,1, Debug_level)
 	fout, err := os.Create(fileName)
 	defer fout.Close()
 	if err != nil {
-		Log(hLog, "common.fs.FilePutContent][err:"+err.Error(),1, Debug_level)
+		Log(logger, "common.fs.FilePutContent][err:"+err.Error(),1, Debug_level)
 		return false
 	}
 	fout.WriteString(data)
