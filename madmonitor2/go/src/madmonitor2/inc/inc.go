@@ -7,46 +7,26 @@
  */
 package inc
 
-import (
-	"os"
-)
-
 const (
-    LOG_SUFFIX   = "madmonitor2"
-    CLIENT_VERSION  = "2.0.0.1630"
-    PROC_NAME    = "madmonitor2"
-    PROC_ROOT    = "/services/monitor2_deal"
-    CONF_FILE    = "madmonitor2.ini"
-    RUN_SUBPATH  = "run/"
-    CONF_SUBPATH = "conf/"
-    STATUS_SUBPATH = "status/"
-    WORK_SUBPATH = "work/"
-    __PROC_LIFE    = "3600"
-    __SLEEP        = "10"
-    __LOGTAG_READ  = "MadRead"
+    LOG_SUFFIX       = "madmonitor2"
+    CLIENT_VERSION   = "2.0.0.1630"
+    PROC_NAME        = "madmonitor2"
+    PROC_ROOT        = "/services/monitor2_deal"
+    CONF_FILE        = "madmonitor2.ini"
+    RUN_SUBPATH      = "run/"
+    CONF_SUBPATH     = "conf/"
+    STATUS_SUBPATH   = "status/"
+    WORK_SUBPATH     = "work/"
+    PROC_LIFE        = "3600"
+    SLEEP            = "10"
+    SEND_PORT        = "8090"
+    __LOGTAG_READ    = "MadRead"
     __LOGTAG_DELIVER = "MadDeliver"
-    __LOGTAG_PF = "pf_monitor"
-    __LOGTAG_LOG = "access_monitor"
+    __LOGTAG_PF      = "pf_monitor"
+    __LOGTAG_LOG     = "access_monitor"
 )
 
 
-func GenConf() map[string]string{
-	data, _ := os.Hostname()
-	proc_life := __PROC_LIFE
-	sleep := __SLEEP
-	var mapConf = map[string]string{
-		"server_name": data,
-		"proc_life" : proc_life,
-		"sleep" : sleep,
-		"upload_url" : "",
-		"upload_host" : "172.18.0.30",
-		"upload_port"  : "80",
-		"upload_version"  : "monitor_server2r1_1",
-		"upload_suffix"  : "m1",
-		"send_host"  : "172.18.0.1",
-		"send_port"   : "8090",
-	}
-	return mapConf
-}
+
 
 

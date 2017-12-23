@@ -17,18 +17,18 @@ import (
 	"time"
 	"flag"
 	"bufio"
+	"madmonitor2/config"
 )
+// start unix timestamp
+var StartTime = time.Now().UnixNano()/1000/1000/1000
 
-var StartTime = time.Now()
-
-var version = flag.Bool("version", false, "0.1")
+// flag define
+var version = flag.Bool("version", false, "")
 var Debug_level = flag.Int("d", 4, "-d=4")
+var daemonize = flag.Bool("D", true, "-D=true")
+var pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "-pidfile=")
 
 func Init() *log.Logger {
-
-	//var version *bool
-	//version = flag.Bool("version", false, "0.1")
-	//debug_level := flag.Int("d", 4, "-d=4")
 	flag.Parse()
 	if *version {
 		fmt.Printf("Version %s\n", inc.CLIENT_VERSION)
@@ -70,7 +70,7 @@ func Init() *log.Logger {
 }
 
 func WriteConf(confFileIn string) error {
-	conf := inc.GenConf()
+	conf := config.GetDefaults()
 	file, err := os.Create(confFileIn)
 	if err != nil {
 		return err
