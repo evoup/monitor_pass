@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"time"
 	"flag"
-	"bufio"
 	"madmonitor2/config"
 )
 // start unix timestamp
@@ -75,26 +74,17 @@ func Init() *log.Logger {
 		common.MakeDir(inc.PROC_ROOT, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
-		writeConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+		//config.WriteConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 		common.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
 		os.Exit(0)
 	}
 	return logger
 }
 
-func writeConf(confFileIn string) error {
-	conf := config.GetDefaults()
-	file, err := os.Create(confFileIn)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	w := bufio.NewWriter(file)
-	for k, v := range conf {
-		fmt.Fprintln(w, k + "=" + v)
-	}
-	return w.Flush()
-}
+
+
+
 
 
 

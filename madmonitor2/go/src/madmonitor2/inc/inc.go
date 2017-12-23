@@ -28,12 +28,21 @@ const (
     PROC_LIFE        = "3600"
     SLEEP            = "10"
     SEND_PORT        = "8090"
+    SEND_HOSTS        = "172.18.0.1,172.18.9.3"
     __LOGTAG_READ    = "MadRead"
     __LOGTAG_DELIVER = "MadDeliver"
     __LOGTAG_PF      = "pf_monitor"
     __LOGTAG_LOG     = "access_monitor"
 )
 
+//type Hosts []string
+type DefaultConf struct {
+    ServerName string
+    ProcLife   string
+    Sleep      string
+    SendPort   string
+    SendHosts  string
+}
 
 
 
