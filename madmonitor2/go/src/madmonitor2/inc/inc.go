@@ -18,24 +18,16 @@ package inc
 const (
     LOG_SUFFIX       = "madmonitor2"
     CLIENT_VERSION   = "2.0.0.1"
-    PROC_NAME        = "madmonitor2"
     PROC_ROOT        = "/services/monitor2_deal"
     CONF_FILE        = "madmonitor2.ini"
-    RUN_SUBPATH      = "run/"
     CONF_SUBPATH     = "conf/"
-    STATUS_SUBPATH   = "status/"
     WORK_SUBPATH     = "work/"
     PROC_LIFE        = "3600"
     SLEEP            = "10"
     SEND_PORT        = "8090"
     SEND_HOSTS        = "172.18.0.1,172.18.9.3"
-    __LOGTAG_READ    = "MadRead"
-    __LOGTAG_DELIVER = "MadDeliver"
-    __LOGTAG_PF      = "pf_monitor"
-    __LOGTAG_LOG     = "access_monitor"
 )
 
-//type Hosts []string
 type DefaultConf struct {
     ServerName string
     ProcLife   string
@@ -43,6 +35,10 @@ type DefaultConf struct {
     SendPort   string
     SendHosts  string
 }
+
+type Conf DefaultConf
+
+
 
 
 

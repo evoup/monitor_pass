@@ -24,6 +24,7 @@ import (
 	"time"
 	"flag"
 	"madmonitor2/config"
+	"github.com/antonholmquist/jason"
 )
 // start unix timestamp
 var StartTime = time.Now().UnixNano()/1000/1000/1000
@@ -35,7 +36,7 @@ var daemonize = flag.Bool("daemonize", false, "Run as a background daemon.")
 var daemonizeShort = flag.Bool("D", false, "Run as a background daemon.")
 var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
 
-func Init() *log.Logger {
+func Init() (*log.Logger, *jason.Object) {
 	flag.Parse()
 	if *version {
 		fmt.Printf("Version %s\n", inc.CLIENT_VERSION)
@@ -79,8 +80,18 @@ func Init() *log.Logger {
 		common.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
 		os.Exit(0)
 	}
-	return logger
-}
+	file, err := os.Open("/services/monitor2_deal/conf/madmonitor2.ini")
+	if err == nil {
+		v, err := jason.NewObjectFromReader(file)
+		if err == nil {
+			return logger, v
+		}
+	} else {
+		common.Log(logger, "core.Init][err:" + err.Error(), 1, *Debug_level)
+	}
+
+	return logger, nil
+	}
 
 
 

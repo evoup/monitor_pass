@@ -20,23 +20,12 @@ import (
     "madmonitor2/module"
     "fmt"
     "time"
-    "github.com/antonholmquist/jason"
-    "os"
 )
 
 func main() {
-    file, err := os.Open("/services/monitor2_deal/conf/madmonitor2.ini")
-    if err == nil {
-        v, err := jason.NewObjectFromReader(file)
-        host, _ := v.GetString("ServerName")
-        fmt.Println(host)
-        if err == nil {
-            fmt.Println(v)
-        }
-    } else {
-        fmt.Println(err)
-    }
-    hLog := core.Init()
+    hLog, conf := core.Init()
+    host, _ := conf.GetString("ServerName")
+    fmt.Println(host)
     common.Log(hLog, "main][init done",1, 4)
     fmt.Println(core.StartTime)
     for ;; {
