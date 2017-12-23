@@ -15,10 +15,7 @@ import (
 func FileGetContent(filePath string) string {
 	hLog := LogInit()
 	bool_existed, _ := FileExists(filePath)
-	if bool_existed {
-		Log(hLog, "common.fs.FilePutContent][pid file existed",1, Debug_level)
-	} else {
-		Log(hLog, "common.fs.FilePutContent][pid file doesn`t existed,maybe first run",1, Debug_level)
+	if !bool_existed {
 		return ""
 	}
 	fin, err := os.Open(filePath)
@@ -36,7 +33,6 @@ func FileGetContent(filePath string) string {
 		}
 		retStr += string(buf[:n])
 	}
-	Log(hLog, "common.fs.FilePutContent][pid number is:"+retStr,1, Debug_level)
 	return retStr
 }
 

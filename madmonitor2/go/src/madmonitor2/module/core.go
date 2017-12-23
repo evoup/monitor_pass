@@ -25,8 +25,9 @@ var StartTime = time.Now().UnixNano()/1000/1000/1000
 // flag define
 var version = flag.Bool("version", false, "")
 var Debug_level = flag.Int("d", 4, "-d=4")
-var daemonize = flag.Bool("D", true, "-D=true")
-var pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "-pidfile=")
+var daemonize = flag.Bool("daemonize", false, "Run as a background daemon.")
+var daemonizeShort = flag.Bool("D", false, "Run as a background daemon.")
+var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
 
 func Init() *log.Logger {
 	flag.Parse()
@@ -34,13 +35,13 @@ func Init() *log.Logger {
 		fmt.Printf("Version %s\n", inc.CLIENT_VERSION)
 		os.Exit(0)
 	}
+
 	common.Debug_level = *Debug_level
 
 	hLog := common.LogInit()
 	common.Log(hLog, "core.Init][Initiating server........................", 4, *Debug_level)
 	/** make sure only one process running **/
-	pid_file := inc.PROC_ROOT + "/" + inc.RUN_SUBPATH + inc.PROC_NAME + ".pid"
-	common.MakeDir(inc.PROC_ROOT+"/"+inc.RUN_SUBPATH, "0755")
+	var pid_file = *Pidfile
 	pid := common.FileGetContent(pid_file)
 	if pid == "" {
 		common.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
@@ -50,7 +51,9 @@ func Init() *log.Logger {
 		os.Exit(0)
 	} else {
 		common.Log(hLog, "core.Init][single proc check ok", 4, *Debug_level)
-		common.Daemonize(0, 1)
+		if *daemonize || *daemonizeShort {
+			common.Daemonize(0, 1, pid_file)
+		}
 	}
 
 	bool_existed, _ := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_FILE)
@@ -62,14 +65,14 @@ func Init() *log.Logger {
 		common.MakeDir(inc.PROC_ROOT, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
+		writeConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 		common.Log(hLog, "core.Init][build configuration file,done. run again", 4, *Debug_level)
-		//WriteConf(wd + "/docs/conf/madmonitor2.conf.in")
-		WriteConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+		os.Exit(0)
 	}
 	return hLog
 }
 
-func WriteConf(confFileIn string) error {
+func writeConf(confFileIn string) error {
 	conf := config.GetDefaults()
 	file, err := os.Create(confFileIn)
 	if err != nil {
@@ -83,18 +86,5 @@ func WriteConf(confFileIn string) error {
 	return w.Flush()
 }
 
-// writeLines writes the lines to the given file.
-func writeLines(lines []string, path string) error {
-	file, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
 
-	w := bufio.NewWriter(file)
-	for _, line := range lines {
-		fmt.Fprintln(w, line)
-	}
-	return w.Flush()
-}
 

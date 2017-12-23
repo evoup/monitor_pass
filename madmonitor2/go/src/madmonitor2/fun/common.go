@@ -65,7 +65,7 @@ func SingleProc(pidFile string) bool{
     return true
 }
 
-func Daemonize(nochdir int, noclose int) error {
+func Daemonize(nochdir int, noclose int, pid_file string) error {
     var hLog *log.Logger
     hLog = LogInit()
     var ret, ret2 uintptr
@@ -130,8 +130,9 @@ func Daemonize(nochdir int, noclose int) error {
         }
     }
 
-    pid_file:=inc.PROC_ROOT+"/"+inc.RUN_SUBPATH+inc.PROC_NAME+".pid"
-    FilePutContent(pid_file,fmt.Sprintf("%d",os.Getpid()))
+    if !FilePutContent(pid_file,fmt.Sprintf("%d",os.Getpid())) {
+        Log(hLog, "common.Daemonize][write pid fail",1, Debug_level)
+    }
     Log(hLog, "common.Daemonize][daemonize done",1, Debug_level)
     return nil
 }
