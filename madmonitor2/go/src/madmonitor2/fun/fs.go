@@ -14,7 +14,7 @@ import (
 //Get file content
 func FileGetContent(filePath string) string {
 	hLog := LogInit()
-	bool_existed, _ := FileExists(filePath)
+	bool_existed := FileExists(filePath)
 	if !bool_existed {
 		return ""
 	}

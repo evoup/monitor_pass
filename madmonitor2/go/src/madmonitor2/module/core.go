@@ -56,10 +56,13 @@ func Init() *log.Logger {
 		}
 	}
 
-	bool_existed, _ := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_FILE)
+
+	bool_existed := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+	fmt.Println(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	if bool_existed {
 		common.Log(hLog, "core.Init][conf and work dir existed", 4, *Debug_level)
 	} else {
+		common.Log(hLog, "core.Init][conf and work dir not existed", 4, *Debug_level)
 		wd, _ := os.Getwd()
 		common.Log(hLog, "core.Init][current dir:"+wd, 4, *Debug_level)
 		common.MakeDir(inc.PROC_ROOT, "0755")
