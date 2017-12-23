@@ -45,8 +45,8 @@ func Init() *log.Logger {
 
 	common.Debug_level = *Debug_level
 
-	hLog := common.GetLogger()
-	common.Log(hLog, "core.Init][Initiating server........................", 4, *Debug_level)
+	logger := common.GetLogger()
+	common.Log(logger, "core.Init][Initiating server........................", 4, *Debug_level)
 	/** make sure only one process running **/
 	var pid_file = *Pidfile
 	pid := common.FileGetContent(pid_file)
@@ -54,10 +54,10 @@ func Init() *log.Logger {
 		common.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
 	}
 	if false == common.SingleProc(pid_file) {
-		common.Log(hLog, "core.Init][last upload process exists", 4, *Debug_level)
+		common.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
 		os.Exit(0)
 	} else {
-		common.Log(hLog, "core.Init][single proc check ok", 4, *Debug_level)
+		common.Log(logger, "core.Init][single proc check ok", 4, *Debug_level)
 		if *daemonize || *daemonizeShort {
 			common.Daemonize(0, 1, pid_file)
 		}
@@ -67,19 +67,19 @@ func Init() *log.Logger {
 	bool_existed := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	fmt.Println(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	if bool_existed {
-		common.Log(hLog, "core.Init][conf and work dir existed", 4, *Debug_level)
+		common.Log(logger, "core.Init][conf and work dir existed", 4, *Debug_level)
 	} else {
-		common.Log(hLog, "core.Init][conf and work dir not existed", 4, *Debug_level)
+		common.Log(logger, "core.Init][conf and work dir not existed", 4, *Debug_level)
 		wd, _ := os.Getwd()
-		common.Log(hLog, "core.Init][current dir:"+wd, 4, *Debug_level)
+		common.Log(logger, "core.Init][current dir:"+wd, 4, *Debug_level)
 		common.MakeDir(inc.PROC_ROOT, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
 		writeConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
-		common.Log(hLog, "core.Init][build configuration file,done. run again", 4, *Debug_level)
+		common.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
 		os.Exit(0)
 	}
-	return hLog
+	return logger
 }
 
 func writeConf(confFileIn string) error {
