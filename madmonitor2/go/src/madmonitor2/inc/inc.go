@@ -34,7 +34,6 @@ type DefaultConf struct {
     Sleep      string
     SendPort   string
     SendHosts  string
-    Daemonize  bool
 }
 
 type Conf DefaultConf

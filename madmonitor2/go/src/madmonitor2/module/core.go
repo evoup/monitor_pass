@@ -68,7 +68,6 @@ func Init() (*log.Logger, *jason.Object) {
 		common.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
 		os.Exit(0)
 	}
-	fmt.Println((*daemonize))
 	var optionDaedmon = (*daemonize || *daemonizeShort)
 	if (optionDaedmon) {
 		common.Daemonize(0, 1, pid_file)
