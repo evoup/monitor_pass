@@ -25,7 +25,7 @@ const (
     PROC_LIFE        = "3600"
     SLEEP            = "10"
     SEND_PORT        = "8090"
-    SEND_HOSTS        = "172.18.0.1,172.18.9.3"
+    SEND_HOSTS       = "172.18.0.1,172.18.9.3"
 )
 
 type DefaultConf struct {
@@ -34,6 +34,7 @@ type DefaultConf struct {
     Sleep      string
     SendPort   string
     SendHosts  string
+    Daemonize  bool
 }
 
 type Conf DefaultConf

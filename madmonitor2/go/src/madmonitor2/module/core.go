@@ -26,16 +26,16 @@ import (
 	"madmonitor2/config"
 	"github.com/antonholmquist/jason"
 )
+
 // start unix timestamp
-var StartTime = time.Now().UnixNano()/1000/1000/1000
+var StartTime = time.Now().UnixNano() / 1000 / 1000 / 1000
 
 // flag define
 var version = flag.Bool("version", false, "")
 var Debug_level = flag.Int("d", 4, "-d=4")
+var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
 var daemonize = flag.Bool("daemonize", false, "Run as a background daemon.")
 var daemonizeShort = flag.Bool("D", false, "Run as a background daemon.")
-var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
-
 func Init() (*log.Logger, *jason.Object) {
 	flag.Parse()
 	if *version {
@@ -56,17 +56,29 @@ func Init() (*log.Logger, *jason.Object) {
 	if false == common.SingleProc(pid_file) {
 		common.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
 		os.Exit(0)
-	} else {
-		common.Log(logger, "core.Init][single proc check ok", 4, *Debug_level)
-		if *daemonize || *daemonizeShort {
-			common.Daemonize(0, 1, pid_file)
-		}
 	}
+	/** if first run, we make config folder **/
+	buildConf(logger)
+	object, err := parseConf()
+	if err != nil {
+		common.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		os.Exit(0)
+	}
+	if err != nil {
+		common.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		os.Exit(0)
+	}
+	fmt.Println((*daemonize))
+	var optionDaedmon = (*daemonize || *daemonizeShort)
+	if (optionDaedmon) {
+		common.Daemonize(0, 1, pid_file)
+	}
+	return logger, object
+}
 
-
-	bool_existed := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
-	fmt.Println(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
-	if bool_existed {
+func buildConf(logger *log.Logger) {
+	confExists := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+	if confExists {
 		common.Log(logger, "core.Init][conf and work dir existed", 4, *Debug_level)
 	} else {
 		common.Log(logger, "core.Init][conf and work dir not existed", 4, *Debug_level)
@@ -75,27 +87,23 @@ func Init() (*log.Logger, *jason.Object) {
 		common.MakeDir(inc.PROC_ROOT, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
 		common.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
-		//config.WriteConf(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 		common.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
 		os.Exit(0)
 	}
-	file, err := os.Open("/services/monitor2_deal/conf/madmonitor2.ini")
+}
+
+func parseConf() (*jason.Object, error) {
+	file, err := os.Open(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	if err == nil {
-		v, err := jason.NewObjectFromReader(file)
+		conf, err := jason.NewObjectFromReader(file)
 		if err == nil {
-			return logger, v
+			return conf, nil
 		}
+		return nil, err
 	} else {
-		common.Log(logger, "core.Init][err:" + err.Error(), 1, *Debug_level)
+		return nil, err
 	}
-
-	return logger, nil
-	}
-
-
-
-
-
+}
 
 
