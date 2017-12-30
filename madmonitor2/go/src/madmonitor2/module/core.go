@@ -28,7 +28,7 @@ import (
 )
 
 // start unix timestamp
-var StartTime = time.Now().UnixNano() / 1000 / 1000 / 1000
+var StartTime = time.Now().Unix()
 
 // flag define
 var version = flag.Bool("version", false, "")

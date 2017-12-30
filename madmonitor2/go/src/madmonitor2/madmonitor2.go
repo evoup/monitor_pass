@@ -28,8 +28,21 @@ func main() {
     fmt.Println(host)
     common.Log(hLog, "main][init done",1, 4)
     fmt.Println(core.StartTime)
+
+    main_loop()
+}
+
+// 执行我们模块的收集方法
+// main_loop(options, modules, sender, tags)
+func main_loop() {
+    // 检查collector的心跳，每10分钟一次
+    next_heartbeat := int(time.Now().Unix() + 600)
     for ;; {
-        time.Sleep(5)
+        time.Sleep(time.Second * 15)
+        now := int(time.Now().Unix())
+        if now > next_heartbeat {
+            next_heartbeat = now + 600
+        }
     }
 }
 
