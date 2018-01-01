@@ -8,9 +8,10 @@ import (
 	"madmonitor2/collectors/etc"
 	"os/exec"
 	"bufio"
+	"regexp"
 )
 
-var DEFAULT_COLLECTION_INTERVAL = 15
+var DEFAULT_COLLECTION_INTERVAL = 5
 
 // Take a string in the form 1234K, and convert to bytes
 func convert_to_bytes(str string) int {
@@ -66,6 +67,21 @@ func main() {
 		r := bufio.NewReader(stdout)
 		for {
 			line, err := r.ReadString('\n')
+
+			// CPU: --> CPU all:  : FreeBSD, to match the all CPU
+			// %( [uni][a-z]+,?)? : FreeBSD, so that top output matches mpstat output
+			// AM                 : Linux, mpstat output depending on locale
+			// PM                 : Linux, mpstat output depending on locale
+			// .* load            : FreeBSD, to correctly match load averages
+			// ,                  : FreeBSD, to correctly match processes: Mem: ARC: and Swap:
+			re := regexp.MustCompile(`%( [uni][a-z]+,?)?| AM | PM |.* load |,`)
+			line = re.ReplaceAllString(line, "")
+			re = regexp.MustCompile(`CPU:`)
+			line = re.ReplaceAllString(line, "CPU all:")
+			fields := s.Fields(line)
+			if len(fields) <= 0 {
+				continue
+			}
 			fmt.Printf(" > Read %d characters\n", len(line))
 			// Process the line here.
 			fmt.Println(line)

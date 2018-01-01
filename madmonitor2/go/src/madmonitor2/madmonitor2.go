@@ -22,6 +22,9 @@ import (
     "time"
 )
 
+var COLLECTORS = map[string]string{}
+var GENERATION = 0
+
 func main() {
     hLog, conf := core.Init()
     host, _ := conf.GetString("ServerName")
@@ -44,5 +47,10 @@ func main_loop() {
             next_heartbeat = now + 600
         }
     }
+}
+
+// 更新或者添加collector
+func populate_collectors() {
+    GENERATION += 1
 }
 

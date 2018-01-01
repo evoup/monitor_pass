@@ -39,7 +39,9 @@ type DefaultConf struct {
 type Conf DefaultConf
 
 
+// 收集器类，负责管理进程和从进程中获取数据
+type Collector struct {
 
-
+}
 
 
