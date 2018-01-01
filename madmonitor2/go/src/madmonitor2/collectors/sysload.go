@@ -9,9 +9,10 @@ import (
 	"os/exec"
 	"bufio"
 	"regexp"
+	"time"
 )
 
-var DEFAULT_COLLECTION_INTERVAL = 5
+var DEFAULT_COLLECTION_INTERVAL = 15
 
 // Take a string in the form 1234K, and convert to bytes
 func convert_to_bytes(str string) int {
@@ -48,15 +49,14 @@ func main() {
 		if err == nil {
 			collection_interval = collection_interval0
 		}
-		//collect_every_cpu0, err := config["collect_every_cpu"]
-		//if err == nil {
-		//	if s.EqualFold(collect_every_cpu0, "1") {
-		//		collect_every_cpu = true
-		//	} else {
-		//		collect_every_cpu = false
-		//	}
-		//}
-		collect_every_cpu = true
+		collect_every_cpu0 := config["collect_every_cpu"]
+		if err == nil {
+			if s.EqualFold(collect_every_cpu0, "1") {
+				collect_every_cpu = true
+			} else {
+				collect_every_cpu = false
+			}
+		}
 	}
 	if collect_every_cpu {
 		itoa := strconv.Itoa(collection_interval)
@@ -82,9 +82,25 @@ func main() {
 			if len(fields) <= 0 {
 				continue
 			}
-			fmt.Printf(" > Read %d characters\n", len(line))
-			// Process the line here.
-			fmt.Println(line)
+			match, _ := regexp.MatchString(`[0-9][0-9]:[0-9][0-9]:[0-9][0-9]`, fields[0])
+			match1, _ := regexp.MatchString(`[0-9][0-9].*[0-9][0-9].*[0-9][0-9].*`, fields[0])
+			match2, _ := regexp.MatchString(`[0-9]+:?`, fields[1])
+			match3, _ := regexp.MatchString(`all:?`, fields[1])
+			if fields[0] == "CPU" || match || match1 && ((collect_every_cpu && match2) || (!collect_every_cpu && match3)) {
+				// Process the line here.
+				cpuid := s.Replace(fields[1], ":", "", -1)
+				cpuuser:=fields[2]
+				cpunice:=fields[3]
+				cpusystem:=fields[4]
+				cpuinterrupt:=fields[6]
+				cpuidle := fields[len(fields)-1]
+				timestamp := time.Now().Unix()
+				fmt.Printf ("cpu.usr %v %v cpu=%v\n" , timestamp, cpuuser, cpuid)
+				fmt.Printf ("cpu.nice %v %v cpu=%v\n", timestamp, cpunice, cpuid)
+				fmt.Printf ("cpu.sys %v %v cpu=%v\n", timestamp, cpusystem, cpuid)
+				fmt.Printf ("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
+				fmt.Printf ("cpu.idle %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuidle)
+			}
 			if err != nil {
 				break
 			}
