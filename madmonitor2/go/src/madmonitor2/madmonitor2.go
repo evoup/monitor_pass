@@ -20,10 +20,13 @@ import (
     "madmonitor2/module"
     "fmt"
     "time"
+    "madmonitor2/inc"
 )
 
 var COLLECTORS = map[string]string{}
 var GENERATION = 0
+
+
 
 func main() {
     hLog, conf := core.Init()
@@ -41,6 +44,7 @@ func main_loop() {
     // 检查collector的心跳，每10分钟一次
     next_heartbeat := int(time.Now().Unix() + 600)
     for ;; {
+        populate_collectors()
         time.Sleep(time.Second * 15)
         now := int(time.Now().Unix())
         if now > next_heartbeat {
@@ -52,5 +56,8 @@ func main_loop() {
 // 更新或者添加collector
 func populate_collectors() {
     GENERATION += 1
+    for collector_name := range inc.VALID_COLLECTORS {
+        fmt.Println(collector_name)
+    }
 }
 

@@ -45,3 +45,4 @@ type Collector struct {
 }
 
 
+var VALID_COLLECTORS = map[string]int{}

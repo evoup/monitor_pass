@@ -72,6 +72,7 @@ func Init() (*log.Logger, *jason.Object) {
 	if (optionDaedmon) {
 		common.Daemonize(0, 1, pid_file)
 	}
+	loadCollectors()
 	return logger, object
 }
 
@@ -105,4 +106,7 @@ func parseConf() (*jason.Object, error) {
 	}
 }
 
-
+// load implemented collectors
+func loadCollectors() {
+	inc.VALID_COLLECTORS["sysload"]=1
+}
