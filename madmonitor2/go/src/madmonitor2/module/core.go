@@ -106,7 +106,8 @@ func parseConf() (*jason.Object, error) {
 	}
 }
 
-// load implemented collectors
+// load implemented collectors key name of collector,value interval
 func loadCollectors() {
-	inc.VALID_COLLECTORS["sysload"]=1
+	inc.VALID_COLLECTORS["sysload"]=0
+
 }

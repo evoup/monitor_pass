@@ -1,3 +1,18 @@
+/*
+ * This file is part of madmonitor2.
+ * Copyright (c) 2018. Author: yinjia evoex123@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.  This program is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+ * General Public License for more details.  You should have received a copy
+ * of the GNU Lesser General Public License along with this program.  If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
+
 package main
 
 import "fmt"
@@ -11,7 +26,7 @@ import (
 	"regexp"
 	"time"
 )
-
+type plugin string
 var DEFAULT_COLLECTION_INTERVAL = 15
 
 // Take a string in the form 1234K, and convert to bytes
@@ -40,6 +55,14 @@ func convert_to_bytes(str string) int {
 }
 
 func main() {
+	sysload()
+}
+
+func (p plugin)Sysload() {
+	sysload()
+}
+
+func sysload() {
 	//convert_to_bytes("1234K");
 	collection_interval := DEFAULT_COLLECTION_INTERVAL
 	collect_every_cpu := true
@@ -49,9 +72,9 @@ func main() {
 		if err == nil {
 			collection_interval = collection_interval0
 		}
-		collect_every_cpu0 := config["collect_every_cpu"]
+		collect_every_cpu_flag := config["collect_every_cpu"]
 		if err == nil {
-			if s.EqualFold(collect_every_cpu0, "1") {
+			if s.EqualFold(collect_every_cpu_flag, "1") {
 				collect_every_cpu = true
 			} else {
 				collect_every_cpu = false
@@ -108,3 +131,7 @@ func main() {
 
 	}
 }
+
+// exported as symbol named "SysloadSo"
+var SysloadSo plugin
+
