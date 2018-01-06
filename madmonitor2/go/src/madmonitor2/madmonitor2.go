@@ -16,76 +16,104 @@
 package main
 
 import (
-    "madmonitor2/fun"
-    "madmonitor2/module"
-    "fmt"
-    "time"
-    "madmonitor2/inc"
-    "io/ioutil"
-    "log"
-    "plugin"
-    "os"
+	"madmonitor2/utils"
+	"madmonitor2/module"
+	"madmonitor2/inc"
+	"fmt"
+	"time"
+	"io/ioutil"
+	"log"
+	"plugin"
+	"os"
 )
 
-var COLLECTORS = map[string]string{}
+var COLLECTORS = map[string]int{}
 var GENERATION = 0
+
 type ICollector interface {
-    Collect()
+	Collect()
 }
 
-
 func main() {
-    hLog, conf := core.Init()
-    host, _ := conf.GetString("ServerName")
-    fmt.Println(host)
-    common.Log(hLog, "main][init done",1, 4)
-    fmt.Println(core.StartTime)
+	hLog, conf := module.Init()
+	host, _ := conf.GetString("ServerName")
+	fmt.Println(host)
+	utils.Log(hLog, "main][init done", 1, 4)
+	fmt.Println(module.StartTime)
 
-    main_loop()
+	main_loop()
 }
 
 // 执行我们模块的收集方法
 // main_loop(options, modules, sender, tags)
 func main_loop() {
-    // 检查collector的心跳，每10分钟一次
-    next_heartbeat := int(time.Now().Unix() + 600)
-    for ;; {
-        populate_collectors()
-        time.Sleep(time.Second * 15)
-        now := int(time.Now().Unix())
-        if now > next_heartbeat {
-            next_heartbeat = now + 600
-        }
-    }
+	// 检查collector的心跳，每10分钟一次
+	next_heartbeat := int(time.Now().Unix() + 600)
+	for ; ; {
+		populate_collectors()
+		time.Sleep(time.Second * 15)
+		now := int(time.Now().Unix())
+		if now > next_heartbeat {
+			next_heartbeat = now + 600
+		}
+	}
+}
+
+
+
+func populate_collectors() {
+	dirname := "./plugin/"
+	files, err := ioutil.ReadDir(dirname)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range files {
+		file.Name()
+		// if this collector is already 'known', then check if it's
+		// been updated (new mtime) so we can kill off the old one
+		// (but only if it's interval 0, else we'll just get
+		// it next time it runs)
+		if _, ok := COLLECTORS[file.Name()]; ok {
+
+		} else {
+			COLLECTORS[file.Name()] = 1
+			module.Register_collector(file.Name(), 0, dirname + file.Name(), GENERATION)
+			//core.Register_collector()
+		}
+	}
 }
 
 // 更新或者添加collector
-func populate_collectors() {
-    GENERATION += 1
-    for collector_name := range inc.VALID_COLLECTORS {
-        fmt.Println(collector_name)
-    }
-    files, err := ioutil.ReadDir("./plugin/")
-    if err != nil {
-        log.Fatal(err)
-    }
+func populate_collectors0() {
 
-    for _, f := range files {
-        fmt.Println(f.Name())
-        mod := f.Name()
-        plug, err := plugin.Open("./plugin/" + mod)
-        if err != nil {
-            fmt.Println(err)
-            os.Exit(1)
-        }
-        symCollector, err := plug.Lookup("CollectorSo")
-    if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-        col := symCollector.(ICollector)
-        col.Collect()
-    }
+	GENERATION += 1
+	for collector_name := range inc.VALID_COLLECTORS {
+		fmt.Println(collector_name)
+	}
+	files, err := ioutil.ReadDir("./plugin/")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		fmt.Println(f.Name())
+		mod := f.Name()
+		plug, err := plugin.Open("./plugin/" + mod)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		symCollector, err := plug.Lookup("CollectorSo")
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		col := symCollector.(ICollector)
+		doCollect(col)
+	}
 
 }
 
+func doCollect(col ICollector) {
+	col.Collect()
+}

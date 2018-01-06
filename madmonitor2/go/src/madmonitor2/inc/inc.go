@@ -41,8 +41,15 @@ type Conf DefaultConf
 
 // 收集器类，负责管理进程和从进程中获取数据
 type Collector struct {
-
+    Name string
+    Interval int
+    Filename string
+    Mtime int
+    LastSpawn int
+    Dead bool
+    Generation int
 }
+
 
 
 var VALID_COLLECTORS = map[string]int{}

@@ -1,6 +1,6 @@
 /*
  * This file is part of madmonitor2.
- * Copyright (c) 2017. Author: yinjia evoex123@gmail.com
+ * Copyright (c) 2018. Author: yinjia evoex123@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -13,27 +13,22 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package common
+package module
 
 import (
-	"log"
-	"log/syslog"
 	"madmonitor2/inc"
+	"os"
+	"fmt"
 )
 
-
-// syslog init
-func GetLogger() *log.Logger {
-	Log, err := syslog.NewLogger(syslog.LOG_DEBUG, log.Lmicroseconds)
+func Register_collector(name string, interval int, filename string, generation int) inc.Collector {
+	file, err := os.Stat(filename)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
-	return Log
-}
-
-// use syslog log item
-func Log(l *log.Logger, s string, debug_level_orig int, debug_level_input int) {
-	if (debug_level_orig<=debug_level_input) {
-		l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.CLIENT_VERSION + "]")
-	}
+	mtime := int(file.ModTime().Unix())
+	lastspawn := 0
+	collector := inc.Collector{name, interval, filename, mtime, lastspawn, false, generation}
+	return collector
 }

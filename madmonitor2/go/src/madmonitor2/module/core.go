@@ -13,12 +13,12 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package core
+package module
 
 import (
 	"log"
 	"os"
-	"madmonitor2/fun"
+	"madmonitor2/utils"
 	"madmonitor2/inc"
 	"fmt"
 	"time"
@@ -43,52 +43,52 @@ func Init() (*log.Logger, *jason.Object) {
 		os.Exit(0)
 	}
 
-	common.Debug_level = *Debug_level
+	utils.Debug_level = *Debug_level
 
-	logger := common.GetLogger()
-	common.Log(logger, "core.Init][Initiating server........................", 4, *Debug_level)
+	logger := utils.GetLogger()
+	utils.Log(logger, "core.Init][Initiating server........................", 4, *Debug_level)
 	/** make sure only one process running **/
 	var pid_file = *Pidfile
-	pid := common.FileGetContent(pid_file)
+	pid := utils.FileGetContent(pid_file)
 	if pid == "" {
-		common.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
+		utils.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
 	}
-	if false == common.SingleProc(pid_file) {
-		common.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
+	if false == utils.SingleProc(pid_file) {
+		utils.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
 		os.Exit(0)
 	}
 	/** if first run, we make config folder **/
 	buildConf(logger)
 	object, err := parseConf()
 	if err != nil {
-		common.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
 		os.Exit(0)
 	}
 	if err != nil {
-		common.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
 		os.Exit(0)
 	}
 	var optionDaedmon = (*daemonize || *daemonizeShort)
 	if (optionDaedmon) {
-		common.Daemonize(0, 1, pid_file)
+		utils.Daemonize(0, 1, pid_file)
 	}
 	loadCollectors()
 	return logger, object
 }
 
 func buildConf(logger *log.Logger) {
-	confExists := common.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+	confExists := utils.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	if confExists {
-		common.Log(logger, "core.Init][conf and work dir existed", 4, *Debug_level)
+		utils.Log(logger, "core.Init][conf and work dir existed", 4, *Debug_level)
 	} else {
-		common.Log(logger, "core.Init][conf and work dir not existed", 4, *Debug_level)
+		utils.Log(logger, "core.Init][conf and work dir not existed", 4, *Debug_level)
 		wd, _ := os.Getwd()
-		common.Log(logger, "core.Init][current dir:"+wd, 4, *Debug_level)
-		common.MakeDir(inc.PROC_ROOT, "0755")
-		common.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
-		common.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
+		utils.Log(logger, "core.Init][current dir:"+wd, 4, *Debug_level)
+		utils.MakeDir(inc.PROC_ROOT, "0755")
+		utils.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
+		utils.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
 		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
-		common.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
+		utils.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
 		os.Exit(0)
 	}
 }
