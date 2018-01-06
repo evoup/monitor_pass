@@ -27,18 +27,18 @@ import (
 	"os"
 )
 
-var COLLECTORS = map[string]int{}
+var COLLECTORS =inc.COLLECTORS
 var GENERATION = 0
-
+var HLog, Conf = module.Init()
 type ICollector interface {
 	Collect()
 }
 
 func main() {
-	hLog, conf := module.Init()
-	host, _ := conf.GetString("ServerName")
+
+	host, _ := Conf.GetString("ServerName")
 	fmt.Println(host)
-	utils.Log(hLog, "main][init done", 1, 4)
+	utils.Log(HLog, "main][init done", 1, 4)
 	fmt.Println(module.StartTime)
 
 	main_loop()
@@ -69,16 +69,21 @@ func populate_collectors() {
 	}
 	for _, file := range files {
 		file.Name()
+		mtime := utils.GetMtime(dirname + file.Name())
 		// if this collector is already 'known', then check if it's
 		// been updated (new mtime) so we can kill off the old one
 		// (but only if it's interval 0, else we'll just get
 		// it next time it runs)
 		if _, ok := COLLECTORS[file.Name()]; ok {
-
+			col := COLLECTORS[file.Name()]
+			col.Generation = GENERATION
+			if col.Mtime < mtime {
+				utils.Log(HLog, "populate_collectors][" + col.Name + "has been updated on disk ", 1, 2)
+				col.Mtime = mtime
+				utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
+			}
 		} else {
-			COLLECTORS[file.Name()] = 1
 			module.Register_collector(file.Name(), 0, dirname + file.Name(), GENERATION)
-			//core.Register_collector()
 		}
 	}
 }

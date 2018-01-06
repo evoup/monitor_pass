@@ -181,3 +181,12 @@ func FileExists(name string) bool {
     return !os.IsNotExist(err)
 }
 
+func GetMtime(filename string) int {
+	file, err := os.Stat(filename)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	mtime := int(file.ModTime().Unix())
+	return mtime
+}

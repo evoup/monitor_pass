@@ -17,18 +17,14 @@ package module
 
 import (
 	"madmonitor2/inc"
-	"os"
-	"fmt"
+	"madmonitor2/utils"
 )
 
-func Register_collector(name string, interval int, filename string, generation int) inc.Collector {
-	file, err := os.Stat(filename)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	mtime := int(file.ModTime().Unix())
+var COLLECTORS = inc.COLLECTORS
+
+func Register_collector(name string, interval int, filename string, generation int) {
+	mtime := utils.GetMtime(filename)
 	lastspawn := 0
 	collector := inc.Collector{name, interval, filename, mtime, lastspawn, false, generation}
-	return collector
+	COLLECTORS[name] = collector
 }

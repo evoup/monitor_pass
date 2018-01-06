@@ -50,6 +50,8 @@ type Collector struct {
     Generation int
 }
 
-
+var COLLECTORS = map[string]Collector{}
 
 var VALID_COLLECTORS = map[string]int{}
+
+
