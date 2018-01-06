@@ -58,7 +58,7 @@ func main() {
 	sysload()
 }
 
-func (p plugin)Sysload() {
+func (p plugin)Collect() {
 	sysload()
 }
 
@@ -133,5 +133,5 @@ func sysload() {
 }
 
 // exported as symbol named "SysloadSo"
-var SysloadSo plugin
+var CollectorSo plugin
 
