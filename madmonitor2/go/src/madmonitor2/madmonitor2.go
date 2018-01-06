@@ -66,7 +66,9 @@ func populate_collectors() {
 	files, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		log.Fatal(err)
+		os.Exit(1)
 	}
+	GENERATION += 1
 	for _, file := range files {
 		file.Name()
 		mtime := utils.GetMtime(dirname + file.Name())
