@@ -16,80 +16,47 @@
 package main
 
 import (
-	"madmonitor2/utils"
 	"madmonitor2/module"
 	"madmonitor2/inc"
 	"fmt"
-	"time"
+
 	"io/ioutil"
 	"log"
 	"plugin"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 var COLLECTORS =inc.COLLECTORS
-var GENERATION = 0
-var HLog, Conf = module.Init()
+var GENERATION = inc.GERERATION
+var HLog = inc.HLog
 type ICollector interface {
 	Collect()
 }
 
 func main() {
-
-	host, _ := Conf.GetString("ServerName")
-	fmt.Println(host)
-	utils.Log(HLog, "main][init done", 1, 4)
-	fmt.Println(module.StartTime)
-
-	main_loop()
+	// Set up channel on which to send signal notifications.
+	// We must use a buffered channel or risk missing the signal
+	// if we're not ready to receive when the signal is sent.
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
+	module.Init()
+	//hLog, conf := module.Init()
+	//HLog = hLog
+	//host, _ := conf.GetString("ServerName")
+	//fmt.Println(host)
+	//utils.Log(HLog, "main][init done", 1, 4)
+	//fmt.Println(module.StartTime)
+//	module.Main_loop()
 }
 
 // 执行我们模块的收集方法
 // main_loop(options, modules, sender, tags)
-func main_loop() {
-	// 检查collector的心跳，每10分钟一次
-	next_heartbeat := int(time.Now().Unix() + 600)
-	for ; ; {
-		populate_collectors()
-		time.Sleep(time.Second * 15)
-		now := int(time.Now().Unix())
-		if now > next_heartbeat {
-			next_heartbeat = now + 600
-		}
-	}
-}
 
 
 
-func populate_collectors() {
-	dirname := "./plugin/"
-	files, err := ioutil.ReadDir(dirname)
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
-	GENERATION += 1
-	for _, file := range files {
-		file.Name()
-		mtime := utils.GetMtime(dirname + file.Name())
-		// if this collector is already 'known', then check if it's
-		// been updated (new mtime) so we can kill off the old one
-		// (but only if it's interval 0, else we'll just get
-		// it next time it runs)
-		if _, ok := COLLECTORS[file.Name()]; ok {
-			col := COLLECTORS[file.Name()]
-			col.Generation = GENERATION
-			if col.Mtime < mtime {
-				utils.Log(HLog, "populate_collectors][" + col.Name + "has been updated on disk ", 1, 2)
-				col.Mtime = mtime
-				// TODO shutdown, because go can`t close so, we should fully exit
-				//utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
-			}
-		} else {
-			module.Register_collector(file.Name(), 0, dirname + file.Name(), GENERATION)
-		}
-	}
-}
+
 
 // 更新或者添加collector
 func populate_collectors0() {

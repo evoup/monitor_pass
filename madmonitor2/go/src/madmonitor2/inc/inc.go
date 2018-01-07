@@ -15,6 +15,8 @@
 
 package inc
 
+import "log"
+
 const (
     LOG_SUFFIX       = "madmonitor2"
     CLIENT_VERSION   = "2.0.0.1"
@@ -26,6 +28,8 @@ const (
     SLEEP            = "10"
     SEND_PORT        = "8090"
     SEND_HOSTS       = "172.18.0.1,172.18.9.3"
+    SERVICE_NAME     = "madmonitor2"
+    SERVICE_DESC     = "monitor client by madhouse"
 )
 
 type DefaultConf struct {
@@ -51,7 +55,10 @@ type Collector struct {
 }
 
 var COLLECTORS = map[string]Collector{}
+var GERERATION = 0
 
 var VALID_COLLECTORS = map[string]int{}
+
+var HLog *log.Logger
 
 
