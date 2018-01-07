@@ -46,6 +46,7 @@ func populate_collectors() {
 		os.Exit(1)
 	}
 	GENERATION += 1
+	generation := GENERATION
 	for _, file := range files {
 		file.Name()
 		mtime := utils.GetMtime(dirname + file.Name())
@@ -55,7 +56,7 @@ func populate_collectors() {
 		// it next time it runs)
 		if _, ok := COLLECTORS[file.Name()]; ok {
 			col := COLLECTORS[file.Name()]
-			col.Generation = GENERATION
+			col.Generation = generation
 			if col.Mtime < mtime {
 				utils.Log(HLog, "populate_collectors][" + col.Name + "has been updated on disk ", 1, 2)
 				col.Mtime = mtime
