@@ -82,7 +82,8 @@ func populate_collectors() {
 			if col.Mtime < mtime {
 				utils.Log(HLog, "populate_collectors][" + col.Name + "has been updated on disk ", 1, 2)
 				col.Mtime = mtime
-				utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
+				// TODO shutdown, because go can`t close so, we should fully exit
+				//utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
 			}
 		} else {
 			module.Register_collector(file.Name(), 0, dirname + file.Name(), GENERATION)
