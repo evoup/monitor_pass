@@ -24,8 +24,6 @@ import (
 	"log"
 	"plugin"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 var COLLECTORS =inc.COLLECTORS
@@ -39,8 +37,6 @@ func main() {
 	// Set up channel on which to send signal notifications.
 	// We must use a buffered channel or risk missing the signal
 	// if we're not ready to receive when the signal is sent.
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 	module.Init()
 	//hLog, conf := module.Init()
 	//HLog = hLog

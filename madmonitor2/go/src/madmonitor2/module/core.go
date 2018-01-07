@@ -26,6 +26,8 @@ import (
 	"madmonitor2/config"
 	"github.com/antonholmquist/jason"
 	"github.com/takama/daemon"
+	"os/signal"
+	"syscall"
 )
 
 // start unix timestamp
@@ -37,7 +39,7 @@ var Debug_level = flag.Int("d", 4, "-d=4")
 var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
 var daemonize = flag.Bool("daemonize", false, "Run as a background daemon.")
 var daemonizeShort = flag.Bool("D", false, "Run as a background daemon.")
-var Service_install  = flag.Bool("service_install", false, "")
+var Service_install = flag.Bool("service_install", false, "")
 var Service_remove = flag.Bool("service_remove", false, "")
 var Service_start = flag.Bool("service_start", false, "")
 var Service_stop = flag.Bool("service_stop", false, "")
@@ -50,6 +52,12 @@ type Service struct {
 
 func Init() (*log.Logger, *jason.Object) {
 	flag.Parse()
+	args := flag.Args()
+	if len(args) > 0 {
+		usage := "Usage: please see madmonitor2 -h"
+		fmt.Printf(usage + "\n")
+		os.Exit(0)
+	}
 	if *version {
 		fmt.Printf("Version %s\n", inc.CLIENT_VERSION)
 		os.Exit(0)
@@ -65,21 +73,13 @@ func Init() (*log.Logger, *jason.Object) {
 	if pid == "" {
 		utils.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
 	}
-	if false == utils.SingleProc(pid_file) {
+	/*if false == utils.SingleProc(pid_file) {
 		utils.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
 		os.Exit(0)
-	}
+	}*/
 	/** if first run, we make config folder **/
 	buildConf(logger)
-	object, err := parseConf()
-	if err != nil {
-		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
-		os.Exit(0)
-	}
-	if err != nil {
-		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
-		os.Exit(0)
-	}
+
 	var optionDaedmon = (*daemonize || *daemonizeShort)
 	if (optionDaedmon) {
 		//utils.Daemonize(0, 1, pid_file)
@@ -96,11 +96,20 @@ func Init() (*log.Logger, *jason.Object) {
 	service := &Service{srv}
 	status, err := service.Manage()
 	if err != nil {
-		utils.Log(logger, "core.Init][status:" + status + "][err:"+err.Error(), 1, *Debug_level)
+		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *Debug_level)
 		os.Exit(1)
 	}
 
 	//////
+	object, err := parseConf()
+	if err != nil {
+		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		os.Exit(0)
+	}
+	if err != nil {
+		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		os.Exit(0)
+	}
 	loadCollectors()
 	return logger, object
 }
@@ -134,9 +143,11 @@ func parseConf() (*jason.Object, error) {
 		return nil, err
 	}
 }
+
 // Manage by daemon commands or run the daemon
 func (service *Service) Manage() (string, error) {
-
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 	//usage := "Usage: myservice install | remove | start | stop | status"
 
 	// if received any kind of command, do it
@@ -150,6 +161,8 @@ func (service *Service) Manage() (string, error) {
 		return service.Start()
 	}
 	if *Service_stop {
+		fmt.Println("stop")
+		//utils.Log(HLog, "core.Init][stop", 1, *Debug_level)
 		return service.Stop()
 	}
 	if *Service_status {
@@ -173,23 +186,31 @@ func (service *Service) Manage() (string, error) {
 	//		return usage, nil
 	//	}
 	//}
-	return main_loop()
+	return main_loop(interrupt)
 }
 
-func main_loop() (string, error) {
+func main_loop(interrupt chan os.Signal) (string, error) {
 	// 检查collector的心跳，每10分钟一次
 	next_heartbeat := int(time.Now().Unix() + 600)
-	for ; ; {
-		populate_collectors()
-		time.Sleep(time.Second * 15)
-		now := int(time.Now().Unix())
-		if now > next_heartbeat {
-			next_heartbeat = now + 600
+	for {
+		select {
+		case killSignal := <-interrupt:
+			fmt.Println("Got signal:", killSignal)
+			utils.Log(HLog, "core.Init][last upload process exists", 1, *Debug_level)
+			if killSignal == os.Interrupt {
+				return "Daemon was interrupted by system signal", nil
+			}
+			return "Daemon was killed", nil
 		}
 	}
+	populate_collectors()
+	time.Sleep(time.Second * 15)
+	now := int(time.Now().Unix())
+	if now > next_heartbeat {
+		next_heartbeat = now + 600
+	}
+	return "", nil
 }
-
-
 
 // load implemented collectors key name of collector,value interval
 func loadCollectors() {

@@ -61,6 +61,7 @@ func UnixMicro() int64 {
 // Check if no other proc
 func SingleProc(pidFile string) bool{
     hLog := GetLogger()
+    Log(hLog, "common.SingleProc][podFile:" + pidFile, 1, Debug_level)
     fd,_:=syscall.Open(pidFile,os.O_RDWR|os.O_CREATE,0644)
     err:=syscall.Flock(fd, syscall.LOCK_EX|syscall.LOCK_NB)
     if err != nil {
