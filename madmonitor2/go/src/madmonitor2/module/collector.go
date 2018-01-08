@@ -22,10 +22,13 @@ import (
 	"os"
 	"io/ioutil"
 	"path/filepath"
+	"fmt"
 )
+
 var GENERATION = inc.GERERATION
 var COLLECTORS = inc.COLLECTORS
 var HLog = inc.HLog
+
 func Register_collector(name string, interval int, filename string, generation int) {
 	mtime := utils.GetMtime(filename)
 	lastspawn := 0
@@ -33,11 +36,10 @@ func Register_collector(name string, interval int, filename string, generation i
 	COLLECTORS[name] = collector
 }
 
-
 func populate_collectors() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		utils.Log(HLog, "populate_collectors][err:" + err.Error(), 1, 2)
+		utils.Log(HLog, "populate_collectors][err:"+err.Error(), 1, 2)
 	}
 	dirname := dir + "/plugin/"
 	files, err := ioutil.ReadDir(dirname)
@@ -48,7 +50,6 @@ func populate_collectors() {
 	GENERATION += 1
 	generation := GENERATION
 	for _, file := range files {
-		file.Name()
 		mtime := utils.GetMtime(dirname + file.Name())
 		// if this collector is already 'known', then check if it's
 		// been updated (new mtime) so we can kill off the old one
@@ -58,13 +59,30 @@ func populate_collectors() {
 			col := COLLECTORS[file.Name()]
 			col.Generation = generation
 			if col.Mtime < mtime {
-				utils.Log(HLog, "populate_collectors][" + col.Name + "has been updated on disk ", 1, 2)
+				utils.Log(HLog, "populate_collectors]["+col.Name+"has been updated on disk ", 1, 2)
 				col.Mtime = mtime
 				// TODO shutdown, because go can`t close so, we should fully exit
 				//utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
 			}
 		} else {
-			Register_collector(file.Name(), 0, dirname + file.Name(), GENERATION)
+			Register_collector(file.Name(), 0, dirname+file.Name(), GENERATION)
 		}
 	}
+}
+
+func spawn_children() {
+	// Iterates over our defined collectors and performs the logic to
+	// determine if we need to spawn, kill, or otherwise take some
+	// action on them.
+	all_valid_collectors()
+}
+
+// collectors that are not marked dead
+func all_valid_collectors() {
+	all_collectors()
+}
+
+func all_collectors() {
+	// Generator to return all collectors.
+	fmt.Println(COLLECTORS)
 }

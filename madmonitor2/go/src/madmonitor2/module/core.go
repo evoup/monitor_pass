@@ -176,13 +176,7 @@ func (service *Service) Manage() (string, error) {
 		return service.Status()
 	}
 
-	return main_loop(interrupt)
-}
-
-// 执行我们模块的收集方法
-func main_loop(interrupt chan os.Signal) (string, error) {
-	// 检查collector的心跳，每10分钟一次
-	next_heartbeat := int(time.Now().Unix() + 600)
+	go main_loop()
 	for {
 		select {
 		case killSignal := <-interrupt:
@@ -194,13 +188,22 @@ func main_loop(interrupt chan os.Signal) (string, error) {
 			return "Daemon was killed", nil
 		}
 	}
-	populate_collectors()
-	time.Sleep(time.Second * 15)
-	now := int(time.Now().Unix())
-	if now > next_heartbeat {
-		next_heartbeat = now + 600
+}
+
+// 执行我们模块的收集方法
+func main_loop() {
+	// 检查collector的心跳，每10分钟一次
+	next_heartbeat := int(time.Now().Unix() + 600)
+	for {
+		populate_collectors()
+		spawn_children()
+		time.Sleep(time.Second * 15)
+		utils.Log(utils.GetLogger(), "core.Init][main loop next iter", 2, *Debug_level)
+		now := int(time.Now().Unix())
+		if now > next_heartbeat {
+			next_heartbeat = now + 600
+		}
 	}
-	return "", nil
 }
 
 // load implemented collectors key name of collector,value interval
