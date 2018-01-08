@@ -33,6 +33,8 @@ import (
 // start unix timestamp
 var StartTime = time.Now().Unix()
 
+var errlog *log.Logger
+
 // flag define
 var version = flag.Bool("version", false, "")
 var Debug_level = flag.Int("d", 4, "-d=4")
@@ -48,6 +50,10 @@ var Service_status = flag.Bool("service_status", false, "")
 // Service has embedded daemon
 type Service struct {
 	daemon.Daemon
+}
+
+func init() {
+	errlog = log.New(os.Stderr, "", 0)
 }
 
 func Init() (*log.Logger, *jason.Object) {
@@ -86,21 +92,22 @@ func Init() (*log.Logger, *jason.Object) {
 	} else {
 
 	}
-	//////
+
 	dependencies := []string{}
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
 	if err != nil {
 		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		errlog.Println("Error: ", err)
 		os.Exit(1)
 	}
 	service := &Service{srv}
 	status, err := service.Manage()
 	if err != nil {
 		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *Debug_level)
+		errlog.Println(status, "\nError: ", err)
 		os.Exit(1)
 	}
 
-	//////
 	object, err := parseConf()
 	if err != nil {
 		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
@@ -110,6 +117,7 @@ func Init() (*log.Logger, *jason.Object) {
 		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
 		os.Exit(0)
 	}
+	fmt.Println(status)
 	loadCollectors()
 	return logger, object
 }
@@ -148,7 +156,6 @@ func parseConf() (*jason.Object, error) {
 func (service *Service) Manage() (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
-	//usage := "Usage: myservice install | remove | start | stop | status"
 
 	// if received any kind of command, do it
 	if *Service_install {
@@ -169,26 +176,10 @@ func (service *Service) Manage() (string, error) {
 		return service.Status()
 	}
 
-	//if len(os.Args) > 1 {
-	//	command := os.Args[1]
-	//	switch command {
-	//	case "install":
-	//		return service.Install()
-	//	case "remove":
-	//		return service.Remove()
-	//	case "start":
-	//		return service.Start()
-	//	case "stop":
-	//		return service.Stop()
-	//	case "status":
-	//		return service.Status()
-	//	default:
-	//		return usage, nil
-	//	}
-	//}
 	return main_loop(interrupt)
 }
 
+// 执行我们模块的收集方法
 func main_loop(interrupt chan os.Signal) (string, error) {
 	// 检查collector的心跳，每10分钟一次
 	next_heartbeat := int(time.Now().Unix() + 600)

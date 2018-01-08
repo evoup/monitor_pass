@@ -26,9 +26,8 @@ import (
 	"os"
 )
 
-var COLLECTORS =inc.COLLECTORS
+
 var GENERATION = inc.GERERATION
-var HLog = inc.HLog
 type ICollector interface {
 	Collect()
 }
@@ -38,21 +37,7 @@ func main() {
 	// We must use a buffered channel or risk missing the signal
 	// if we're not ready to receive when the signal is sent.
 	module.Init()
-	//hLog, conf := module.Init()
-	//HLog = hLog
-	//host, _ := conf.GetString("ServerName")
-	//fmt.Println(host)
-	//utils.Log(HLog, "main][init done", 1, 4)
-	//fmt.Println(module.StartTime)
-//	module.Main_loop()
 }
-
-// 执行我们模块的收集方法
-// main_loop(options, modules, sender, tags)
-
-
-
-
 
 // 更新或者添加collector
 func populate_collectors0() {
