@@ -28,9 +28,7 @@ import (
 
 
 var GENERATION = inc.GERERATION
-type ICollector interface {
-	Collect()
-}
+
 
 func main() {
 	// Set up channel on which to send signal notifications.
@@ -64,12 +62,10 @@ func populate_collectors0() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		col := symCollector.(ICollector)
-		doCollect(col)
+		col := symCollector.(inc.ICollector)
+		module.DoCollect(col)
 	}
 
 }
 
-func doCollect(col ICollector) {
-	col.Collect()
-}
+

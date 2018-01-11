@@ -22,6 +22,10 @@ import (
 	"os"
 	"io/ioutil"
 	"path/filepath"
+	"time"
+
+	"strconv"
+	"plugin"
 	"fmt"
 )
 
@@ -32,7 +36,8 @@ var HLog = inc.HLog
 func Register_collector(name string, interval int, filename string, generation int) {
 	mtime := utils.GetMtime(filename)
 	lastspawn := 0
-	collector := inc.Collector{name, interval, filename, mtime, lastspawn, false, generation}
+	collector := inc.Collector{name, interval, filename, mtime, lastspawn,
+	0, 0, 0, false, generation}
 	COLLECTORS[name] = collector
 }
 
@@ -74,15 +79,78 @@ func spawn_children() {
 	// Iterates over our defined collectors and performs the logic to
 	// determine if we need to spawn, kill, or otherwise take some
 	// action on them.
-	all_valid_collectors()
+    for key_server, _ := range all_valid_collectors() {
+		now := int(time.Now().Unix())
+        col, ok := COLLECTORS[key_server]
+        if ok {
+            spawn_collector(col)
+        }
+        // I'm not very satisfied with this path.  It seems fragile and
+        // overly complex, maybe we should just reply on the asyncproc
+        // terminate method, but that would make the main tcollector
+        // block until it dies... :|
+        if col.NextKill > now {
+            continue
+        }
+        // FIXME >>>add kill collector method
+    }
 }
 
 // collectors that are not marked dead
-func all_valid_collectors() {
-	all_collectors()
+func all_valid_collectors() map[string]inc.Collector {
+    var valid_cols = map[string]inc.Collector{}
+    for key_col, value_col := range all_collectors() {
+		now := int(time.Now().Unix())
+        if !COLLECTORS[key_col].Dead || (now - COLLECTORS[key_col].LastSpawn > 3600) {
+            valid_cols[key_col] = value_col
+        }
+    }
+    return valid_cols
 }
 
-func all_collectors() {
+func all_collectors() map[string]inc.Collector {
 	// Generator to return all collectors.
-	fmt.Println(COLLECTORS)
+    return COLLECTORS
+}
+
+func spawn_collector( collector inc.Collector) {
+	// Takes a Collector object and creates a process for it.
+	interval := strconv.Itoa(collector.Interval)
+	HLog = utils.GetLogger()
+	utils.Log(HLog, "spawn_collector]["+collector.Name + "(interval:"+ interval + ") needs to be spawned", 1, 2)
+	///
+	mod := collector.Name
+	plug, err := plugin.Open("./plugin/" + mod)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	symCollector, err := plug.Lookup("CollectorSo")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	col := symCollector.(inc.ICollector)
+	defer func() { // need to define defer first, otherwise we can`t ge panic exception
+		if err := recover(); err != nil {
+			fmt.Println(err) // this is panic
+		}
+	}()
+	go DoCollect(col)
+	///
+	// The following line needs to move below this line because it is used in
+	// other logic and it makes no sense to update the last spawn time if the
+	// collector didn't actually start.
+	now := int(time.Now().Unix())
+	collector.LastSpawn = now
+	// Without setting last_datapoint here, a long running check (>15s) will be
+	// killed by check_children() the first time check_children is called.
+	collector.LastDataPoint = collector.LastSpawn
+	collector.Dead = false
+	utils.Log(HLog, "spawn_collector]["+collector.Name + " spawned", 1, 2)
+	COLLECTORS[collector.Name] = collector
+}
+
+func DoCollect(col inc.ICollector) {
+	col.Collect()
 }

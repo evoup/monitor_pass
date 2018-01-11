@@ -50,6 +50,9 @@ type Collector struct {
     Filename string
     Mtime int
     LastSpawn int
+    LastDataPoint int
+    NextKill int
+    KillState int
     Dead bool
     Generation int
 }
@@ -62,3 +65,6 @@ var VALID_COLLECTORS = map[string]int{}
 var HLog *log.Logger
 
 
+type ICollector interface {
+    Collect()
+}
