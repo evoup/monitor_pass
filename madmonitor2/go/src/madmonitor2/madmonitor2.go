@@ -19,7 +19,6 @@ import (
 	"madmonitor2/module"
 	"madmonitor2/inc"
 	"fmt"
-
 	"io/ioutil"
 	"log"
 	"plugin"

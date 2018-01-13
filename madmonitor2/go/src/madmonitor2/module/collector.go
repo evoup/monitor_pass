@@ -66,8 +66,12 @@ func populate_collectors() {
 			if col.Mtime < mtime {
 				utils.Log(HLog, "populate_collectors]["+col.Name+"has been updated on disk ", 1, 2)
 				col.Mtime = mtime
-				// TODO shutdown, because go can`t close so, we should fully exit
 				//utils.Log(HLog, "populate_collectors][Respawning " + col.Name, 1, 2)
+				// TODO shutdown, because go can`t close so, we should fully exit
+				inc.Shutdown <- 1
+				inc.Wg.Wait()
+				close(inc.Shutdown)
+				os.Exit(1)
 			}
 		} else {
 			Register_collector(file.Name(), 0, dirname+file.Name(), GENERATION)
@@ -135,6 +139,7 @@ func spawn_collector( collector inc.Collector) {
 			fmt.Println(err) // this is panic
 		}
 	}()
+	inc.Wg.Add(1)
 	go DoCollect(col)
 	///
 	// The following line needs to move below this line because it is used in

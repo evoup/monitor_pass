@@ -15,7 +15,10 @@
 
 package inc
 
-import "log"
+import (
+    "log"
+    "sync"
+)
 
 const (
     LOG_SUFFIX       = "madmonitor2"
@@ -68,3 +71,6 @@ var HLog *log.Logger
 type ICollector interface {
     Collect()
 }
+
+var Wg sync.WaitGroup
+var Shutdown = make(chan int)

@@ -25,8 +25,11 @@ import (
 	"bufio"
 	"regexp"
 	"time"
+	"madmonitor2/inc"
 )
+
 type plugin string
+
 var DEFAULT_COLLECTION_INTERVAL = 15
 
 // Take a string in the form 1234K, and convert to bytes
@@ -58,8 +61,15 @@ func main() {
 	sysload()
 }
 
-func (p plugin)Collect() {
-	sysload()
+func (p plugin) Collect() {
+	defer inc.Wg.Done()
+	select {
+	case _ = <-inc.Shutdown:
+		//We're done!
+		return
+	default:
+		sysload()
+	}
 }
 
 func sysload() {
@@ -89,6 +99,7 @@ func sysload() {
 
 		r := bufio.NewReader(stdout)
 		for {
+
 			line, err := r.ReadString('\n')
 
 			// CPU: --> CPU all:  : FreeBSD, to match the all CPU
@@ -112,17 +123,17 @@ func sysload() {
 			if fields[0] == "CPU" || match || match1 && ((collect_every_cpu && match2) || (!collect_every_cpu && match3)) {
 				// Process the line here.
 				cpuid := s.Replace(fields[1], ":", "", -1)
-				cpuuser:=fields[2]
-				cpunice:=fields[3]
-				cpusystem:=fields[4]
-				cpuinterrupt:=fields[6]
+				cpuuser := fields[2]
+				cpunice := fields[3]
+				cpusystem := fields[4]
+				cpuinterrupt := fields[6]
 				cpuidle := fields[len(fields)-1]
 				timestamp := time.Now().Unix()
-				fmt.Printf ("cpu.usr %v %v cpu=%v\n" , timestamp, cpuuser, cpuid)
-				fmt.Printf ("cpu.nice %v %v cpu=%v\n", timestamp, cpunice, cpuid)
-				fmt.Printf ("cpu.sys %v %v cpu=%v\n", timestamp, cpusystem, cpuid)
-				fmt.Printf ("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
-				fmt.Printf ("cpu.idle %v %v cpu=%v\n", timestamp, cpuidle, cpuid)
+				fmt.Printf("cpu.usr %v %v cpu=%v\n", timestamp, cpuuser, cpuid)
+				fmt.Printf("cpu.nice %v %v cpu=%v\n", timestamp, cpunice, cpuid)
+				fmt.Printf("cpu.sys %v %v cpu=%v\n", timestamp, cpusystem, cpuid)
+				fmt.Printf("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
+				fmt.Printf("cpu.idle %v %v cpu=%v\n", timestamp, cpuidle, cpuid)
 			}
 			if err != nil {
 				break
@@ -134,4 +145,3 @@ func sysload() {
 
 // exported as symbol named "SysloadSo"
 var CollectorSo plugin
-
