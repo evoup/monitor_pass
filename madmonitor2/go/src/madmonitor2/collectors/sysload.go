@@ -122,7 +122,7 @@ func sysload() {
 				fmt.Printf ("cpu.nice %v %v cpu=%v\n", timestamp, cpunice, cpuid)
 				fmt.Printf ("cpu.sys %v %v cpu=%v\n", timestamp, cpusystem, cpuid)
 				fmt.Printf ("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
-				fmt.Printf ("cpu.idle %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuidle)
+				fmt.Printf ("cpu.idle %v %v cpu=%v\n", timestamp, cpuidle, cpuid)
 			}
 			if err != nil {
 				break

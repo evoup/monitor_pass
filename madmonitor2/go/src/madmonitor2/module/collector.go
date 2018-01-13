@@ -115,9 +115,8 @@ func all_collectors() map[string]inc.Collector {
 
 func spawn_collector( collector inc.Collector) {
 	// Takes a Collector object and creates a process for it.
-	interval := strconv.Itoa(collector.Interval)
 	HLog = utils.GetLogger()
-	utils.Log(HLog, "spawn_collector]["+collector.Name + "(interval:"+ interval + ") needs to be spawned", 1, 2)
+	utils.Log(HLog, "spawn_collector]["+collector.Name + "(interval:"+ strconv.Itoa(collector.Interval) + ") needs to be spawned", 1, 2)
 	///
 	mod := collector.Name
 	plug, err := plugin.Open("./plugin/" + mod)
