@@ -33,6 +33,10 @@ const (
     SEND_HOSTS       = "172.18.0.1,172.18.9.3"
     SERVICE_NAME     = "madmonitor2"
     SERVICE_DESC     = "monitor client by madhouse"
+    EVICTINTERVAL  = "6000"
+    DEDUPINTERVAL  = "300"
+    MAX_SENDQ_SIZE = 10000
+    MAX_READQ_SIZE = 100000
 )
 
 type DefaultConf struct {
@@ -41,6 +45,8 @@ type DefaultConf struct {
     Sleep      string
     SendPort   string
     SendHosts  string
+    EvictInterval string
+    DedupInterval string
 }
 
 type Conf DefaultConf
@@ -74,3 +80,14 @@ type ICollector interface {
 
 var Wg sync.WaitGroup
 var Shutdown = make(chan int)
+
+var ReadQueue = make(chan string, MAX_READQ_SIZE)
+var SenderQueue = make(chan string, MAX_SENDQ_SIZE)
+
+type ReaderChannel struct {
+    Readerq chan string
+    Lines_collected int
+    Lines_dropped int
+    Evictinterval int
+    Dedupinterval int
+}

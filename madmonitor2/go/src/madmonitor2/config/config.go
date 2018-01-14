@@ -59,7 +59,8 @@ func WriteConf(confFileIn string) error {
 func GetDefaultsJson() inc.DefaultConf {
 	hostname, _ := os.Hostname()
 	jsonBlob := []byte("{\"servername\":\"" + hostname + "\",\"proclife\":\"" + inc.PROC_LIFE + "\",\"sleep\":\"" +
-		inc.SLEEP + "\",\"sendport\":\"" + inc.SEND_PORT + "\",\"sendhosts\":\"" + inc.SEND_HOSTS + "\"}")
+		inc.SLEEP + "\",\"sendport\":\"" + inc.SEND_PORT + "\",\"sendhosts\":\"" + inc.SEND_HOSTS + "\", " +
+			"\"evictinterval\":\"" + inc.EVICTINTERVAL + "\", \"dedupinterval\":\"" + inc.DEDUPINTERVAL + "\"}")
 	defaultConf := inc.DefaultConf{}
 	err := json.Unmarshal(jsonBlob, &defaultConf)
 	if err != nil {
