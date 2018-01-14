@@ -28,6 +28,7 @@ import (
 	"github.com/takama/daemon"
 	"os/signal"
 	"syscall"
+	"strconv"
 )
 
 // start unix timestamp
@@ -92,6 +93,12 @@ func Init() (*log.Logger, *jason.Object) {
 	} else {
 
 	}
+	object, err := parseConf()
+	ev, _ := object.GetString("EvictInterval")
+	dp, _ := object.GetString("DedupInterval")
+	ev1, _ := strconv.Atoi(ev)
+	dp1, _ := strconv.Atoi(dp)
+	readChannel := NewReadChannel(ev1, dp1)
 
 	dependencies := []string{}
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
@@ -101,22 +108,13 @@ func Init() (*log.Logger, *jason.Object) {
 		os.Exit(1)
 	}
 	service := &Service{srv}
-	status, err := service.Manage()
+	status, err := service.Manage(*readChannel)
 	if err != nil {
 		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *Debug_level)
 		errlog.Println(status, "\nError: ", err)
 		os.Exit(1)
 	}
 
-	object, err := parseConf()
-	if err != nil {
-		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
-		os.Exit(0)
-	}
-	if err != nil {
-		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
-		os.Exit(0)
-	}
 	fmt.Println(status)
 	loadCollectors()
 	return logger, object
@@ -153,7 +151,7 @@ func parseConf() (*jason.Object, error) {
 }
 
 // Manage by daemon commands or run the daemon
-func (service *Service) Manage() (string, error) {
+func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
