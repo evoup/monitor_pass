@@ -51,6 +51,29 @@ type DefaultConf struct {
 
 type Conf DefaultConf
 
+// 存放每个metric+tag对应的信息
+type CollectorValue struct {
+    Value string
+    Tf bool
+    Line string
+    Timestamp int
+}
+
+//func (v *CollectorValue) SetValue(value string) {
+//    v.Value = value
+//}
+//
+//func (v *CollectorValue) SetTf(tf bool) {
+//    v.Tf = tf
+//}
+//
+//func  (v *CollectorValue) SetLine(line string) {
+//    v.Line = line
+//}
+//
+//func  (v *CollectorValue) SetTimestamp(timestamp int) {
+//    v.Timestamp = timestamp
+//}
 
 // 收集器类，负责管理进程和从进程中获取数据
 type Collector struct {
@@ -64,6 +87,7 @@ type Collector struct {
     KillState int
     Dead bool
     Generation int
+    CollectorValues map[string]CollectorValue
 }
 
 var COLLECTORS = map[string]Collector{}

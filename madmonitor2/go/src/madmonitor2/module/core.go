@@ -211,18 +211,36 @@ func run_read(readChannel inc.ReaderChannel) {
 
 func process_line(readChannel inc.ReaderChannel, msg string) {
 	// msg的第一位是sysload是模块名
-	//fmt.Println("process_line: " + msg)
+	// fmt.Println("process_line: " + msg)
 	readChannel.AddLinesCollected()
 	// 解析消息
 	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)
 	submatch := r.FindAllStringSubmatch(msg, -1)
 	if submatch != nil {
 		fmt.Println(submatch)
-		fmt.Println("collector name:" + submatch[0][1])
-		fmt.Println("metric name:" + submatch[0][2])
-		fmt.Println("timestamp:" + submatch[0][3])
-		fmt.Println("value:" + submatch[0][4])
-		fmt.Println("tags:" + submatch[0][5])
+		collectorName := submatch[0][1]
+		metricName := submatch[0][2]
+		timestamp, _ := strconv.Atoi(submatch[0][3])
+		//timestamp := submatch[0][3]
+		value := submatch[0][4]
+		tags := submatch[0][5]
+		fmt.Println("collector name:" + collectorName)
+		fmt.Println("metric name:" + metricName)
+		fmt.Println("timestamp:%v" , timestamp)
+		fmt.Println("value:" + value)
+		fmt.Println("tags:" + tags)
+		// 去重
+		// 如果数据点是重复的，保存但不发送，保存之前的timestamp，当数据发生变化，
+		// 我们不发送最后一次进来的指标的值，而是第一次进来。如果达到了去重间隔，打印该数值。
+		dedupInteval := 300
+		if COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Value==value &&
+			timestamp - COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Timestamp < dedupInteval {
+			collectorValue := inc.CollectorValue{value, true, msg, timestamp}
+			COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
+			return
+		}
+		collectorValue := inc.CollectorValue{value, false, msg, timestamp}
+		COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
 	}
 }
 

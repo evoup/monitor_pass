@@ -36,8 +36,10 @@ var HLog = inc.HLog
 func Register_collector(name string, interval int, filename string, generation int) {
 	mtime := utils.GetMtime(filename)
 	lastspawn := 0
+	// initialize values map
+	values := make(map[string]inc.CollectorValue, 50000)
 	collector := inc.Collector{name, interval, filename, mtime, lastspawn,
-	0, 0, 0, false, generation}
+	0, 0, 0, false, generation, values}
 	COLLECTORS[name] = collector
 }
 
