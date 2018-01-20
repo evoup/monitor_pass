@@ -134,6 +134,12 @@ func sysload() {
 				fmt.Printf("cpu.sys %v %v cpu=%v\n", timestamp, cpusystem, cpuid)
 				fmt.Printf("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
 				fmt.Printf("cpu.idle %v %v cpu=%v\n", timestamp, cpuidle, cpuid)
+				// 第一列为具体的收集器名
+				inc.ReadQueue <- fmt.Sprintf("%v cpu.usr %v %v cpu=%v\n", "sysload", timestamp, cpuuser, cpuid)
+				inc.ReadQueue <- fmt.Sprintf("%v cpu.nice %v %v cpu=%v\n", "sysload", timestamp, cpunice, cpuid)
+				inc.ReadQueue <- fmt.Sprintf("%v cpu.sys %v %v cpu=%v\n", "sysload", timestamp, cpusystem, cpuid)
+				inc.ReadQueue <- fmt.Sprintf("%v cpu.irq %v %v cpu=%v\n", "sysload", timestamp, cpuinterrupt, cpuid)
+				inc.ReadQueue <- fmt.Sprintf("%v cpu.idle %v %v cpu=%v\n", "sysload", timestamp, cpuidle, cpuid)
 			}
 			if err != nil {
 				break

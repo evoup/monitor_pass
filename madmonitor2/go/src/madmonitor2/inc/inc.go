@@ -85,11 +85,45 @@ var ReadQueue = make(chan string, MAX_READQ_SIZE)
 var SenderQueue = make(chan string, MAX_SENDQ_SIZE)
 
 type ReaderChannel struct {
-    Readerq chan string
-    Lines_collected int
-    Lines_dropped int
-    Evictinterval int
-    Dedupinterval int
+    Readerq        chan string
+    LinesCollected int
+    LinesDropped   int
+    EvictInterval  int
+    DedupInterval  int
 }
 
+func (c *ReaderChannel) SetLinesCollected(i int) {
+    c.LinesCollected = i
+}
 
+func (c *ReaderChannel) GetLinesCollected() int {
+    return c.LinesCollected
+}
+
+func (c *ReaderChannel) SetLinesDropped(i int) {
+    c.LinesDropped = i
+}
+
+func (c *ReaderChannel) GetLinesDropped() int {
+    return c.LinesDropped
+}
+
+func (c *ReaderChannel) SetEvictInterval(i int) {
+    c.EvictInterval = i
+}
+
+func (c *ReaderChannel) GetEvictInterval() int {
+    return c.EvictInterval
+}
+
+func (c *ReaderChannel) SetDedupInterval(i int) {
+    c.DedupInterval = i
+}
+
+func (c *ReaderChannel) GetDedupInterval() int {
+    return c.DedupInterval
+}
+
+func (c *ReaderChannel) AddLinesCollected() {
+    c.LinesCollected += 1
+}

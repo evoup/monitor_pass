@@ -29,6 +29,7 @@ import (
 	"os/signal"
 	"syscall"
 	"strconv"
+	"regexp"
 )
 
 // start unix timestamp
@@ -174,7 +175,10 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		return service.Status()
 	}
 
+	go run_read(readChannel)
+
 	go main_loop()
+
 	for {
 		select {
 		case killSignal := <-interrupt:
@@ -185,6 +189,40 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 			}
 			return "Daemon was killed", nil
 		}
+	}
+}
+
+// read channel maintain
+func run_read(readChannel inc.ReaderChannel) {
+	for {
+		select {
+		case msg := <-inc.ReadQueue:
+			fmt.Println(">>>>" + msg)
+
+			if len(msg) > 1024 {
+				// todo check which collector produce this msg
+				utils.Log(HLog, "line to long", 1, *Debug_level)
+				continue
+			}
+			process_line(readChannel, msg)
+		}
+	}
+}
+
+func process_line(readChannel inc.ReaderChannel, msg string) {
+	// msg的第一位是sysload是模块名
+	//fmt.Println("process_line: " + msg)
+	readChannel.AddLinesCollected()
+	// 解析消息
+	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)
+	submatch := r.FindAllStringSubmatch(msg, -1)
+	if submatch != nil {
+		fmt.Println(submatch)
+		fmt.Println("collector name:" + submatch[0][1])
+		fmt.Println("metric name:" + submatch[0][2])
+		fmt.Println("timestamp:" + submatch[0][3])
+		fmt.Println("value:" + submatch[0][4])
+		fmt.Println("tags:" + submatch[0][5])
 	}
 }
 

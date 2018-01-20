@@ -166,7 +166,7 @@ func MakeDir(path string, mask string) {
     app := "/bin/mkdir"
     arg0 := "-p"
     arg1 := path
-    cmd := exec.Command(app, arg0,arg1)
+    cmd := exec.Command(app, arg0, arg1)
     _, err := cmd.Output()
     if err != nil {
         Log(hLog, "common.MakeDir][path:"+path, 2, Debug_level)
