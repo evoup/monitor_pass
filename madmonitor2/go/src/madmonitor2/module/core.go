@@ -209,19 +209,18 @@ func run_read(readChannel inc.ReaderChannel) {
 	}
 }
 
-func process_line(readChannel inc.ReaderChannel, msg string) {
+func process_line(readChannel inc.ReaderChannel, line string) {
 	// msg的第一位是sysload是模块名
 	// fmt.Println("process_line: " + msg)
 	readChannel.AddLinesCollected()
 	// 解析消息
 	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)
-	submatch := r.FindAllStringSubmatch(msg, -1)
+	submatch := r.FindAllStringSubmatch(line, -1)
 	if submatch != nil {
 		fmt.Println(submatch)
 		collectorName := submatch[0][1]
 		metricName := submatch[0][2]
 		timestamp, _ := strconv.Atoi(submatch[0][3])
-		//timestamp := submatch[0][3]
 		value := submatch[0][4]
 		tags := submatch[0][5]
 		fmt.Println("collector name:" + collectorName)
@@ -235,16 +234,16 @@ func process_line(readChannel inc.ReaderChannel, msg string) {
 		dedupInteval := 300
 		if COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Value==value &&
 			timestamp - COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Timestamp < dedupInteval {
-			collectorValue := inc.CollectorValue{value, true, msg, timestamp}
+			collectorValue := inc.CollectorValue{value, true, line, timestamp}
 			COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
 			return
 		}
-		collectorValue := inc.CollectorValue{value, false, msg, timestamp}
+		collectorValue := inc.CollectorValue{value, false, line, timestamp}
 		COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
 		c := COLLECTORS[collectorName + ".so"] // 解决大坑map的index操作获得的变量无法取其指针
 		c.LinesSent += 1
 		COLLECTORS[collectorName + ".so"] = c
-		fmt.Println("")
+		readChannel.Readerq <- line
 	}
 }
 
