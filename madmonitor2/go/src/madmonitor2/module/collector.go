@@ -39,7 +39,7 @@ func Register_collector(name string, interval int, filename string, generation i
 	// initialize values map
 	values := make(map[string]inc.CollectorValue, 50000)
 	collector := inc.Collector{name, interval, filename, mtime, lastspawn,
-	0, 0, 0, false, generation, values}
+	0, 0, 0, false, generation, values, 0}
 	COLLECTORS[name] = collector
 }
 

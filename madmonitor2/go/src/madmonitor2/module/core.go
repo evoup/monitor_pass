@@ -196,7 +196,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 func run_read(readChannel inc.ReaderChannel) {
 	for {
 		select {
-		case msg := <-inc.ReadQueue:
+		case msg := <-inc.MsgQueue:
 			fmt.Println(">>>>" + msg)
 
 			if len(msg) > 1024 {
@@ -241,6 +241,10 @@ func process_line(readChannel inc.ReaderChannel, msg string) {
 		}
 		collectorValue := inc.CollectorValue{value, false, msg, timestamp}
 		COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
+		c := COLLECTORS[collectorName + ".so"] // 解决大坑map的index操作获得的变量无法取其指针
+		c.LinesSent += 1
+		COLLECTORS[collectorName + ".so"] = c
+		fmt.Println("")
 	}
 }
 

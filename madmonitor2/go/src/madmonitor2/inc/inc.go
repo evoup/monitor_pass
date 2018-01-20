@@ -37,6 +37,7 @@ const (
     DEDUPINTERVAL  = "300"
     MAX_SENDQ_SIZE = 10000
     MAX_READQ_SIZE = 100000
+    MAX_MSGQ_SIZE  = 100000
 )
 
 type DefaultConf struct {
@@ -77,17 +78,18 @@ type CollectorValue struct {
 
 // 收集器类，负责管理进程和从进程中获取数据
 type Collector struct {
-    Name string
-    Interval int
-    Filename string
-    Mtime int
-    LastSpawn int
-    LastDataPoint int
-    NextKill int
-    KillState int
-    Dead bool
-    Generation int
+    Name            string
+    Interval        int
+    Filename        string
+    Mtime           int
+    LastSpawn       int
+    LastDataPoint   int
+    NextKill        int
+    KillState       int
+    Dead            bool
+    Generation      int
     CollectorValues map[string]CollectorValue
+    LinesSent       int
 }
 
 var COLLECTORS = map[string]Collector{}
@@ -105,7 +107,8 @@ type ICollector interface {
 var Wg sync.WaitGroup
 var Shutdown = make(chan int)
 
-var ReadQueue = make(chan string, MAX_READQ_SIZE)
+var MsgQueue = make(chan string, MAX_MSGQ_SIZE)
+var ReaderQueue = make(chan string, MAX_READQ_SIZE)
 var SenderQueue = make(chan string, MAX_SENDQ_SIZE)
 
 type ReaderChannel struct {
