@@ -225,7 +225,7 @@ func process_line(readChannel inc.ReaderChannel, line string) {
 		tags := submatch[0][5]
 		fmt.Println("collector name:" + collectorName)
 		fmt.Println("metric name:" + metricName)
-		fmt.Println("timestamp:%v" , timestamp)
+		fmt.Println("timestamp:" + strconv.Itoa(timestamp))
 		fmt.Println("value:" + value)
 		fmt.Println("tags:" + tags)
 		// 去重
