@@ -176,7 +176,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 
 	go run_read(readChannel)
-
+	go run_send(readChannel)
 	go main_loop()
 
 	for {
@@ -188,6 +188,15 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 				return "Daemon was interrupted by system signal", nil
 			}
 			return "Daemon was killed", nil
+		}
+	}
+}
+
+func run_send(readChannel inc.ReaderChannel) {
+	for {
+		select {
+		case msg := <- readChannel.Readerq:
+			fmt.Println("message sent:" + msg)
 		}
 	}
 }
