@@ -30,6 +30,7 @@ import (
 	"syscall"
 	"strconv"
 	"regexp"
+	"net"
 )
 
 // start unix timestamp
@@ -197,6 +198,16 @@ func run_send(readChannel inc.ReaderChannel) {
 		select {
 		case msg := <- readChannel.Readerq:
 			fmt.Println("message sent:" + msg)
+			conn, err := net.Dial("tcp", "localhost:8090")
+			if err != nil {
+				fmt.Printf(err.Error())
+				return
+			}
+			_, err1 := conn.Write([]byte(msg))
+			if err1 != nil {
+				fmt.Printf(err1.Error())
+			}
+			conn.Close()
 		}
 	}
 }
