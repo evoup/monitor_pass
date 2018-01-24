@@ -15,7 +15,11 @@
 
 package module
 
-import "math/rand"
+import (
+	"math/rand"
+	"fmt"
+	"bytes"
+)
 
 func RandStringBytesRmndr(n int) string {
 	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -44,4 +48,29 @@ func clientFirstMessage(cName, cNonce []byte) (out []byte) {
 	out = []byte("n,,")
 	out = append(out, clientFirstMessageBare(cName, cNonce)...)
 	return
+}
+
+func getAttribute(message []byte, attribute byte) []byte {
+	attributes := bytes.Split(message, []byte{','})
+
+	for _, a := range attributes {
+		if len(a) > 0 && a[0] == attribute {
+			return a[2:]
+		}
+	}
+	return nil
+}
+
+func scram_sha1_login() {
+	fmt.Println("scram sha-1 login")
+	cName := []byte("clientName")
+	cNonce := []byte(makeClientNonce())
+	cFirstMessage := clientFirstMessage(cName, cNonce)
+	fmt.Printf("C: %s\n", cFirstMessage)
+	cNonce = getAttribute(cFirstMessage, byte('r'))
+}
+
+func main() {
+	fmt.Println("test")
+	scram_sha1_login()
 }

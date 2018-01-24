@@ -18,7 +18,6 @@ package inc
 import (
     "log"
     "sync"
-    "net/textproto"
 )
 
 const (
