@@ -18,6 +18,7 @@ package inc
 import (
     "log"
     "sync"
+    "net/textproto"
 )
 
 const (
@@ -154,3 +155,6 @@ func (c *ReaderChannel) GetDedupInterval() int {
 func (c *ReaderChannel) AddLinesCollected() {
     c.LinesCollected += 1
 }
+
+
+

@@ -193,6 +193,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 }
 
+// run_send like tcollector`s sender_thread
 func run_send(readChannel inc.ReaderChannel) {
 	for {
 		select {

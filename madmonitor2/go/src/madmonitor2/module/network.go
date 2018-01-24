@@ -15,8 +15,41 @@
 
 package module
 
-import "madmonitor2/inc"
+import (
+	"time"
+	"net"
+	"net/textproto"
+)
 
-func NewReadChannel(evictInterval int, dedupInterval int) *inc.ReaderChannel {
-	return &inc.ReaderChannel{inc.ReaderQueue, 0, 0, evictInterval, dedupInterval}
+
+
+type ServerConn struct {
+	conn          *textproto.Conn
+	host          string
+	timeout       time.Duration
+}
+
+func DialTimeout(addr string, timeout time.Duration) (*ServerConn, error) {
+	tconn, err := net.DialTimeout("tcp", addr, timeout)
+	if err != nil {
+		return nil, err
+	}
+
+	// Use the resolved IP address in case addr contains a domain name
+	// If we use the domain name, we might not resolve to the same IP.
+	remoteAddr := tconn.RemoteAddr().(*net.TCPAddr)
+
+	conn := textproto.NewConn(tconn)
+
+	c := &ServerConn{
+		conn:     conn,
+		host:     remoteAddr.IP.String(),
+		timeout:  timeout,
+	}
+
+	return c, nil
+}
+
+func (c *ServerConn) Quit() error {
+	return c.conn.Close()
 }
