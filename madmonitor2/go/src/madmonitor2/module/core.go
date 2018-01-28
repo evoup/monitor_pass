@@ -30,7 +30,6 @@ import (
 	"syscall"
 	"strconv"
 	"regexp"
-	"net"
 )
 
 // start unix timestamp
@@ -175,9 +174,15 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	if *Service_status {
 		return service.Status()
 	}
-
 	go run_read(readChannel)
-	go run_send(readChannel)
+	// we must open connection to server before send data
+	// TODO use const
+	conn, e := DialTimeout("localhost:8090", 5*time.Second)
+	if e != nil {
+		utils.Log(utils.GetLogger(), "core.Init][error:" + e.Error(), 1, *Debug_level)
+		os.Exit(1)
+	}
+	go run_send(readChannel, conn)
 	go main_loop()
 
 	for {
@@ -194,21 +199,16 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 }
 
 // run_send like tcollector`s sender_thread
-func run_send(readChannel inc.ReaderChannel) {
+func run_send(readChannel inc.ReaderChannel, c *ServerConn) {
 	for {
 		select {
 		case msg := <- readChannel.Readerq:
-			fmt.Println("message sent:" + msg)
-			conn, err := net.Dial("tcp", "localhost:8090")
-			if err != nil {
-				fmt.Printf(err.Error())
-				return
-			}
-			_, err1 := conn.Write([]byte(msg))
+			conn := c.conn
+			_, err1 := conn.Cmd(msg)
 			if err1 != nil {
 				fmt.Printf(err1.Error())
 			}
-			conn.Close()
+			fmt.Println("message sent:" + msg)
 		}
 	}
 }
