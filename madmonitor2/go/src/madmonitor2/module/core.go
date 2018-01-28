@@ -30,6 +30,7 @@ import (
 	"syscall"
 	"strconv"
 	"regexp"
+	"strings"
 )
 
 // start unix timestamp
@@ -168,7 +169,6 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 	if *Service_stop {
 		fmt.Println("stop")
-		//utils.Log(HLog, "core.Init][stop", 1, *Debug_level)
 		return service.Stop()
 	}
 	if *Service_status {
@@ -176,13 +176,24 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 	go run_read(readChannel)
 	// we must open connection to server before send data
-	// TODO use const
-	conn, e := DialTimeout("localhost:8090", 5*time.Second)
-	if e != nil {
-		utils.Log(utils.GetLogger(), "core.Init][error:" + e.Error(), 1, *Debug_level)
+	sendHosts := strings.Split(inc.SEND_HOSTS, ",")
+	foundServer := false
+	for i := range sendHosts {
+		conn, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
+		if e != nil {
+			utils.Log(utils.GetLogger(), "core.Init][error:" + e.Error(), 1, *Debug_level)
+		} else {
+			foundServer = true
+			go run_send(readChannel, conn)
+			break
+		}
+	}
+	if !foundServer {
+		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
 		os.Exit(1)
 	}
-	go run_send(readChannel, conn)
+
+
 	go main_loop()
 
 	for {
