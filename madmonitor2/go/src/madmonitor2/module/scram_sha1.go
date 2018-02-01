@@ -61,16 +61,13 @@ func getAttribute(message []byte, attribute byte) []byte {
 	return nil
 }
 
-func scram_sha1_login() {
+func scram_sha1_login() []byte {
 	fmt.Println("scram sha-1 login")
 	cName := []byte("clientName")
 	cNonce := []byte(makeClientNonce())
 	cFirstMessage := clientFirstMessage(cName, cNonce)
 	fmt.Printf("C: %s\n", cFirstMessage)
 	cNonce = getAttribute(cFirstMessage, byte('r'))
+	return cFirstMessage
 }
 
-func main() {
-	fmt.Println("test")
-	scram_sha1_login()
-}

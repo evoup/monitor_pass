@@ -2,6 +2,13 @@ package com.evoupsight.monitorPass.dataCollector.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -15,7 +22,7 @@ public class TCPServer {
 
 	@Autowired
 	@Qualifier("serverBootstrap")
-	private ServerBootstrap b;
+	private ServerBootstrap bootstrap;
 	
 	@Autowired
 	@Qualifier("tcpSocketAddress")
@@ -26,7 +33,10 @@ public class TCPServer {
 	@PostConstruct
 	public void start() throws Exception {
 		System.out.println("Starting server at " + tcpPort);
-		serverChannelFuture = b.bind(tcpPort).sync();
+		bootstrap.option(ChannelOption.SO_BACKLOG, 128);
+		bootstrap.option(ChannelOption.TCP_NODELAY, true);
+		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+		serverChannelFuture = bootstrap.bind(tcpPort).sync();
 	}
 
 	@PreDestroy
@@ -34,12 +44,12 @@ public class TCPServer {
 	    serverChannelFuture.channel().closeFuture().sync();
 	}
 
-	public ServerBootstrap getB() {
-		return b;
+	public ServerBootstrap getBootstrap() {
+		return bootstrap;
 	}
 
-	public void setB(ServerBootstrap b) {
-		this.b = b;
+	public void setBootstrap(ServerBootstrap bootstrap) {
+		this.bootstrap = bootstrap;
 	}
 
 	public InetSocketAddress getTcpPort() {

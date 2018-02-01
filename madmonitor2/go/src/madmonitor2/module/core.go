@@ -179,12 +179,16 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	sendHosts := strings.Split(inc.SEND_HOSTS, ",")
 	foundServer := false
 	for i := range sendHosts {
-		conn, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
+		c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
+		///////// scram sha-1安全认证 ////////
+		clientFirstMsg := scram_sha1_login()
+		c.conn.Cmd(string(clientFirstMsg))
+		////////////////////////////////////
 		if e != nil {
 			utils.Log(utils.GetLogger(), "core.Init][error:" + e.Error(), 1, *Debug_level)
 		} else {
 			foundServer = true
-			go run_send(readChannel, conn)
+			go run_send(readChannel, c)
 			break
 		}
 	}
