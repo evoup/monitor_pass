@@ -23,8 +23,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     String topic;
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, String msg)
-            throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         System.out.print(msg);
         LOG.debug("got a message here");
         //ctx.channel().writeAndFlush(msg);
