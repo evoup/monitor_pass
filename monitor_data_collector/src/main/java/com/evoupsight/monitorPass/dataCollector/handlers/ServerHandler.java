@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +44,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
                 ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.INITIAL)) {
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg);
             if (!m.matches()) {
-                ctx.write("invalid protocol\n");
+                ctx.channel().write("invalid protocol\n");
                 return;
             }
             clientName = m.group(6);
@@ -52,6 +53,16 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             ctx.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
             ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.FIRST_CLIENT_MESSAGE_HANDLED);
             // 写server first message
+            String serverNonce = UUID.randomUUID().toString();
+            String salt = UUID.randomUUID().toString();
+            String iterator = "4096";
+            ctx.channel().attr(AttributeKey.valueOf("serverNonce")).set(serverNonce);
+            ctx.channel().attr(AttributeKey.valueOf("salt")).set(salt);
+            ctx.channel().attr(AttributeKey.valueOf("iterator")).set(iterator);
+            StringBuffer sb = new StringBuffer();
+            sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(salt).append(",i=").append(iterator);
+            ctx.channel().write(sb);
+            ctx.write(sb);
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.FIRST_CLIENT_MESSAGE_HANDLED)) {
