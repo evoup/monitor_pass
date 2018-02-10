@@ -2,7 +2,7 @@ package com.evoupsight.monitorPass.dataCollector.server;
 
 public enum ClientState {
     INITIAL,
-    CLIENT_FIRST_SENT,
-    CLIENT_FINAL_SENT,
+    FIRST_CLIENT_MESSAGE_HANDLED,
+    PREPARED_FIRST,
     ENDED
 }

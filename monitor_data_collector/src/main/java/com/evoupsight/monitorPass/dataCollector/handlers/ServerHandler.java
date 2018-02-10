@@ -3,7 +3,6 @@ package com.evoupsight.monitorPass.dataCollector.handlers;
 import com.evoupsight.kafkaclient.producer.KafkaProducer;
 import com.evoupsight.kafkaclient.util.KafkaCallback;
 import com.evoupsight.kafkaclient.util.KafkaMessage;
-import com.evoupsight.monitorPass.dataCollector.server.ClientStateMap;
 import com.evoupsight.monitorPass.dataCollector.server.ClientState;
 import com.evoupsight.monitorPass.dataCollector.server.NettyChannelMap;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -35,46 +34,37 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
 
     @Override
-    public void channelRead0(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         System.out.print(msg);
         // 看消息是不是client first message
         // 消息格式为n,,n=clientName,r=oJnNPGsiuz
         String clientName;
-        if (!channelHandlerContext.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
-                channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.INITIAL)) {
-        // if (ClientStateMap.get(clientName) == null || ClientStateMap.get(clientName).equals(ClientState.INITIAL) ||
-        //         seemToBeClientFirstMessage) {
+        if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
+                ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.INITIAL)) {
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg);
             if (!m.matches()) {
+                ctx.write("invalid protocol\n");
                 return;
             }
-            // FIXME m.find() doesn't return true?
             clientName = m.group(6);
             String clientNonce = m.group(7);
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientId")).set(clientName);
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.CLIENT_FIRST_SENT);
-            //ClientStateMap.set(clientName, ClientState.CLIENT_FIRST_SENT);
+            ctx.channel().attr(AttributeKey.valueOf("clientId")).set(clientName);
+            ctx.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.FIRST_CLIENT_MESSAGE_HANDLED);
             // 写server first message
             return;
         }
-        if (channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.CLIENT_FIRST_SENT)) {
-        // if (ClientStateMap.get(clientName) == ClientState.CLIENT_FIRST_SENT) {
+        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.FIRST_CLIENT_MESSAGE_HANDLED)) {
             // 看新消息是不是client final message
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.CLIENT_FINAL_SENT);
-            //ClientStateMap.set(channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().toString(), ClientState.CLIENT_FINAL_SENT);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.PREPARED_FIRST);
             // 验证通过,写server final message
-            // ClientStateMap.set(channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().toString(), ClientState.ENDED);
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.ENDED);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.ENDED);
             // 验证不通过
-            //ClientStateMap.remove("");
-            channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
             return;
         }
-        if (channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.ENDED)) {
-        //if (ClientStateMap.get(clientName).equals(ClientState.ENDED)) {
+        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.ENDED)) {
             // 正式开始发送
-            //NettyChannelMap.add(channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).get().toString(), (SocketChannel) channelHandlerContext.channel());
             LOG.debug("got a message here");
             //ctx.channel().writeAndFlush(msg);
             KafkaProducer producer = new KafkaProducer(brokers, 5, null);
@@ -91,8 +81,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             return;
         }
         // 奇怪的状态，认为是初始化中
-        // ClientStateMap.set(clientName, ClientState.INITIAL);
-        channelHandlerContext.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
+        ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
     }
 
     @Override
