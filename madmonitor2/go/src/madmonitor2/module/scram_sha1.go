@@ -20,8 +20,17 @@ import (
 	"fmt"
 	"bytes"
 	"regexp"
-	"madmonitor2/inc"
 	"strconv"
+	"encoding/base64"
+	"golang.org/x/crypto/pbkdf2"
+	"crypto/sha1"
+	"crypto/hmac"
+)
+
+const (
+	ClientPass   = "pencil"
+	ClientHeader = "biws"
+	PBKDF2Length = 20
 )
 
 func RandStringBytesRmndr(n int) string {
@@ -75,7 +84,7 @@ func scramSha1FirstMessage(cname string) ([]byte, []byte) {
 	return cFirstMessage, cNonce
 }
 
-func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) []byte {
+func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) (out []byte) {
 	// server first message e.g.:
 	// r=client nonce+server nonce s=server salt i=iterator
 	// r=oJnNPGsiuz152d4ba7-d324-4228-8a63-78b352851853,s=b174075f-7512-421c-92ab-81cc1fcf9585,i=4096
@@ -99,16 +108,23 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 		snonce := nonce[0+cnonceLen:]
 		fmt.Println(snonce)
 		iter, _ := strconv.Atoi(iterator)
-		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, inc.ClientHeader, iter, string(serverFisrtMessage))
+		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, ClientHeader, iter, string(serverFisrtMessage))
 		fmt.Println(authMessage)
+		saltedPassword := pbkdf2Sum(normalize([]byte(ClientPass)), fromBase64([]byte(salt)), iter)
+		fmt.Println(saltedPassword)
+		clientKey := hmacSum(saltedPassword, []byte("Client Key"))
+		fmt.Println(clientKey)
+		storedKey := sha1Sum(clientKey)
+		fmt.Println(storedKey)
+		clientSignature := hmacSum(storedKey, authMessage)
+		fmt.Println(clientSignature)
+		clientProof := xor(clientKey, clientSignature)
+		fmt.Println(clientProof)
+		out = clientFinalMessageWithoutProof([]byte(ClientHeader), cnonce, []byte(snonce))
+		out = append(out, ",p="...)
+		out = append(out, toBase64(clientProof)...)
 	}
-
-	///
-
-	fmt.Println(serverFisrtMessage)
-	s := inc.ClientHeader
-	fmt.Println(s)
-	return []byte("")
+	return
 }
 
 func authMessage(cName string, cNonce []byte, sNonce []byte, sSalt string, cHeader string, iterations int,
@@ -129,4 +145,51 @@ func clientFinalMessageWithoutProof(cHeader, cNonce, sNonce []byte) (out []byte)
 	out = append(out, ",r="...)
 	out = append(out, nonce...)
 	return
+}
+
+func normalize(in []byte) []byte {
+	return in
+}
+func toBase64(src []byte) []byte {
+	out := base64.StdEncoding.EncodeToString(src)
+	return []byte(out)
+}
+
+func fromBase64(src []byte) []byte {
+	dst := make([]byte, base64.StdEncoding.DecodedLen(len(src)))
+	l, _ := base64.StdEncoding.Decode(dst, src)
+	return dst[:l]
+}
+
+func pbkdf2Sum(password, salt []byte, i int) []byte {
+	return pbkdf2.Key(password, salt, i, PBKDF2Length, sha1.New)
+}
+
+func hmacSum(key, message []byte) []byte {
+	mac := hmac.New(sha1.New, key)
+	mac.Write(message)
+	return mac.Sum(nil)
+}
+
+func sha1Sum(message []byte) []byte {
+	mac := sha1.New()
+	mac.Write(message)
+	return mac.Sum(nil)
+}
+
+func xor(a, b []byte) []byte {
+	if len(a) != len(b) {
+		fmt.Println("Warning: xor lengths are differing...", a, b)
+	}
+
+	count := len(a)
+	if len(b) < count {
+		count = len(b)
+	}
+
+	out := make([]byte, count)
+	for i := 0; i < count; i++ {
+		out[i] = a[i] ^ b[i]
+	}
+	return out
 }
