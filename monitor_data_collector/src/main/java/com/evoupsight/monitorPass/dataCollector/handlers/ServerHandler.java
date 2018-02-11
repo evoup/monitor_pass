@@ -48,7 +48,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 消息格式为n,,n=clientName,r=oJnNPGsiuz
         String clientName;
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
-                ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.INITIAL)) {
+                ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.INITIAL)) {
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
                 ctx.channel().write("invalid protocol\n");
@@ -58,7 +58,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             String clientNonce = m.group(7);
             ctx.channel().attr(AttributeKey.valueOf("clientId")).set(clientName);
             ctx.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.FIRST_CLIENT_MESSAGE_HANDLED);
+            ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.FIRST_CLIENT_MESSAGE_HANDLED);
             // 写server first message
             String serverNonce = UUID.randomUUID().toString();
             String salt = UUID.randomUUID().toString();
@@ -72,16 +72,31 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             ctx.write(sb);
             return;
         }
-        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.FIRST_CLIENT_MESSAGE_HANDLED)) {
+        if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.FIRST_CLIENT_MESSAGE_HANDLED)) {
             // 看新消息是不是client final message
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.PREPARED_FIRST);
+            ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.PREPARED_FIRST);
+            Matcher m = CLIENT_FINAL_MESSAGE.matcher(msg.toString());
+            if (!m.matches()) {
+                ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
+                return;
+            }
+            String clientFinalMessageWithoutProof = m.group(1);
+            String NonceFromClient = m.group(3);
+            StringBuilder nonce = new StringBuilder();
+            nonce.append(ctx.channel().attr(AttributeKey.valueOf("clientNonce")).get());
+            nonce.append(ctx.channel().attr(AttributeKey.valueOf("serverNonce")).get());
+            if (!nonce.toString().equals(NonceFromClient)) {
+                ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
+                return;
+            }
+            String proof = m.group(4);
             // 验证通过,写server final message
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.ENDED);
+            ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
             // 验证不通过
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.INITIAL);
+            ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
             return;
         }
-        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.ENDED)) {
+        if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
             // 正式开始发送
             LOG.debug("got a message here");
             //ctx.channel().writeAndFlush(msg);
@@ -99,7 +114,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         // 奇怪的状态，认为是初始化中
-        ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.INITIAL);
+        ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
     }
 
     @Override
