@@ -43,7 +43,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.print(msg);
+        System.out.println("client message:" + msg);
         // 看消息是不是client first message
         // 消息格式为n,,n=clientName,r=oJnNPGsiuz
         String clientName;
