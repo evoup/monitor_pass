@@ -3,14 +3,13 @@ package com.evoupsight.monitorPass.dataCollector.handlers;
 import com.evoupsight.kafkaclient.producer.KafkaProducer;
 import com.evoupsight.kafkaclient.util.KafkaCallback;
 import com.evoupsight.kafkaclient.util.KafkaMessage;
-import com.evoupsight.monitorPass.dataCollector.server.ClientState;
+import com.evoupsight.monitorPass.dataCollector.server.ServerState;
 import com.evoupsight.monitorPass.dataCollector.server.NettyChannelMap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 消息格式为n,,n=clientName,r=oJnNPGsiuz
         String clientName;
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
-                ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.INITIAL)) {
+                ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.INITIAL)) {
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
                 ctx.channel().write("invalid protocol\n");
@@ -59,7 +58,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             String clientNonce = m.group(7);
             ctx.channel().attr(AttributeKey.valueOf("clientId")).set(clientName);
             ctx.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.FIRST_CLIENT_MESSAGE_HANDLED);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.FIRST_CLIENT_MESSAGE_HANDLED);
             // 写server first message
             String serverNonce = UUID.randomUUID().toString();
             String salt = UUID.randomUUID().toString();
@@ -73,16 +72,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             ctx.write(sb);
             return;
         }
-        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.FIRST_CLIENT_MESSAGE_HANDLED)) {
+        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.FIRST_CLIENT_MESSAGE_HANDLED)) {
             // 看新消息是不是client final message
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.PREPARED_FIRST);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.PREPARED_FIRST);
             // 验证通过,写server final message
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.ENDED);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.ENDED);
             // 验证不通过
-            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
+            ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.INITIAL);
             return;
         }
-        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.ENDED)) {
+        if (ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ServerState.ENDED)) {
             // 正式开始发送
             LOG.debug("got a message here");
             //ctx.channel().writeAndFlush(msg);
@@ -100,7 +99,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         // 奇怪的状态，认为是初始化中
-        ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ClientState.INITIAL);
+        ctx.channel().attr(AttributeKey.valueOf("clientState")).set(ServerState.INITIAL);
     }
 
     @Override

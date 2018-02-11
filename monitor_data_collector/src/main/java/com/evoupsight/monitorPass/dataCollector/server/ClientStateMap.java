@@ -4,12 +4,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientStateMap {
-    private static Map<String, ClientState> map = new ConcurrentHashMap<>();
+    private static Map<String, ServerState> map = new ConcurrentHashMap<>();
 
-    public static void set(String clientId, ClientState clientState) {
-        map.put(clientId, clientState);
+    public static void set(String clientId, ServerState serverState) {
+        map.put(clientId, serverState);
     }
-    public static ClientState get(String clientId) {
+    public static ServerState get(String clientId) {
         return map.get(clientId);
     }
     public static void remove(String clientId) {
