@@ -19,13 +19,16 @@ import (
 	"math/rand"
 	"fmt"
 	"bytes"
+	"regexp"
 )
+
+var cHeader = "evps"
 
 func RandStringBytesRmndr(n int) string {
 	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	b := make([]byte, n)
 	for i := range b {
-		b[i] = letterBytes[rand.Int63() % int64(len(letterBytes))]
+		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
 	}
 	return string(b)
 }
@@ -61,7 +64,7 @@ func getAttribute(message []byte, attribute byte) []byte {
 	return nil
 }
 
-func scramSha1FirstMessage(cname string) []byte {
+func scramSha1FirstMessage(cname string) ([]byte, []byte) {
 	fmt.Println("scram sha-1 login")
 	//cName := []byte("clientName")
 	cName := []byte(cname)
@@ -69,14 +72,35 @@ func scramSha1FirstMessage(cname string) []byte {
 	cFirstMessage := clientFirstMessage(cName, cNonce)
 	fmt.Printf("C: %s\n", cFirstMessage)
 	cNonce = getAttribute(cFirstMessage, byte('r'))
-	return cFirstMessage
+	return cFirstMessage, cNonce
 }
 
-func scramSha1FinalMessage(serverFisrtMessage string) []byte {
+func scramSha1FinalMessage(serverFisrtMessage string, cnonce string) []byte {
 	// server first message e.g.:
 	// r=client nonce+server nonce s=server salt i=iterator
 	// r=oJnNPGsiuz152d4ba7-d324-4228-8a63-78b352851853,s=b174075f-7512-421c-92ab-81cc1fcf9585,i=4096
+	r := regexp.MustCompile(`r=([^,]*),s=([^,]*),i=(.*)$`)
+	submatch := r.FindAllStringSubmatch(serverFisrtMessage, -1)
+	if submatch != nil {
+		fmt.Print(submatch)
+		nonce := submatch[0][1]
+		salt := submatch[0][2]
+		iter := submatch[0][3]
+		fmt.Println(nonce)
+		fmt.Println(salt)
+		fmt.Println(iter)
+		// 检查nonce是不是以cnonce和snonce连接而成
+		cnonceLen := len(cnonce)
+		remoteCnonce := nonce[0:cnonceLen]
+		if remoteCnonce != cnonce {
+			// 认证失败
+			return []byte("")
+		}
+		snonce := nonce[0+cnonceLen:]
+		fmt.Println(snonce)
+	}
 	fmt.Println(serverFisrtMessage)
+	s := cHeader
+	fmt.Println(s)
 	return []byte("")
 }
-
