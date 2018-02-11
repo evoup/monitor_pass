@@ -18,6 +18,7 @@ package inc
 import (
     "log"
     "sync"
+    "github.com/antonholmquist/jason"
 )
 
 const (
@@ -155,5 +156,5 @@ func (c *ReaderChannel) AddLinesCollected() {
     c.LinesCollected += 1
 }
 
-
+var ConfObject = &jason.Object{}
 

@@ -97,6 +97,7 @@ func Init() (*log.Logger, *jason.Object) {
 
 	}
 	object, err := parseConf()
+	inc.ConfObject = object
 	ev, _ := object.GetString("EvictInterval")
 	dp, _ := object.GetString("DedupInterval")
 	ev1, _ := strconv.Atoi(ev)
@@ -177,14 +178,18 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 	go run_read(readChannel)
 	// we must open connection to server before send data
-	sendHosts := strings.Split(inc.SEND_HOSTS, ",")
+	// sendHosts := strings.Split(inc.SEND_HOSTS, ",")
+	sendHost, _ := inc.ConfObject.GetString("SendHosts")
+	sendHosts := strings.Split(sendHost, ",")
+	sendPort, _ := inc.ConfObject.GetString("SendPort")
+	cName, _ := inc.ConfObject.GetString("ServerName")
 	foundServer := false
 	for i := range sendHosts {
 		//c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
-		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i] + ":" + inc.SEND_PORT)
+		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i] + ":" + sendPort)
 		conn, err := net.DialTCP("tcp", nil, addr)
 		///////// scram sha-1安全认证 ////////
-		clientFirstMsg := scramSha1FirstMessage()
+		clientFirstMsg := scramSha1FirstMessage(cName)
 		conn.Write([]byte(clientFirstMsg))
 		data := make([]byte, 1024)
 		conn.Read(data)
