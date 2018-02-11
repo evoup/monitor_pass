@@ -5,8 +5,11 @@ import com.evoupsight.kafkaclient.util.KafkaCallback;
 import com.evoupsight.kafkaclient.util.KafkaMessage;
 import com.evoupsight.monitorPass.dataCollector.server.ClientState;
 import com.evoupsight.monitorPass.dataCollector.server.NettyChannelMap;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.AttributeKey;
@@ -23,7 +26,7 @@ import java.util.regex.Pattern;
 @Component
 @Qualifier("serverHandler")
 @Sharable
-public class ServerHandler extends SimpleChannelInboundHandler<String> {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerHandler.class);
     @Value("${kafka.brokers}")
     String brokers;
@@ -35,14 +38,19 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.print(msg);
         // 看消息是不是client first message
         // 消息格式为n,,n=clientName,r=oJnNPGsiuz
         String clientName;
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
                 ctx.channel().attr(AttributeKey.valueOf("clientState")).get().equals(ClientState.INITIAL)) {
-            Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg);
+            Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
                 ctx.channel().write("invalid protocol\n");
                 return;
@@ -87,7 +95,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
                     }
                 }
             })) {
-                producer.sendMessage(topic, msg.getBytes());
+                producer.sendMessage(topic, msg.toString().getBytes());
             }
             return;
         }

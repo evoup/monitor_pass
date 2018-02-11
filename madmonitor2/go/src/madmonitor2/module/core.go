@@ -31,6 +31,7 @@ import (
 	"strconv"
 	"regexp"
 	"strings"
+	"net"
 )
 
 // start unix timestamp
@@ -179,16 +180,36 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	sendHosts := strings.Split(inc.SEND_HOSTS, ",")
 	foundServer := false
 	for i := range sendHosts {
-		c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
+		//c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
+		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i] + ":" + inc.SEND_PORT)
+		conn, err := net.DialTCP("tcp", nil, addr)
 		///////// scram sha-1安全认证 ////////
 		clientFirstMsg := scram_sha1_login()
-		c.conn.Cmd(string(clientFirstMsg))
+		conn.Write([]byte(clientFirstMsg))
+		data := make([]byte, 1024)
+		conn.Read(data)
+		fmt.Println(string(data))
+		conn.Write([]byte("test"))
+		data2 := make([]byte, 1024)
+		conn.Read(data2)
+		fmt.Println(string(data2))
+		//id, err := c.conn.Cmd(string(clientFirstMsg))
+		//if err != nil {
+		//	continue
+		//}
+		//c.conn.StartResponse(id)
+		//defer c.conn.EndResponse(id)
+		//text, err1 := c.conn.ReadContinuedLineBytes()
+		//if err1 != nil {
+		//	continue
+		//}
+		//fmt.Println(text)
 		////////////////////////////////////
-		if e != nil {
-			utils.Log(utils.GetLogger(), "core.Init][error:" + e.Error(), 1, *Debug_level)
+		if err != nil {
+			utils.Log(utils.GetLogger(), "core.Init][error:" + err.Error(), 1, *Debug_level)
 		} else {
 			foundServer = true
-			go run_send(readChannel, c)
+			//go run_send(readChannel, c)
 			break
 		}
 	}
