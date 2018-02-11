@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"bytes"
 	"regexp"
+	"madmonitor2/inc"
+	"strconv"
 )
-
-var cHeader = "evps"
 
 func RandStringBytesRmndr(n int) string {
 	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -39,7 +39,7 @@ func makeClientNonce() string {
 	return RandStringBytesRmndr(10)
 }
 
-func clientFirstMessageBare(cName, cNonce []byte) (out []byte) {
+func clientFirstMessageBare(cName []byte, cNonce []byte) (out []byte) {
 	out = []byte("n=")
 	out = append(out, cName...)
 	out = append(out, ",r="...)
@@ -75,32 +75,58 @@ func scramSha1FirstMessage(cname string) ([]byte, []byte) {
 	return cFirstMessage, cNonce
 }
 
-func scramSha1FinalMessage(serverFisrtMessage string, cnonce string) []byte {
+func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) []byte {
 	// server first message e.g.:
 	// r=client nonce+server nonce s=server salt i=iterator
 	// r=oJnNPGsiuz152d4ba7-d324-4228-8a63-78b352851853,s=b174075f-7512-421c-92ab-81cc1fcf9585,i=4096
 	r := regexp.MustCompile(`r=([^,]*),s=([^,]*),i=(.*)$`)
-	submatch := r.FindAllStringSubmatch(serverFisrtMessage, -1)
+	submatch := r.FindAllStringSubmatch(string(serverFisrtMessage), -1)
 	if submatch != nil {
 		fmt.Print(submatch)
 		nonce := submatch[0][1]
 		salt := submatch[0][2]
-		iter := submatch[0][3]
+		iterator := submatch[0][3]
 		fmt.Println(nonce)
 		fmt.Println(salt)
-		fmt.Println(iter)
+		fmt.Println(iterator)
 		// 检查nonce是不是以cnonce和snonce连接而成
 		cnonceLen := len(cnonce)
 		remoteCnonce := nonce[0:cnonceLen]
-		if remoteCnonce != cnonce {
+		if remoteCnonce != string(cnonce) {
 			// 认证失败
 			return []byte("")
 		}
 		snonce := nonce[0+cnonceLen:]
 		fmt.Println(snonce)
+		iter, _ := strconv.Atoi(iterator)
+		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, inc.ClientHeader, iter, string(serverFisrtMessage))
+		fmt.Println(authMessage)
 	}
+
+	///
+
 	fmt.Println(serverFisrtMessage)
-	s := cHeader
+	s := inc.ClientHeader
 	fmt.Println(s)
 	return []byte("")
+}
+
+func authMessage(cName string, cNonce []byte, sNonce []byte, sSalt string, cHeader string, iterations int,
+	serverFirstMessage string) (out []byte) {
+	out = clientFirstMessageBare([]byte(cName), cNonce)
+	out = append(out, ","...)
+	out = append(out, serverFirstMessage...)
+	out = append(out, ","...)
+	out = append(out, clientFinalMessageWithoutProof([]byte(cHeader), cNonce, sNonce)...)
+	return
+}
+
+func clientFinalMessageWithoutProof(cHeader, cNonce, sNonce []byte) (out []byte) {
+	nonce := append(cNonce, sNonce...)
+
+	out = []byte("c=")
+	out = append(out, cHeader...)
+	out = append(out, ",r="...)
+	out = append(out, nonce...)
+	return
 }

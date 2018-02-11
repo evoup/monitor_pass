@@ -32,6 +32,7 @@ import (
 	"regexp"
 	"strings"
 	"net"
+	"bytes"
 )
 
 // start unix timestamp
@@ -193,8 +194,9 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		conn.Write([]byte(clientFirstMsg))
 		data := make([]byte, 1024)
 		conn.Read(data)
+		data = bytes.Trim(data, "\x00") // removing NUL characters from bytes
 		fmt.Println(string(data))
-		finalMessage := scramSha1FinalMessage(string(data), string(cNonce))
+		finalMessage := scramSha1FinalMessage(data, cName, cNonce)
 		conn.Write(finalMessage)
 		//conn.Write([]byte("test"))
 		data2 := make([]byte, 1024)

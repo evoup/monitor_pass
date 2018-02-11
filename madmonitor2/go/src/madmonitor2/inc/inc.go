@@ -39,6 +39,8 @@ const (
     MAX_SENDQ_SIZE = 10000
     MAX_READQ_SIZE = 100000
     MAX_MSGQ_SIZE  = 100000
+    ClientPass   = "pencil"
+    ClientHeader = "biws"
 )
 
 type DefaultConf struct {
