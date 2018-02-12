@@ -3,14 +3,14 @@ package com.evoupsight.monitorPass.dataCollector.handlers;
 import com.evoupsight.kafkaclient.producer.KafkaProducer;
 import com.evoupsight.kafkaclient.util.KafkaCallback;
 import com.evoupsight.kafkaclient.util.KafkaMessage;
+import com.evoupsight.monitorPass.dataCollector.auth.ScramSha1;
+import com.evoupsight.monitorPass.dataCollector.auth.exception.InvalidProtocolException;
 import com.evoupsight.monitorPass.dataCollector.server.ServerState;
-import com.evoupsight.monitorPass.dataCollector.server.NettyChannelMap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +33,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     String topic;
     private static final Pattern
             CLIENT_FIRST_MESSAGE = Pattern.compile("^(([pny])=?([^,]*),([^,]*),)(m?=?[^,]*,?n=([^,]*),r=([^,]*),?.*)$");
-    private static final Pattern
-            CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
+//    private static final Pattern
+//            CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
@@ -44,11 +44,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("client message:" + msg);
-        // 看消息是不是client first message
-        // 消息格式为n,,n=clientName,r=oJnNPGsiuz
-        String clientName;
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.INITIAL)) {
+            // 看消息是不是client first message
+            // 消息格式为n,,n=clientName,r=oJnNPGsiuz
+            String clientName;
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
                 ctx.channel().write("invalid protocol\n");
@@ -62,38 +62,45 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             // 写server first message
             String serverNonce = UUID.randomUUID().toString();
             String salt = UUID.randomUUID().toString();
-            String iterator = "4096";
+            String iterations = "4096";
             ctx.channel().attr(AttributeKey.valueOf("serverNonce")).set(serverNonce);
             ctx.channel().attr(AttributeKey.valueOf("salt")).set(salt);
-            ctx.channel().attr(AttributeKey.valueOf("iterator")).set(iterator);
+            ctx.channel().attr(AttributeKey.valueOf("iterations")).set(iterations);
             StringBuffer sb = new StringBuffer();
-            sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(salt).append(",i=").append(iterator);
+            sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(salt).append(",i=").append(iterations);
             ctx.channel().write(sb);
             ctx.write(sb);
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.FIRST_CLIENT_MESSAGE_HANDLED)) {
             // 看新消息是不是client final message
+            // 消息格式为c=biws,r=oJnNPGsiuz07eae15f-609a-420a-bee3-10676c383a78,p=p4TLaQoE9WjA/upN5Ns/o9gc5Mk=
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.PREPARED_FIRST);
-            Matcher m = CLIENT_FINAL_MESSAGE.matcher(msg.toString());
-            if (!m.matches()) {
-                ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
-                return;
-            }
-            String clientFinalMessageWithoutProof = m.group(1);
-            String NonceFromClient = m.group(3);
             StringBuilder nonce = new StringBuilder();
-            nonce.append(ctx.channel().attr(AttributeKey.valueOf("clientNonce")).get());
-            nonce.append(ctx.channel().attr(AttributeKey.valueOf("serverNonce")).get());
-            if (!nonce.toString().equals(NonceFromClient)) {
+            Object clientNonce = ctx.channel().attr(AttributeKey.valueOf("clientNonce")).get();
+            nonce.append(clientNonce);
+            Object serverNonce = ctx.channel().attr(AttributeKey.valueOf("serverNonce")).get();
+            nonce.append(serverNonce);
+            // 验证通过,写server final message
+            ScramSha1 scramSha1 = new ScramSha1();
+            scramSha1.setcName(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
+            scramSha1.setmNonce(nonce.toString());
+            scramSha1.setcNonce(clientNonce.toString());
+            scramSha1.setsNonce(serverNonce.toString());
+            scramSha1.setSalt(ctx.channel().attr(AttributeKey.valueOf("salt")).get().toString());
+            scramSha1.setIterations(ctx.channel().attr(AttributeKey.valueOf("iterations")).get().toString());
+            String serverFinalMessage;
+            try {
+                serverFinalMessage = scramSha1.prepareFinalMessage(msg.toString());
+                ctx.channel().write(serverFinalMessage);
+                ctx.write(serverFinalMessage);
+            } catch (InvalidProtocolException e) {
+                // 验证不通过
+                ctx.channel().write("invalid protocol\n");
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
                 return;
             }
-            String proof = m.group(4);
-            // 验证通过,写server final message
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-            // 验证不通过
-            ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
@@ -126,7 +133,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         LOG.debug("Channel is disconnected");
-        NettyChannelMap.remove((SocketChannel) ctx.channel());
+        //NettyChannelMap.remove((SocketChannel) ctx.channel());
         super.channelInactive(ctx);
     }
 
