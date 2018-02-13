@@ -6,6 +6,7 @@ import com.evoupsight.kafkaclient.util.KafkaMessage;
 import com.evoupsight.monitorPass.dataCollector.auth.ScramSha1;
 import com.evoupsight.monitorPass.dataCollector.auth.exception.InvalidProtocolException;
 import com.evoupsight.monitorPass.dataCollector.server.ServerState;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -68,12 +69,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             // 写server first message
             String serverNonce = UUID.randomUUID().toString();
             String salt = UUID.randomUUID().toString();
+            String saltBase64 = Base64.encode(salt.getBytes());
             String iterations = "4096";
             ctx.channel().attr(AttributeKey.valueOf("serverNonce")).set(serverNonce);
-            ctx.channel().attr(AttributeKey.valueOf("salt")).set(salt);
+            ctx.channel().attr(AttributeKey.valueOf("salt")).set(saltBase64);
             ctx.channel().attr(AttributeKey.valueOf("iterations")).set(iterations);
             StringBuffer sb = new StringBuffer();
-            sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(salt).append(",i=").append(iterations);
+            sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(saltBase64).append(",i=").append(iterations);
             ctx.channel().attr(AttributeKey.valueOf("serverFirstMessage")).set(sb);
             ctx.channel().write(sb);
             ctx.write(sb);
