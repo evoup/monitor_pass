@@ -114,9 +114,13 @@ public class ScramSha1 {
         }
         byte[] resultKey = MessageDigest.getInstance("SHA-1").digest(clientKey);
         if (!Arrays.equals(storedKey, resultKey)) {
-            return null;
+            throw new InvalidProtocolException();
         }
-        return null;
+        // 客户端身份确认，下发server final message
+        byte[] serverKey = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Server Key");
+        byte[] key = MessageDigest.getInstance("SHA-1").digest(serverKey);
+        byte[] serverSignature = ScramUtils.computeHmac(key, "HmacSHA1", authMessage);
+        return "v=" + Base64.encodeBytes(serverSignature, Base64.DONT_BREAK_LINES);
     }
 
 //    func clientFirstMessageBare(cName, cNonce []byte) (out []byte) {
