@@ -60,6 +60,7 @@ public class ScramSha1 {
             throw new InvalidProtocolException();
         }
         String authMessage = authMessage(cName, cNonce, sNonce, salt, CLIENT_HEADER, Integer.parseInt(iterations));
+        // todo 用pbkdf2生成好saltedPassword,并和“Server Key”字符串计算摘要
         //HmacSha1Signature.calculateRFC2104HMAC(authMessage, )
         return null;
     }
