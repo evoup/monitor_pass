@@ -18,6 +18,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,8 +58,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 ctx.channel().write("invalid protocol\n");
                 return;
             }
+            String clientFirstMessageBare = m.group(5);
             clientName = m.group(6);
             String clientNonce = m.group(7);
+            ctx.channel().attr(AttributeKey.valueOf("clientFirstMessageBare")).set(clientFirstMessageBare);
             ctx.channel().attr(AttributeKey.valueOf("clientId")).set(clientName);
             ctx.channel().attr(AttributeKey.valueOf("clientNonce")).set(clientNonce);
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.FIRST_CLIENT_MESSAGE_HANDLED);
@@ -68,6 +74,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             ctx.channel().attr(AttributeKey.valueOf("iterations")).set(iterations);
             StringBuffer sb = new StringBuffer();
             sb.append("r=").append(clientNonce).append(serverNonce).append(",s=").append(salt).append(",i=").append(iterations);
+            ctx.channel().attr(AttributeKey.valueOf("serverFirstMessage")).set(sb);
             ctx.channel().write(sb);
             ctx.write(sb);
             return;
@@ -89,12 +96,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             scramSha1.setsNonce(serverNonce.toString());
             scramSha1.setSalt(ctx.channel().attr(AttributeKey.valueOf("salt")).get().toString());
             scramSha1.setIterations(ctx.channel().attr(AttributeKey.valueOf("iterations")).get().toString());
+            scramSha1.setmClientFirstMessageBare(ctx.channel().attr(AttributeKey.valueOf("clientFirstMessageBare")).get().toString());
+            scramSha1.setmServerFirstMessage(ctx.channel().attr(AttributeKey.valueOf("serverFirstMessage")).get().toString());
             String serverFinalMessage;
             try {
                 serverFinalMessage = scramSha1.prepareFinalMessage(msg.toString());
                 ctx.channel().write(serverFinalMessage);
                 ctx.write(serverFinalMessage);
-            } catch (InvalidProtocolException e) {
+            } catch (InvalidProtocolException | InvalidKeySpecException | NoSuchAlgorithmException |
+                    UnsupportedEncodingException | InvalidKeyException e) {
+                LOG.error(e.getMessage(), e);
                 // 验证不通过
                 ctx.channel().write("invalid protocol\n");
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);

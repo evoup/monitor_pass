@@ -1,6 +1,12 @@
 package com.evoupsight.monitorPass.dataCollector.auth;
 
 import com.evoupsight.monitorPass.dataCollector.auth.exception.InvalidProtocolException;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +17,10 @@ public class ScramSha1 {
             CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
 
     private static final String CLIENT_HEADER = "biws";
+
+    private static final String ClIENT_PASS = "pencil";
+
+    private static final int PBKDF2Length = 20;
 
     /**
      * client username, stored after client first message came
@@ -43,11 +53,23 @@ public class ScramSha1 {
     private String iterations;
 
     /**
+     * client first message bare, stored after client first message came
+     */
+    private String mClientFirstMessageBare;
+
+    /**
+     * server first message, stored before server first message send
+     */
+    private String mServerFirstMessage;
+
+    /**
      *
      * @param clientFinalMessage client final message
      * @return server final message
      */
-    public String prepareFinalMessage(String clientFinalMessage) throws InvalidProtocolException {
+    public String prepareFinalMessage(String clientFinalMessage) throws InvalidProtocolException,
+            InvalidKeySpecException, NoSuchAlgorithmException, UnsupportedEncodingException, SignatureException,
+            InvalidKeyException {
         Matcher m = CLIENT_FINAL_MESSAGE.matcher(clientFinalMessage);
         if (!m.matches()) {
             throw new InvalidProtocolException();
@@ -59,9 +81,16 @@ public class ScramSha1 {
         if (!mNonce.equals(NonceFromClient)) {
             throw new InvalidProtocolException();
         }
-        String authMessage = authMessage(cName, cNonce, sNonce, salt, CLIENT_HEADER, Integer.parseInt(iterations));
+        int iter = Integer.parseInt(iterations);
+        // 不能再计算一次authMessage，而应该用传过来的消息的几个字段client first message bare,server first message
+        // 和client final message without proof
+        // String authMessage = authMessage(cName, cNonce, sNonce, salt, CLIENT_HEADER, iter);
+        String authMessage = mClientFirstMessageBare + "," + mServerFirstMessage + "," + clientFinalMessageWithoutProof;
+
         // todo 用pbkdf2生成好saltedPassword,并和“Server Key”字符串计算摘要
-        //HmacSha1Signature.calculateRFC2104HMAC(authMessage, )
+        byte[] bytes = PasswordHash.pbkdf2(ClIENT_PASS.toCharArray(), salt.getBytes(), iter, PBKDF2Length);
+        String saltedPassword = new String(bytes, "UTF-8");
+        String serverKey = HmacSha1Signature.calculateRFC2104HMAC(saltedPassword, "Server Key");
         return null;
     }
 
@@ -179,5 +208,21 @@ public class ScramSha1 {
 
     public void setIterations(String iterations) {
         this.iterations = iterations;
+    }
+
+    public String getmClientFirstMessageBare() {
+        return mClientFirstMessageBare;
+    }
+
+    public void setmClientFirstMessageBare(String mClientFirstMessageBare) {
+        this.mClientFirstMessageBare = mClientFirstMessageBare;
+    }
+
+    public String getmServerFirstMessage() {
+        return mServerFirstMessage;
+    }
+
+    public void setmServerFirstMessage(String mServerFirstMessage) {
+        this.mServerFirstMessage = mServerFirstMessage;
     }
 }

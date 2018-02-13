@@ -119,7 +119,7 @@ public class PasswordHash
      * @param   bytes       the length of the hash to compute in bytes
      * @return              the PBDKF2 hash of the password
      */
-    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes)
+    public static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes)
             throws NoSuchAlgorithmException, InvalidKeySpecException
     {
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
