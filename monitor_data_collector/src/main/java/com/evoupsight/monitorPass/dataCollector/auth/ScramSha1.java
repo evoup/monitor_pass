@@ -96,14 +96,16 @@ public class ScramSha1 {
         // 也可以使用下面的方法计算加盐密码，也就是pbkdf2的实现
         byte[] salt = Base64.decode(this.salt);
         System.out.println("salt64:" + this.salt);
+        //salt = "15a30400-a9f4-47d6-bcd6-89c47990eebf".getBytes();
         System.out.println("salt:" + new String(salt));
-        byte[] bytes = ScramUtils.generateSaltedPassword(ClIENT_PASS, salt, iter, "HmacSHA1");
-        String saltedPassword = new String(bytes);
-        saltedPassword="data";
-        System.out.println("saltedPassword hex:" + printHexString(saltedPassword.getBytes()));
-
-        //String storedKey = HmacSha1Signature.calculateRFC2104HMAC(saltedPassword, "Client Key"); // to hexString ??
-        byte[] clientKey0 = ScramUtils.computeHmac(saltedPassword.getBytes(), "HmacSHA1", "Client Key");
+        //byte[] bytes = ScramUtils.generateSaltedPassword(ClIENT_PASS, salt, iter, "HmacSHA1");
+        //String saltedPassword = new String(bytes);
+        byte[] saltedPassword = PasswordHash.pbkdf2(ClIENT_PASS.toCharArray(), salt, iter, PBKDF2Length);
+        //String saltedPassword = new String(bytes, "UTF-8");
+        //saltedPassword="data";
+        System.out.println("saltedPassword:" + PasswordHash.toHex(saltedPassword));
+        byte[] clientKey0 = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Client Key");
+        System.out.println("clientKey0 hex:" + printHexString(clientKey0));
         byte[] storedKey = MessageDigest.getInstance("SHA-1").digest(clientKey0);
         System.out.println("storedKey hex:" + printHexString(storedKey));
         byte[] clientSignature = ScramUtils.computeHmac(storedKey, "HmacSHA1", authMessage);

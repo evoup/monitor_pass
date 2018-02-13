@@ -149,7 +149,7 @@ public class PasswordHash
      * @param   array       the byte array to convert
      * @return              a length*2 character string encoding the byte array
      */
-    private static String toHex(byte[] array)
+    public static String toHex(byte[] array)
     {
         BigInteger bi = new BigInteger(1, array);
         String hex = bi.toString(16);

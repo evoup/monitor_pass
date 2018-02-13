@@ -110,12 +110,12 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 		iter, _ := strconv.Atoi(iterator)
 		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, ClientHeader, iter, string(serverFisrtMessage))
 		fmt.Println("salt64:" + salt)
-		fmt.Println("salt:" + string(fromBase64([]byte(salt)))) // ??function ok ?
-		saltedPassword := pbkdf2Sum(normalize([]byte(ClientPass)), fromBase64([]byte(salt)), iter)
-		saltedPassword = []byte("data")
+		salt = string(fromBase64([]byte(salt)))
+		//salt = "15a30400-a9f4-47d6-bcd6-89c47990eebf"
+		fmt.Println("salt:" + salt)
+		saltedPassword := pbkdf2Sum(normalize([]byte(ClientPass)), []byte(salt), iter)
+		// saltedPassword = []byte("data")
 		fmt.Printf("saltedPassword hex:%x\n", saltedPassword)
-		//fmt.Println("saltedPassword:" + string(saltedPassword))
-		//saltedPassword := pbkdf2Sum(normalize([]byte(ClientPass)), []byte(salt), iter)
 		clientKey := hmacSum(saltedPassword, []byte("Client Key"))
 		fmt.Printf("clientKey hex:%x\n", clientKey)
 		storedKey := sha1Sum(clientKey)
