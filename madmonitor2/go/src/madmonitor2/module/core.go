@@ -207,7 +207,6 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		// 检查server final message
 		submatch := ServerFinalMessage.FindAllStringSubmatch(string(serverFinalMessageData), -1)
 		if submatch != nil {
-			fmt.Print(submatch)
 			serverSignature := submatch[0][1]
 			decodeBytes, err := base64.StdEncoding.DecodeString(serverSignature)
 			if err != nil {

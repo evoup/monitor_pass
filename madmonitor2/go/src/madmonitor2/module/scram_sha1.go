@@ -87,7 +87,7 @@ func scramSha1FirstMessage(cname string) ([]byte, []byte) {
 }
 
 func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) (out []byte, salt string,
-	sNonce string, iter int) {
+	snonce string, iter int) {
 	// server first message e.g.:
 	// r=client nonce+server nonce s=server salt i=iterator
 	// r=oJnNPGsiuz152d4ba7-d324-4228-8a63-78b352851853,s=b174075f-7512-421c-92ab-81cc1fcf9585,i=4096
@@ -108,7 +108,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 			// 认证失败
 			return []byte(""), "", "", 0
 		}
-		snonce := nonce[0+cnonceLen:]
+		snonce = nonce[0+cnonceLen:]
 		fmt.Println(snonce)
 		iter, _ := strconv.Atoi(iterator)
 		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, ClientHeader, iter, string(serverFisrtMessage))
@@ -128,6 +128,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 		out = clientFinalMessageWithoutProof([]byte(ClientHeader), cnonce, []byte(snonce))
 		out = append(out, ",p="...)
 		out = append(out, toBase64(clientProof)...)
+		return out, salt, snonce, iter
 	}
 	return
 }
@@ -202,10 +203,14 @@ func xor(a, b []byte) []byte {
 func isValidServer(cName string, cPass []byte, cNonce []byte, sNonce []byte, sSalt string, cHeader string, serverSignature []byte, iterations int,
 	serverFirstMessage string) bool {
 	authMessage := authMessage(cName, cNonce, sNonce, sSalt, cHeader, iterations, serverFirstMessage)
-
-	saltedPassword := pbkdf2Sum(normalize(cPass), fromBase64([]byte(sSalt)), iterations)
+	fmt.Println("--------------------------")
+	fmt.Println("salt:", sSalt)
+	saltedPassword := pbkdf2Sum(normalize(cPass), []byte(sSalt), iterations)
 	serverKey := hmacSum(saltedPassword, []byte("Server Key"))
-
+	serverKey = sha1Sum(serverKey)
+	fmt.Printf("saltedPassword hex:%x\n", saltedPassword)
+	fmt.Printf("serverKey hex:%x\n", serverKey)
+	fmt.Printf("serverSignature hex:%x\n", serverSignature)
 	attemptingServerSignature := hmacSum(serverKey, authMessage)
 	valid := bytes.Equal(attemptingServerSignature, serverSignature)
 	return valid

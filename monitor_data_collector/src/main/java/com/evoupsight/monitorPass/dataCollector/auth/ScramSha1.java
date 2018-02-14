@@ -120,6 +120,9 @@ public class ScramSha1 {
         byte[] serverKey = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Server Key");
         byte[] key = MessageDigest.getInstance("SHA-1").digest(serverKey);
         byte[] serverSignature = ScramUtils.computeHmac(key, "HmacSHA1", authMessage);
+        System.out.println("saltedPassword hex:" + PasswordHash.toHex(saltedPassword));
+        System.out.println("serverKey hex:" + PasswordHash.toHex(key));
+        System.out.println("serverSignature hex:" + PasswordHash.toHex(serverSignature));
         return "v=" + Base64.encodeBytes(serverSignature, Base64.DONT_BREAK_LINES);
     }
 
