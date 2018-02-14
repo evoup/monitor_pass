@@ -33,6 +33,8 @@ const (
 	PBKDF2Length = 20
 )
 
+var ServerFinalMessage = regexp.MustCompile(`v=([^,]*)$`)
+
 func RandStringBytesRmndr(n int) string {
 	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	b := make([]byte, n)
@@ -84,7 +86,8 @@ func scramSha1FirstMessage(cname string) ([]byte, []byte) {
 	return cFirstMessage, cNonce
 }
 
-func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) (out []byte) {
+func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byte) (out []byte, salt string,
+	sNonce string, iter int) {
 	// server first message e.g.:
 	// r=client nonce+server nonce s=server salt i=iterator
 	// r=oJnNPGsiuz152d4ba7-d324-4228-8a63-78b352851853,s=b174075f-7512-421c-92ab-81cc1fcf9585,i=4096
@@ -93,7 +96,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 	if submatch != nil {
 		fmt.Print(submatch)
 		nonce := submatch[0][1]
-		salt := submatch[0][2]
+		salt = submatch[0][2]
 		iterator := submatch[0][3]
 		fmt.Println(nonce)
 		fmt.Println(salt)
@@ -103,7 +106,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 		remoteCnonce := nonce[0:cnonceLen]
 		if remoteCnonce != string(cnonce) {
 			// 认证失败
-			return []byte("")
+			return []byte(""), "", "", 0
 		}
 		snonce := nonce[0+cnonceLen:]
 		fmt.Println(snonce)
@@ -195,3 +198,16 @@ func xor(a, b []byte) []byte {
 	}
 	return out
 }
+
+func isValidServer(cName string, cPass []byte, cNonce []byte, sNonce []byte, sSalt string, cHeader string, serverSignature []byte, iterations int,
+	serverFirstMessage string) bool {
+	authMessage := authMessage(cName, cNonce, sNonce, sSalt, cHeader, iterations, serverFirstMessage)
+
+	saltedPassword := pbkdf2Sum(normalize(cPass), fromBase64([]byte(sSalt)), iterations)
+	serverKey := hmacSum(saltedPassword, []byte("Server Key"))
+
+	attemptingServerSignature := hmacSum(serverKey, authMessage)
+	valid := bytes.Equal(attemptingServerSignature, serverSignature)
+	return valid
+}
+

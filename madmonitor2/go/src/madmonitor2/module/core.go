@@ -33,6 +33,7 @@ import (
 	"strings"
 	"net"
 	"bytes"
+	"encoding/base64"
 )
 
 // start unix timestamp
@@ -192,28 +193,39 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		///////// scram sha-1安全认证 ////////
 		clientFirstMsg,cNonce := scramSha1FirstMessage(cName)
 		conn.Write([]byte(clientFirstMsg))
-		data := make([]byte, 1024)
-		conn.Read(data)
-		data = bytes.Trim(data, "\x00") // removing NUL characters from bytes
-		fmt.Println(string(data))
-		finalMessage := scramSha1FinalMessage(data, cName, cNonce)
+		serverFirstMessageData := make([]byte, 1024)
+		conn.Read(serverFirstMessageData)
+		serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00") // removing NUL characters from bytes
+		fmt.Println(string(serverFirstMessageData))
+		finalMessage,salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
 		conn.Write(finalMessage)
 		//conn.Write([]byte("test"))
-		data2 := make([]byte, 1024)
-		conn.Read(data2)
-		fmt.Println(string(data2))
-		//id, err := c.conn.Cmd(string(clientFirstMsg))
-		//if err != nil {
-		//	continue
-		//}
-		//c.conn.StartResponse(id)
-		//defer c.conn.EndResponse(id)
-		//text, err1 := c.conn.ReadContinuedLineBytes()
-		//if err1 != nil {
-		//	continue
-		//}
-		//fmt.Println(text)
-		////////////////////////////////////
+		serverFinalMessageData := make([]byte, 1024)
+		conn.Read(serverFinalMessageData)
+		serverFinalMessageData = bytes.Trim(serverFinalMessageData, "\x00")
+		fmt.Println(string(serverFinalMessageData))
+		// 检查server final message
+		submatch := ServerFinalMessage.FindAllStringSubmatch(string(serverFinalMessageData), -1)
+		if submatch != nil {
+			fmt.Print(submatch)
+			serverSignature := submatch[0][1]
+			decodeBytes, err := base64.StdEncoding.DecodeString(serverSignature)
+			if err != nil {
+				utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+				continue
+			}
+			fmt.Println("decodeBytes:" + string(decodeBytes))
+			cPass := []byte(ClientPass)
+			cHeader := ClientHeader
+			if !isValidServer(cName, cPass, cNonce, []byte(sNonce), salt, cHeader, decodeBytes, iter,
+				string(serverFirstMessageData)) {
+				utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+				continue
+			}
+		} else {
+			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+			continue
+		}
 		if err != nil {
 			utils.Log(utils.GetLogger(), "core.Init][error:" + err.Error(), 1, *Debug_level)
 		} else {
