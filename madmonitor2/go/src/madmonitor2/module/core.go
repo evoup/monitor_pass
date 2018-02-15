@@ -229,7 +229,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 			utils.Log(utils.GetLogger(), "core.Init][error:" + err.Error(), 1, *Debug_level)
 		} else {
 			foundServer = true
-			//go run_send(readChannel, c)
+			go run_send(readChannel, conn)
 			break
 		}
 	}
@@ -255,14 +255,13 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 }
 
 // run_send like tcollector`s sender_thread
-func run_send(readChannel inc.ReaderChannel, c *ServerConn) {
+func run_send(readChannel inc.ReaderChannel, conn *net.TCPConn) {
 	for {
 		select {
 		case msg := <- readChannel.Readerq:
-			conn := c.conn
-			_, err1 := conn.Cmd(msg)
-			if err1 != nil {
-				fmt.Printf(err1.Error())
+			_, err := conn.Write([]byte(msg))
+			if err != nil {
+				fmt.Printf(err.Error())
 			}
 			fmt.Println("message sent:" + msg)
 		}
