@@ -342,5 +342,5 @@ func main_loop() {
 // load implemented collectors key name of collector,value interval
 func loadCollectors() {
 	inc.VALID_COLLECTORS["sysload"] = 0
-
+	inc.VALID_COLLECTORS["dfstat"] = 0
 }

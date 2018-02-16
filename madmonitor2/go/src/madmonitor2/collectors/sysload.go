@@ -28,7 +28,7 @@ import (
 	"madmonitor2/inc"
 )
 
-type plugin string
+type sysloadPlugin string
 
 var DEFAULT_COLLECTION_INTERVAL = 15
 
@@ -61,7 +61,7 @@ func main() {
 	sysload()
 }
 
-func (p plugin) Collect() {
+func (p sysloadPlugin) Collect() {
 	defer inc.Wg.Done()
 	select {
 	case _ = <-inc.Shutdown:
@@ -150,4 +150,6 @@ func sysload() {
 }
 
 // exported as symbol named "SysloadSo"
-var CollectorSo plugin
+var SysloadSo sysloadPlugin
+
+//build -gcflags "-I -N" -buildmode=plugin -o plugin/sysload.so collectors/sysload.go

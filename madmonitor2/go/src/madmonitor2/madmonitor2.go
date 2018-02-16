@@ -18,11 +18,6 @@ package main
 import (
 	"madmonitor2/module"
 	"madmonitor2/inc"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"plugin"
-	"os"
 )
 
 
@@ -35,36 +30,4 @@ func main() {
 	// if we're not ready to receive when the signal is sent.
 	module.Init()
 }
-
-// 更新或者添加collector
-func populate_collectors0() {
-
-	GENERATION += 1
-	for collector_name := range inc.VALID_COLLECTORS {
-		fmt.Println(collector_name)
-	}
-	files, err := ioutil.ReadDir("./plugin/")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, f := range files {
-		fmt.Println(f.Name())
-		mod := f.Name()
-		plug, err := plugin.Open("./plugin/" + mod)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		symCollector, err := plug.Lookup("CollectorSo")
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		col := symCollector.(inc.ICollector)
-		module.DoCollect(col)
-	}
-
-}
-
 

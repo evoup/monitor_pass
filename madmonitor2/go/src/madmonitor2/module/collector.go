@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"plugin"
 	"fmt"
+	"strings"
 )
 
 var GENERATION = inc.GERERATION
@@ -39,7 +40,7 @@ func Register_collector(name string, interval int, filename string, generation i
 	// initialize values map
 	values := make(map[string]inc.CollectorValue, 50000)
 	collector := inc.Collector{name, interval, filename, mtime, lastspawn,
-	0, 0, 0, false, generation, values, 0}
+	0, 0, 0, true, generation, values, 0}
 	COLLECTORS[name] = collector
 }
 
@@ -120,6 +121,9 @@ func all_collectors() map[string]inc.Collector {
 }
 
 func spawn_collector( collector inc.Collector) {
+	if collector.Dead == false {
+		return
+	}
 	// Takes a Collector object and creates a process for it.
 	HLog = utils.GetLogger()
 	utils.Log(HLog, "spawn_collector]["+collector.Name + "(interval:"+ strconv.Itoa(collector.Interval) + ") needs to be spawned", 1, 2)
@@ -130,7 +134,9 @@ func spawn_collector( collector inc.Collector) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	symCollector, err := plug.Lookup("CollectorSo")
+	modNameArr := strings.Split(mod, ".") // sysload.so
+	modName := strings.Title(modNameArr[0]) // Sysload
+	symCollector, err := plug.Lookup(modName + "So") // SysloadSo is plugin exported name
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
