@@ -30,7 +30,7 @@ import (
 
 type sysloadPlugin string
 
-var DEFAULT_COLLECTION_INTERVAL = 15
+var SYSLOAD_DEFAULT_COLLECTION_INTERVAL = 15
 
 // Take a string in the form 1234K, and convert to bytes
 func convert_to_bytes(str string) int {
@@ -74,7 +74,7 @@ func (p sysloadPlugin) Collect() {
 
 func sysload() {
 	//convert_to_bytes("1234K");
-	collection_interval := DEFAULT_COLLECTION_INTERVAL
+	collection_interval := SYSLOAD_DEFAULT_COLLECTION_INTERVAL
 	collect_every_cpu := true
 	config := etc.Get_config()
 	if config != nil {

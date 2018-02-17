@@ -343,4 +343,5 @@ func main_loop() {
 func loadCollectors() {
 	inc.VALID_COLLECTORS["sysload"] = 0
 	inc.VALID_COLLECTORS["dfstat"] = 0
+	inc.VALID_COLLECTORS["procstats"] = 0
 }
