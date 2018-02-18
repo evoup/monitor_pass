@@ -92,8 +92,8 @@ func Init() (*log.Logger, *jason.Object) {
 	/** if first run, we make config folder **/
 	buildConf(logger)
 
-	var optionDaedmon = (*daemonize || *daemonizeShort)
-	if (optionDaedmon) {
+	var optionDaedmon = *daemonize || *daemonizeShort
+	if optionDaedmon {
 		//utils.Daemonize(0, 1, pid_file)
 	} else {
 
@@ -106,7 +106,7 @@ func Init() (*log.Logger, *jason.Object) {
 	dp1, _ := strconv.Atoi(dp)
 	readChannel := NewReadChannel(ev1, dp1)
 
-	dependencies := []string{}
+	var dependencies []string
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
 	if err != nil {
 		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)

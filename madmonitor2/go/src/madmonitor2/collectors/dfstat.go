@@ -45,8 +45,6 @@ type fsStruct struct {
 	fsVfstype string
 }
 
-type devices []fsStruct
-
 func main() {
 	dfstat()
 }
