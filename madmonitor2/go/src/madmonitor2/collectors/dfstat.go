@@ -23,6 +23,7 @@ import (
 	"time"
 	"bufio"
 	"strings"
+	"syscall"
 )
 
 var FsTypeIgnore = map[string]bool{
@@ -36,7 +37,7 @@ var FsTypeIgnore = map[string]bool{
 
 type dfstatPlugin string
 
-var DFSTAT_DEFAULT_COLLECTION_INTERVAL = 10
+var DFSTAT_DEFAULT_COLLECTION_INTERVAL = 60
 
 type fsStruct struct {
 	fsSpec    string
@@ -68,6 +69,7 @@ func dfstat() {
 		utils.Log(utils.GetLogger(), "dfstat][err:"+err.Error(), 2, 1)
 	}
 	for {
+		timestamp := time.Now().Unix()
 		var devices []fsStruct
 		time.Sleep(time.Second * time.Duration(collection_interval))
 		scanner := bufio.NewScanner(f)
@@ -80,9 +82,7 @@ func dfstat() {
 			//# fs_freq     # Dump(8) utility flags
 			//# fs_passno   # Order in which filesystem checks are done at reboot time
 			line := scanner.Text()
-			fmt.Println(line)
 			fields := strings.Fields(line)
-			fmt.Print(len(fields))
 			//var fsSpec, fsFile, fsVfstype, fsMntops, fsFrep, fsPassno = "", "", "", "", "", ""
 			var fsSpec, fsFile, fsVfstype = "", "", ""
 			if len(fields) == 6 {
@@ -137,6 +137,68 @@ func dfstat() {
 				devices = append(devices, fsStruct{fsSpec, fsFile, fsVfstype})
 			}
 			for i := range devices {
+				fs := syscall.Statfs_t{}
+				err := syscall.Statfs(devices[i].fsFile, &fs)
+				if err != nil {
+					utils.Log(utils.GetLogger(), "dfstat][can't get info for mount point:"+err.Error(), 2, 1)
+					continue
+				}
+				blocks := fs.Blocks * uint64(fs.Bsize)
+				free := fs.Bfree * uint64(fs.Bsize)
+				used := blocks - free
+				percentUsed := float64(0)
+				if blocks == 0 {
+					percentUsed = float64(100)
+				} else {
+					percentUsed = float64(used) * float64(100.0) / float64(blocks)
+				}
+				//print("df.bytes.total %d %s mount=%s fstype=%s"
+				//% (ts, r.f_frsize * r.f_blocks, fs_file, fs_vfstype))
+				//print("df.bytes.used %d %s mount=%s fstype=%s"
+				//% (ts, r.f_frsize * used, fs_file, fs_vfstype))
+				//print("df.bytes.percentused %d %s mount=%s fstype=%s"
+				//% (ts, percent_used, fs_file, fs_vfstype))
+				//print("df.bytes.free %d %s mount=%s fstype=%s"
+				//% (ts, r.f_frsize * r.f_bfree, fs_file, fs_vfstype))
+				fmt.Printf("df.bytes.total %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.bytes.used %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.bytes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.bytes.free %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
+
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.total %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.used %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.free %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
+
+				used = fs.Files - fs.Ffree
+				//# percent_used = 100 if r.f_files == 0 else used * 100.0 / r.f_files
+				//if r.f_files == 0:
+				//percent_used = 100
+				//else:
+				//percent_used = used * 100.0 / r.f_files
+				//
+				//print("df.inodes.total %d %s mount=%s fstype=%s"
+				//% (ts, r.f_files, fs_file, fs_vfstype))
+				//print("df.inodes.used %d %s mount=%s fstype=%s"
+				//% (ts, used, fs_file, fs_vfstype))
+				//print("df.inodes.percentused %d %s mount=%s fstype=%s"
+				//% (ts, percent_used,  fs_file, fs_vfstype))
+				//print("df.inodes.free %d %s mount=%s fstype=%s"
+				//% (ts, r.f_ffree, fs_file, fs_vfstype))
+				if fs.Files == 0 {
+					percentUsed = float64(100)
+				} else {
+					percentUsed = float64(used) * float64(100.0) / float64(fs.Files)
+				}
+				fmt.Printf("df.inodes.total %v %v mount=%v fstype=%v\n", timestamp, fs.Files, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.inodes.used %v %v mount=%v fstype=%v\n", timestamp, used, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.inodes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.inodes.free %v %v mount=%v fstype=%v\n", fs.Ffree, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.total %v %v mount=%v fstype=%v\n", timestamp, fs.Files, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.used %v %v mount=%v fstype=%v\n", timestamp, used, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.free %v %v mount=%v fstype=%v\n", fs.Ffree, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
 			}
 		}
 		f.Seek(0, 0)
