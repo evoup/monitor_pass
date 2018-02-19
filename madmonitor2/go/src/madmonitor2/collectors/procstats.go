@@ -41,14 +41,14 @@ func procstats() {
 	if err != nil {
 		utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
 	}
-	//f_vmstat, err := os.Open("/proc/vmstat")
-	//if err != nil {
-	//	utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
-	//}
-	//f_stat, err := os.Open("/proc/stat")
-	//if err != nil {
-	//	utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
-	//}
+	f_vmstat, err := os.Open("/proc/vmstat")
+	if err != nil {
+		utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
+	}
+	f_stat, err := os.Open("/proc/stat")
+	if err != nil {
+		utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
+	}
 	//f_loadavg, err := os.Open("/proc/loadavg")
 	//if err != nil {
 	//	utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
@@ -95,7 +95,7 @@ func procstats() {
 
 	///////////////
 	for {
-		timestamp := time.Now().Unix()
+		ts := time.Now().Unix()
 		f_uptime.Seek(0, 0)
 		scanner := bufio.NewScanner(f_uptime)
 		for scanner.Scan() {
@@ -104,11 +104,12 @@ func procstats() {
 			data := reg.FindAllStringSubmatch(line, -1)
 			if len(data[0]) > 0 {
 				//print "proc.uptime.total %d %s" % (ts, m.group(1))
-				fmt.Printf("procstats proc.uptime.total %v %v\n", timestamp, data[0][1])
+				fmt.Printf("procstats proc.uptime.total %v %v\n", ts, data[0][1])
 				//print "proc.uptime.now %d %s" % (ts, m.group(2))
-				fmt.Printf("procstats proc.uptime.now %v %v\n", timestamp, data[0][2])
+				fmt.Printf("procstats proc.uptime.now %v %v\n", ts, data[0][2])
 			}
 		}
+		ts = time.Now().Unix()
 		f_meminfo.Seek(0, 0)
 		scanner = bufio.NewScanner(f_meminfo)
 		for scanner.Scan() {
@@ -138,7 +139,88 @@ func procstats() {
 				reg := regexp.MustCompile(`\W`)
 				name := strings.TrimPrefix(reg.ReplaceAllString(data[0][1], "_"), "_")
 				//print ("proc.meminfo.%s %d %s"% (name, ts, value))
-				fmt.Printf("procstats proc.meminfo.%v %v %v\n", name, timestamp, value)
+				fmt.Printf("procstats proc.meminfo.%v %v %v\n", name, ts, value)
+			}
+		}
+
+		f_vmstat.Seek(0, 0)
+		ts = time.Now().Unix()
+		scanner = bufio.NewScanner(f_vmstat)
+		for scanner.Scan() {
+			line := scanner.Text()
+			reg := regexp.MustCompile(`(\w+)\s+(\d+)`)
+			data := reg.FindAllStringSubmatch(line, -1)
+			if len(data[0]) < 3 {
+				continue
+			}
+			x:=map[string]bool{
+				"pgpgin":true,
+				"pgpgout":true,
+				"pswpin":true,
+				"pswpout":true,
+				"pgfault":true,
+				"pgmajfault":true,
+			}
+			if x[data[0][1]] {
+				//print "proc.vmstat.%s %d %s" % (m.group(1), ts, m.group(2))
+				fmt.Printf("procstats proc.vmstat.%s %d %s\n", data[0][1], ts, data[0][2])
+			}
+		}
+
+		//# proc.stat
+		f_stat.Seek(0,0)
+		ts = time.Now().Unix()
+		scanner = bufio.NewScanner(f_stat)
+		for scanner.Scan() {
+			line := scanner.Text()
+			reg := regexp.MustCompile(`(\w+)\s+(.*)`)
+			m := reg.FindAllStringSubmatch(line, -1)
+			if len(m[0]) < 3 {
+				continue
+			}
+			if strings.HasPrefix(m[0][1], "cpu") {
+				reg = regexp.MustCompile(`cpu(\d+)`)
+				m_cpu := reg.FindAllStringSubmatch(line, -1)
+				metric_percpu := ""
+				tags := ""
+				if m_cpu!=nil && len(m_cpu[0])==2 {
+					//metric_percpu = '.percpu'
+                    //tags = ' cpu=%s' % cpu_m.group(1)
+                    metric_percpu = ".percpu"
+					cpuM := m_cpu[0][1]
+					tags = " cpu=" + cpuM
+				} else {
+					metric_percpu = ""
+					tags = ""
+					//fields = m.group(2).split()
+					//cpu_types = ['user', 'nice', 'system', 'idle', 'iowait',
+					//'irq', 'softirq', 'guest', 'guest_nice']
+					//print "proc.stat.cpu%s %d %s type=%s%s" % (metric_percpu,
+					//	ts, value, field_name, tags)
+					fields := strings.Fields(m[0][2])
+					field_names := []string{"user", "nice", "system", "idle", "iowait",
+						"irq", "softirq", "guest", "guest_nice"}
+					i:=0
+					for field_name := range field_names {
+						value := fields[i]
+						fmt.Printf("procstats proc.stat.cpu%v %v %v type=%v%v\n", metric_percpu, ts, value, field_name, tags)
+						i++
+					}
+
+				}
+			} else if m[0][1] == "intr" {
+				//print ("proc.stat.intr %d %s"% (ts, m.group(2).split()[0]))
+				fields := strings.Fields(m[0][2])
+				fmt.Printf("procstats proc.stat.intr %v %v\n", ts, fields[0])
+			} else if m[0][1] == "ctxt" {
+				//print "proc.stat.ctxt %d %s" % (ts, m.group(2))
+				fmt.Printf("procstats proc.stat.ctxt %v %v\n", ts, m[0][2])
+			} else if m[0][1] == "processes" {
+				//print "proc.stat.processes %d %s" % (ts, m.group(2))
+				fmt.Printf("procstats proc.stat.processes %v %v\n", ts, m[0][2])
+			} else if m[0][1] == "procs_blocked" {
+				//print "proc.stat.procs_blocked %d %s" % (ts, m.group(2))
+				fmt.Printf("procstats proc.stat.procs_blocked %v %v\n", ts, m[0][2])
 			}
 		}
 	}
