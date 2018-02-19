@@ -49,10 +49,10 @@ func procstats() {
 	if err != nil {
 		utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
 	}
-	//f_loadavg, err := os.Open("/proc/loadavg")
-	//if err != nil {
-	//	utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
-	//}
+	f_loadavg, err := os.Open("/proc/loadavg")
+	if err != nil {
+		utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
+	}
 	//f_entropy_avail, err := os.Open("/proc/sys/kernel/random/entropy_avail")
 	//if err != nil {
 	//	utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
@@ -222,6 +222,28 @@ func procstats() {
 				//print "proc.stat.procs_blocked %d %s" % (ts, m.group(2))
 				fmt.Printf("procstats proc.stat.procs_blocked %v %v\n", ts, m[0][2])
 			}
+		}
+
+		f_loadavg.Seek(0,0)
+		ts = time.Now().Unix()
+		scanner = bufio.NewScanner(f_loadavg)
+		for scanner.Scan() {
+			line := scanner.Text()
+			reg := regexp.MustCompile(`(\S+)\s+(\S+)\s+(\S+)\s+(\d+)/(\d+)\s+`)
+			m := reg.FindAllStringSubmatch(line, -1)
+			if m==nil || len(m[0])!=6 {
+				continue
+			}
+			//print "proc.loadavg.1min %d %s" % (ts, m.group(1))
+			//print "proc.loadavg.5min %d %s" % (ts, m.group(2))
+			//print "proc.loadavg.15min %d %s" % (ts, m.group(3))
+			//print "proc.loadavg.runnable %d %s" % (ts, m.group(4))
+			//print "proc.loadavg.total_threads %d %s" % (ts, m.group(5))
+			fmt.Printf("procstats proc.loadavg.1min %v %v\n", ts, m[0][1])
+			fmt.Printf("procstats proc.loadavg.5min %v %v\n", ts, m[0][2])
+			fmt.Printf("procstats proc.loadavg.15min %v %v\n", ts, m[0][3])
+			fmt.Printf("procstats proc.loadavg.runnable %v %v\n", ts, m[0][4])
+			fmt.Printf("procstats proc.loadavg.total_threads %v %v\n", ts, m[0][5])
 		}
 	}
 
