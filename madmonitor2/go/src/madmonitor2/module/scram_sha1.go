@@ -16,15 +16,15 @@
 package module
 
 import (
-	"math/rand"
-	"fmt"
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha1"
+	"encoding/base64"
+	"fmt"
+	"golang.org/x/crypto/pbkdf2"
+	"math/rand"
 	"regexp"
 	"strconv"
-	"encoding/base64"
-	"golang.org/x/crypto/pbkdf2"
-	"crypto/sha1"
-	"crypto/hmac"
 )
 
 const (
@@ -215,4 +215,3 @@ func isValidServer(cName string, cPass []byte, cNonce []byte, sNonce []byte, sSa
 	valid := bytes.Equal(attemptingServerSignature, serverSignature)
 	return valid
 }
-

@@ -21,7 +21,6 @@ import (
 	"madmonitor2/inc"
 )
 
-
 // syslog init
 func GetLogger() *log.Logger {
 	Log, err := syslog.NewLogger(syslog.LOG_DEBUG, log.Lmicroseconds)
@@ -33,7 +32,7 @@ func GetLogger() *log.Logger {
 
 // use syslog log item
 func Log(l *log.Logger, s string, debug_level_orig int, debug_level_input int) {
-	if (debug_level_orig<=debug_level_input) {
+	if debug_level_orig <= debug_level_input {
 		l.Print("[" + s + "][" + inc.LOG_SUFFIX + "." + inc.CLIENT_VERSION + "]")
 	}
 }

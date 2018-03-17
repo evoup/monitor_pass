@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os"
-	"madmonitor2/utils"
 	"bufio"
-	"regexp"
 	"fmt"
+	"madmonitor2/inc"
+	"madmonitor2/utils"
+	"os"
+	"regexp"
 	"strings"
 	"time"
-	"madmonitor2/inc"
 )
 
 var FIELDS = []string{"bytes", "packets", "errs", "dropped",

@@ -7,19 +7,20 @@ import (
 	"regexp"
 	//"fmt"
 	"fmt"
-	"os"
 	"io/ioutil"
+	"os"
 	//"strings"
-	"strings"
-	"madmonitor2/utils"
-	"time"
 	"bufio"
-	"strconv"
 	"madmonitor2/inc"
+	"madmonitor2/utils"
+	"strconv"
+	"strings"
+	"time"
 )
 
 var NUMADIR = "/sys/devices/system/node"
 var PROCSTATS_DEFAULT_COLLECTION_INTERVAL = 15
+
 type procstatsPlugin string
 
 func main() {

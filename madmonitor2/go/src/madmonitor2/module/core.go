@@ -16,24 +16,24 @@
 package module
 
 import (
-	"log"
-	"os"
-	"madmonitor2/utils"
-	"madmonitor2/inc"
-	"fmt"
-	"time"
-	"flag"
-	"madmonitor2/config"
-	"github.com/antonholmquist/jason"
-	"github.com/takama/daemon"
-	"os/signal"
-	"syscall"
-	"strconv"
-	"regexp"
-	"strings"
-	"net"
 	"bytes"
 	"encoding/base64"
+	"flag"
+	"fmt"
+	"github.com/antonholmquist/jason"
+	"github.com/takama/daemon"
+	"log"
+	"madmonitor2/config"
+	"madmonitor2/inc"
+	"madmonitor2/utils"
+	"net"
+	"os"
+	"os/signal"
+	"regexp"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
 )
 
 // start unix timestamp
@@ -188,16 +188,16 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	foundServer := false
 	for i := range sendHosts {
 		//c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
-		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i] + ":" + sendPort)
+		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i]+":"+sendPort)
 		conn, err := net.DialTCP("tcp", nil, addr)
 		///////// scram sha-1安全认证 ////////
-		clientFirstMsg,cNonce := scramSha1FirstMessage(cName)
+		clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
 		conn.Write([]byte(clientFirstMsg))
 		serverFirstMessageData := make([]byte, 1024)
 		conn.Read(serverFirstMessageData)
 		serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00") // removing NUL characters from bytes
 		fmt.Println(string(serverFirstMessageData))
-		finalMessage,salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
+		finalMessage, salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
 		conn.Write(finalMessage)
 		//conn.Write([]byte("test"))
 		serverFinalMessageData := make([]byte, 1024)
@@ -226,7 +226,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 			continue
 		}
 		if err != nil {
-			utils.Log(utils.GetLogger(), "core.Init][error:" + err.Error(), 1, *Debug_level)
+			utils.Log(utils.GetLogger(), "core.Init][error:"+err.Error(), 1, *Debug_level)
 		} else {
 			foundServer = true
 			go run_send(readChannel, conn)
@@ -237,7 +237,6 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
 		os.Exit(1)
 	}
-
 
 	go main_loop()
 
@@ -258,7 +257,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 func run_send(readChannel inc.ReaderChannel, conn *net.TCPConn) {
 	for {
 		select {
-		case msg := <- readChannel.Readerq:
+		case msg := <-readChannel.Readerq:
 			_, err := conn.Write([]byte(msg))
 			if err != nil {
 				fmt.Printf(err.Error())
@@ -308,17 +307,17 @@ func process_line(readChannel inc.ReaderChannel, line string) {
 		// 如果数据点是重复的，保存但不发送，保存之前的timestamp，当数据发生变化，
 		// 我们不发送最后一次进来的指标的值，而是第一次进来。如果达到了去重间隔，打印该数值。
 		dedupInteval := 300
-		if COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Value==value &&
-			timestamp - COLLECTORS[collectorName + ".so"].CollectorValues[metricName].Timestamp < dedupInteval {
+		if COLLECTORS[collectorName+".so"].CollectorValues[metricName].Value == value &&
+			timestamp-COLLECTORS[collectorName+".so"].CollectorValues[metricName].Timestamp < dedupInteval {
 			collectorValue := inc.CollectorValue{value, true, line, timestamp}
-			COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
+			COLLECTORS[collectorName+".so"].CollectorValues[metricName] = collectorValue
 			return
 		}
 		collectorValue := inc.CollectorValue{value, false, line, timestamp}
-		COLLECTORS[collectorName + ".so"].CollectorValues[metricName] = collectorValue
-		c := COLLECTORS[collectorName + ".so"] // 解决大坑map的index操作获得的变量无法取其指针
+		COLLECTORS[collectorName+".so"].CollectorValues[metricName] = collectorValue
+		c := COLLECTORS[collectorName+".so"] // 解决大坑map的index操作获得的变量无法取其指针
 		c.LinesSent += 1
-		COLLECTORS[collectorName + ".so"] = c
+		COLLECTORS[collectorName+".so"] = c
 		readChannel.Readerq <- line
 	}
 }

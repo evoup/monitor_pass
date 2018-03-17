@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/Centny/gosigar"
 	"fmt"
+	"github.com/Centny/gosigar"
 	"time"
-
 )
 
 func main() {

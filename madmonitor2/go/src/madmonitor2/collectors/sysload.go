@@ -18,14 +18,14 @@ package main
 import "fmt"
 
 import (
-	s "strings"
-	"strconv"
-	"madmonitor2/collectors/etc"
-	"os/exec"
 	"bufio"
-	"regexp"
-	"time"
+	"madmonitor2/collectors/etc"
 	"madmonitor2/inc"
+	"os/exec"
+	"regexp"
+	"strconv"
+	s "strings"
+	"time"
 )
 
 type sysloadPlugin string
@@ -46,7 +46,7 @@ func convert_to_bytes(str string) int {
 		fmt.Println(e)
 		fmt.Println(factors[e])
 		if s.HasSuffix(str, e) {
-			number := str[0:len(str)-1]
+			number := str[0 : len(str)-1]
 			i, err := strconv.Atoi(number)
 			if err == nil {
 				numberInt := i * factors[e]

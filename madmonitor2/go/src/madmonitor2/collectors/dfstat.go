@@ -16,14 +16,14 @@
 package main
 
 import (
-	"madmonitor2/inc"
-	"fmt"
-	"os"
-	"madmonitor2/utils"
-	"time"
 	"bufio"
+	"fmt"
+	"madmonitor2/inc"
+	"madmonitor2/utils"
+	"os"
 	"strings"
 	"syscall"
+	"time"
 )
 
 var FsTypeIgnore = map[string]bool{

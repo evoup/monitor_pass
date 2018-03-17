@@ -16,17 +16,17 @@
 package module
 
 import (
+	"io/ioutil"
+	"log"
 	"madmonitor2/inc"
 	"madmonitor2/utils"
-	"log"
 	"os"
-	"io/ioutil"
 	"path/filepath"
 	"time"
 
-	"strconv"
-	"plugin"
 	"fmt"
+	"plugin"
+	"strconv"
 	"strings"
 )
 
@@ -40,7 +40,7 @@ func Register_collector(name string, interval int, filename string, generation i
 	// initialize values map
 	values := make(map[string]inc.CollectorValue, 50000)
 	collector := inc.Collector{name, interval, filename, mtime, lastspawn,
-	0, 0, 0, true, generation, values, 0}
+		0, 0, 0, true, generation, values, 0}
 	COLLECTORS[name] = collector
 }
 
@@ -86,47 +86,47 @@ func spawn_children() {
 	// Iterates over our defined collectors and performs the logic to
 	// determine if we need to spawn, kill, or otherwise take some
 	// action on them.
-    for key_server, _ := range all_valid_collectors() {
+	for key_server, _ := range all_valid_collectors() {
 		now := int(time.Now().Unix())
-        col, ok := COLLECTORS[key_server]
-        if ok {
-            spawn_collector(col)
-        }
-        // I'm not very satisfied with this path.  It seems fragile and
-        // overly complex, maybe we should just reply on the asyncproc
-        // terminate method, but that would make the main tcollector
-        // block until it dies... :|
-        if col.NextKill > now {
-            continue
-        }
-        // FIXME >>>add kill collector method
-    }
+		col, ok := COLLECTORS[key_server]
+		if ok {
+			spawn_collector(col)
+		}
+		// I'm not very satisfied with this path.  It seems fragile and
+		// overly complex, maybe we should just reply on the asyncproc
+		// terminate method, but that would make the main tcollector
+		// block until it dies... :|
+		if col.NextKill > now {
+			continue
+		}
+		// FIXME >>>add kill collector method
+	}
 }
 
 // collectors that are not marked dead
 func all_valid_collectors() map[string]inc.Collector {
-    var valid_cols = map[string]inc.Collector{}
-    for key_col, value_col := range all_collectors() {
+	var valid_cols = map[string]inc.Collector{}
+	for key_col, value_col := range all_collectors() {
 		now := int(time.Now().Unix())
-        if !COLLECTORS[key_col].Dead || (now - COLLECTORS[key_col].LastSpawn > 3600) {
-            valid_cols[key_col] = value_col
-        }
-    }
-    return valid_cols
+		if !COLLECTORS[key_col].Dead || (now-COLLECTORS[key_col].LastSpawn > 3600) {
+			valid_cols[key_col] = value_col
+		}
+	}
+	return valid_cols
 }
 
 func all_collectors() map[string]inc.Collector {
 	// Generator to return all collectors.
-    return COLLECTORS
+	return COLLECTORS
 }
 
-func spawn_collector( collector inc.Collector) {
+func spawn_collector(collector inc.Collector) {
 	if collector.Dead == false {
 		return
 	}
 	// Takes a Collector object and creates a process for it.
 	HLog = utils.GetLogger()
-	utils.Log(HLog, "spawn_collector]["+collector.Name + "(interval:"+ strconv.Itoa(collector.Interval) + ") needs to be spawned", 1, 2)
+	utils.Log(HLog, "spawn_collector]["+collector.Name+"(interval:"+strconv.Itoa(collector.Interval)+") needs to be spawned", 1, 2)
 	///
 	mod := collector.Name
 	plug, err := plugin.Open("./plugin/" + mod)
@@ -134,8 +134,8 @@ func spawn_collector( collector inc.Collector) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	modNameArr := strings.Split(mod, ".") // sysload.so
-	modName := strings.Title(modNameArr[0]) // Sysload
+	modNameArr := strings.Split(mod, ".")            // sysload.so
+	modName := strings.Title(modNameArr[0])          // Sysload
 	symCollector, err := plug.Lookup(modName + "So") // SysloadSo is plugin exported name
 	if err != nil {
 		fmt.Println(err)
@@ -159,7 +159,7 @@ func spawn_collector( collector inc.Collector) {
 	// killed by check_children() the first time check_children is called.
 	collector.LastDataPoint = collector.LastSpawn
 	collector.Dead = false
-	utils.Log(HLog, "spawn_collector]["+collector.Name + " spawned", 1, 2)
+	utils.Log(HLog, "spawn_collector]["+collector.Name+" spawned", 1, 2)
 	COLLECTORS[collector.Name] = collector
 }
 

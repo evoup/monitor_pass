@@ -16,49 +16,49 @@
 package inc
 
 import (
-    "log"
-    "sync"
-    "github.com/antonholmquist/jason"
+	"github.com/antonholmquist/jason"
+	"log"
+	"sync"
 )
 
 const (
-    LOG_SUFFIX       = "madmonitor2"
-    CLIENT_VERSION   = "2.0.0.1"
-    PROC_ROOT        = "/services/monitor2_deal"
-    CONF_FILE        = "madmonitor2.ini"
-    CONF_SUBPATH     = "conf/"
-    WORK_SUBPATH     = "work/"
-    PROC_LIFE        = "3600"
-    SLEEP            = "10"
-    SEND_PORT        = "8090"
-    SEND_HOSTS       = "172.18.0.1,172.18.9.3"
-    SERVICE_NAME     = "madmonitor2"
-    SERVICE_DESC     = "monitor client by madhouse"
-    EVICTINTERVAL  = "6000"
-    DEDUPINTERVAL  = "300"
-    MAX_SENDQ_SIZE = 10000
-    MAX_READQ_SIZE = 100000
-    MAX_MSGQ_SIZE  = 100000
+	LOG_SUFFIX     = "madmonitor2"
+	CLIENT_VERSION = "2.0.0.1"
+	PROC_ROOT      = "/services/monitor2_deal"
+	CONF_FILE      = "madmonitor2.ini"
+	CONF_SUBPATH   = "conf/"
+	WORK_SUBPATH   = "work/"
+	PROC_LIFE      = "3600"
+	SLEEP          = "10"
+	SEND_PORT      = "8090"
+	SEND_HOSTS     = "172.18.0.1,172.18.9.3"
+	SERVICE_NAME   = "madmonitor2"
+	SERVICE_DESC   = "monitor client by madhouse"
+	EVICTINTERVAL  = "6000"
+	DEDUPINTERVAL  = "300"
+	MAX_SENDQ_SIZE = 10000
+	MAX_READQ_SIZE = 100000
+	MAX_MSGQ_SIZE  = 100000
 )
 
 type DefaultConf struct {
-    ServerName string
-    ProcLife   string
-    Sleep      string
-    SendPort   string
-    SendHosts  string
-    EvictInterval string
-    DedupInterval string
+	ServerName    string
+	ProcLife      string
+	Sleep         string
+	SendPort      string
+	SendHosts     string
+	EvictInterval string
+	DedupInterval string
 }
 
 type Conf DefaultConf
 
 // 存放每个metric+tag对应的信息
 type CollectorValue struct {
-    Value string
-    Tf bool
-    Line string
-    Timestamp int
+	Value     string
+	Tf        bool
+	Line      string
+	Timestamp int
 }
 
 //func (v *CollectorValue) SetValue(value string) {
@@ -79,18 +79,18 @@ type CollectorValue struct {
 
 // 收集器类，负责管理进程和从进程中获取数据
 type Collector struct {
-    Name            string
-    Interval        int
-    Filename        string
-    Mtime           int
-    LastSpawn       int
-    LastDataPoint   int
-    NextKill        int
-    KillState       int
-    Dead            bool
-    Generation      int
-    CollectorValues map[string]CollectorValue
-    LinesSent       int
+	Name            string
+	Interval        int
+	Filename        string
+	Mtime           int
+	LastSpawn       int
+	LastDataPoint   int
+	NextKill        int
+	KillState       int
+	Dead            bool
+	Generation      int
+	CollectorValues map[string]CollectorValue
+	LinesSent       int
 }
 
 var COLLECTORS = map[string]Collector{}
@@ -100,9 +100,8 @@ var VALID_COLLECTORS = map[string]int{}
 
 var HLog *log.Logger
 
-
 type ICollector interface {
-    Collect()
+	Collect()
 }
 
 var Wg sync.WaitGroup
@@ -113,48 +112,47 @@ var ReaderQueue = make(chan string, MAX_READQ_SIZE)
 var SenderQueue = make(chan string, MAX_SENDQ_SIZE)
 
 type ReaderChannel struct {
-    Readerq        chan string
-    LinesCollected int
-    LinesDropped   int
-    EvictInterval  int
-    DedupInterval  int
+	Readerq        chan string
+	LinesCollected int
+	LinesDropped   int
+	EvictInterval  int
+	DedupInterval  int
 }
 
 func (c *ReaderChannel) SetLinesCollected(i int) {
-    c.LinesCollected = i
+	c.LinesCollected = i
 }
 
 func (c *ReaderChannel) GetLinesCollected() int {
-    return c.LinesCollected
+	return c.LinesCollected
 }
 
 func (c *ReaderChannel) SetLinesDropped(i int) {
-    c.LinesDropped = i
+	c.LinesDropped = i
 }
 
 func (c *ReaderChannel) GetLinesDropped() int {
-    return c.LinesDropped
+	return c.LinesDropped
 }
 
 func (c *ReaderChannel) SetEvictInterval(i int) {
-    c.EvictInterval = i
+	c.EvictInterval = i
 }
 
 func (c *ReaderChannel) GetEvictInterval() int {
-    return c.EvictInterval
+	return c.EvictInterval
 }
 
 func (c *ReaderChannel) SetDedupInterval(i int) {
-    c.DedupInterval = i
+	c.DedupInterval = i
 }
 
 func (c *ReaderChannel) GetDedupInterval() int {
-    return c.DedupInterval
+	return c.DedupInterval
 }
 
 func (c *ReaderChannel) AddLinesCollected() {
-    c.LinesCollected += 1
+	c.LinesCollected += 1
 }
 
 var ConfObject = &jason.Object{}
-

@@ -16,13 +16,11 @@
 package main
 
 import (
-	"madmonitor2/module"
 	"madmonitor2/inc"
+	"madmonitor2/module"
 )
 
-
 var GENERATION = inc.GERERATION
-
 
 func main() {
 	// Set up channel on which to send signal notifications.
@@ -30,4 +28,3 @@ func main() {
 	// if we're not ready to receive when the signal is sent.
 	module.Init()
 }
-

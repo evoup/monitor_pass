@@ -15,17 +15,15 @@
 package module
 
 import (
-	"time"
 	"net"
 	"net/textproto"
+	"time"
 )
 
-
-
 type ServerConn struct {
-	conn          *textproto.Conn
-	host          string
-	timeout       time.Duration
+	conn    *textproto.Conn
+	host    string
+	timeout time.Duration
 }
 
 func DialTimeout(addr string, timeout time.Duration) (*ServerConn, error) {
@@ -41,9 +39,9 @@ func DialTimeout(addr string, timeout time.Duration) (*ServerConn, error) {
 	conn := textproto.NewConn(tconn)
 
 	c := &ServerConn{
-		conn:     conn,
-		host:     remoteAddr.IP.String(),
-		timeout:  timeout,
+		conn:    conn,
+		host:    remoteAddr.IP.String(),
+		timeout: timeout,
 	}
 
 	return c, nil
