@@ -190,6 +190,15 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		//c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
 		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i]+":"+sendPort)
 		conn, err := net.DialTCP("tcp", nil, addr)
+		if err != nil {
+			fmt.Println(err.Error())
+			if i == len(sendHosts)-1 {
+				fmt.Println("no collector server found! good bye.")
+				os.Exit(0)
+			}
+			fmt.Println("switch to another collector server")
+			continue
+		}
 		///////// scram sha-1安全认证 ////////
 		clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
 		conn.Write([]byte(clientFirstMsg))
