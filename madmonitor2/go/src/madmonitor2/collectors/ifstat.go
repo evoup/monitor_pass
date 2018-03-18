@@ -15,11 +15,22 @@ var FIELDS = []string{"bytes", "packets", "errs", "dropped",
 	"fifo.errs", "frame.errs", "compressed", "multicast",
 	"bytes", "packets", "errs", "dropped",
 	"fifo.errs", "collisions", "carrier.errs", "compressed"}
-
+type ifstatPlugin string
 var IFSTAT_DEFAULT_COLLECTION_INTERVAL = 15
 
 func main() {
 	ifstat()
+}
+
+func (p ifstatPlugin) Collect() {
+	defer inc.Wg.Done()
+	select {
+	case _ = <-inc.Shutdown:
+		//We're done!
+		return
+	default:
+		ifstat()
+	}
 }
 
 func ifstat() {
@@ -68,3 +79,5 @@ func direction(i int) string {
 	}
 
 }
+
+var IfstatSo ifstatPlugin

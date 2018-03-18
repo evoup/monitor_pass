@@ -21,7 +21,6 @@ import (
 	"madmonitor2/inc"
 	"madmonitor2/utils"
 	"os"
-	"path/filepath"
 	"time"
 
 	"fmt"
@@ -45,11 +44,12 @@ func Register_collector(name string, interval int, filename string, generation i
 }
 
 func populate_collectors() {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		utils.Log(HLog, "populate_collectors][err:"+err.Error(), 1, 2)
-	}
-	dirname := dir + "/plugin/"
+	//dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	//if err != nil {
+	//	utils.Log(HLog, "populate_collectors][err:"+err.Error(), 1, 2)
+	//}
+	//dirname := dir + "/plugin/"
+	dirname := "/usr/local/lib/madmonitor2/"
 	files, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		log.Fatal(err)
@@ -129,7 +129,8 @@ func spawn_collector(collector inc.Collector) {
 	utils.Log(HLog, "spawn_collector]["+collector.Name+"(interval:"+strconv.Itoa(collector.Interval)+") needs to be spawned", 1, 2)
 	///
 	mod := collector.Name
-	plug, err := plugin.Open("./plugin/" + mod)
+	//plug, err := plugin.Open("./plugin/" + mod)
+	plug, err := plugin.Open("/usr/local/lib/madmonitor2/" + mod)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
