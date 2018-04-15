@@ -558,8 +558,9 @@ function openMdb($host, $port, $sendtimeout, $recvtimeout) {
         $GLOBALS['mdb_client'] = new HbaseClient($protocol);
         $GLOBALS['mdb_transport']->open();
     } catch (Exception $e) {
-        SaveSysLog("[$module_name][open mdb error,check mdb server addr and whether mdb table integrity!]",2);
-        doExit("open mdb");
+        //SaveSysLog("[$module_name][open mdb error,check mdb server addr and whether mdb table integrity!]",2);
+        print_r($e);
+        exit(0);
     }
 }
 
