@@ -6,6 +6,91 @@
 <link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
 <link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
 
+
+
+  <!-- template
+    ================================================== -->
+    <script id="t_0" type="text/html">
+    <!--<label for="host">主机名</label>-->
+    <!--<input class="input text" type="text" id="host" name="host" value="" size="50" maxlength="64" style="width: 312px;" autofocus="autofocus">-->
+    <div id="set_form">
+    	
+				<form class="form-horizontal" id="form" onsubmit="return false;">
+					 <fieldset>
+					 	<legend>监控向导</legend>
+						<p class="help-block" style="padding:5px 0;">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 主机名： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required] text-input" name="host_name" value="">
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 监控客户端： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="client_interface" value="">
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> SNMP： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="one_default_gp_down" value="">
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> JMX： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="one_cust_gp_down" value="">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 对应的数据收集器： </label>
+                            <div class="controls">
+                                <select name="current_engine">
+					 						              <option value="192.168.2.211:8009" selected="">192.168.2.211:8009</option>
+					 			                </select>
+							               <p class="help-block">数据收集器可存在多个,但一个客户端或SNMP服务器或JMX服务器只对应一个数据收集器</p>
+                            </div>
+                        </div>
+						
+
+                     <div class="control-group">
+                         <label class="control-label" for="recover_notifiction">模板：</label>
+                         <div class="controls">
+                         </div>
+					          </div>
+
+                     <div class="control-group">
+                         <label class="control-label" for="recover_notifiction">是否监控：</label>
+                         <div class="controls">
+                             <label class="checkbox inline">
+                                 <input type="checkbox" name="recover_notifiction" false="">&nbsp;
+                             </label>
+														 <p class="help-block">如果不监控将不触发事件、图表、告警和其他操作</p>
+                         </div>
+					          </div>
+						
+					 </fieldset>
+					 
+                <div class="form-actions">
+                    <button class="btn btn-info" name="submit">
+                        	保存 
+                    </button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn" name="reset">
+                        	重置 
+                    </button>					
+					<input type="reset" style="display:none;">
+                </div>			
+			</form>
+			
+    </div>
+    </script>
+
  <!-- template
     ================================================== -->
     <script id="t_a" type="text/html">
@@ -54,9 +139,11 @@
 		
     <div id="mainbody" name="monitorWizard">
         <header class="page-header">
-            <h3>监控向导  &gt;&gt; 第一步 </h3>
-            <p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p>
-        </header>
+            <!--<h3>监控向导  &gt;&gt; 第一步 </h3>-->
+            <!--<h3>监控向导  &gt;&gt;  </h3>-->
+            <!--[><p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p><]-->
+            <!--<p class="help-block">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
+        <!--</header>-->
 		
 		<div id="monitor_option"></div>
     </div>
@@ -81,28 +168,30 @@ $(function(){
 	var cls = urlParams('cls') || '';
 	
 	
+  //init
+  $('#monitor_option').html(template('t_0', null))
 	
 	//init
-	$('#monitor_option').html(template('t_a',{map : smartMad.monitorOptionMap}))
-	.delegate('button[name="next"]','click',function(){
-		var val = $('input[name="monitorOption"]:checked').val();
-		if(val){
-			location.href = 'monitorWizardStep2.html?cls=' + val + '&version=' + version;
-		}else{
-			alert('请选择一个监控项!');
-		}
-	})
-	.find('input[name="monitorOption"]').change(function(){
-		if($(this).attr('checked')){
-			$('input[name="monitorOption"]').not(this).attr('checked',false);
-			$('#monitor_option button[name="next"]').fadeOut();
-			$(this).parent().parent().find('button').fadeIn();
-		}else{
-			$(this).parent().parent().find('button').fadeOut();
-		}
-	});
+	<!--$('#monitor_option').html(template('t_a',{map : smartMad.monitorOptionMap}))-->
+	<!--.delegate('button[name="next"]','click',function(){-->
+		<!--var val = $('input[name="monitorOption"]:checked').val();-->
+		<!--if(val){-->
+			<!--location.href = 'monitorWizardStep2.html?cls=' + val + '&version=' + version;-->
+		<!--}else{-->
+			<!--alert('请选择一个监控项!');-->
+		<!--}-->
+	<!--})-->
+	<!--.find('input[name="monitorOption"]').change(function(){-->
+		<!--if($(this).attr('checked')){-->
+			<!--$('input[name="monitorOption"]').not(this).attr('checked',false);-->
+			<!--$('#monitor_option button[name="next"]').fadeOut();-->
+			<!--$(this).parent().parent().find('button').fadeIn();-->
+		<!--}else{-->
+			<!--$(this).parent().parent().find('button').fadeOut();-->
+		<!--}-->
+	<!--});-->
 	
-	cls && $('input[value="' + cls + '"]').click();
+	<!--cls && $('input[value="' + cls + '"]').click();-->
 	
 
 });
