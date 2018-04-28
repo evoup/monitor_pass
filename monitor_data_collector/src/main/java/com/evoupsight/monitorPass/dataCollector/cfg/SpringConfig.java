@@ -2,6 +2,8 @@ package com.evoupsight.monitorPass.dataCollector.cfg;
 
 
 
+import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
+import com.evoupsight.kafkaclient.producer.KafkaProducer;
 import com.evoupsight.monitorPass.dataCollector.handlers.StringProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -60,6 +62,15 @@ public class SpringConfig {
 	
 	@Value("${log4j.configuration}")
 	private String log4jConfiguration;
+
+	@Value("${kafka.brokers}")
+	String brokers;
+
+//	@Value("${kafka.topic}")
+//	String topic;
+
+	@Value("${kafka.groupId}")
+	String groupId;
 
 	@Autowired
 	@Qualifier("springProtocolInitializer")
@@ -123,5 +134,15 @@ public class SpringConfig {
 	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
-	
+
+	@Bean
+	public KafkaConsumer InitKafkaConsumer() {
+		return new KafkaConsumer(brokers, groupId);
+	}
+
+	@Bean
+	public KafkaProducer InitKafkaProducer() {
+		return new KafkaProducer(brokers, 5, null);
+	}
+
 }

@@ -15,6 +15,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,8 @@ import java.util.regex.Pattern;
 @Sharable
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerHandler.class);
+    @Autowired
+    KafkaProducer producer;
     @Value("${kafka.brokers}")
     String brokers;
     @Value("${kafka.topic}")
@@ -120,7 +123,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             // 正式开始发送
             LOG.debug("got a message here");
             //ctx.channel().writeAndFlush(msg);
-            KafkaProducer producer = new KafkaProducer(brokers, 5, null);
+            //KafkaProducer producer = new KafkaProducer(brokers, 5, null);
             if (producer.start(new KafkaCallback() {
                 @Override
                 public void onCompletion(KafkaMessage message, Exception e) {
