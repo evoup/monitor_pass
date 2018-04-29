@@ -123,6 +123,9 @@ func sysload() {
 			if fields[0] == "CPU" || match || match1 && ((collect_every_cpu && match2) || (!collect_every_cpu && match3)) {
 				// Process the line here.
 				cpuid := s.Replace(fields[1], ":", "", -1)
+				if cpuid == "CPU" { // fix bug for linux version
+					continue
+				}
 				cpuuser := fields[2]
 				cpunice := fields[3]
 				cpusystem := fields[4]
