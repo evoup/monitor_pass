@@ -66,8 +66,8 @@ func ifstat() {
 			//# want to avoid bond interfaces, because interface
 			//# stats are still kept on the child interfaces when
 			//# you bond.  By skipping bond we avoid double counting.
-			time.Sleep(time.Second * time.Duration(collectionInterval))
 		}
+		time.Sleep(time.Second * time.Duration(collectionInterval))
 	}
 }
 
