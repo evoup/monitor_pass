@@ -13,6 +13,9 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +135,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
             })) {
-                producer.sendMessage(topic, msg.toString().getBytes());
+                String msgstr = msg.toString();
+                if (StringUtils.isNoneEmpty(msgstr)) {
+                    String[] m = msgstr.split("\n");
+                    if (ArrayUtils.isNotEmpty(m)) {
+                        for (String s : m) {
+                            if (StringUtils.isNoneEmpty(s)) {
+                                s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString();
+                                producer.sendMessage(topic, s.getBytes());
+                            }
+                        }
+                    }
+                }
             }
             return;
         }
