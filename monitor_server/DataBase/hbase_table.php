@@ -14,10 +14,10 @@
   +----------------------------------------------------------------------+
  */
 define(__THRIFT_ROOT,'../GPL/thrift');
-define(__MDB_HOST,'datanode2');
-define(__MDB_PORT,'9090');
-define(__MDB_SENDTIMEOUT, '10000');  //10 seconds
-define(__MDB_RECVTIMEOUT, '10000');  //10 seconds
+define(__MDB_HOST,'192.168.2.197');
+define(__MDB_PORT,'32799');
+define(__MDB_SENDTIMEOUT, '20000');  //10 seconds
+define(__MDB_RECVTIMEOUT, '20000');  //10 seconds
 define(__TABLE1_NAME,     'monitor_servername'); //被监控服务器名表
 define(__TABLE2_NAME,     'monitor_server'); //服务器信息表
 define(__TABLE3_NAME,     'monitor_user'); //用户表
@@ -27,6 +27,7 @@ define(__TABLE6_NAME,     'monitor_server_history'); //服务器历史信息表
 define(__TABLE7_NAME,     'monitor_engine'); //服务端状态配置表
 define(__TABLE8_NAME,     'monitor_testspeed'); //统计测速表
 define(__TABLE9_NAME,     'monitor_testspeed_history'); //统计测速表
+define(__TABLE10_NAME,    'monitor_interface'); //接口表
 
 
 chdir(dirname(__FILE__));
@@ -46,7 +47,8 @@ $all_create_tables = array(
     __TABLE6_NAME,
     __TABLE7_NAME,
     __TABLE8_NAME,
-    __TABLE9_NAME
+    __TABLE9_NAME,
+    __TABLE10_NAME
 );
 /*{{{ 删除表
  */
@@ -180,6 +182,12 @@ $table_arr = array(
             'table_name'         => __TABLE9_NAME
         )
     ),
+    array( //表10的family 
+        array(
+            'column_family_name' => "info:", //存接口的ip或主机名和端口，支持agent、snmp和jmx
+            'table_name'         => __TABLE10_NAME
+        )
+    )
 );
 foreach ($table_arr as $table) {
     foreach ($table as $column_fm) {
@@ -477,6 +485,33 @@ $mutations = array(
     new Mutation( array(
         'column' => "groupid:monitoradmin",
         'value'  => "member"
+    ))
+);
+try { //thrift出错直接抛出异常需要捕获 
+    $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+    $ret = true;
+}
+catch (Exception $e) { //抛出异常返回false 
+    echo $e;
+    $ret = false;
+}
+/* }}} */
+/* {{{ 接口表默认有服务器这台的采用客户端接口的数据
+ */
+$table = __TABLE10_NAME;
+$rowkey = "monitorserver";
+$mutations = array(
+    new Mutation( array(
+        'column' => 'info:ip',
+        'value'  => '127.0.0.1'
+    )),
+    new Mutation( array(
+        'column' => 'info:port',
+        'value'  => '15667'
+    )),
+    new Mutation( array(
+        'column' => 'info:type',
+        'value'  => '1'
     ))
 );
 try { //thrift出错直接抛出异常需要捕获 
