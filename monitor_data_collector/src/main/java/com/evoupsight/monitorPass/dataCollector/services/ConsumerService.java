@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.opentsdb.client.ExpectResponse;
 import org.opentsdb.client.HttpClient;
 import org.opentsdb.client.HttpClientImpl;
-import org.opentsdb.client.builder.Metric;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.Response;
 import org.slf4j.Logger;
@@ -16,11 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.sound.midi.Track;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -32,6 +28,8 @@ public class ConsumerService {
     String topic;
     @Value("${kafka.groupId}")
     String groupId;
+    @Value("${opentsdb.serverurl}")
+    String opentsdbServerUrl;
     @Autowired
     KafkaConsumer consumer;
 
@@ -46,7 +44,6 @@ public class ConsumerService {
         consumer.start(topic, new KafkaCallback() {
             @Override
             public boolean onFetch(String topic, int partition, long offset, byte[] message) {
-                System.out.println("in consume2");
                 try {
                     String msg = new String(message);
                     System.out.println(String.format("%s-%d-%d-%s", topic, partition, offset, msg));
@@ -58,7 +55,7 @@ public class ConsumerService {
             }
 
             private void myProcessMsgBag(String m) throws IOException {
-                HttpClient client = new HttpClientImpl("http://localhost:14242");
+                HttpClient client = new HttpClientImpl(opentsdbServerUrl);
                 MetricBuilder builder = MetricBuilder.getInstance();
                 // put proc.loadavg.1m 1524995898 1.13 host=evoup-Inspiron-3443
                 // put metric value tagkey=tagvalue
