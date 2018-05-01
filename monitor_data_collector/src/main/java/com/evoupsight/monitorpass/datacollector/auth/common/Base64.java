@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.auth.common;
+package com.evoupsight.monitorpass.datacollector.auth.common;
 
 
 /**

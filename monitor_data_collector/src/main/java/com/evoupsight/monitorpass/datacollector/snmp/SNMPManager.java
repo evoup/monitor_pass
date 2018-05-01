@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.snmp;
+package com.evoupsight.monitorpass.datacollector.snmp;
 
 
 import org.snmp4j.*;

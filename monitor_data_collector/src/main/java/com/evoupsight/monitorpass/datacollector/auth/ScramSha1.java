@@ -1,8 +1,8 @@
-package com.evoupsight.monitorPass.dataCollector.auth;
+package com.evoupsight.monitorpass.datacollector.auth;
 
-import com.evoupsight.monitorPass.dataCollector.auth.common.Base64;
-import com.evoupsight.monitorPass.dataCollector.auth.common.ScramUtils;
-import com.evoupsight.monitorPass.dataCollector.auth.exception.InvalidProtocolException;
+import com.evoupsight.monitorpass.datacollector.auth.common.Base64;
+import com.evoupsight.monitorpass.datacollector.auth.common.ScramUtils;
+import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolException;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -79,10 +79,10 @@ public class ScramSha1 {
             throw new InvalidProtocolException();
         }
         String clientFinalMessageWithoutProof = m.group(1);
-        String NonceFromClient = m.group(3);
+        String nonceFromClient = m.group(3);
         String proof = m.group(4);
 
-        if (!mNonce.equals(NonceFromClient)) {
+        if (!mNonce.equals(nonceFromClient)) {
             throw new InvalidProtocolException();
         }
         int iter = Integer.parseInt(iterations);

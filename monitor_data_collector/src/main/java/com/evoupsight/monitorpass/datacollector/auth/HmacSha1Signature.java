@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.auth;
+package com.evoupsight.monitorpass.datacollector.auth;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

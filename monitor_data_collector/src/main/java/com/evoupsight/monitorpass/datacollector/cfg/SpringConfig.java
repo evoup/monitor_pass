@@ -1,10 +1,10 @@
-package com.evoupsight.monitorPass.dataCollector.cfg;
+package com.evoupsight.monitorpass.datacollector.cfg;
 
 
 
 import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
 import com.evoupsight.kafkaclient.producer.KafkaProducer;
-import com.evoupsight.monitorPass.dataCollector.handlers.StringProtocolInitalizer;
+import com.evoupsight.monitorpass.datacollector.handlers.StringProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -136,12 +136,12 @@ public class SpringConfig {
 	}
 
 	@Bean
-	public KafkaConsumer InitKafkaConsumer() {
+	public KafkaConsumer initKafkaConsumer() {
 		return new KafkaConsumer(brokers, groupId);
 	}
 
 	@Bean
-	public KafkaProducer InitKafkaProducer() {
+	public KafkaProducer initKafkaProducer() {
 		return new KafkaProducer(brokers, 5, null);
 	}
 

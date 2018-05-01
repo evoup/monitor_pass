@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.server;
+package com.evoupsight.monitorpass.datacollector.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

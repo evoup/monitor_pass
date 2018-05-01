@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.auth;
+package com.evoupsight.monitorpass.datacollector.auth;
 
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;

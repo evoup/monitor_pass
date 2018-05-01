@@ -1,7 +1,7 @@
-package com.evoupsight.monitorPass.dataCollector.server;
+package com.evoupsight.monitorpass.datacollector.server;
 
 
-import com.evoupsight.monitorPass.dataCollector.cfg.SpringConfig;
+import com.evoupsight.monitorpass.datacollector.cfg.SpringConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.server;
+package com.evoupsight.monitorpass.datacollector.server;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.handlers;
+package com.evoupsight.monitorpass.datacollector.handlers;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.server;
+package com.evoupsight.monitorpass.datacollector.server;
 
 public enum ServerState {
     INITIAL,

@@ -1,4 +1,4 @@
-package com.evoupsight.monitorPass.dataCollector.services;
+package com.evoupsight.monitorpass.datacollector.services;
 
 import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
 import com.evoupsight.kafkaclient.util.KafkaCallback;

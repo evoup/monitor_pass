@@ -1,11 +1,11 @@
-package com.evoupsight.monitorPass.dataCollector.handlers;
+package com.evoupsight.monitorpass.datacollector.handlers;
 
 import com.evoupsight.kafkaclient.producer.KafkaProducer;
 import com.evoupsight.kafkaclient.util.KafkaCallback;
 import com.evoupsight.kafkaclient.util.KafkaMessage;
-import com.evoupsight.monitorPass.dataCollector.auth.ScramSha1;
-import com.evoupsight.monitorPass.dataCollector.auth.exception.InvalidProtocolException;
-import com.evoupsight.monitorPass.dataCollector.server.ServerState;
+import com.evoupsight.monitorpass.datacollector.auth.ScramSha1;
+import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolException;
+import com.evoupsight.monitorpass.datacollector.server.ServerState;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -13,7 +13,6 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
