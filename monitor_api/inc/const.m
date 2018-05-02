@@ -66,6 +66,7 @@ define('__SERVICE_TIME',              'time');
 define('__SERVICE_DOCS',              'docs');
 define('__SERVICE_DOWNLOADS',         'downloads');
 define('__SERVICE_GET_DOWNLOAD_FILE', 'get_download_file');
+define('__SERVICE_HOST', 'host');
 /* }}} */
 
 /* {{{ services
@@ -105,6 +106,7 @@ define('__PREFIX_TIME',              'time');
 define('__PREFIX_DOCS',              'docs');
 define('__PREFIX_DOWNLOADS',         'downloads');
 define('__PREFIX_GET_DOWNLOAD_FILE', 'get_download_file');
+define('__PREFIX_HOST',              'host');
 /* }}} */
 
 /* {{{ operations
@@ -201,6 +203,7 @@ if (!$conf['debug']) {
     define('__MDB_TAB_SERVERNAME', 'monitor_servername'); //MDB的servername表 
     define('__MDB_TAB_USER', 'monitor_user'); //MDB的user表 
     define('__MDB_TAB_USERGROUP', 'monitor_usergroup'); //MDB的usergroup表 
+    define('__MDB_TAB_HOSTS', 'monitor_hosts'); //新hosts表 
     define('__MDB_TAB_HOST', 'monitor_host'); //MDB的host表 
     define('__MDB_TAB_ENGINE', 'monitor_engine'); //MDB的engine表 
 } else {

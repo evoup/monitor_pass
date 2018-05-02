@@ -27,7 +27,7 @@ define(__TABLE6_NAME,     'monitor_server_history'); //服务器历史信息表
 define(__TABLE7_NAME,     'monitor_engine'); //服务端状态配置表
 define(__TABLE8_NAME,     'monitor_testspeed'); //统计测速表
 define(__TABLE9_NAME,     'monitor_testspeed_history'); //统计测速表
-define(__TABLE10_NAME,    'monitor_interface'); //接口表
+define(__TABLE10_NAME,    'monitor_hosts'); //新主机表
 
 
 chdir(dirname(__FILE__));
@@ -502,16 +502,28 @@ $table = __TABLE10_NAME;
 $rowkey = "monitorserver";
 $mutations = array(
     new Mutation( array(
-        'column' => 'info:ip',
-        'value'  => '127.0.0.1'
+        'column' => 'info:agent_interface',
+        'value'  => '127.0.0.1:15667'
     )),
     new Mutation( array(
-        'column' => 'info:port',
-        'value'  => '15667'
+        'column' => 'info:snmp_interface',
+        'value'  => ''
     )),
     new Mutation( array(
-        'column' => 'info:type',
-        'value'  => '1'
+        'column' => 'info:jmx_interface',
+        'value'  => ''
+    )),
+    new Mutation( array(
+        'column' => 'info:data_collector',
+        'value'  => ''
+    )),
+    new Mutation( array(
+        'column' => 'info:template',
+        'value'  => ''
+    )),
+    new Mutation( array(
+        'column' => 'info:monitored',
+        'value'  => '0'
     ))
 );
 try { //thrift出错直接抛出异常需要捕获 

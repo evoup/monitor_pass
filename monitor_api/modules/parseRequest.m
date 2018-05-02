@@ -165,6 +165,9 @@ if (!empty($GLOBALS['serviceName'])) {
     case __SERVICE_GET_DOWNLOAD_FILE:
         $GLOBALS['prefix']=__PREFIX_GET_DOWNLOAD_FILE;
         break;
+    case __SERVICE_HOST:
+        $GLOBALS['prefix']=__PREFIX_HOST;
+        break;
     default:
         break;
     }
