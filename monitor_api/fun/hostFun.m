@@ -77,6 +77,41 @@ case(__OPERATION_CREATE):
         }
     }
     break;
+    case(__OPERATION_READ): //查询操作 
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
+        if (!canAccess('read_usergroupList')) {
+            $GLOBALS['httpStatus'] = __HTTPSTATUS_FORBIDDEN;
+            return;
+        }
+        switch ($GLOBALS['selector']) {
+        case(__SELECTOR_SINGLE):
+            $GLOBALS['rowKey'] = urldecode($GLOBALS['rowKey']); 
+                list($table_name,$row_key) = array(__MDB_TAB_HOSTS, $GLOBALS['rowKey']); //以用户组名为rowkey 
+                try {
+                    $res = $GLOBALS['mdb_client']->getRow($table_name, $row_key);
+                } catch (Exception $e) {
+                    $err = true;
+                }
+                $res = (array)$res[0]; //得到二维数组下标为row和columns 
+                if (empty($res)) {
+                    $err = true;
+                } else {
+                    $str = array( //组织用户组信息数据 
+                        "hostname" => $GLOBALS['rowKey'],
+                        "agent_interface"      => $res['columns']['info:agent_interface']->value,
+                        "snmp_interface" => $res['columns']['info:snmp_interface']->value,
+                        "jmx_interface" => $res['columns']['info:jmx_interface']->value,
+                        "data_collector" => $res['columns']['info:data_collector']->value,
+                        "template" => $res['columns']['info:template']->value,
+                        "monitored" => $res['columns']['info:monitored']->value
+                    );
+                    echo json_encode($str);
+                }
+                $GLOBALS['httpStatus'] = __HTTPSTATUS_OK; //查询成功返回200 
+                break;
+        }
+    }
+    break;
 }
 
 ?>
