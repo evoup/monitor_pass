@@ -29,17 +29,18 @@ case(__OPERATION_CREATE):
             if (!in_array($host_key, array_keys($_POST))) { //检查参数是否传满，对少传判断为非法 
                 $err = true;
             } else {
-                $hosts[$host_key] = $_POST[$host_key];
+                $host_setting[$host_key] = $_POST[$host_key];
             }
         }
-        if (empty($hosts['hostname'])) {
+
+        if (empty($host_setting['hostname'])) {
             $err = true;
         }
         if ($err) {
             return;
         }
         $table_name = __MDB_TAB_HOSTS;
-        $row_key = $hosts['hostname'];
+        $row_key = $host_setting['hostname'];
         $mutations = array(
             new Mutation( array(
                 'column' => "info:agent_interface", 
