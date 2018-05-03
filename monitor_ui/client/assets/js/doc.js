@@ -72,6 +72,13 @@ smartMad.api = {
 	getScanSet:'/get/scan_setting/@self',
 	updateScanSet:'/update/scan_setting/@self',			
 
+  // Hosts
+  createHost: '/create/host/@self',
+  getHost: '/get/host/@self/',
+  updateHost: '/update/host/@self/',
+  deleteHost: '/delete/host/@self/',
+
+
 	getEventKeepaliveSet:'/get/event_setting/@keepalive',
 		
 	//engine

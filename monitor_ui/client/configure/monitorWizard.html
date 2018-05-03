@@ -14,80 +14,81 @@
     <!--<label for="host">主机名</label>-->
     <!--<input class="input text" type="text" id="host" name="host" value="" size="50" maxlength="64" style="width: 312px;" autofocus="autofocus">-->
     <div id="set_form">
-    	
-				<form class="form-horizontal" id="form" onsubmit="return false;">
-					 <fieldset>
-					 	<legend>监控向导</legend>
-						<p class="help-block" style="padding:5px 0;">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
+
+        <form class="form-horizontal" id="form" onsubmit="return false;">
+           <fieldset>
+            <legend>监控向导</legend>
+            <p class="help-block" style="padding:5px 0;">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 主机名： </label>
                             <div class="controls">
-                                <input type="text" class="validate[required] text-input" name="host_name" value="">
+                                <input type="text" class="validate[required] text-input" name="hostname" value="">
                             </div>
                         </div>
-						
+
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 监控客户端： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="client_interface" value="">
+                                <input type="text" class="text-input" name="agent_interface" value="">
                             </div>
                         </div>
-						
+
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> SNMP： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="one_default_gp_down" value="">
+                                <input type="text" class="text-input" name="snmp_interface" value="">
                             </div>
                         </div>
-						
+
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> JMX： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="one_cust_gp_down" value="">
+                                <input type="text" class="text-input" name="jmx_interface" value="">
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 对应的数据收集器： </label>
                             <div class="controls">
-                                <select name="current_engine">
-					 						              <option value="192.168.2.197:8090" selected="">192.168.2.197:8090</option>
-					 			                </select>
-							               <p class="help-block">数据收集器可存在多个,但一个客户端或SNMP服务器或JMX服务器只对应一个数据收集器</p>
+                                <select name="data_collector">
+                                    <option value="192.168.2.197:8090" selected="">192.168.2.197:8090</option>
+                                </select>
+                             <p class="help-block">数据收集器可存在多个,但一个客户端或SNMP服务器或JMX服务器只对应一个数据收集器</p>
                             </div>
                         </div>
-						
+
 
                      <div class="control-group">
                          <label class="control-label" for="recover_notifiction">模板：</label>
                          <div class="controls">
+                                <input type="text" class="text-input" name="template" value="">
                          </div>
-					          </div>
+                    </div>
 
                      <div class="control-group">
                          <label class="control-label" for="recover_notifiction">是否监控：</label>
                          <div class="controls">
                              <label class="checkbox inline">
-                                 <input type="checkbox" name="recover_notifiction" false="">&nbsp;
+                                 <input type="checkbox" name="monitored" false="">&nbsp;
                              </label>
-														 <p class="help-block">如果不监控将不触发事件、图表、告警和其他操作</p>
+                             <p class="help-block">如果不监控将不触发事件、图表、告警和其他操作</p>
                          </div>
-					          </div>
-						
-					 </fieldset>
-					 
+                    </div>
+
+           </fieldset>
+
                 <div class="form-actions">
                     <button class="btn btn-info" name="submit">
-                        	保存 
+                          保存 
                     </button>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button class="btn" name="reset">
-                        	重置 
+                          重置 
                     </button>					
-					<input type="reset" style="display:none;">
+          <input type="reset" style="display:none;">
                 </div>			
-			</form>
-			
+      </form>
+
     </div>
     </script>
 
@@ -96,61 +97,61 @@
     <script id="t_a" type="text/html">
         <ul>
             <% for (var i in map) { var arr = map[i] || []; %>
-			<li>
-				<i class="icon40-<%= i %>"></i>
+      <li>
+        <i class="icon40-<%= i %>"></i>
             <div>
                 <h5>
-					<label class="checkbox inline">
+          <label class="checkbox inline">
                             <input type="checkbox" name="monitorOption" value="<%= i %>" />&nbsp;<%= arr[0] %> 
                     </label>
-					<button class='btn btn-info' name="next"> 下一步  </button>
-				</h5>
-				<p class="help-block"><%= arr[1] %></p>
+          <button class='btn btn-info' name="next"> 下一步  </button>
+        </h5>
+        <p class="help-block"><%= arr[1] %></p>
             </div>
-			</li>
+      </li>
             <% } %>
         </ul>
-		
-		 <div class="form-actions" style="display:none;">
-			  <button class='btn' name="next"> 下一步  </button>
+
+     <div class="form-actions" style="display:none;">
+        <button class='btn' name="next"> 下一步  </button>
         </div>
     </script>
 
 <style>
-	#monitor_option li{margin-bottom:15px;padding-bottom:5px; border-bottom: 1px solid whiteSmoke;}
-	#monitor_option li:last-child{border:none;}
-	#monitor_option li i{float:left;margin-right:30px;}
-	#monitor_option h5{padding-bottom:7px;position:relative;}
-	#monitor_option h5 button{position:absolute;margin-left:10px;display:none;}
+  #monitor_option li{margin-bottom:15px;padding-bottom:5px; border-bottom: 1px solid whiteSmoke;}
+  #monitor_option li:last-child{border:none;}
+  #monitor_option li i{float:left;margin-right:30px;}
+  #monitor_option h5{padding-bottom:7px;position:relative;}
+  #monitor_option h5 button{position:absolute;margin-left:10px;display:none;}
 </style>	
 </head>
     <body>
-    <header>
+      <header>
         <h1>监控向导</h1>
         <div class="row" id="toolbar">
-                <div class="box_1">
-                    <button class="btn" id="info">
-                        <i class="icon-info-sign"></i> 信息
-                    </button>					
-                </div>
+          <div class="box_1">
+            <button class="btn" id="info">
+              <i class="icon-info-sign"></i> 信息
+            </button>					
+          </div>
         </div>
-    </header>	    	
-		
-		
-    <div id="mainbody" name="monitorWizard">
+      </header>	    	
+
+
+      <div id="mainbody" name="monitorWizard">
         <header class="page-header">
-            <!--<h3>监控向导  &gt;&gt; 第一步 </h3>-->
-            <!--<h3>监控向导  &gt;&gt;  </h3>-->
-            <!--[><p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p><]-->
-            <!--<p class="help-block">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
-        <!--</header>-->
-		
-		<div id="monitor_option"></div>
-    </div>
-	
-       
-		
-  <!-- js part
+          <!--<h3>监控向导  &gt;&gt; 第一步 </h3>-->
+          <!--<h3>监控向导  &gt;&gt;  </h3>-->
+          <!--[><p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p><]-->
+          <!--<p class="help-block">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
+          <!--</header>-->
+
+        <div id="monitor_option"></div>
+      </div>
+
+
+
+      <!-- js part
     ================================================== -->
 <script src="../assets/js/library/jquery-1.7.1.js"></script>
 <script src="../assets/js/library/bootstrap.min.js"></script>
@@ -159,43 +160,50 @@
 <script src="../assets/js/doc.js?t=20130516173114"></script>
 <script>
 $(function(){
-	var smartMad = window.smartMad = window.smartMad || {};
-	var domain = domainURI();
+  var smartMad = window.smartMad = window.smartMad || {};
+  var domain = domainURI();
     var version = urlParams('version');
-	
+
     var _url = 'http://' + domain + '/mmsapi' + version;
-	
-	var cls = urlParams('cls') || '';
-	
-	
+
+  var cls = urlParams('cls') || '';
+
+
   //init
   $('#monitor_option').html(template('t_0', null))
-	
-	//init
-	<!--$('#monitor_option').html(template('t_a',{map : smartMad.monitorOptionMap}))-->
-	<!--.delegate('button[name="next"]','click',function(){-->
-		<!--var val = $('input[name="monitorOption"]:checked').val();-->
-		<!--if(val){-->
-			<!--location.href = 'monitorWizardStep2.html?cls=' + val + '&version=' + version;-->
-		<!--}else{-->
-			<!--alert('请选择一个监控项!');-->
-		<!--}-->
-	<!--})-->
-	<!--.find('input[name="monitorOption"]').change(function(){-->
-		<!--if($(this).attr('checked')){-->
-			<!--$('input[name="monitorOption"]').not(this).attr('checked',false);-->
-			<!--$('#monitor_option button[name="next"]').fadeOut();-->
-			<!--$(this).parent().parent().find('button').fadeIn();-->
-		<!--}else{-->
-			<!--$(this).parent().parent().find('button').fadeOut();-->
-		<!--}-->
-	<!--});-->
-	
-	<!--cls && $('input[value="' + cls + '"]').click();-->
-	
+
+  ////////////////////////////////////////////////////////
+  //提交保存
+  ////////////////////////////////////////////////////////
+    $('#mainbody')
+  .delegate('button[name="submit"]', 'click', function(){
+      var conf = {
+          url: smartMad._url + smartMad.api.createHost
+          };
+      var data = {}; 
+      var hostJson = {hostname:null, agent_interface:null, snmp_interface:null, jmx_interface:null, data_collector:null, template:null, monitored:null};
+      for(var i in hostJson) {
+          //hostname
+          //agent_interface
+          //snmp_interface
+          //jmx_interface
+          //data_collector
+          //template
+          //monitored
+          if (i == 'data_collector') {
+              data[i]='192.168.2.197:8090';
+          }else{
+              data[i] = $('input[name="' + i + '"]').val();
+          }
+      }
+      conf.data = data;
+      $(this).postData(conf);
+  });
+	$('#set_form').bind('ajax.success', formCall).getData(formConf);
+
 
 });
 </script>		
-		
+
 </body>
 </html>
