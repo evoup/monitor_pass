@@ -99,7 +99,7 @@ case(__OPERATION_CREATE):
                 } else {
                     $str = array( //组织用户组信息数据 
                         "hostname" => $GLOBALS['rowKey'],
-                        "agent_interface"      => $res['columns']['info:agent_interface']->value,
+                        "agent_interface" => $res['columns']['info:agent_interface']->value,
                         "snmp_interface" => $res['columns']['info:snmp_interface']->value,
                         "jmx_interface" => $res['columns']['info:jmx_interface']->value,
                         "data_collector" => $res['columns']['info:data_collector']->value,
