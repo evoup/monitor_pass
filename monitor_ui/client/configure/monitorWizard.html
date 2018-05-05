@@ -12,18 +12,17 @@
   <!-- template
     ================================================== -->
     <script id="t_0" type="text/html">
-    <!--<label for="host">主机名</label>-->
-    <!--<input class="input text" type="text" id="host" name="host" value="" size="50" maxlength="64" style="width: 312px;" autofocus="autofocus">-->
     <div id="set_form">
 
+    	<% var json = json || {};%>
         <form class="form-horizontal" id="form" onsubmit="return false;">
            <fieldset>
-            <legend>创建主机</legend>
-            <p class="help-block" style="padding:5px 0;">创建主机是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
+            <!--<legend>创建主机</legend>-->
+            <!--<p class="help-block" style="padding:5px 0;">创建主机是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 主机名： </label>
                             <div class="controls">
-                                <input type="text" class="validate[required] text-input" name="hostname" value="">
+                                <input type="text" class="validate[required] text-input" name="hostname" value="<%= json.hostname || '' %>" <%= json.hostname && 'readonly' %> >
                                 <p class="help-block">格式：不能为空</p>
                             </div>
                         </div>
@@ -31,7 +30,7 @@
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 监控客户端： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="agent_interface" value="">
+                                <input type="text" class="text-input" name="agent_interface" value="<%= json.agent_interface %>">
                                 <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
@@ -39,7 +38,7 @@
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> SNMP： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="snmp_interface" value="">
+                                <input type="text" class="text-input" name="snmp_interface" value="<%= json.snmp_interface %>">
                                 <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
@@ -47,7 +46,7 @@
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> JMX： </label>
                             <div class="controls">
-                                <input type="text" class="text-input" name="jmx_interface" value="">
+                                <input type="text" class="text-input" name="jmx_interface" value="<%= json.jmx_interface %>">
                                 <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
@@ -174,10 +173,38 @@ $(function(){
     var _url = 'http://' + domain + '/mmsapi' + version;
 
   var hostName = urlParams('hostName') || '';
+	
+	////////////////////////////////////////////////////
+	//读取设置
+	////////////////////////////////////////////////////
+	var hostFormConf = {
+		url: smartMad._url + smartMad.api.getHost + hostName
+	};	
+	var hostFormCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		
+		json.hostname = hostName;
+		
+		smartMad.json = json;
+		
+		///////////////////////////////////////////////
+        data = {
+            json: json
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_0', data);
+        $th.html(html);
+		
+		$('#form').validationEngine();
+		
+	};	
 
 
-  //init
-  $('#host_option').html(template('t_0', null))
 
   ////////////////////////////////////////////////////////
   //提交保存
@@ -210,9 +237,17 @@ $(function(){
       conf.data = data;
       $(this).postData(conf);
   });
-	$('#set_form').bind('ajax.success', formCall).getData(formConf);
+    if (hostName) {
+        $('#hostName').text(hostName);
+        console.log(hostFormConf);
+        $('#host_option').bind('ajax.success', hostFormCall).getData(hostFormConf);
+    }else{
+		 $('#title').text('添加主机');
+		 $('#host_option').bind('ajax.success', hostFormCall).trigger('ajax.success',[{}]);
+    }
 
-
+  //init
+  <!--$('#host_option').html(template('t_0', null))-->
 });
 </script>		
 
