@@ -5,6 +5,7 @@
 <title>monitor-configure-wizard</title>
 <link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
 <link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
 
 
 
@@ -17,12 +18,13 @@
 
         <form class="form-horizontal" id="form" onsubmit="return false;">
            <fieldset>
-            <legend>监控向导</legend>
-            <p class="help-block" style="padding:5px 0;">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
+            <legend>创建主机</legend>
+            <p class="help-block" style="padding:5px 0;">创建主机是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 主机名： </label>
                             <div class="controls">
                                 <input type="text" class="validate[required] text-input" name="hostname" value="">
+                                <p class="help-block">格式：不能为空</p>
                             </div>
                         </div>
 
@@ -30,6 +32,7 @@
                             <label class="control-label" for="watchdogUrl"> 监控客户端： </label>
                             <div class="controls">
                                 <input type="text" class="text-input" name="agent_interface" value="">
+                                <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
 
@@ -37,6 +40,7 @@
                             <label class="control-label" for="watchdogUrl"> SNMP： </label>
                             <div class="controls">
                                 <input type="text" class="text-input" name="snmp_interface" value="">
+                                <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
 
@@ -44,6 +48,7 @@
                             <label class="control-label" for="watchdogUrl"> JMX： </label>
                             <div class="controls">
                                 <input type="text" class="text-input" name="jmx_interface" value="">
+                                <p class="help-block">格式：IP:port</p>
                             </div>
                         </div>
 
@@ -118,16 +123,16 @@
     </script>
 
 <style>
-  #monitor_option li{margin-bottom:15px;padding-bottom:5px; border-bottom: 1px solid whiteSmoke;}
-  #monitor_option li:last-child{border:none;}
-  #monitor_option li i{float:left;margin-right:30px;}
-  #monitor_option h5{padding-bottom:7px;position:relative;}
-  #monitor_option h5 button{position:absolute;margin-left:10px;display:none;}
+  #host_option li{margin-bottom:15px;padding-bottom:5px; border-bottom: 1px solid whiteSmoke;}
+  #host_option li:last-child{border:none;}
+  #host_option li i{float:left;margin-right:30px;}
+  #host_option h5{padding-bottom:7px;position:relative;}
+  #host_option h5 button{position:absolute;margin-left:10px;display:none;}
 </style>	
 </head>
     <body>
       <header>
-        <h1>监控向导</h1>
+        <h1><span id="title">修改主机&nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;</span> <span id="userName"></span></h1>
         <div class="row" id="toolbar">
           <div class="box_1">
             <button class="btn" id="info">
@@ -146,7 +151,7 @@
           <!--<p class="help-block">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
           <!--</header>-->
 
-        <div id="monitor_option"></div>
+        <div id="host_option"></div>
       </div>
 
 
@@ -156,8 +161,10 @@
 <script src="../assets/js/library/jquery-1.7.1.js"></script>
 <script src="../assets/js/library/bootstrap.min.js"></script>
 <script src="../assets/js/library/template.js"></script>
-<script src="../assets/js/helper.js?t=20130516173114"></script>	
-<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>	
 <script>
 $(function(){
   var smartMad = window.smartMad = window.smartMad || {};
@@ -166,17 +173,21 @@ $(function(){
 
     var _url = 'http://' + domain + '/mmsapi' + version;
 
-  var cls = urlParams('cls') || '';
+  var hostName = urlParams('hostName') || '';
 
 
   //init
-  $('#monitor_option').html(template('t_0', null))
+  $('#host_option').html(template('t_0', null))
 
   ////////////////////////////////////////////////////////
   //提交保存
   ////////////////////////////////////////////////////////
     $('#mainbody')
   .delegate('button[name="submit"]', 'click', function(){
+		//表单验证
+		if(!$('#form').validationEngine()){
+			return;
+		}
       var conf = {
           url: smartMad._url + smartMad.api.createHost
           };
