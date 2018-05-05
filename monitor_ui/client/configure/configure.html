@@ -12,7 +12,23 @@
 		$(document).ready(function(){
 			var ver=url_params("version");
 			$("#rightIframe").attr("src","common_settings.html?version="+ver);
-      bindClickMenu("#rightIframe",["common_settings.html?version="+ver,/*"certification.html?version="+ver,*/"mail_settings.html?version="+ver,"warning_settings.html?version="+ver,"scan_settings.html?version="+ver,"event_settings.html?version="+ver,"userManager.html?version="+ver,"usergroupManager.html?version="+ver,"monitorWizard.html?version="+ver,"ipManager.html?version="+ver,"mdnDeliver.html?version="+ver]);
+      bindClickMenu(
+          "#rightIframe",
+          [
+              "common_settings.html?version="+ver,
+              /*"certification.html?version="+ver,*/
+              "mail_settings.html?version="+ver,
+              "warning_settings.html?version="+ver,
+              "scan_settings.html?version="+ver,
+              "event_settings.html?version="+ver,
+              "userManager.html?version="+ver,
+              "usergroupManager.html?version="+ver,
+              "monitorWizard.html?version="+ver,
+              "ipManager.html?version="+ver,
+              "mdnDeliver.html?version="+ver,
+              "template.html?version="+ver,
+              "dataCollector.html?version="+ver
+          ]);
 			contentHeight();
 			window.onresize=contentHeight;
 			});   
@@ -37,6 +53,7 @@
 					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>IP管理</a>
 					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>MADN管理</a>
 					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>模板</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>数据收集器</a>
 				</div>
      </div>
    </div>
