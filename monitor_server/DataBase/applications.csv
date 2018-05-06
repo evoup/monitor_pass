@@ -1,0 +1,184 @@
+applicationid,hostid,name
+13,10001,CPU
+5,10001,Filesystems
+21,10001,General
+15,10001,Memory
+7,10001,"Network interfaces"
+1,10001,OS
+17,10001,Performance
+9,10001,Processes
+23,10001,Security
+207,10001,"Zabbix agent"
+179,10047,"Zabbix server"
+356,10048,"Zabbix proxy"
+206,10050,"Zabbix agent"
+227,10060,Interfaces
+228,10065,General
+229,10066,General
+230,10066,Interfaces
+235,10067,"Disk partitions"
+231,10067,General
+232,10067,Interfaces
+242,10067,Processors
+234,10068,"Disk partitions"
+236,10069,"Disk partitions"
+237,10069,General
+238,10069,Interfaces
+241,10069,Processors
+240,10070,Processors
+247,10071,Fans
+246,10071,Temperature
+245,10071,Voltage
+250,10072,Fans
+249,10072,Temperature
+248,10072,Voltage
+251,10073,MySQL
+253,10074,CPU
+254,10074,Filesystems
+255,10074,General
+256,10074,Memory
+257,10074,"Network interfaces"
+258,10074,OS
+259,10074,Performance
+260,10074,Processes
+261,10074,Security
+252,10074,"Zabbix agent"
+263,10075,CPU
+264,10075,Filesystems
+265,10075,General
+266,10075,Memory
+267,10075,"Network interfaces"
+268,10075,OS
+269,10075,Performance
+270,10075,Processes
+271,10075,Security
+262,10075,"Zabbix agent"
+273,10076,CPU
+274,10076,Filesystems
+275,10076,General
+331,10076,"Logical partitions"
+276,10076,Memory
+277,10076,"Network interfaces"
+278,10076,OS
+279,10076,Performance
+280,10076,Processes
+281,10076,Security
+272,10076,"Zabbix agent"
+283,10077,CPU
+284,10077,Filesystems
+285,10077,General
+286,10077,Memory
+287,10077,"Network interfaces"
+288,10077,OS
+289,10077,Performance
+290,10077,Processes
+291,10077,Security
+282,10077,"Zabbix agent"
+293,10078,CPU
+294,10078,Filesystems
+295,10078,General
+296,10078,Memory
+297,10078,"Network interfaces"
+298,10078,OS
+299,10078,Performance
+300,10078,Processes
+301,10078,Security
+292,10078,"Zabbix agent"
+303,10079,CPU
+304,10079,Filesystems
+305,10079,General
+306,10079,Memory
+307,10079,"Network interfaces"
+308,10079,OS
+309,10079,Performance
+310,10079,Processes
+311,10079,Security
+302,10079,"Zabbix agent"
+325,10081,CPU
+322,10081,Filesystems
+319,10081,General
+328,10081,Memory
+330,10081,"Network interfaces"
+323,10081,OS
+320,10081,Performance
+324,10081,Processes
+329,10081,"Zabbix agent"
+332,10082,Classes
+333,10082,Compilation
+334,10082,"Garbage Collector"
+335,10082,Memory
+336,10082,"Memory Pool"
+337,10082,"Operating System"
+338,10082,Runtime
+339,10082,Threads
+343,10083,Sessions
+344,10083,Tomcat
+340,10083,http-8080
+341,10083,http-8443
+342,10083,jk-8009
+346,10084,CPU
+347,10084,Filesystems
+348,10084,General
+349,10084,Memory
+350,10084,"Network interfaces"
+351,10084,OS
+352,10084,Performance
+353,10084,Processes
+354,10084,Security
+355,10084,"Zabbix agent"
+345,10084,"Zabbix server"
+434,10088,Clusters
+458,10088,General
+433,10088,Log
+408,10089,CPU
+435,10089,Disks
+424,10089,Filesystems
+412,10089,General
+437,10089,Interfaces
+410,10089,Memory
+428,10089,Network
+414,10089,Storage
+416,10091,CPU
+445,10091,Datastore
+418,10091,General
+420,10091,Hardware
+422,10091,Memory
+443,10091,Network
+446,10093,"FTP service"
+447,10094,"HTTP service"
+448,10095,"HTTPS service"
+449,10096,"IMAP service"
+450,10097,"LDAP service"
+451,10098,"NNTP service"
+452,10099,"NTP service"
+453,10100,"POP service"
+454,10101,"SMTP service"
+455,10102,"SSH service"
+456,10103,"Telnet service"
+457,10104,ICMP
+459,10105,Classes
+460,10105,Compilation
+461,10105,"Garbage Collector"
+467,10105,ICMP
+462,10105,Memory
+463,10105,"Memory Pool"
+464,10105,"Operating System"
+465,10105,Runtime
+466,10105,Threads
+468,10106,Classes
+469,10106,Compilation
+470,10106,"Garbage Collector"
+471,10106,Memory
+472,10106,"Memory Pool"
+473,10106,"Operating System"
+474,10106,Runtime
+475,10106,Threads
+476,10107,Classes
+477,10107,Compilation
+478,10107,"Garbage Collector"
+479,10107,Memory
+480,10107,"Memory Pool"
+481,10107,"Operating System"
+482,10107,Runtime
+483,10107,Threads
+484,10107,"Zabbix agent"
