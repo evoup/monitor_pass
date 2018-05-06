@@ -28,9 +28,12 @@ define(__TABLE7_NAME,     'monitor_engine'); //服务端状态配置表
 define(__TABLE8_NAME,     'monitor_testspeed'); //统计测速表
 define(__TABLE9_NAME,     'monitor_testspeed_history'); //统计测速表
 define(__TABLE10_NAME,    'monitor_hosts'); //新主机表
+define(__TABLE11_NAME,    'monitor_items'); //新监控项表
+define(__TABLE12_NAME,    'monitor_sets'); //新监控集表
 
 
 chdir(dirname(__FILE__));
+include_once('template.php');
 include_once(__THRIFT_ROOT.'/Thrift.php');
 include_once(__THRIFT_ROOT.'/transport/TSocket.php');
 include_once(__THRIFT_ROOT.'/transport/TBufferedTransport.php');
@@ -48,7 +51,10 @@ $all_create_tables = array(
     __TABLE7_NAME,
     __TABLE8_NAME,
     __TABLE9_NAME,
-    __TABLE10_NAME
+    __TABLE10_NAME,
+    __TABLE11_NAME,
+    __TABLE12_NAME
+
 );
 /*{{{ 删除表
  */
@@ -186,6 +192,18 @@ $table_arr = array(
         array(
             'column_family_name' => "info:", //存接口的ip或主机名和端口，支持agent、snmp和jmx
             'table_name'         => __TABLE10_NAME
+        )
+    ),
+    array( //表11的family 
+        array(
+            'column_family_name' => "info:", //存监控项
+            'table_name'         => __TABLE11_NAME
+        )
+    ),
+    array( //表12的family 
+        array(
+            'column_family_name' => "info:", //存监控集
+            'table_name'         => __TABLE12_NAME
         )
     )
 );
@@ -588,7 +606,98 @@ if ($ret) {
     echo "Database create successfully, sample data add ok!\r\n";
 }
 
+/* {{{ 默认监控模板，也存在hosts表
+ */
+$table = __TABLE10_NAME;
+$templateData=getTemplate();
+for ($i=1; $i<sizeof($templateData); $i++) {
+    list($host,$status,$disable_until,$error,$available,$errors_from,$lastaccess,$snmp_disable_until,$snmp_available,$snmp_errors_from,$snmp_error,$jmx_disable_until,$jmx_available,$jmx_errors_from,$jmx_error,$name,$flags,$templateid) = $templateData[$i];
+    $rowkey=$host;
+    echo "add template:${host}\n";
+    $mutations = array(
+        new Mutation( array(
+            'column' => "info:status",
+            'value'  => $status 
+        )),
+        new Mutation( array(
+            'column' => "info:disable_until",
+            'value'  => $disable_until 
+        )),
+        new Mutation( array(
+            'column' => "info:error",
+            'value'  => $error 
+        )),
+        new Mutation( array(
+            'column' => "info:available",
+            'value'  => $available 
+        )),
+        new Mutation( array(
+            'column' => "info:errors_from",
+            'value'  => $errors_from 
+        )),
+        new Mutation( array(
+            'column' => "info:lastaccess",
+            'value'  => $lastaccess 
+        )),
+        new Mutation( array(
+            'column' => "info:snmp_disable_until",
+            'value'  => $snmp_disable_until 
+        )),
+        new Mutation( array(
+            'column' => "info:snmp_available",
+            'value'  => $snmp_available 
+        )),
+        new Mutation( array(
+            'column' => "info:snmp_errors_from",
+            'value'  => $snmp_errors_from 
+        )),
+        new Mutation( array(
+            'column' => "info:snmp_error",
+            'value'  => $snmp_error 
+        )),
+        new Mutation( array(
+            'column' => "info:jmx_disable_until",
+            'value'  => $jmx_disable_until 
+        )),
+        new Mutation( array(
+            'column' => "info:jmx_available",
+            'value'  => $jmx_available 
+        )),
+        new Mutation( array(
+            'column' => "info:jmx_errors_from",
+            'value'  => $jmx_errors_from 
+        )),
+        new Mutation( array(
+            'column' => "info:jmx_error",
+            'value'  => $jmx_error 
+        )),
+        new Mutation( array(
+            'column' => "info:name",
+            'value'  => $name 
+        )),
+        new Mutation( array(
+            'column' => "info:flags",
+            'value'  => $flags 
+        )),
+        new Mutation( array(
+            'column' => "info:templateid",
+            'value'  => $templateid 
+        ))
+    );
+    try { //thrift出错直接抛出异常需要捕获 
+        $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+        $ret = true;
+    }
+    catch (Exception $e) { //抛出异常返回false 
+        echo $e;
+        $ret = false;
+    }
+}
+/* }}} */
+
+
 closeMdb();
+
 
 /**
  *@brief 打开Mdb连接 

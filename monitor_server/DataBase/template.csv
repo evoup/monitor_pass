@@ -1,0 +1,42 @@
+host,status,disable_until,error,available,errors_from,lastaccess,snmp_disable_until,snmp_available,snmp_errors_from,snmp_error,jmx_disable_until,jmx_available,jmx_errors_from,jmx_error,name,flags,templateid
+Template OS Linux,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS Linux,0,NULL
+Template App Zabbix Server,3,0,,0,0,0,0,0,0,,0,0,0,,Template App Zabbix Server,0,NULL
+Template App Zabbix Proxy,3,0,,0,0,0,0,0,0,,0,0,0,,Template App Zabbix Proxy,0,NULL
+Template App Zabbix Agent,3,0,,0,0,0,0,0,0,,0,0,0,,Template App Zabbix Agent,0,NULL
+Template SNMP Interfaces,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP Interfaces,0,NULL
+Template SNMP Generic,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP Generic,0,NULL
+Template SNMP Device,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP Device,0,NULL
+Template SNMP OS Windows,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP OS Windows,0,NULL
+Template SNMP Disks,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP Disks,0,NULL
+Template SNMP OS Linux,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP OS Linux,0,NULL
+Template SNMP Processors,3,0,,0,0,0,0,0,0,,0,0,0,,Template SNMP Processors,0,NULL
+Template IPMI Intel SR1530,3,0,,0,0,0,0,0,0,,0,0,0,,Template IPMI Intel SR1530,0,NULL
+Template IPMI Intel SR1630,3,0,,0,0,0,0,0,0,,0,0,0,,Template IPMI Intel SR1630,0,NULL
+Template App MySQL,3,0,,0,0,0,0,0,0,,0,0,0,,Template App MySQL,0,NULL
+Template OS OpenBSD,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS OpenBSD,0,NULL
+Template OS FreeBSD,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS FreeBSD,0,NULL
+Template OS AIX,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS AIX,0,NULL
+Template OS HP-UX,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS HP-UX,0,NULL
+Template OS Solaris,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS Solaris,0,NULL
+Template OS Mac OS X,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS Mac OS X,0,NULL
+Template OS Windows,3,0,,0,0,0,0,0,0,,0,0,0,,Template OS Windows,0,NULL
+Template JMX Generic,3,0,,0,0,0,0,0,0,,0,0,0,,Template JMX Generic,0,NULL
+Template JMX Tomcat,3,0,,0,0,0,0,0,0,,0,0,0,,Template JMX Tomcat,0,NULL
+Zabbix server,1,0,,0,0,0,0,0,0,,0,0,0,,Zabbix server,0,NULL
+Template Virt VMware,3,0,,0,0,0,0,0,0,,0,0,0,,Template Virt VMware,0,NULL
+Template Virt VMware Guest,3,0,,0,0,0,0,0,0,,0,0,0,,Template Virt VMware Guest,0,NULL
+{#VM.UUID},0,0,,0,0,0,0,0,0,,0,0,0,,{#VM.NAME},2,NULL
+Template Virt VMware Hypervisor,3,0,,0,0,0,0,0,0,,0,0,0,,Template Virt VMware Hypervisor,0,NULL
+{#HV.UUID},0,0,,0,0,0,0,0,0,,0,0,0,,{#HV.NAME},2,NULL
+Template App FTP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App FTP Service,0,NULL
+Template App HTTP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App HTTP Service,0,NULL
+Template App HTTPS Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App HTTPS Service,0,NULL
+Template App IMAP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App IMAP Service,0,NULL
+Template App LDAP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App LDAP Service,0,NULL
+Template App NNTP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App NNTP Service,0,NULL
+Template App NTP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App NTP Service,0,NULL
+Template App POP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App POP Service,0,NULL
+Template App SMTP Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App SMTP Service,0,NULL
+Template App SSH Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App SSH Service,0,NULL
+Template App Telnet Service,3,0,,0,0,0,0,0,0,,0,0,0,,Template App Telnet Service,0,NULL
+Template ICMP Ping,3,0,,0,0,0,0,0,0,,0,0,0,,Template ICMP Ping,0,NULL
