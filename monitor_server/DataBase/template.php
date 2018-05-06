@@ -14,7 +14,10 @@
   +----------------------------------------------------------------------+
  */
 
+//全部导出的
+//hostid,proxy_hostid,host,status,disable_until,error,available,errors_from,lastaccess,ipmi_authtype,ipmi_privilege,ipmi_username,ipmi_password,ipmi_disable_until,ipmi_available,snmp_disable_until,snmp_available,maintenanceid,maintenance_status,maintenance_type,maintenance_from,ipmi_errors_from,snmp_errors_from,ipmi_error,snmp_error,jmx_disable_until,jmx_available,jmx_errors_from,jmx_error,name,flags,templateid
 
+//实际需要的
 //host
 //status
 //disable_until
@@ -33,7 +36,6 @@
 //name
 //flags
 //templateid
-
 
 /**
  *@brief 添加模板

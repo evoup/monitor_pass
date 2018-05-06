@@ -606,15 +606,26 @@ if ($ret) {
     echo "Database create successfully, sample data add ok!\r\n";
 }
 
-/* {{{ 默认监控模板，也存在hosts表
+/* {{{ 默认监控模板，也存在hosts表,默认的模板的hostid从10001到10104,且必定templateid为null
+ * 同时直接用info:hostid10001的方式记录下来，方便查询
  */
 $table = __TABLE10_NAME;
 $templateData=getTemplate();
 for ($i=1; $i<sizeof($templateData); $i++) {
-    list($host,$status,$disable_until,$error,$available,$errors_from,$lastaccess,$snmp_disable_until,$snmp_available,$snmp_errors_from,$snmp_error,$jmx_disable_until,$jmx_available,$jmx_errors_from,$jmx_error,$name,$flags,$templateid) = $templateData[$i];
+list($hostid,$proxy_hostid,$host,$status,$disable_until,$error,$available,$errors_from,$lastaccess,$ipmi_authtype,$ipmi_privilege,$ipmi_username,$ipmi_password,$ipmi_disable_until,$ipmi_available,$snmp_disable_until,$snmp_available,$maintenanceid,$maintenance_status,$maintenance_type,$maintenance_from,$ipmi_errors_from,$snmp_errors_from,$ipmi_error,$snmp_error,$jmx_disable_until,$jmx_available,$jmx_errors_from,$jmx_error,$name,$flags,$templateid)=$templateData[$i];
+list($hostid,,$host,$status,$disable_until,$error,$available,$errors_from,$lastaccess,,,,,,,$snmp_disable_until,$snmp_available,,,,,,$snmp_errors_from,,$snmp_error,$jmx_disable_until,$jmx_available,$jmx_errors_from,$jmx_error,$name,$flags,$templateid)=$templateData[$i];
+    //list($host,$status,$disable_until,$error,$available,$errors_from,$lastaccess,$snmp_disable_until,$snmp_available,$snmp_errors_from,$snmp_error,$jmx_disable_until,$jmx_available,$jmx_errors_from,$jmx_error,$name,$flags,$templateid) = $templateData[$i];
     $rowkey=$host;
     echo "add template:${host}\n";
     $mutations = array(
+        new Mutation( array(
+            'column' => "info:hostid",
+            'value'  => $hostid 
+        )),
+        new Mutation( array(
+            'column' => "info:hostid".$hostid,
+            'value'  => 1 
+        )),
         new Mutation( array(
             'column' => "info:status",
             'value'  => $status 
