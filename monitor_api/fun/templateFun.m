@@ -18,25 +18,26 @@ header("Content-type: application/json; charset=utf-8");
 
 switch ($GLOBALS['operation']) {
 case(__OPERATION_READ): //查询操作 
-    if ( in_array($GLOBALS['selector'], array(__SELECTOR_MASS,__SELECTOR_MASSMEMBER)) && 
+    if ( in_array($GLOBALS['selector'], array(__SELECTOR_MASS)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
         list($table_name,$start_row,$family) = array(__MDB_TAB_HOSTS, '', array('info')); //从row的起点开始 
         try {
             $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
+            $templateArr = [];
             while (true) { //TODO 这里可能会发生超时，需要加时限 
                 $get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
                 if ($get_arr == null) break;
                 foreach ( $get_arr as $TRowResult ) {
-                    $template = $TRowResult->row; //以用户名为rowkey 
-                    /* {{{ 取出实际用户名和电子邮件
+                    $template = $TRowResult->row; //以模板名为rowkey 
+                    /* {{{ 取出模板名字
                      */
                     $column = $TRowResult->columns;
                     foreach ($column as $family_column=>$Tcell) {
-                        if (strstr("info:hostid")) {
-                           $hostid=substr('info:hostid10011', 11);
+                        if (strstr($family_column, "info:hostid")) {
+                           $hostid=substr($family_column, 11);
                            if ($hostid>=10001 && $hostid<10104) {
                                if ($Tcell->value=="1") {
-                                   echo $template;
+                                   $templateArr[]=array($template,1,1,1);
                                }
                            }
                         }
@@ -48,6 +49,7 @@ case(__OPERATION_READ): //查询操作
         } catch (Exception $e) {
             $err = true;
         }
+        echo json_encode($templateArr);
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
         return;
     }
