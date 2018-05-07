@@ -66,7 +66,8 @@ define('__SERVICE_TIME',              'time');
 define('__SERVICE_DOCS',              'docs');
 define('__SERVICE_DOWNLOADS',         'downloads');
 define('__SERVICE_GET_DOWNLOAD_FILE', 'get_download_file');
-define('__SERVICE_HOST', 'host');
+define('__SERVICE_HOST',              'host');
+define('__SERVICE_TEMPLATE',          'template');
 /* }}} */
 
 /* {{{ services
@@ -107,6 +108,7 @@ define('__PREFIX_DOCS',              'docs');
 define('__PREFIX_DOWNLOADS',         'downloads');
 define('__PREFIX_GET_DOWNLOAD_FILE', 'get_download_file');
 define('__PREFIX_HOST',              'host');
+define('__PREFIX_TEMPLATE',          'template');
 /* }}} */
 
 /* {{{ operations

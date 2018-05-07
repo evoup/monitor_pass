@@ -168,6 +168,9 @@ if (!empty($GLOBALS['serviceName'])) {
     case __SERVICE_HOST:
         $GLOBALS['prefix']=__PREFIX_HOST;
         break;
+    case __SERVICE_TEMPLATE:
+        $GLOBALS['prefix']=__PREFIX_TEMPLATE;
+        break;
     default:
         break;
     }

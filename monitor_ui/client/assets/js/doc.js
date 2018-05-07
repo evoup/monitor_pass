@@ -78,6 +78,12 @@ smartMad.api = {
   updateHost: '/update/host/@self/',
   deleteHost: '/delete/host/@self/',
 
+  // Template
+  createTemplate: '/create/template/@self',
+  getTemplate: '/get/template/@self/',
+  updateTemplate: '/upate/template/@self/',
+  deleteTemplate: '/delete/template/@self/',
+
 
 	getEventKeepaliveSet:'/get/event_setting/@keepalive',
 		
