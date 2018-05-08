@@ -117,17 +117,17 @@ $(function(){
 	///////////////////////////////////////////////////////////
     $('body')
 	.delegate('#add','click',function(){
-        location.href = 'editUser.html?version=' + smartMad.version;
+        location.href = 'editDatacollector.html?version=' + smartMad.version;
     })
 	.delegate('button[name="modify"]','click',function(){
         var name = $(this).attr('data-name');
-        location.href = 'editUser.html?name=' + name + '&version=' + smartMad.version;
+        location.href = 'editDatacollector.html?name=' + name + '&version=' + smartMad.version;
     })
     .delegate('button[name="delete"]','click',function(){
         var name = $(this).attr('data-name');
         var conf = {
-			type:'get',
-            url: smartMad._url + smartMad.api.delUser + name,
+			  type:'get',
+            url: smartMad._url + smartMad.api.delDatacollector + name,
             success: function(json, textStatus, jqXHR){
                 $.tips('已经删除!');
                 this.parent().parent().remove();
