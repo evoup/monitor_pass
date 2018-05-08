@@ -11,12 +11,22 @@
   +----------------------------------------------------------------------+
   | Last-Modified:
   +----------------------------------------------------------------------+
-*/
+ */
 $GLOBALS['httpStatus'] = __HTTPSTATUS_BAD_REQUEST; //默认返回400 
 header("Content-type: application/json; charset=utf-8");
 
 
 switch ($GLOBALS['operation']) {
+
+case(__OPERATION_CREATE):
+    if ($GLOBALS['selector'] == __SELECTOR_SINGLE && $_SERVER['REQUEST_METHOD'] == 'POST') { 
+        $valid_key = array('interface', 'memberServers'); //合法的POST的key
+        $dataCollector = $GLOBALS['rowKey'];
+        $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
+        return;
+    }
+    break;
+
 case(__OPERATION_READ): //查询操作 
     if ( in_array($GLOBALS['selector'], array(__SELECTOR_MASS)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 

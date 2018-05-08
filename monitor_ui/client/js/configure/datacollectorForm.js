@@ -276,9 +276,9 @@ $(document).ready(function(){
 		 //post_data("http://211.136.105.207:8282/mmsapi/create/userGroup/@self","false",data);	
 	   //console.log(add_usergroup_param);
 		 if(!!isAddusergroup){
-        _url="http://"+domain+"/mmsapi"+version+"/create/userGroup/@self/"+groupname_val;
+        _url="http://"+domain+"/mmsapi"+version+"/create/datacollector/@self/"+groupname_val;
      }else{
-       _url="http://"+domain+"/mmsapi"+version+"/update/userGroup/@self/"+groupname_val;
+       _url="http://"+domain+"/mmsapi"+version+"/update/datacollector/@self/"+groupname_val;
      }
      $.ajax({
        type: "post",
