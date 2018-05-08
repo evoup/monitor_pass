@@ -21,7 +21,25 @@ switch ($GLOBALS['operation']) {
 case(__OPERATION_CREATE):
     if ($GLOBALS['selector'] == __SELECTOR_SINGLE && $_SERVER['REQUEST_METHOD'] == 'POST') { 
         $valid_key = array('interface', 'memberServers'); //合法的POST的key
-        $dataCollector = $GLOBALS['rowKey'];
+        $rowkey=$GLOBALS['rowKey'];
+        $table='monitor_datacollectors';
+        $mutations = array(
+            new Mutation( array(
+                'column' => "info:hostNum",
+                'value'  => "0" 
+            )),
+            new Mutation( array(
+                'column' => "info:itemNum",
+                'value'  => "0" 
+            ))
+        );
+        try { //thrift出错直接抛出异常需要捕获 
+            $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+            $ret = true;
+        } catch (Exception $e) { //抛出异常返回false 
+            echo $e;
+            $ret = false;
+        }
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
         return;
     }
@@ -105,6 +123,8 @@ case(__OPERATION_READ): //查询操作
             "host1"=>array("blabla","blabla","host1","blabla"),
             "host2"=>array("blabla","blabla","host2","blabla")
         );
+
+
         echo json_encode($hosts);
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
         return;
