@@ -9,8 +9,8 @@
 		<script type="text/javascript" src="../js/jqModal.js"></script>
 		<script type="text/javascript" src="../js/base.js"></script>
 		<script type="text/javascript" src="../js/ajax_post.js"></script>
-		<!--<script type="text/javascript" src="../js/server/action.js"></script>-->
-		<script type="text/javascript" src="../js/configure/usergroupForm.js"></script>
+    <script type="text/javascript" src="../js/server/action.js"></script>
+		<script type="text/javascript" src="../js/configure/datacollectorForm.js"></script>
 	  <style type="text/css">
 		 #add_usergroup_table{
 		   border:1px solid #c0c0c0;
@@ -68,10 +68,10 @@
    <div class="window">
      <div class="jqmWindow" id="dialog">
 		 <a href="#" class="jqmClose" style="float:right;"><img  src="../images/deleteTab.png" style="-webkit-transform:translate(36px,-36px);-moz-transform:translate(36px,-36px);-o-transform:translate(36px,-36px);-khtml-transform:translate(36px,-36px);"/></a>	 
-		 <p>添加用户到用户组</p>
+		 <p>添加服务器到数据收集器</p>
      <ul class="usergroup_select">
 			 <li>
-			 <label>可选用户</label><br/>
+			 <label>可选服务器</label><br/>
         <select size="8" id="usergroup_optional"  multiple="multiple"></select>
 			 </li>
 			 <li>
@@ -81,7 +81,7 @@
 			 <a href="javascript:void(0)" id="del_option"><img src="../images/arrowLeft.png" style="-webkit-transform:translate(-20px,0px);-moz-transform:translate(-20px,0px);-khtml-transform:translate(-20px,0px);cursor:pointer;"/></a>
 			 </li>
 			 <li>
-			 <label>已加入该组的用户</label><br/>
+			 <label>已加入的服务器</label><br/>
 				<select id="add_usergroup_old" size="8" multiple="multiple"></select>
 			 </li>
 			 <li>
