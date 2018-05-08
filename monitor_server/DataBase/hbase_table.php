@@ -723,12 +723,10 @@ foreach($sets as $hostid => $setsInfo) {
     $mutations = [];
     $rowkey = $hostid;
     foreach ($setsInfo as $setInfo) {
-        foreach ($setInfo as $setid => $name) {
             $mutations[]=new Mutation( array(
-                'column' => "info:setid".$setid,
-                'value'  => $name 
+                'column' => "info:setid".$setInfo[0],
+                'value'  => $setInfo[1] 
             ));
-        }
     }
     try { //thrift出错直接抛出异常需要捕获 
         $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
