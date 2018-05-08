@@ -14,8 +14,8 @@
   +----------------------------------------------------------------------+
  */
 define(__THRIFT_ROOT,'../GPL/thrift');
-define(__MDB_HOST,'172.18.0.54');
-define(__MDB_PORT,'9090');
+define(__MDB_HOST,'192.168.2.197');
+define(__MDB_PORT,'32799');
 define(__MDB_SENDTIMEOUT, '20000');  //10 seconds
 define(__MDB_RECVTIMEOUT, '20000');  //10 seconds
 define(__TABLE1_NAME,     'monitor_servername'); //被监控服务器名表
@@ -35,6 +35,7 @@ define(__TABLE13_NAME,    'monitor_datacollectors'); //新数据收集器表
 
 chdir(dirname(__FILE__));
 include_once('template.php');
+include_once('applications.php');
 include_once(__THRIFT_ROOT.'/Thrift.php');
 include_once(__THRIFT_ROOT.'/transport/TSocket.php');
 include_once(__THRIFT_ROOT.'/transport/TBufferedTransport.php');
@@ -586,6 +587,7 @@ catch (Exception $e) { //抛出异常返回false
     echo $e;
     $ret = false;
 }
+/* }}} */
 /* {{{ 生成INI需要之user_setting,usergroup_setting
  */
 //$table = __TABLE2_NAME;
@@ -609,10 +611,6 @@ catch (Exception $e) { //抛出异常返回false
     //$ret = false;
 //}
 /* }}} */
-if ($ret) {
-    echo "Database create successfully, sample data add ok!\r\n";
-}
-
 /* {{{ 默认监控模板，也存在hosts表,默认的模板的hostid从10001到10104,且必定templateid为null
  * 同时直接用info:hostid10001的方式记录下来，方便查询
  */
@@ -712,7 +710,38 @@ list($hostid,,$host,$status,$disable_until,$error,$available,$errors_from,$lasta
     }
 }
 /* }}} */
-
+/* {{{ 默认监控集，rowkey是hostid，其实对应模板的hostid10001到10104
+ */
+$table = __TABLE12_NAME;
+$setsData = getSets();
+$sets=[];
+for ($i=1;$i<sizeof($setsData);$i++) {
+    list($setid,$hostid,$name)=$setsData[$i];
+    $sets[$hostid][]=array($setid,$name);
+}
+foreach($sets as $hostid => $setsInfo) {
+    $mutations = [];
+    $rowkey = $hostid;
+    foreach ($setsInfo as $setInfo) {
+        foreach ($setInfo as $setid => $name) {
+            $mutations[]=new Mutation( array(
+                'column' => "info:setid".$setid,
+                'value'  => $name 
+            ));
+        }
+    }
+    try { //thrift出错直接抛出异常需要捕获 
+        $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+        $ret = true;
+    }
+    catch (Exception $e) { //抛出异常返回false 
+        echo $e;
+        $ret = false;
+    }
+}
+/*}}}*/
+/* {{{ 默认数据收集器
+ */
 $rowkey="datacollector1";
 $table=__TABLE13_NAME;
 $mutations = array(
@@ -732,9 +761,14 @@ try { //thrift出错直接抛出异常需要捕获
     echo $e;
     $ret = false;
 }
+/* }}} */
 
 
 closeMdb();
+
+if ($ret) {
+    echo "Database create successfully, sample data add ok!\r\n";
+}
 
 
 /**

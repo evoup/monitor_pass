@@ -502,7 +502,8 @@ select{
     width:99%;
     margin:2px 0px 2px 2px;
     padding:0px;
-    height:41px;
+    /*height:41px;*/
+    height:auto;
     /*border-top:1px solid #698CB8;
     border-left:1px solid #698CB8;
     border-right:1px solid #698CB8;
