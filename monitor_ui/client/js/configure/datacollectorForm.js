@@ -92,7 +92,7 @@ function get_userGroup_data_Callback(json, textStatus, jqXHR){
 	  console.log("json null");
 	}else{
 		//console.log(json);
-		var usergroup_name=url_params("name"),row1=1,edit_user_name=["数据收集器名","地址"],selected=[],per_name=[],permission=[];
+		var usergroup_name=url_params("name"),row1=1,edit_user_name=["主机名","说明"],selected=[],per_name=[],permission=[];
     $("#addUserGroup_form  input[name='groupname']").val(usergroup_name);
 		$("#addUserGroup_form  textarea[name='desc']").val(json[0]);
     $.each(json[1],function(j){
@@ -153,17 +153,19 @@ $(document).ready(function(){
   var domain=domainURI(document.location.href);
 	//console.log(groupname);
 	//
-	if(groupname!=null){
-   get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/userGroup/@self/"+groupname,"#add_usergroup_box","loading_middle.gif",get_userGroup_data_Callback);
-   isAddusergroup=false;
-   $("#addUserGroup_form input[name='groupname']").attr("readonly", "readonly");
-   $("#addUserGroup_form input[name='groupname']").attr("disabled", "disabled");
-   $("div.title").html("修改用户组"); 
+	//if(groupname!=null){
+   //get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/userGroup/@self/"+groupname,"#add_usergroup_box","loading_middle.gif",get_userGroup_data_Callback);
+   //isAddusergroup=false;
+   //$("#addUserGroup_form input[name='groupname']").attr("readonly", "readonly");
+   //$("#addUserGroup_form input[name='groupname']").attr("disabled", "disabled");
+   //$("div.title").html("修改数据收集器"); 
     
-}	
+//}	
    
-  get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/userGroup/@self","#add_usergroup_box","loading_middle.gif",get_userGroup_groupId_Callback); 
-  get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/user/@allmember","#add_userall_box","loading_middle.gif",get_userAll_Callback);
+  //get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/userGroup/@self","#add_usergroup_box","loading_middle.gif",get_userGroup_groupId_Callback); 
+  //get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/datacollector/@self","#add_usergroup_box","loading_middle.gif",get_userGroup_groupId_Callback); 
+  //get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/user/@allmember","#add_userall_box","loading_middle.gif",get_userAll_Callback);
+  get_data_ajax("http://"+domain+"/mmsapi"+version+"/get/datacollector/@allmember","#add_userall_box","loading_middle.gif",get_userAll_Callback);
 
 /****************************添加用户组动作****************************************/
   $("#add_option").bind("click",function(){
@@ -181,7 +183,7 @@ $(document).ready(function(){
 		//event.stopPropagation();
 		var obj=$("#userGroup_member_table"),current=[];
 	  if(obj.length==0){
-		  var add_user_content=["数据收集器名","地址"],row=1;
+		  var add_user_content=["主机名","说明"],row=1;
       $(".usergroup_select select:last option").each(function(){
         add_user_content.push($(this).text());
         add_user_content.push($(this).val());
@@ -289,7 +291,7 @@ $(document).ready(function(){
            //alert("success");
           if(jqXHR.status==200||jqXHR.status==205){
 		   		   //alert("create success");
-					  Tips("complete","添加/修改用户组成功!"); 
+					  Tips("complete","添加/修改数据收集器成功!"); 
 					}
 			  },
        error: function(jqXHR, textStatus, errorThrown){
