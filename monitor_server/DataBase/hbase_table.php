@@ -30,6 +30,7 @@ define(__TABLE9_NAME,     'monitor_testspeed_history'); //统计测速表
 define(__TABLE10_NAME,    'monitor_hosts'); //新主机表
 define(__TABLE11_NAME,    'monitor_items'); //新监控项表
 define(__TABLE12_NAME,    'monitor_sets'); //新监控集表
+define(__TABLE13_NAME,    'monitor_datacollectors'); //新数据收集器表
 
 
 chdir(dirname(__FILE__));
@@ -53,8 +54,8 @@ $all_create_tables = array(
     __TABLE9_NAME,
     __TABLE10_NAME,
     __TABLE11_NAME,
-    __TABLE12_NAME
-
+    __TABLE12_NAME,
+    __TABLE13_NAME
 );
 /*{{{ 删除表
  */
@@ -204,6 +205,12 @@ $table_arr = array(
         array(
             'column_family_name' => "info:", //存监控集
             'table_name'         => __TABLE12_NAME
+        )
+    ),
+    array( //表13的family 
+        array(
+            'column_family_name' => "info:", //存监控集
+            'table_name'         => __TABLE13_NAME
         )
     )
 );
@@ -705,6 +712,26 @@ list($hostid,,$host,$status,$disable_until,$error,$available,$errors_from,$lasta
     }
 }
 /* }}} */
+
+$rowkey="datacollector1";
+$table=__TABLE13_NAME;
+$mutations = array(
+    new Mutation( array(
+        'column' => "info:hostNum",
+        'value'  => "0" 
+    )),
+    new Mutation( array(
+        'column' => "info:itemNum",
+        'value'  => "0" 
+    ))
+);
+try { //thrift出错直接抛出异常需要捕获 
+    $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+    $ret = true;
+} catch (Exception $e) { //抛出异常返回false 
+    echo $e;
+    $ret = false;
+}
 
 
 closeMdb();
