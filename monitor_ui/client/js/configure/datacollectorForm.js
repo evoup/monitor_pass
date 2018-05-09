@@ -246,48 +246,40 @@ $(document).ready(function(){
    $("input[name='groupname']").blur(function(){
 	    var name=$(this).val();
 			if(!!isChina(name)){  //字符串含有中文
-	      Tips("alert","用户组名不能含有中文");		
+	      Tips("alert","数据收集器名不能含有中文");		
 			}else{
 			  $("#Tips").hide();
 			}
 	 });	
 	/****************************submit editServers Form **********************************************************************/
   $("#addUserGroup_form").submit(function(){
-    var groupname_val=$("input[name='groupname']").val();
+    var datacollectorname_val=$("input[name='groupname']").val();
+    var interface=$("input[name='interface']").val();
 		var desc_val=$("textarea[name='desc']").val();
-		//console.log(groupname_val);
-		//console.log(desc_val);
-		var privilege=[],_url;
+    var _url;
 		$("#add_usergroup_box select").each(function(x){
 		  var pri=$(this).attr("name")+"#"+$(this).val();
-      privilege.push(pri);
 		});
-		var pri_param=privilege.join("|"),member=[];
-		//console.log(pri_param);
+    var member=[];
 		$(".usergroup_select select:last option").each(function(){
-		  // $(this).val();
 			 member.push($(this).text());
 		 });
 		 var member_param=member.join("|");
-		 //console.log(member_param);
 		 var add_usergroup_param={
-			"desc" : desc_val,
-			"privilege" : pri_param,
-			"member" : member_param
+      "interface" : interface,
+			"memberServers" : member_param
 		 };
-		 //post_data("http://211.136.105.207:8282/mmsapi/create/userGroup/@self","false",data);	
-	   //console.log(add_usergroup_param);
 		 if(!!isAddusergroup){
-        _url="http://"+domain+"/mmsapi"+version+"/create/datacollector/@self/"+groupname_val;
+        _url="http://"+domain+"/mmsapi"+version+"/create/datacollector/@self/"+datacollectorname_val;
      }else{
-       _url="http://"+domain+"/mmsapi"+version+"/update/datacollector/@self/"+groupname_val;
+       _url="http://"+domain+"/mmsapi"+version+"/update/datacollector/@self/"+datacollectorname_val;
      }
      $.ajax({
        type: "post",
        url : _url,
        async: false,
        data: add_usergroup_param,
-       success: function(data, textStatus, jqXHR){//婵″倹鐏夌拫鍐暏php閹存劕濮?
+       success: function(data, textStatus, jqXHR){
            //alert("success");
           if(jqXHR.status==200||jqXHR.status==205){
 		   		   //alert("create success");

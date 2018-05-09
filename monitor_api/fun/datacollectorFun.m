@@ -31,6 +31,10 @@ case(__OPERATION_CREATE):
             new Mutation( array(
                 'column' => "info:itemNum",
                 'value'  => "0" 
+            )),
+            new Mutation( array(
+                'column' => "info:interface",
+                'value'  => $_POST['interface'] 
             ))
         );
         try { //thrift出错直接抛出异常需要捕获 
