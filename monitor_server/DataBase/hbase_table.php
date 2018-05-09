@@ -36,6 +36,7 @@ define(__TABLE13_NAME,    'monitor_datacollectors'); //新数据收集器表
 chdir(dirname(__FILE__));
 include_once('template.php');
 include_once('applications.php');
+include_once('items.php');
 include_once(__THRIFT_ROOT.'/Thrift.php');
 include_once(__THRIFT_ROOT.'/transport/TSocket.php');
 include_once(__THRIFT_ROOT.'/transport/TBufferedTransport.php');
@@ -738,6 +739,164 @@ foreach($sets as $hostid => $setsInfo) {
     }
 }
 /*}}}*/
+
+/* {{{ 默认监控项，rowkey是itemid可能没有用到
+ */
+$table = __TABLE11_NAME;
+$itemsData = getItems();
+$items=[];
+for($i=1;$i<sizeof($itemsData);$i++) {
+    list($itemid,$type,$snmp_community,$snmp_oid,$hostid,$name,$key_,$delay,$history,$trends,$status,$value_type,$trapper_hosts,$units,$multiplier,$delta,$snmpv3_securityname,$snmpv3_securitylevel,$snmpv3_authpassphrase,$snmpv3_privpassphrase,$formula,$error,$lastlogsize,$logtimefmt,$templateid,$valuemapid,$delay_flex,$params,$ipmi_sensor,$data_type,$authtype,$username,$password,$publickey,$privatekey,$mtime,$flags,$filter,$interfaceid,$port,$description,$inventory_link,$lifetime,$snmpv3_authprotocol,$snmpv3_privprotocol,$state,$snmpv3_contextname)=$itemsData[$i];
+    $rowkey="$itemid";
+    $sets=getItemsApplication($itemid);
+    //print_r($sets);
+    $mutations = [];
+    foreach ($sets as $set) {
+        $mutations[]=
+            new Mutation( array(
+                'column' => "info:setid{$set}",
+                'value'  => "0" 
+            ));
+    }
+    $mutations[]=new Mutation( array(
+        'column' => "info:type",
+        'value'  => "${type}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmp_community",
+        'value'  => "${snmp_community}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmp_oid",
+        'value'  => "${snmp_oid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:hostid",
+        'value'  => "${hostid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:name",
+        'value'  => "${name}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:key_",
+        'value'  => "${key_}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:delay",
+        'value'  => "${delay}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:history",
+        'value'  => "${history}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:trends",
+        'value'  => "${trends}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:status",
+        'value'  => "${status}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:value_type",
+        'value'  => "${value_type}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:trapper_hosts",
+        'value'  => "${trapper_hosts}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:units",
+        'value'  => "${units}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:multiplier",
+        'value'  => "${multiplier}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:delta",
+        'value'  => "${delta}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_securityname",
+        'value'  => "${snmpv3_securityname}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_securitylevel",
+        'value'  => "${snmpv3_securityname}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_authpassphrase",
+        'value'  => "${snmpv3_authpassphrase}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_privpassphrase",
+        'value'  => "${snmpv3_privpassphrase}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:formula",
+        'value'  => "${formula}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:error",
+        'value'  => "${error}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:lastlogsize",
+        'value'  => "${lastlogsize}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:logtimefmt",
+        'value'  => "${logtimefmt}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:templateid",
+        'value'  => "${templateid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:valuemapid",
+        'value'  => "${templateid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:delay_flex",
+        'value'  => "${delay_flex}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:params",
+        'value'  => "${params}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:data_type",
+        'value'  => "${data_type}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:authtype",
+        'value'  => "${authtype}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:username",
+        'value'  => "${username}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:password",
+        'value'  => "${password}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:publickey",
+        'value'  => "${publickey}" 
+    ));
+    try { //thrift出错直接抛出异常需要捕获 
+        $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+        $ret = true;
+    } catch (Exception $e) { //抛出异常返回false 
+        echo $e;
+        $ret = false;
+    }
+}
+
+/* }}} */
+
 /* {{{ 默认数据收集器
  */
 $rowkey="datacollector1";
