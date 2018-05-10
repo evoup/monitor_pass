@@ -23,20 +23,18 @@ case(__OPERATION_READ): //查询操作
         $templateSetArr=getTemplateSetMap();
         $setItemArr=getSetItemMap();
         $templateItemMap=[];
+        //模板、集
         foreach($templateSetArr as $template => $sets) {
-            //echo "template:".$template."\n";
             $items=[];
             foreach($sets as $set) {
-                //echo "set:".$set."\n";
-                //echo "item:";
-                //print_r($setItemArr[$set]);
-                $items[]=$setItemArr[$set];
+                $itemsOfSet = $setItemArr[$set];
+                foreach($itemsOfSet as $item) {
+                    if (!in_array($item, $templateItemMap[$template])) {
+                        $templateItemMap[$template][]=$item;
+                    }
+                }
             }
-            print_r($items);
-            die;
-            $templateItemMap[$template]=$items;
         }
-        //print_r($templateItemMap);
         //查询监控集
         list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info'));
         $setsArr=null;
