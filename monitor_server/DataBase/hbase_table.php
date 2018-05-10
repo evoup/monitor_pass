@@ -746,6 +746,7 @@ $table = __TABLE11_NAME;
 $itemsData = getItems();
 $items=[];
 for($i=1;$i<sizeof($itemsData);$i++) {
+    echo "add item:${itemid}\n";
     list($itemid,$type,$snmp_community,$snmp_oid,$hostid,$name,$key_,$delay,$history,$trends,$status,$value_type,$trapper_hosts,$units,$multiplier,$delta,$snmpv3_securityname,$snmpv3_securitylevel,$snmpv3_authpassphrase,$snmpv3_privpassphrase,$formula,$error,$lastlogsize,$logtimefmt,$templateid,$valuemapid,$delay_flex,$params,$ipmi_sensor,$data_type,$authtype,$username,$password,$publickey,$privatekey,$mtime,$flags,$filter,$interfaceid,$port,$description,$inventory_link,$lifetime,$snmpv3_authprotocol,$snmpv3_privprotocol,$state,$snmpv3_contextname)=$itemsData[$i];
     $rowkey="$itemid";
     $sets=getItemsApplication($itemid);
@@ -885,6 +886,58 @@ for($i=1;$i<sizeof($itemsData);$i++) {
     $mutations[]=new Mutation( array(
         'column' => "info:publickey",
         'value'  => "${publickey}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:privatekey",
+        'value'  => "${privatekey}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:mtime",
+        'value'  => "${mtime}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:flags",
+        'value'  => "${flags}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:filter",
+        'value'  => "${filter}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:interfaceid",
+        'value'  => "${interfaceid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:port",
+        'value'  => "${port}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:description",
+        'value'  => "${description}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:inventory_link",
+        'value'  => "${inventory_link}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:lifetime",
+        'value'  => "${lifetime}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_authprotocol",
+        'value'  => "${snmpv3_authprotocol}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_privprotocol",
+        'value'  => "${snmpv3_privprotocol}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:state",
+        'value'  => "${state}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:snmpv3_contextname",
+        'value'  => "${snmpv3_contextname}" 
     ));
     try { //thrift出错直接抛出异常需要捕获 
         $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
