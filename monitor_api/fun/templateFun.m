@@ -20,6 +20,23 @@ switch ($GLOBALS['operation']) {
 case(__OPERATION_READ): //查询操作 
     if ( in_array($GLOBALS['selector'], array(__SELECTOR_MASS)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
+        $templateSetArr=getTemplateSetMap();
+        $setItemArr=getSetItemMap();
+        $templateItemMap=[];
+        foreach($templateSetArr as $template => $sets) {
+            //echo "template:".$template."\n";
+            $items=[];
+            foreach($sets as $set) {
+                //echo "set:".$set."\n";
+                //echo "item:";
+                //print_r($setItemArr[$set]);
+                $items[]=$setItemArr[$set];
+            }
+            print_r($items);
+            die;
+            $templateItemMap[$template]=$items;
+        }
+        //print_r($templateItemMap);
         //查询监控集
         list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info'));
         $setsArr=null;
@@ -38,7 +55,6 @@ case(__OPERATION_READ): //查询操作
             $err = true;
         }
 
-
         list($table_name,$start_row,$family) = array(__MDB_TAB_HOSTS, '', array('info')); //从row的起点开始 
         try {
             $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
@@ -56,7 +72,14 @@ case(__OPERATION_READ): //查询操作
                            $hostid=substr($family_column, 11);
                            if ($hostid>=10001 && $hostid<10104) {
                                if ($Tcell->value=="1") {
-                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),1,1);
+                                   //foreach (array_keys($setsArr[$hostid]) as $key) {
+                                       //if (strstr($key, 'info:setid')) {
+                                           //$setid=substr($key, 10);
+                                       //}
+                                   //}
+                                   //print_r($setItemArr[$setid]);
+                                   $itemsUnderTemplate = sizeof($templateItemMap[$hostid]);
+                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,1);
                                }
                            }
                         }
@@ -73,4 +96,53 @@ case(__OPERATION_READ): //查询操作
         return;
     }
     break;
+}
+
+/**
+ * 返回以templated为key，setid为value的全部set
+ */
+function getTemplateSetMap() {
+    list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info')); //从row的起点开始 
+    $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
+    $itemArr=[];
+    while (true) {
+        $get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
+        if ($get_arr == null) break;
+        foreach ( $get_arr as $TRowResult ) {
+            foreach(array_keys($TRowResult->columns) as $value) {
+                if (strstr($value,"info:setid")) {
+                    $setid=substr($value, 10);
+                    $templateid=$TRowResult->row;
+                    if ($templateid>=10001 && $templateid<10104) {
+                        //返回setid对应的item
+                        $itemArr[$templateid][]=$setid;
+                    }
+                }
+            }
+        }
+    }
+    return $itemArr;
+}
+
+/**
+ * 返回以setid为key，itemid为value的全部item
+ */
+function getSetItemMap() {
+    list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info')); //从row的起点开始 
+    $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
+    $itemArr=[];
+    while (true) {
+        $get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
+        if ($get_arr == null) break;
+        foreach ( $get_arr as $TRowResult ) {
+            foreach(array_keys($TRowResult->columns) as $value) {
+                if (strstr($value,"info:setid")) {
+                    $mysetid=substr($value, 10);
+                    //返回setid对应的item
+                    $itemArr[$mysetid][]=$TRowResult->row;
+                }
+            }
+        }
+    }
+    return $itemArr;
 }

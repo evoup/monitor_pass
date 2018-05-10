@@ -698,7 +698,7 @@ list($hostid,,$host,$status,$disable_until,$error,$available,$errors_from,$lasta
         )),
         new Mutation( array(
             'column' => "info:templateid",
-            'value'  => $templateid 
+            'value'  => $hostid 
         ))
     );
     try { //thrift出错直接抛出异常需要捕获 

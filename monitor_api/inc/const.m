@@ -210,6 +210,7 @@ if (!$conf['debug']) {
     define('__MDB_TAB_HOSTS', 'monitor_hosts'); //新hosts表 
     define('__MDB_TAB_SETS', 'monitor_sets'); //新的sets表 
     define('__MDB_TAB_DATACOLLECTORS', 'monitor_datacollectors'); //新的data collector表
+    define('__MDB_TAB_ITEMS', 'monitor_items'); // 新的items表
     define('__MDB_TAB_HOST', 'monitor_host'); //MDB的host表 
     define('__MDB_TAB_ENGINE', 'monitor_engine'); //MDB的engine表 
 } else {
