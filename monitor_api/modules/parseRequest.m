@@ -174,6 +174,9 @@ if (!empty($GLOBALS['serviceName'])) {
     case __SERVICE_DATA_COLLECTOR:
         $GLOBALS['prefix']=__PREFIX_DATA_COLLECTOR;
         break;
+    case __SERVICE_ITEM:
+        $GLOBALS['prefix']=__PREFIX_ITEM;
+        break;
     default:
         break;
     }

@@ -85,6 +85,11 @@ smartMad.api = {
   updateTemplate: '/upate/template/@self/',
   deleteTemplate: '/delete/template/@self/',
 
+  // Item
+  createItem: '/create/item/@self',
+  getItemOfSet: '/get/item/@set/',
+  getItem: '/get/item/@self/',
+
   // DataCollector 
   createDataCollector: '/create/dataCollector/@self',
   getDataCollectorAll: '/get/dataCollector/@all',

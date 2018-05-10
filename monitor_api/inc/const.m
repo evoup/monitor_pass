@@ -69,6 +69,7 @@ define('__SERVICE_GET_DOWNLOAD_FILE', 'get_download_file');
 define('__SERVICE_HOST',              'host');
 define('__SERVICE_TEMPLATE',          'template');
 define('__SERVICE_DATA_COLLECTOR',    'datacollector');
+define('__SERVICE_ITEM',              'item');
 /* }}} */
 
 /* {{{ services
@@ -111,6 +112,7 @@ define('__PREFIX_GET_DOWNLOAD_FILE', 'get_download_file');
 define('__PREFIX_HOST',              'host');
 define('__PREFIX_TEMPLATE',          'template');
 define('__PREFIX_DATA_COLLECTOR',    'datacollector');
+define('__PREFIX_ITEM',              'item');
 /* }}} */
 
 /* {{{ operations
@@ -140,6 +142,7 @@ define('__HTTPSTATUS_INTERNAL_SERVER_ERROR', 500);
  */
 define('__SELECTOR_SINGLE',   '@self');
 define('__SELECTOR_MASS',     '@all');
+define('__SELECTOR_SET',     '@set');
 define('__SELECTOR_GROUP',    '@group');
 
 /* statusUnit的选择器 */
