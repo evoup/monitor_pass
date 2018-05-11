@@ -142,7 +142,8 @@ define('__HTTPSTATUS_INTERNAL_SERVER_ERROR', 500);
  */
 define('__SELECTOR_SINGLE',   '@self');
 define('__SELECTOR_MASS',     '@all');
-define('__SELECTOR_SET',     '@set');
+define('__SELECTOR_SET',      '@set');
+define('__SELECTOR_TEMPLATE', '@template');
 define('__SELECTOR_GROUP',    '@group');
 
 /* statusUnit的选择器 */

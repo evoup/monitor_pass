@@ -90,8 +90,9 @@ $(function(){
 	
     var smartMad = window.smartMad = window.smartMad || {};
 	
+    var templateid = urlParams('templateid');
     var getItemAllConf = {
-        url: smartMad._url + smartMad.api.getItemOfSet
+        url: smartMad._url + smartMad.api.getItemOfTemplate + templateid
     };
 	
     var getItemAllCall = function(e, json){

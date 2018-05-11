@@ -29,6 +29,18 @@ case(__OPERATION_READ): //查询操作
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
         return;
     }
+    if ( in_array($GLOBALS['selector'], array(__SELECTOR_TEMPLATE)) && 
+        $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
+        $templateId=$GLOBALS['rowKey'];
+        //监控点名    key  采集间隔 保存天数    类型    监控集
+        $arr = array(
+            array($templateId,"2","3","4","5","6","7"),
+            array($templateId,"2","3","4","5","6","7")
+        );
+        echo json_encode($arr);
+        $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
+        return;
+    }
     break;
 
 }

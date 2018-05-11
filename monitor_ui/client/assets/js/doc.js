@@ -88,6 +88,7 @@ smartMad.api = {
   // Item
   createItem: '/create/item/@self',
   getItemOfSet: '/get/item/@set/',
+  getItemOfTemplate: '/get/item/@template/',
   getItem: '/get/item/@self/',
 
   // DataCollector 
