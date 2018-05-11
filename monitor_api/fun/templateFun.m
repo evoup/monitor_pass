@@ -70,7 +70,7 @@ case(__OPERATION_READ): //查询操作
                     foreach ($column as $family_column=>$Tcell) {
                         if (strstr($family_column, "info:hostid")) {
                            $hostid=substr($family_column, 11);
-                           if ($hostid>=10001 && $hostid<10104) {
+                           if ($hostid>=10001 && $hostid<=10104) {
                                if ($Tcell->value=="1") {
                                    //foreach (array_keys($setsArr[$hostid]) as $key) {
                                        //if (strstr($key, 'info:setid')) {
@@ -113,7 +113,7 @@ function getTemplateSetMap() {
                 if (strstr($value,"info:setid")) {
                     $setid=substr($value, 10);
                     $templateid=$TRowResult->row;
-                    if ($templateid>=10001 && $templateid<10104) {
+                    if ($templateid>=10001 && $templateid<=10104) {
                         //返回setid对应的item
                         $itemArr[$templateid][]=$setid;
                     }
