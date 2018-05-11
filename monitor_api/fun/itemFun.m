@@ -61,6 +61,7 @@ case(__OPERATION_READ): //查询操作
         //监控点名    key  采集间隔 保存天数    类型    监控集
         $arr=[];
         foreach (array_keys($itemArr) as $itm) {
+<<<<<<< HEAD
             $itemInfo = $GLOBALS['mdb_client']->getRow(__MDB_TAB_ITEMS, $itm);
             $columns=$itemInfo[0]->columns;
             $name=$columns['info:name']->value;
@@ -80,6 +81,13 @@ case(__OPERATION_READ): //查询操作
                     break;
                 }
             }
+            echo $itm;
+            $itemInfo = getRow(__MDB_TAB_ITEMS, $itm);
+            print_r($itemInfo);
+            $itemInfo = $GLOBALS['mdb_client']->getRow(__MDB_TAB_ITEMS, $itm);
+            $columns=$itemInfo[0]->columns;
+            $name=$columns['info:name']->value;
+            $arr[]=array($name,"2","3","4","5","6","7");
         }
 
         echo json_encode($arr);
