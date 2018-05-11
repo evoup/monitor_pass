@@ -95,21 +95,12 @@ $(function(){
     };
 	
     var getItemAllCall = function(e, json){
-    
         var $th = $(this), data, html;
-        
-        //$th.html(JSON.stringify(json));return;
-        ///////////////////////////////////////////////
-        
         data = {
             json: json
         };
-        
-        /////////////////////////////////////////////
-        
         html = template('t_a', data);
         $th.html(html);
-		
     };
 	
 
