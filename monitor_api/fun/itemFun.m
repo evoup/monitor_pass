@@ -32,7 +32,39 @@ case(__OPERATION_READ): //查询操作
     if ( in_array($GLOBALS['selector'], array(__SELECTOR_TEMPLATE)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
         $templateId=$GLOBALS['rowKey'];
+        // 根据templateId查下面的监控项
+        list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info'));
+        $setsArr=null;
+        try {
+            $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
+            $itemArr=[];
+            while (true) {
+                $get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
+                if ($get_arr == null) break;
+                foreach ( $get_arr as $TRowResult ) {
+                    $item = $TRowResult->row;
+                    $column = $TRowResult->columns;
+                    foreach ($column as $family_column=>$Tcell) {
+                        if (strstr($family_column, "info:hostid")) {
+                            if ($Tcell->value==$templateId) {
+                                $itemArr[$item]=1;
+                            }
+                        }
+                    }
+                }
+            }
+            $GLOBALS['mdb_client']->scannerClose($scanner); //关闭scanner 
+        } catch (Exception $e) {
+            $err = true;
+        }
+        //print_r(array_keys($itemArr));
         //监控点名    key  采集间隔 保存天数    类型    监控集
+        foreach (array_keys($itemArr) as $itm) {
+            echo $itm;
+            $itemInfo = getRow(__MDB_TAB_ITEMS, $itm);
+            print_r($itemInfo);
+        }
+
         $arr = array(
             array($templateId,"2","3","4","5","6","7"),
             array($templateId,"2","3","4","5","6","7")
