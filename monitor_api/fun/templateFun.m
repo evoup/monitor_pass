@@ -65,6 +65,8 @@ case(__OPERATION_READ): //查询操作
                     /* {{{ 取出模板名字
                      */
                     $column = $TRowResult->columns;
+                    $templateidInfo=$column['info:templateid'];
+                    $templateid=$templateidInfo->value;
                     foreach ($column as $family_column=>$Tcell) {
                         if (strstr($family_column, "info:hostid")) {
                            $hostid=substr($family_column, 11);
@@ -77,7 +79,7 @@ case(__OPERATION_READ): //查询操作
                                    //}
                                    //print_r($setItemArr[$setid]);
                                    $itemsUnderTemplate = sizeof($templateItemMap[$hostid]);
-                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,1);
+                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,1,$templateid);
                                }
                            }
                         }

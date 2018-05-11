@@ -14,8 +14,8 @@
   +----------------------------------------------------------------------+
  */
 define(__THRIFT_ROOT,'../GPL/thrift');
-define(__MDB_HOST,'192.168.2.197');
-define(__MDB_PORT,'32799');
+define(__MDB_HOST,'datanode1');
+define(__MDB_PORT,'9090');
 define(__MDB_SENDTIMEOUT, '20000');  //10 seconds
 define(__MDB_RECVTIMEOUT, '20000');  //10 seconds
 define(__TABLE1_NAME,     'monitor_servername'); //被监控服务器名表
@@ -962,6 +962,10 @@ $mutations = array(
     new Mutation( array(
         'column' => "info:itemNum",
         'value'  => "0" 
+    )),
+    new Mutation( array(
+        'column' => "info:interface",
+        'value'  => "127.0.0.1:8090" 
     ))
 );
 try { //thrift出错直接抛出异常需要捕获 
