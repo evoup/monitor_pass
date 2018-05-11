@@ -54,8 +54,8 @@
                         <div class="control-group">
                             <label class="control-label" for="watchdogUrl"> 对应的数据收集器： </label>
                             <div class="controls">
-                                <select name="data_collector">
-                                    <option value="192.168.2.197:8090" selected="">192.168.2.197:8090</option>
+                                <select name="data_collector" id="data_collector">
+                                    <!--<option value="192.168.2.197:8090" selected="">192.168.2.197:8090</option>-->
                                 </select>
                              <p class="help-block">数据收集器可存在多个,但一个客户端或SNMP服务器或JMX服务器只对应一个数据收集器</p>
                             </div>
@@ -181,28 +181,16 @@ $(function(){
 		url: smartMad._url + smartMad.api.getHost + hostName
 	};	
 	var hostFormCall = function(e,json){
-		var $th = $(this), data, html;
-		
-		//$th.html(JSON.stringify(json));return;
-        ///////////////////////////////////////////////
-		
-		json.hostname = hostName;
-		
-		smartMad.json = json;
-		
-		///////////////////////////////////////////////
-        data = {
-            json: json
-        };
-        
-        ///////////////////////////////////////////////
-        
-        html = template('t_0', data);
-        $th.html(html);
-		
-		$('#form').validationEngine();
-		
-	};	
+      var $th = $(this), data, html;
+      json.hostname = hostName;
+      smartMad.json = json;
+      data = {
+          json: json
+      };
+      html = template('t_0', data);
+      $th.html(html);
+      $('#form').validationEngine();
+	};
 
 
 
@@ -239,7 +227,6 @@ $(function(){
   });
     if (hostName) {
         $('#hostName').text(hostName);
-        console.log(hostFormConf);
         $('#host_option').bind('ajax.success', hostFormCall).getData(hostFormConf);
     }else{
 		 $('#title').text('添加主机');
@@ -247,9 +234,18 @@ $(function(){
     }
 
   //init
-  <!--$('#host_option').html(template('t_0', null))-->
+	 var url1 = smartMad._url + smartMad.api.getDataCollectorAll
+   $.get(url1, function(data, status){
+       for (d in data) {
+           console.log("datacollector name:"+data[d][0]);
+           console.log("datacollector interface:"+data[d][3]);
+           datacolletor_name=data[d][0];
+           datacollector_interface=data[d][3];
+           $("#data_collector").append('<option value=' + d + '>' + datacolletor_name + '(' + datacollector_interface + ')' + '</option>');
+       }
+   });
 });
-</script>		
+</script>
 
 </body>
 </html>

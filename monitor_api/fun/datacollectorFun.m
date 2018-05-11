@@ -62,7 +62,7 @@ case(__OPERATION_READ): //查询操作
                 foreach ( $get_arr as $TRowResult ) {
                     $datacollector = $TRowResult->row; //以模板名为rowkey 
                     $column = $TRowResult->columns;
-                    $datacollectorArr[]=array($datacollector, $column['info:hostNum']->value, $column['info:itemNum']->value, 1);
+                    $datacollectorArr[]=array($datacollector, $column['info:hostNum']->value, $column['info:itemNum']->value, $column['info:interface']->value);
                 }
             }
             $GLOBALS['mdb_client']->scannerClose($scanner); //关闭scanner 
