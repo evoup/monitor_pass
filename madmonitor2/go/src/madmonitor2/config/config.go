@@ -37,6 +37,7 @@ func GetDefaults() map[string]string {
 		"upload_version": "monitor_server2r1_1",
 		"upload_suffix":  "m1",
 		"send_hosts":     "172.18.0.1,172.18.0.2",
+		"getCheckListInterval": "120",
 	}
 	return defaultConf
 }
@@ -60,7 +61,7 @@ func GetDefaultsJson() inc.DefaultConf {
 	hostname, _ := os.Hostname()
 	jsonBlob := []byte("{\"servername\":\"" + hostname + "\",\"proclife\":\"" + inc.PROC_LIFE + "\",\"sleep\":\"" +
 		inc.SLEEP + "\",\"sendport\":\"" + inc.SEND_PORT + "\",\"sendhosts\":\"" + inc.SEND_HOSTS + "\", " +
-		"\"evictinterval\":\"" + inc.EVICTINTERVAL + "\", \"dedupinterval\":\"" + inc.DEDUPINTERVAL + "\"}")
+		"\"evictinterval\":\"" + inc.EVICTINTERVAL + "\", \"dedupinterval\":\"" + inc.DEDUPINTERVAL + "\", \"getCheckListInterval\":\"120\"}")
 	defaultConf := inc.DefaultConf{}
 	err := json.Unmarshal(jsonBlob, &defaultConf)
 	if err != nil {
