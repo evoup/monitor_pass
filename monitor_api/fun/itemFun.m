@@ -18,6 +18,20 @@ header("Content-type: application/json; charset=utf-8");
 
 switch ($GLOBALS['operation']) {
 case(__OPERATION_READ): //查询操作 
+    if ( in_array($GLOBALS['selector'], array(__SELECTOR_SINGLE)) && 
+        $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
+        $arr=array(
+            'name'=>"monitor item name",
+            'key'=>'k',
+            'unit'=>'m',
+            'multiply'=>'1',
+            'interval'=>30,
+            'history'=>7
+        );
+        echo json_encode($arr);
+        $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
+        return;
+    }
     if ( in_array($GLOBALS['selector'], array(__SELECTOR_SET)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
         //监控点名    key  采集间隔 保存天数    类型    监控集
