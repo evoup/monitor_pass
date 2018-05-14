@@ -57,12 +57,11 @@ case(__OPERATION_READ): //查询操作
         } catch (Exception $e) {
             $err = true;
         }
-        //print_r(array_keys($itemArr));
         //监控点名    key  采集间隔 保存天数    类型    监控集
         $arr=[];
         foreach (array_keys($itemArr) as $itm) {
-//<<<<<<< HEAD
             $itemInfo = $GLOBALS['mdb_client']->getRow(__MDB_TAB_ITEMS, $itm);
+            $row=$itemInfo[0]->row;
             $columns=$itemInfo[0]->columns;
             $name=$columns['info:name']->value;
             $key=$columns['info:key_']->value;
@@ -77,7 +76,7 @@ case(__OPERATION_READ): //查询操作
             }
             foreach(array_keys($columns) as $col) {
                 if (strstr($col,"info:setid")) {
-                    $arr[]=array($name,$key,$delay,$history,$type,getSetName($col),"7");
+                    $arr[]=array($name,$key,$delay,$history,$type,getSetName($col),$row);
                     break;
                 }
             }
