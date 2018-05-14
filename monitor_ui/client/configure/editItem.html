@@ -82,6 +82,7 @@
                             <label class="control-label" for="sleepSecPerReq"> 保存数据方式： </label>
                             <div class="controls">
                                 <select name="saveDataMode" id="saveDataMode">
+                                </select>
                             </div>
                         </div>
            </fieldset>
@@ -90,6 +91,7 @@
                             <label class="control-label" for="sleepSecPerReq"> 所属监控集： </label>
                             <div class="controls">
                                 <select name="belongSet" id="belongSet">
+                                </select>
                             </div>
                         </div>
            </fieldset>
@@ -106,18 +108,22 @@
                             <label class="control-label" for="sleepSecPerReq"> 启用： </label>
                             <div class="controls">
                                 <select name="enable" id="enable">
+                                </select>
                             </div>
                         </div>
            </fieldset>
-
+          <div class="form-actions">
+                    <button class='btn btn-info' name="submit">
+                          保存
+                    </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class='btn' name="reset">
+                          重置
+                    </button>					
+          <input type="reset" style="display:none;">
+          </div>
       </form>
-
     </script>
-
-
-<style>
-
-</style>
 
 </head>
 <body>
