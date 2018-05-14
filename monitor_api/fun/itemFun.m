@@ -20,14 +20,27 @@ switch ($GLOBALS['operation']) {
 case(__OPERATION_READ): //查询操作 
     if ( in_array($GLOBALS['selector'], array(__SELECTOR_SINGLE)) && 
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
+        $row=$GLOBALS['rowKey'];
+        list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info'));
+        $itemInfo = $GLOBALS['mdb_client']->getRow($table_name, $row);
+        //print_r($itemInfo);
+        $colInfo=$itemInfo[0]->columns;
+        $name=$colInfo['info:name']->value;
+        $interval=$colInfo['info:delay']->value;
+        $desc=$colInfo["info:description"]->value;
+        $key=$colInfo["info:key_"]->value;
+        $unit=$colInfo["info:units"]->value;
+        $multiply=$colInfo["info:multiplier"]->value;
+        $history=$colInfo["info:history"]->value;
+        //print_r($colInfo);
         $arr=array(
-            'name'=>"monitor item name",
-            'key'=>'k',
-            'unit'=>'m',
-            'multiply'=>'1',
-            'interval'=>30,
-            'desc'=>'desc',
-            'history'=>7
+            'name'=>$name,
+            'key'=>$key,
+            'unit'=>$unit,
+            'multiply'=>$multiply,
+            'interval'=>$interval,
+            'desc'=>$desc,
+            'history'=>$history
         );
         echo json_encode($arr);
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
