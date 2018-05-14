@@ -110,18 +110,10 @@
                         </div>
            </fieldset>
 
-                <div class="form-actions">
-                    <button class='btn btn-info' name="submit">
-                          保存 
-                    </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button class='btn' name="reset">
-                          重置 
-                    </button>					
-          <input type="reset" style="display:none;">
-                </div>
       </form>
+
     </script>
+
 
 <style>
 
@@ -222,20 +214,20 @@ $(function(){
         url: smartMad._url + smartMad.api.updateGenericSet
     };
 
-    var watchdogUrl = $('input[name="watchdogUrl"]').val(),
-    sleepSecRep = $('input[name="sleepSecPerReq"]').val() * 1,
-    sendMail = $('input[name="sendMail"]').attr('checked') ? 1 : 0,
-    sendHour = $('select[name="sendHour"]').val(),
-    sendMin = $('select[name="sendMin"]').val(),
-    sendSec = '00';
+    <!--var watchdogUrl = $('input[name="watchdogUrl"]').val(),-->
+    <!--sleepSecRep = $('input[name="sleepSecPerReq"]').val() * 1,-->
+    <!--sendMail = $('input[name="sendMail"]').attr('checked') ? 1 : 0,-->
+    <!--sendHour = $('select[name="sendHour"]').val(),-->
+    <!--sendMin = $('select[name="sendMin"]').val(),-->
+    <!--sendSec = '00';-->
 
     conf.data = {
-        'watchdogUrl': watchdogUrl,
-        'sleepSecPerReq': sleepSecRep,
-        'sendMail': sendMail,
-        'sendHour': sendHour,
-        'sendMin': sendMin,
-        'sendSec': sendSec
+        'watchdogUrl': null,
+        'sleepSecPerReq': null,
+        'sendMail': null,
+        'sendHour': null,
+        'sendMin': null,
+        'sendSec': null
     };	
 
     $(this).postData(conf);
