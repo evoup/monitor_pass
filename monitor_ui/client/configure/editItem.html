@@ -55,9 +55,14 @@
            </fieldset>
            <fieldset>	
                         <div class="control-group">
-                            <label class="control-label" for="sleepSecPerReq"> 数据类型： </label>
+                            <label class="control-label" for="sleepSecPerReq"> 信息类型： </label>
                             <div class="controls">
                                 <select name="infotype" id="infotype">
+                                <option value="0">数字（无符号）</option>
+                                <option value="1">数字（浮点数）</option>
+                                <option value="2">字符</option>
+                                <option value="3">日志</option>
+                                <option value="4">文本</option>
                                 </select>
                             </div>
                         </div>
@@ -219,7 +224,6 @@ $(function(){
             json: json
         };
         html = template('t_a', data);
-        console.log(data);
         $th.html(html);
         //是哪种监控点
         $('#type option:eq(' + json["type"] + ')').prop('selected', true)
