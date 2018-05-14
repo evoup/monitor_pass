@@ -95,6 +95,14 @@
            </fieldset>
            <fieldset>	
                         <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 描述： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="desc" value="<%= json.desc %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
                             <label class="control-label" for="sleepSecPerReq"> 启用： </label>
                             <div class="controls">
                                 <select name="enable" id="enable">
@@ -111,11 +119,9 @@
                           重置 
                     </button>					
           <input type="reset" style="display:none;">
-                </div>			
+                </div>
       </form>
-
     </script>
-
 
 <style>
 

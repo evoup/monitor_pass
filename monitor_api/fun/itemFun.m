@@ -26,6 +26,7 @@ case(__OPERATION_READ): //查询操作
             'unit'=>'m',
             'multiply'=>'1',
             'interval'=>30,
+            'desc'=>'desc',
             'history'=>7
         );
         echo json_encode($arr);
