@@ -25,6 +25,8 @@ case(__OPERATION_READ): //查询操作
         $itemInfo = $GLOBALS['mdb_client']->getRow($table_name, $row);
         //print_r($itemInfo);
         $colInfo=$itemInfo[0]->columns;
+        $type=$colInfo['info:type']->value;
+        $data_type=$colInfo['info:data_type']->value;
         $name=$colInfo['info:name']->value;
         $interval=$colInfo['info:delay']->value;
         $desc=$colInfo["info:description"]->value;
@@ -35,7 +37,9 @@ case(__OPERATION_READ): //查询操作
         //print_r($colInfo);
         $arr=array(
             'name'=>$name,
-            'key'=>$key,
+            'type'=>$type,
+            'data_type'=>$data_type,
+            'key'=>htmlspecialchars($key),
             'unit'=>$unit,
             'multiply'=>$multiply,
             'interval'=>$interval,
