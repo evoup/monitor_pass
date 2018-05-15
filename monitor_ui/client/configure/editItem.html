@@ -57,11 +57,11 @@
                         <div class="control-group">
                             <label class="control-label" for="sleepSecPerReq"> 信息类型： </label>
                             <div class="controls">
-                                <select name="infotype" id="infotype">
-                                <option value="0">数字（无符号）</option>
-                                <option value="1">数字（浮点数）</option>
-                                <option value="2">字符</option>
-                                <option value="3">日志</option>
+                                <select name="valuetype" id="valuetype">
+                                <option value="0">数字（浮点数）</option>
+                                <option value="1">字符</option>
+                                <option value="2">日志</option>
+                                <option value="3">数字（无符号）</option>
                                 <option value="4">文本</option>
                                 </select>
                             </div>
@@ -220,14 +220,16 @@ $(function(){
   };
   var formCall = function(e,json){
     var $th = $(this), data, html;
-        data = {
-            json: json
-        };
-        html = template('t_a', data);
-        $th.html(html);
-        //是哪种监控点
-        $('#type option:eq(' + json["type"] + ')').prop('selected', true)
-
+    data = {
+        json: json
+    };
+    html = template('t_a', data);
+    $th.html(html);
+    <!--console.log(json["value_type"]);-->
+    //是哪种监控点
+    $('#type option:eq(' + json["type"] + ')').prop('selected', true)
+    //是那种数值类型
+    $('#valuetype option:eq(' + json["value_type"] + ')').prop('selected', true)
     $('#form').validationEngine();
 
   };	
