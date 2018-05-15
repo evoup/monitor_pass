@@ -35,6 +35,7 @@ case(__OPERATION_READ): //查询操作
         $multiply=$colInfo["info:multiplier"]->value;
         $history=$colInfo["info:history"]->value;
         $value_type=$colInfo["info:value_type"]->value;
+        $delta=$colInfo["info:delta"]->value;
         //print_r($colInfo);
         $arr=array(
             'name'=>$name,
@@ -46,7 +47,8 @@ case(__OPERATION_READ): //查询操作
             'interval'=>$interval,
             'desc'=>$desc,
             'history'=>$history,
-            'value_type'=>$value_type
+            'value_type'=>$value_type,
+            'delta'=>$delta
         );
         echo json_encode($arr);
         $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;

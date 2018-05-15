@@ -105,6 +105,8 @@
                             <div class="controls">
                                 <select name="saveDataMode" id="saveDataMode">
                                     <option value="0">不改变</option>
+                                    <option value="1">增量（每秒速度）</option>
+                                    <option value="2">增量（简单更改）</option>
                                 </select>
                             </div>
                         </div>
@@ -230,6 +232,8 @@ $(function(){
     $('#type option:eq(' + json["type"] + ')').prop('selected', true)
     //是那种数值类型
     $('#valuetype option:eq(' + json["value_type"] + ')').prop('selected', true)
+    //是不是增量
+    $('#saveDataMode option:eq(' + json["delta"] + ')').prop('selected', true)
     $('#form').validationEngine();
 
   };	
