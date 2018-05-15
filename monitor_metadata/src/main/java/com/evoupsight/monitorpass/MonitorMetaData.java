@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -15,9 +16,8 @@ import java.net.URL;
  */
 public class MonitorMetaData
 {
-    public static void main( String[] args )
-    {
-        // System.out.println( "Hello World!" );
+    public static void main( String[] args ) throws IOException {
+        System.out.println( "Hello World!" );
         QueryInfo queryInfo = new QueryInfo();
         queryInfo.getRow();
     }
