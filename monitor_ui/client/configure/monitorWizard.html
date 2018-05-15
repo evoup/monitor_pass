@@ -237,8 +237,6 @@ $(function(){
 	 var url1 = smartMad._url + smartMad.api.getDataCollectorAll
    $.get(url1, function(data, status){
        for (d in data) {
-           console.log("datacollector name:"+data[d][0]);
-           console.log("datacollector interface:"+data[d][3]);
            datacolletor_name=data[d][0];
            datacollector_interface=data[d][3];
            $("#data_collector").append('<option value=' + d + '>' + datacolletor_name + '(' + datacollector_interface + ')' + '</option>');
