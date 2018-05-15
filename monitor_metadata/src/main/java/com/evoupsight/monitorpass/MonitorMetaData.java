@@ -13,7 +13,7 @@ import java.net.URL;
  * Hello world!
  *
  */
-public class App 
+public class MonitorMetaData
 {
     public static void main( String[] args )
     {
