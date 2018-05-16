@@ -105,7 +105,10 @@ public class QueryInfo {
                 //System.out.println(r.getColumnCells("info".getBytes(), "data_type".getBytes()));
                 //System.out.println(r.getColumnCells("info".getBytes(), "delay".getBytes()));
                 //List<Cell> columnCells = r.getColumnCells("info".getBytes(), "desc".getBytes());
-
+                byte[] row = r.getRow();
+                if (row != null) {
+                    System.out.println("row:" + new String(row));
+                }
                 byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
                 if (value != null) {
                     System.out.println("[info:type]:" + new String(value));
@@ -166,10 +169,6 @@ public class QueryInfo {
                 if (value != null) {
                     System.out.println("[info:delta]:" + new String(value));
                 }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("delta"));
-                if (value != null) {
-                    System.out.println("[info:delta]:" + new String(value));
-                }
                 value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastlogsize"));
                 if (value != null) {
                     System.out.println("[info:lastlogsize]:" + new String(value));
@@ -177,10 +176,6 @@ public class QueryInfo {
                 value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_type"));
                 if (value != null) {
                     System.out.println("[info:data_type]:" + new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("description"));
-                if (value != null) {
-                    System.out.println("[info:description]:" + new String(value));
                 }
                 value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("description"));
                 if (value != null) {
