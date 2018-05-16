@@ -17,9 +17,10 @@ import java.net.URL;
 public class MonitorMetaData
 {
     public static void main( String[] args ) throws IOException {
-        System.out.println( "Hello World!" );
+        //System.out.println( "Hello World!" );
         QueryInfo queryInfo = new QueryInfo();
-        queryInfo.getRow();
+        //queryInfo.getRow();
+        queryInfo.getScanData();
     }
 
 
