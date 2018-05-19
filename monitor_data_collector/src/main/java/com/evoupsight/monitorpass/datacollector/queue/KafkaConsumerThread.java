@@ -20,7 +20,7 @@ public class KafkaConsumerThread extends Thread {
     public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic, String openstdbServerUrl, PoolingHttpClient httpClient) {
         Properties props = new Properties();
         props.putAll(consumerConfig);
-        this.consumer = new KafkaConsumer<String, String>(props);
+        this.consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Arrays.asList(topic));
         this.openstdbServerUrl = openstdbServerUrl;
         this.httpClient = httpClient;

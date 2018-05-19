@@ -1,8 +1,6 @@
 package com.evoupsight.monitorpass.datacollector.handlers;
 
-//import com.evoupsight.kafkaclient.producer.KafkaProducer;
-//import com.evoupsight.kafkaclient.util.KafkaCallback;
-//import com.evoupsight.kafkaclient.util.KafkaMessage;
+
 import com.evoupsight.monitorpass.datacollector.auth.ScramSha1;
 import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolException;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
@@ -39,9 +37,6 @@ import java.util.regex.Pattern;
 @Sharable
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerHandler.class);
-//    @Autowired
-//    @Qualifier("kafka_producer")
-//    KafkaProducer producer;
     @Autowired
     @Qualifier("new_kafka_producer_pool")
     ExecutorService kafkaProducerPool;
