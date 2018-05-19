@@ -2,8 +2,9 @@ package com.evoupsight.monitorpass.datacollector.cfg;
 
 
 
-import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
-import com.evoupsight.kafkaclient.producer.KafkaProducer;
+//import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
+//import com.evoupsight.kafkaclient.producer.KafkaProducer;
+//import com.evoupsight.kafkaclient.consumer.KafkaConsumer;
 import com.evoupsight.monitorpass.datacollector.handlers.StringProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -11,6 +12,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +24,10 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -135,14 +142,33 @@ public class SpringConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-	@Bean
-	public KafkaConsumer initKafkaConsumer() {
-		return new KafkaConsumer(brokers, groupId);
-	}
+//	@Bean
+//	public KafkaConsumer initKafkaConsumer() {
+//		return new KafkaConsumer(brokers, groupId);
+//	}
 
-	@Bean
-	public KafkaProducer initKafkaProducer() {
-		return new KafkaProducer(brokers, 5, null);
+//	@Bean(name="kafka_producer")
+//	public KafkaProducer initKafkaProducer() {
+//		return new KafkaProducer(brokers, 5, null);
+//	}
+
+	@Bean(name = "new_kafka_producer")
+	public KafkaProducer<String,String> producer() {
+		Properties props = new Properties();
+		props.put("bootstrap.servers", brokers);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		props.put("group.id", groupId);
+		props.put("enable.auto.commit", false);
+		props.put("auto.offset.reset", "earliest");
+		props.put("heartbeat.interval.ms", 3000);
+		props.put("session.timeout.ms", 30000);
+		return new KafkaProducer<String, String>(props);
+	}
+	@Bean(name="new_kafka_producer_pool")
+	public ExecutorService kafkaExecutorService() {
+		ExecutorService executorService = Executors.newFixedThreadPool(5);
+		return executorService;
 	}
 
 }
