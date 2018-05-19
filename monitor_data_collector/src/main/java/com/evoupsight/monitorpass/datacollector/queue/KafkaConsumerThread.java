@@ -10,13 +10,17 @@ import java.util.Map;
 import java.util.Properties;
 
 public class KafkaConsumerThread extends Thread {
-    private KafkaConsumer<String, String> consumer;
 
-    public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic) {
+
+    private KafkaConsumer<String, String> consumer;
+    private String openstdbServerUrl;
+
+    public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic, String openstdbServerUrl) {
         Properties props = new Properties();
         props.putAll(consumerConfig);
         this.consumer = new KafkaConsumer<String, String>(props);
         consumer.subscribe(Arrays.asList(topic));
+        this.openstdbServerUrl = openstdbServerUrl;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class KafkaConsumerThread extends Thread {
                     System.out.printf("threadId=%s,partition=%d,offset=%d,key=%s,value=%s%n",
                             Thread.currentThread().getId(),
                             record.partition(), record.offset(), record.key(), record.value());
-                    new Sender(record.value(), "");
+                    new Sender(record.value(), this.openstdbServerUrl).myProcessMsgBag();
                 }
             }
         } catch (Exception e) {

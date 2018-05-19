@@ -23,7 +23,7 @@ public class Sender {
         this.opentsdbServerUrl = opentsdbServerUrl;
     }
 
-    private void myProcessMsgBag() throws IOException {
+    public void myProcessMsgBag() throws IOException {
         String m = this.message;
         String opentsdbServerUrl = this.opentsdbServerUrl;
         HttpClient client = new HttpClientImpl(opentsdbServerUrl);
