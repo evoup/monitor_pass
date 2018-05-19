@@ -4,6 +4,8 @@ import com.evoupsight.monitorpass.datacollector.queue.KafkaConsumerThread;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.log4j.Logger;
+import org.opentsdb.client.PoolingHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class ConsumeService {
     String groupId;
     @Value("${opentsdb.serverurl}")
     String opentsdbServerUrl;
+    @Autowired
+    PoolingHttpClient httpClient;
 
     @PostConstruct
     public void initConsumer() {
@@ -34,17 +38,15 @@ public class ConsumeService {
     }
 
     private void consume() {
-        Map<String, Object> config = new HashMap<String, Object>();
+        Map<String, Object> config = new HashMap<>();
         config.put("bootstrap.servers", brokers);
         config.put("group.id", groupId);
         config.put("enable.auto.commit", true);
         config.put("auto.commit.interval.ms", 1000);
-        //config.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        //config.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         for (int i = 0; i < 5; i++) {
-            new KafkaConsumerThread(config, topic, opentsdbServerUrl).start();
+            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient).start();
         }
     }
 }

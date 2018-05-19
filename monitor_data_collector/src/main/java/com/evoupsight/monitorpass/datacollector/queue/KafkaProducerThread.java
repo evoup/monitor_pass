@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 public class KafkaProducerThread implements Runnable {
     private static final Logger LOG = Logger.getLogger(KafkaProducerThread.class);
-    private KafkaProducer<String, String> producer = null;
-    private ProducerRecord<String, String> record = null;
+    private KafkaProducer<String, String> producer;
+    private ProducerRecord<String, String> record;
 
     public KafkaProducerThread(KafkaProducer<String,String> producer, ProducerRecord<String,String> record) {
         this.producer = producer;

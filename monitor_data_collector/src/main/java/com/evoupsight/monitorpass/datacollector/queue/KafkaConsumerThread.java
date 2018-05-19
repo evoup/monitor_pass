@@ -4,6 +4,7 @@ import com.evoupsight.monitorpass.datacollector.sender.Sender;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.opentsdb.client.PoolingHttpClient;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -14,13 +15,15 @@ public class KafkaConsumerThread extends Thread {
 
     private KafkaConsumer<String, String> consumer;
     private String openstdbServerUrl;
+    private PoolingHttpClient httpClient;
 
-    public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic, String openstdbServerUrl) {
+    public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic, String openstdbServerUrl, PoolingHttpClient httpClient) {
         Properties props = new Properties();
         props.putAll(consumerConfig);
         this.consumer = new KafkaConsumer<String, String>(props);
         consumer.subscribe(Arrays.asList(topic));
         this.openstdbServerUrl = openstdbServerUrl;
+        this.httpClient = httpClient;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class KafkaConsumerThread extends Thread {
                     System.out.printf("threadId=%s,partition=%d,offset=%d,key=%s,value=%s%n",
                             Thread.currentThread().getId(),
                             record.partition(), record.offset(), record.key(), record.value());
-                    new Sender(record.value(), this.openstdbServerUrl).myProcessMsgBag();
+                    new Sender(record.value(), this.openstdbServerUrl, this.httpClient).myProcessMsgBag();
                 }
             }
         } catch (Exception e) {

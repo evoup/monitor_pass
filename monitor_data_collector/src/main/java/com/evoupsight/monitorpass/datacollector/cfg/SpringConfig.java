@@ -15,6 +15,7 @@ import io.netty.handler.codec.string.StringEncoder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.opentsdb.client.PoolingHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,15 +143,6 @@ public class SpringConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-//	@Bean
-//	public KafkaConsumer initKafkaConsumer() {
-//		return new KafkaConsumer(brokers, groupId);
-//	}
-
-//	@Bean(name="kafka_producer")
-//	public KafkaProducer initKafkaProducer() {
-//		return new KafkaProducer(brokers, 5, null);
-//	}
 
 	@Bean(name = "new_kafka_producer")
 	public KafkaProducer<String,String> producer() {
@@ -169,6 +161,11 @@ public class SpringConfig {
 	public ExecutorService kafkaExecutorService() {
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		return executorService;
+	}
+
+	@Bean(name = "http_client_pool")
+	public PoolingHttpClient poolingHttpClient() {
+		return new PoolingHttpClient();
 	}
 
 }
