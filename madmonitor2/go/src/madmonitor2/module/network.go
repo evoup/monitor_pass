@@ -67,6 +67,24 @@ func ConnectToServer(exit bool, sc *ServerConn) (string,bool, *ServerConn) {
 	return cName, foundServer, sc
 }
 
+func TestServerOn() (bool) {
+	sendHost, _ := inc.ConfObject.GetString("SendHosts")
+	sendHosts := strings.Split(sendHost, ",")
+	sendPort, _ := inc.ConfObject.GetString("SendPort")
+	for i := range sendHosts {
+		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i]+":"+sendPort)
+		fmt.Println("try to connect server:" + sendHosts[i])
+		conn, err := net.DialTCP("tcp", nil, addr)
+		if err != nil {
+
+		} else {
+			conn.Close()
+			return true
+		}
+	}
+	return false
+}
+
 func (c *ServerConn) Quit() error {
 	return c.conn.Close()
 }

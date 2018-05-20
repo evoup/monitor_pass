@@ -32,7 +32,6 @@ import (
 	"strconv"
 	"syscall"
 	"time"
-	"net"
 )
 
 // start unix timestamp
@@ -276,7 +275,7 @@ func run_read(readChannel inc.ReaderChannel) {
 func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 	lastOnline := true
 	for {
-		time.Sleep(time.Second*5)
+		time.Sleep(time.Second*15)
 		select {
 		case msg := <- reconnectChannel.ReconnectQueue:
 			if msg=="broken pipe" {
@@ -294,13 +293,8 @@ func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 			}
 		}
 
-		conn, err := net.DialTimeout("tcp", net.JoinHostPort("172.18.0.1", "8090"), time.Second*5)
-		if err != nil {
-			fmt.Println("reconn err:" + err.Error())
-		}
-		if conn != nil {
+		if TestServerOn() {
 			fmt.Println("》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》")
-			conn.Close()
 			continue
 		} else {
 			lastOnline = false
