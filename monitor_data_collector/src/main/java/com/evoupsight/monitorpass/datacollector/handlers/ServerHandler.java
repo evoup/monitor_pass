@@ -131,30 +131,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
             // 正式开始发送
             LOG.debug("got a message here");
-            //ctx.channel().writeAndFlush(msg);
-            //KafkaProducer producer = new KafkaProducer(brokers, 5, null);
-            /*if (producer.start(new KafkaCallback() {
-                @Override
-                public void onCompletion(KafkaMessage message, Exception e) {
-                    if (e != null) {
-                        System.out.println(e.toString());
-                    }
-                }
-            })) {
-                String msgstr = msg.toString();
-                if (StringUtils.isNoneEmpty(msgstr)) {
-                    String[] m = msgstr.split("\n");
-                    if (ArrayUtils.isNotEmpty(m)) {
-                        for (String s : m) {
-                            if (StringUtils.isNoneEmpty(s)) {
-                                s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString();
-                                producer.sendMessage(topic, s.getBytes());
-                            }
-                        }
-                    }
-                }
-            }*/
-            //producer.stop();
             String msgstr = msg.toString();
             if (StringUtils.isNotEmpty(msgstr)) {
                 String[] m = msgstr.split("\n");
@@ -163,7 +139,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     for (String s : m) {
                         if (StringUtils.isNotEmpty(s)) {
                             s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString();
-                            //producer.sendMessage(topic, s.getBytes());
                             record = new ProducerRecord<>(topic, s);
                             kafkaProducerPool.submit(new KafkaProducerThread(kafkaProducer, record));
                         }
