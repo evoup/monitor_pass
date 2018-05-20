@@ -31,7 +31,6 @@ import (
 	"os/signal"
 	"regexp"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 )
@@ -180,69 +179,46 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 	}
 	go run_read(readChannel)
 	// we must open connection to server before send data
-	// sendHosts := strings.Split(inc.SEND_HOSTS, ",")
-	sendHost, _ := inc.ConfObject.GetString("SendHosts")
-	sendHosts := strings.Split(sendHost, ",")
-	sendPort, _ := inc.ConfObject.GetString("SendPort")
-	cName, _ := inc.ConfObject.GetString("ServerName")
-	foundServer := false
-	for i := range sendHosts {
-		//c, e := DialTimeout(sendHosts[i] + ":" + inc.SEND_PORT, 5*time.Second)
-		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i]+":"+sendPort)
-		conn, err := net.DialTCP("tcp", nil, addr)
+	cName, foundServer, serverConn := MyDial()
+	conn := serverConn.conn
+	///////// scram sha-1安全认证 ////////
+	clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
+	conn.Write([]byte(clientFirstMsg))
+	serverFirstMessageData := make([]byte, 1024)
+	conn.Read(serverFirstMessageData)
+	serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00") // removing NUL characters from bytes
+	fmt.Println(string(serverFirstMessageData))
+	finalMessage, salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
+	conn.Write(finalMessage)
+	//conn.Write([]byte("test"))
+	serverFinalMessageData := make([]byte, 1024)
+	conn.Read(serverFinalMessageData)
+	serverFinalMessageData = bytes.Trim(serverFinalMessageData, "\x00")
+	fmt.Println(string(serverFinalMessageData))
+	// 检查server final message
+	submatch := ServerFinalMessage.FindAllStringSubmatch(string(serverFinalMessageData), -1)
+	if submatch != nil {
+		serverSignature := submatch[0][1]
+		decodeBytes, err := base64.StdEncoding.DecodeString(serverSignature)
 		if err != nil {
-			fmt.Println(err.Error())
-			if i == len(sendHosts)-1 {
-				fmt.Println("no collector server found! good bye.")
-				os.Exit(0)
-			}
-			fmt.Println("switch to another collector server")
-			continue
-		}
-		///////// scram sha-1安全认证 ////////
-		clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
-		conn.Write([]byte(clientFirstMsg))
-		serverFirstMessageData := make([]byte, 1024)
-		conn.Read(serverFirstMessageData)
-		serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00") // removing NUL characters from bytes
-		fmt.Println(string(serverFirstMessageData))
-		finalMessage, salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
-		conn.Write(finalMessage)
-		//conn.Write([]byte("test"))
-		serverFinalMessageData := make([]byte, 1024)
-		conn.Read(serverFinalMessageData)
-		serverFinalMessageData = bytes.Trim(serverFinalMessageData, "\x00")
-		fmt.Println(string(serverFinalMessageData))
-		// 检查server final message
-		submatch := ServerFinalMessage.FindAllStringSubmatch(string(serverFinalMessageData), -1)
-		if submatch != nil {
-			serverSignature := submatch[0][1]
-			decodeBytes, err := base64.StdEncoding.DecodeString(serverSignature)
-			if err != nil {
-				utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
-				continue
-			}
-			fmt.Println("decodeBytes:" + string(decodeBytes))
-			cPass := []byte(ClientPass)
-			cHeader := ClientHeader
-			if !isValidServer(cName, cPass, cNonce, []byte(sNonce), salt, cHeader, decodeBytes, iter,
-				string(serverFirstMessageData)) {
-				utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
-				continue
-			}
-		} else {
 			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
-			continue
+			os.Exit(1)
 		}
-		if err != nil {
-			utils.Log(utils.GetLogger(), "core.Init][error:"+err.Error(), 1, *Debug_level)
-		} else {
-			foundServer = true
-			go run_send(readChannel, conn)
-			break
+		fmt.Println("decodeBytes:" + string(decodeBytes))
+		cPass := []byte(ClientPass)
+		cHeader := ClientHeader
+		if !isValidServer(cName, cPass, cNonce, []byte(sNonce), salt, cHeader, decodeBytes, iter,
+			string(serverFirstMessageData)) {
+			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+			os.Exit(1)
 		}
+	} else {
+		utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+		os.Exit(1)
 	}
-	if !foundServer {
+	if foundServer {
+		go run_send(readChannel, conn)
+	} else {
 		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
 		os.Exit(1)
 	}
