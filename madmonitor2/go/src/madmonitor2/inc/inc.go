@@ -39,6 +39,7 @@ const (
 	MAX_SENDQ_SIZE = 10000
 	MAX_READQ_SIZE = 100000
 	MAX_MSGQ_SIZE  = 100000
+	MAX_CONNQ_SIZE = 1
 )
 
 type DefaultConf struct {
@@ -110,6 +111,7 @@ var Shutdown = make(chan int)
 var MsgQueue = make(chan string, MAX_MSGQ_SIZE)
 var ReaderQueue = make(chan string, MAX_READQ_SIZE)
 var SenderQueue = make(chan string, MAX_SENDQ_SIZE)
+var ReconnectQueue = make(chan string, MAX_CONNQ_SIZE)
 
 type ReaderChannel struct {
 	Readerq        chan string
@@ -117,6 +119,11 @@ type ReaderChannel struct {
 	LinesDropped   int
 	EvictInterval  int
 	DedupInterval  int
+}
+
+type ReconnectChannel struct {
+	ReconnectQueue chan string
+	LastConnected int
 }
 
 func (c *ReaderChannel) SetLinesCollected(i int) {

@@ -26,13 +26,13 @@ import (
 	"madmonitor2/config"
 	"madmonitor2/inc"
 	"madmonitor2/utils"
-	"net"
 	"os"
 	"os/signal"
 	"regexp"
 	"strconv"
 	"syscall"
 	"time"
+	"net"
 )
 
 // start unix timestamp
@@ -104,6 +104,7 @@ func Init() (*log.Logger, *jason.Object) {
 	ev1, _ := strconv.Atoi(ev)
 	dp1, _ := strconv.Atoi(dp)
 	readChannel := NewReadChannel(ev1, dp1)
+	reconnectChannel := NewConnectChannel()
 
 	var dependencies []string
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
@@ -113,7 +114,7 @@ func Init() (*log.Logger, *jason.Object) {
 		os.Exit(1)
 	}
 	service := &Service{srv}
-	status, err := service.Manage(*readChannel)
+	status, err := service.Manage(*readChannel, reconnectChannel)
 	if err != nil {
 		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *Debug_level)
 		errlog.Println(status, "\nError: ", err)
@@ -156,7 +157,7 @@ func parseConf() (*jason.Object, error) {
 }
 
 // Manage by daemon commands or run the daemon
-func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
+func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *inc.ReconnectChannel) (string, error) {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
@@ -178,8 +179,9 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		return service.Status()
 	}
 	go run_read(readChannel)
+	go run_reconnect(ServerConnection, reconnectChannel)
 	// we must open connection to server before send data
-	cName, foundServer, serverConn := MyDial()
+	cName, foundServer, serverConn := ConnectToServer(true, ServerConnection)
 	conn := serverConn.conn
 	///////// scram sha-1安全认证 ////////
 	clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
@@ -217,7 +219,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 		os.Exit(1)
 	}
 	if foundServer {
-		go run_send(readChannel, conn)
+		go run_send(readChannel, serverConn, reconnectChannel)
 	} else {
 		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
 		os.Exit(1)
@@ -239,13 +241,14 @@ func (service *Service) Manage(readChannel inc.ReaderChannel) (string, error) {
 }
 
 // run_send like tcollector`s sender_thread
-func run_send(readChannel inc.ReaderChannel, conn *net.TCPConn) {
+func run_send(readChannel inc.ReaderChannel, sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 	for {
 		select {
 		case msg := <-readChannel.Readerq:
-			_, err := conn.Write([]byte(msg))
+			_, err := sc.conn.Write([]byte(msg))
 			if err != nil {
 				fmt.Printf(err.Error())
+				reconnectChannel.ReconnectQueue <- "broken pipe"
 			}
 			fmt.Println("message sent:" + msg)
 		}
@@ -265,6 +268,42 @@ func run_read(readChannel inc.ReaderChannel) {
 				continue
 			}
 			process_line(readChannel, msg)
+		}
+	}
+}
+
+// reconnect server channel
+func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
+	lastOnline := true
+	for {
+		time.Sleep(time.Second*5)
+		select {
+		case msg := <- reconnectChannel.ReconnectQueue:
+			if msg=="broken pipe" {
+				fmt.Println("detect lost connect from server, will reconnect")
+				lastOnline=false
+			}
+		}
+		if lastOnline==false {
+			fmt.Println("make new conn")
+			_, _, conn1 := ConnectToServer(false, sc)
+			if conn1 != nil {
+				sc = conn1
+				lastOnline = true
+				<- reconnectChannel.ReconnectQueue
+			}
+		}
+
+		conn, err := net.DialTimeout("tcp", net.JoinHostPort("172.18.0.1", "8090"), time.Second*5)
+		if err != nil {
+			fmt.Println("reconn err:" + err.Error())
+		}
+		if conn != nil {
+			fmt.Println("》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》")
+			conn.Close()
+			continue
+		} else {
+			lastOnline = false
 		}
 	}
 }

@@ -26,58 +26,46 @@ import (
 type ServerConn struct {
 	conn    *net.TCPConn
 	host    string
-	timeout time.Duration
+	lastConnected int64
 }
 
+var ServerConnection = &ServerConn{}
 
-func MyDial() (string,bool, *ServerConn) {
+func ConnectToServer(exit bool, sc *ServerConn) (string,bool, *ServerConn) {
 	sendHost, _ := inc.ConfObject.GetString("SendHosts")
 	sendHosts := strings.Split(sendHost, ",")
 	sendPort, _ := inc.ConfObject.GetString("SendPort")
 	cName, _ := inc.ConfObject.GetString("ServerName")
 	foundServer := false
-	sc := &ServerConn{conn:nil,host:"",timeout:0}
+	if sc.conn != nil {
+		fmt.Println("close conn of server:" + sc.host)
+		sc.conn.Close()
+	}
 	for i := range sendHosts {
 		addr, err := net.ResolveTCPAddr("tcp", sendHosts[i]+":"+sendPort)
+		fmt.Println("try to connect server:" + sendHosts[i])
 		conn, err := net.DialTCP("tcp", nil, addr)
 		if err != nil {
 			fmt.Println(err.Error())
 			if i == len(sendHosts)-1 {
-				fmt.Println("no collector server found! good bye.")
-				os.Exit(0)
+				if exit {
+				    fmt.Println("no collector server found! good bye.")
+				    os.Exit(0)
+				}
+			} else {
+				fmt.Println("switch to another collector server")
 			}
-			fmt.Println("switch to another collector server")
 			continue
 		} else {
 			foundServer = true
 			sc.conn=conn
 			sc.host=addr.IP.String()
+			sc.lastConnected = time.Now().Unix()
 			break
 		}
 	}
 	return cName, foundServer, sc
 }
-
-//func DialTimeout(addr string, timeout time.Duration) (*ServerConn, error) {
-//	tconn, err := net.DialTimeout("tcp", addr, timeout)
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	// Use the resolved IP address in case addr contains a domain name
-//	// If we use the domain name, we might not resolve to the same IP.
-//	remoteAddr := tconn.RemoteAddr().(*net.TCPAddr)
-//
-//	conn := textproto.NewConn(tconn)
-//
-//	c := &ServerConn{
-//		conn:    conn,
-//		host:    remoteAddr.IP.String(),
-//		timeout: timeout,
-//	}
-//
-//	return c, nil
-//}
 
 func (c *ServerConn) Quit() error {
 	return c.conn.Close()
