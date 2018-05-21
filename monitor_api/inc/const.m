@@ -189,6 +189,11 @@ define('__SELECTOR_HOSTIP',  '@hostip');
 /* testspeed的选择器 */
 define('__SELECTOR_ALLSITE', '@all'); // 全部站点 
 define('__SELECTOR_SINGLE_SITE', '@self'); // 单个站点 
+
+/* template的选择器 */
+// 全部模板
+define('__SELECTOR_TEMPLATE_ALL', '@alltemplate');
+
 /* }}} */
 
 
