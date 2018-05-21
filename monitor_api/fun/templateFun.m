@@ -72,12 +72,6 @@ case(__OPERATION_READ): //查询操作
                            $hostid=substr($family_column, 11);
                            if ($hostid>=10001 && $hostid<=10104) {
                                if ($Tcell->value=="1") {
-                                   //foreach (array_keys($setsArr[$hostid]) as $key) {
-                                       //if (strstr($key, 'info:setid')) {
-                                           //$setid=substr($key, 10);
-                                       //}
-                                   //}
-                                   //print_r($setItemArr[$setid]);
                                    $itemsUnderTemplate = sizeof($templateItemMap[$hostid]);
                                    $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,1,$templateid);
                                }
