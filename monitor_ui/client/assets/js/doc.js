@@ -84,6 +84,7 @@ smartMad.api = {
   getTemplate: '/get/template/@self/',
   updateTemplate: '/upate/template/@self/',
   deleteTemplate: '/delete/template/@self/',
+  getTemplateAll: '/get/template/@alltemplate/',
 
   // Item
   createItem: '/create/item/@self',
