@@ -211,6 +211,13 @@ $(function(){
 		if(!$('#form').validationEngine()){
 			return;
 		}
+    templateIdNums=$(".selectize-input")[0].childNodes.length-1
+    var templateArr=[]
+    for (i=0;i<templateIdNums;i++) {
+      templateId=$(".selectize-input")[0].childNodes[i].dataset.value
+      templateArr.push(templateId)
+    }
+
       var conf = {
           url: smartMad._url + smartMad.api.createHost
           };
@@ -230,6 +237,7 @@ $(function(){
               data[i] = $('input[name="' + i + '"]').val();
           }
       }
+      data["template"]=templateArr.join("|");
       conf.data = data;
       $(this).postData(conf);
   });
@@ -254,7 +262,8 @@ $(function(){
    $.get(url2, function(data, status){
        for (d in data) {
            template_name=data[d][0];
-           $("#select-state").append('<option value=' + d + '>' + template_name + '</option>');
+           template_id=data[d][4];
+           $("#select-state").append('<option value=' + template_id + '>' + template_name + '</option>');
        }
        // selectize实现的模板选择
        $('#select-state').selectize({ 
