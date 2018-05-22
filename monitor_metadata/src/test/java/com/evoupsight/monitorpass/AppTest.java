@@ -1,8 +1,5 @@
 package com.evoupsight.monitorpass;
 
-import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
@@ -10,13 +7,13 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
-import java.time.Duration;
+
+import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
 
 /**
  * Unit test for simple MonitorMetaData.
  */
-public class AppTest 
-{
+public class AppTest {
     /**
      * Rigorous Test :-)
      */
