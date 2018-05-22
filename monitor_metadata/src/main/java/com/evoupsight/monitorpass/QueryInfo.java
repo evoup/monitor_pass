@@ -121,66 +121,27 @@ public class QueryInfo {
         Table table = connection.getTable(TableName.valueOf("monitor_sets"));
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
         Scan scan = new Scan();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                String templateId = new String(row);
-                String[] cols = getColumnsInColumnFamily(r, "info");
-                if (cols != null) {
-                    for (String col : cols) {
-                        // 查出列，找是否有类似info:setid286的列，这就是setid
-                        if (col.contains("setid")) {
-                            String setid = col.substring(5);
-                            if (templateSetsMap.containsKey(templateId)) {
-                                HashSet<String> sets = templateSetsMap.get(templateId);
-                                sets.add(setid);
-                                templateSetsMap.put(templateId, sets);
-                            } else {
-                                HashSet<String> sets = new HashSet<>();
-                                sets.add(setid);
-                                templateSetsMap.put(templateId, sets);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        templateSetsMap = makeMap(table, templateSetsMap, scan);
         connection.close();
         return templateSetsMap;
     }
+
+
 
     /**
      * 返回key为setId，value为若干itemid
      * @param ad
      */
-    private void scanSetItems(HBaseAdmin ad) throws IOException {
+    private  HashMap<String, HashSet<String>> scanSetItems(HBaseAdmin ad) throws IOException {
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_items"));
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
         Scan scan = new Scan();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                String itemid = new String(row);
-                String[] cols = getColumnsInColumnFamily(r,"info");
-                if (cols != null) {
-                    for (String col : cols) {
-                        if (col.contains("setid")) {
-                            String setid = col.substring(5);
-                            if (setItemsMap.containsKey(setid)) {
-                                HashSet<String> items = setItemsMap.get(setid);
-                                items.add(itemid);
-                                setItemsMap.put(setid, items);
-                            } else {
-                                HasSet<String> items = new HashMap<>()
-                                setItemsMap.put(setid, itemid);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        setItemsMap = makeMap(table, setItemsMap, scan);
+        connection.close();
+        return setItemsMap;
     }
+
 
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
@@ -193,9 +154,16 @@ public class QueryInfo {
         System.out.println("==================================");
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
-        System.out.println("========templateSetsMap===========");
+        System.out.println("=========templateSetsMap==========");
         System.out.println(new Gson().toJson(templateSetsMap));
         System.out.println("==================================");
+
+        HashMap<String, HashSet<String>> setItemsMap = scanSetItems(ad);
+        System.out.println("===========setItemsMap============");
+        System.out.println(new Gson().toJson(setItemsMap));
+        System.out.println("==================================");
+        // 最后获取host下所有对应item的大结构
+
 
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_items"));
@@ -338,6 +306,34 @@ public class QueryInfo {
             System.out.println("row Name: " + new String(CellUtil.cloneQualifier(cell)) + " ");
             System.out.println("value: " + new String(CellUtil.cloneValue(cell)) + " ");
         }
+    }
+
+    private HashMap<String, HashSet<String>> makeMap(Table table, HashMap<String, HashSet<String>> map, Scan scan) throws IOException {
+        try (ResultScanner rs = table.getScanner(scan)) {
+            for (Result r = rs.next(); r != null; r = rs.next()) {
+                byte[] row = r.getRow();
+                String templateId = new String(row);
+                String[] cols = getColumnsInColumnFamily(r, "info");
+                if (cols != null) {
+                    for (String col : cols) {
+                        // 查出列，找是否有类似info:setid286的列，这就是setid
+                        if (col.contains("setid")) {
+                            String setid = col.substring(5);
+                            if (map.containsKey(templateId)) {
+                                HashSet<String> sets = map.get(templateId);
+                                sets.add(setid);
+                                map.put(templateId, sets);
+                            } else {
+                                HashSet<String> sets = new HashSet<>();
+                                sets.add(setid);
+                                map.put(templateId, sets);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return map;
     }
 }
 
