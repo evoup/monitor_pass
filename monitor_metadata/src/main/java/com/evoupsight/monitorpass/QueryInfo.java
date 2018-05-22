@@ -1,7 +1,9 @@
 package com.evoupsight.monitorpass;
 
 import com.evoupsight.monitorpass.domain.Item;
+import com.evoupsight.monitorpass.utils.Utils;
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;
@@ -10,7 +12,9 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
+
+import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 
 /**
  * @author evoup
@@ -73,18 +77,100 @@ public class QueryInfo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return scanData(ad);
+        scanTemplateSets(ad);
+        //return scanData(ad);
+        return null;
     }
 
     /**
-     * 获取全部items
+     * 返回key为hostName，value为template id数组的map
+     * @param ad
+     */
+    private HashMap<String, String[]> scanHosts(HBaseAdmin ad) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
+        Scan scan = new Scan();
+        HashMap<String, String[]> hostTemplateMap = new HashMap<>();
+        try (ResultScanner rs = table.getScanner(scan)) {
+            for (Result r = rs.next(); r != null; r = rs.next()) {
+                byte[] row = r.getRow();
+                String hostName = new String(row);
+                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
+                // 数据收集器不为空，说明是实际的服务器
+                if (r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_collector")) != null) {
+                    byte[] templateBytes = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("template"));
+                    if (templateBytes != null) {
+                        String templateStr = new String(templateBytes);
+                        if (StringUtils.isNotEmpty(templateStr)) {
+                            String[] templateArr = templateStr.split("\\|");
+                            hostTemplateMap.put(hostName, templateArr);
+                        }
+                    }
+                }
+
+            }
+        }
+        connection.close();
+        return hostTemplateMap;
+    }
+
+    /**
+     * 返回key为templateId，value为若干setid
+     * @param ad
+     */
+    private void scanTemplateSets(HBaseAdmin ad) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+        HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
+        Scan scan = new Scan();
+        try (ResultScanner rs = table.getScanner(scan)) {
+            for (Result r = rs.next(); r != null; r = rs.next()) {
+                byte[] row = r.getRow();
+                String templateId = new String(row);
+                String[] cols = getColumnsInColumnFamily(r, "info");
+                // System.out.println("cols:" + new Gson().toJson(cols));
+                if (cols != null) {
+                    for (String col : cols) {
+                        // 查出列，找是否有类似info:setid286的列，这就是setid
+                        if (col.contains("setid")) {
+                            String setid = col.substring(5);
+                            // System.out.println("setid:" + setid);
+                            if (templateSetsMap.containsKey(templateId)) {
+                                HashSet<String> sets = templateSetsMap.get(templateId);
+                                sets.add(setid);
+                                templateSetsMap.put(templateId, sets);
+                            } else {
+                                HashSet<String> sets = new HashSet<>();
+                                sets.add(setid);
+                                templateSetsMap.put(templateId, sets);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        connection.close();
+        System.out.println("templateSetsMap:" + new Gson().toJson(templateSetsMap));
+    }
+
+    /**
+     * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
      */
     public String scanData(HBaseAdmin ad) throws IOException {
+        // 获取主机和模板
+        HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
+        System.out.println("========hostTemplateMap===========");
+        System.out.println(new Gson().toJson(hostTemplateMap));
+        System.out.println("==================================");
+
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_items"));
         Scan scan = new Scan();
-        //scan.setFilter(new PageFilter(10));
-        HashMap<String, Item> confMap = new HashMap();
+
+        // 中间数组，key为templateid，value为若干itemid
+        HashMap<String, HashSet<String>> templateItemMap = new HashMap<>();
+
+        HashMap<String, Item> itemMap = new HashMap<>();
         try (ResultScanner rs = table.getScanner(scan)) {
             for (Result r = rs.next(); r != null; r = rs.next()) {
                 byte[] row = r.getRow();
@@ -153,13 +239,74 @@ public class QueryInfo {
                 if (value != null) {
                     item.setDataType(new String(value));
                 }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("templateid"));
+                if (value != null) {
+                    System.out.println("find templateid");
+                    String templateId = new String(value);
+                    // 已经有模板id的，追加监控项，否则直接加入
+                    if (templateItemMap.containsKey(templateId)) {
+                        HashSet<String> items = templateItemMap.get(templateId);
+                        items.add(new String(row));
+                        templateItemMap.put(templateId, items);
+                    } else {
+                        HashSet<String> items = new HashSet<>();
+                        items.add(new String(row));
+                        templateItemMap.put(templateId, items);
+                    }
+                } else {
+                    System.out.println("could not find templateid");
+                }
                 if (row != null) {
-                    confMap.put(new String(row), item);
+                    itemMap.put(new String(row), item);
                 }
             }
         }
-        String s = new Gson().toJson(confMap);
+        // 最终数组，key为主机，value为若干items
+        HashMap<String, ArrayList<Item>> lastMap = new HashMap<>();
+        Set<Map.Entry<String, String[]>> entries = hostTemplateMap.entrySet();
+        for (Map.Entry<String, String[]> hostTemplateEntry : entries) {
+            String keyHostName = hostTemplateEntry.getKey();
+            System.out.println("keyHostName:" + keyHostName);
+            String[] templateIds = hostTemplateEntry.getValue();
+            System.out.println("templateIds:" + new Gson().toJson(templateIds));
+            Set<Map.Entry<String, HashSet<String>>> entries1 = templateItemMap.entrySet();
+            for (Map.Entry<String, HashSet<String>> templateItemsEntry : entries1) {
+                String templateId = templateItemsEntry.getKey();
+                System.out.println("templateId:" + templateId);
+                if (Arrays.asList(templateIds).contains(templateId)) {
+                    System.out.println("templateId hit:" + templateId);
+                    // 属于该host的template下的item
+                    HashSet<String> itemIds = templateItemsEntry.getValue();
+                    System.out.println("itemIds:" + new Gson().toJson(itemIds));
+                    ArrayList<Item> myItems = new ArrayList<>();
+                    if (itemIds != null) {
+                        for (String itemId : itemIds) {
+                            myItems.add(itemMap.get(itemId));
+                        }
+                    }
+                    // 已有主机的，追加实际item，否则直接加入
+                    if (lastMap.containsKey(keyHostName)) {
+                        ArrayList<Item> items1 = lastMap.get(keyHostName);
+                        items1.addAll(myItems);
+                        lastMap.put(keyHostName, items1);
+                    } else {
+                        lastMap.put(keyHostName, myItems);
+                    }
+                }
+            }
+        }
+
+//        System.out.println("----------itemMap----------");
+//        System.out.println(new Gson().toJson(itemMap));
+//        System.out.println("---------------------------");
+        System.out.println("----------templateItemMap----------");
+        System.out.println(new Gson().toJson(templateItemMap));
+        System.out.println("-----------------------------------");
+
+        //String s = new Gson().toJson(confMap);
+        String s = new Gson().toJson(lastMap);
         System.out.println(s);
+        connection.close();
         return s;
     }
 
