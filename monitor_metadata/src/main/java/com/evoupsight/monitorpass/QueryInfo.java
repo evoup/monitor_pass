@@ -9,11 +9,15 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
 import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 
 /**
@@ -69,7 +73,7 @@ public class QueryInfo {
     }
 
 
-    public String getScanData() throws IOException {
+    public void getScanData() throws IOException {
         Configuration config = getHbaseConf();
         HBaseAdmin ad = null;
         try {
@@ -77,7 +81,7 @@ public class QueryInfo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return scanData(ad);
+        scanData(ad);
     }
 
     /**
@@ -129,10 +133,10 @@ public class QueryInfo {
 
 
     /**
-     * 返回key为setId，value为若干itemid
+     * 返回key为itemId，value为若干setid
      * @param ad
      */
-    private  HashMap<String, HashSet<String>> scanSetItems(HBaseAdmin ad) throws IOException {
+    private  HashMap<String, HashSet<String>> scanItemSets(HBaseAdmin ad) throws IOException {
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_items"));
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
@@ -142,36 +146,14 @@ public class QueryInfo {
         return setItemsMap;
     }
 
-
     /**
-     * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
+     * 返回itemId,value为对应Item的map
      */
-    private String scanData(HBaseAdmin ad) throws IOException {
-        // 获取主机和模板
-        HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
-        System.out.println("========hostTemplateMap===========");
-        System.out.println(new Gson().toJson(hostTemplateMap));
-        System.out.println("==================================");
-
-        HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
-        System.out.println("=========templateSetsMap==========");
-        System.out.println(new Gson().toJson(templateSetsMap));
-        System.out.println("==================================");
-
-        HashMap<String, HashSet<String>> setItemsMap = scanSetItems(ad);
-        System.out.println("===========setItemsMap============");
-        System.out.println(new Gson().toJson(setItemsMap));
-        System.out.println("==================================");
-        // 最后获取host下所有对应item的大结构
-
-
+    private HashMap<String, Item> scanItems(HBaseAdmin ad) throws IOException {
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_items"));
-        Scan scan = new Scan();
-
-
-
         HashMap<String, Item> itemMap = new HashMap<>();
+        Scan scan = new Scan();
         try (ResultScanner rs = table.getScanner(scan)) {
             for (Result r = rs.next(); r != null; r = rs.next()) {
                 byte[] row = r.getRow();
@@ -246,13 +228,53 @@ public class QueryInfo {
                 }
             }
         }
-        // 最终数组，key为主机，value为若干items
-        HashMap<String, ArrayList<Item>> lastMap = new HashMap<>();
-
-        String s = new Gson().toJson(lastMap);
-        System.out.println(s);
         connection.close();
-        return s;
+        return itemMap;
+    }
+
+
+    /**
+     * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
+     */
+    private void scanData(HBaseAdmin ad) throws IOException {
+        // 获取主机和模板
+        HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
+        System.out.println("========hostTemplateMap===========");
+        String json1 = new Gson().toJson(hostTemplateMap);
+        System.out.println(json1);
+        System.out.println("==================================");
+
+        HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
+        System.out.println("=========templateSetsMap==========");
+        String json2 = new Gson().toJson(templateSetsMap);
+        System.out.println(json2);
+        System.out.println("==================================");
+
+        HashMap<String, HashSet<String>> itemSetsMap = scanItemSets(ad);
+        System.out.println("===========itemSetsMap============");
+        String json3 = new Gson().toJson(itemSetsMap);
+        System.out.println(json3);
+        System.out.println("==================================");
+
+        HashMap<String, Item> itemsMap = scanItems(ad);
+        System.out.println("=============itemsMap=============");
+        String json4 = new Gson().toJson(itemsMap);
+        System.out.println(json4);
+        System.out.println("==================================");
+
+        JedisPoolConfig poolConfig = buildPoolConfig();
+
+        // 缓存成4个key就足够了
+        try (JedisPool jedisPool = new JedisPool(poolConfig, "datacollector"); Jedis jedis = jedisPool.getResource()) {
+            // do simple operation to verify that the Jedis resource is working
+            jedis.set("key1", json1);
+            jedis.set("key2", json2);
+            jedis.set("key3", json3);
+            jedis.set("key4", json4);
+            // flush Redis
+            //jedis.flushAll();
+        }
+
     }
 
     /**
