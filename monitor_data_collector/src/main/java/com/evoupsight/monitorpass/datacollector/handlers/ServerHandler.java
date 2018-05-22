@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -48,6 +50,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     String brokers;
     @Value("${kafka.topic}")
     String topic;
+    @Autowired
+    protected JedisPool jedisPool;
+
     private static final Pattern
             CLIENT_FIRST_MESSAGE = Pattern.compile("^(([pny])=?([^,]*),([^,]*),)(m?=?[^,]*,?n=([^,]*),r=([^,]*),?.*)$");
 //    private static final Pattern
@@ -61,6 +66,24 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("client message:" + msg);
+        if (msg != null) {
+            if ("getconf\r\n".equals(msg.toString()) || "getconf\n".equals(msg.toString()) ||
+                    "getconf".equals(msg.toString())) {
+                Jedis resource = null;
+                try {
+                    resource = jedisPool.getResource();
+                    String value1 = resource.get("key1");
+                    System.out.println(value1);
+                    ctx.channel().write(value1);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                } finally {
+                    jedisPool.returnResource(resource);
+                }
+                // 返回客户端配置信息
+                return;
+            }
+        }
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.INITIAL)) {
             // 看消息是不是client first message

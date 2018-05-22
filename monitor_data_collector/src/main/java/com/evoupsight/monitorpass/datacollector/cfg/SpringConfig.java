@@ -17,8 +17,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -74,6 +79,9 @@ public class SpringConfig {
 
     @Value("${kafka.groupId}")
     String groupId;
+
+    @Value("${redis.host}")
+    String redisHost;
 
     @Autowired
     @Qualifier("springProtocolInitializer")
@@ -164,4 +172,17 @@ public class SpringConfig {
         return new PoolingHttpClient();
     }
 
+
+    public @Bean
+    JedisPool getJedisPool() {
+        try {
+            URI jedisURI = new URI(redisHost);
+            return new JedisPool(new JedisPoolConfig(), jedisURI.getHost(),
+                    jedisURI.getPort(), Protocol.DEFAULT_TIMEOUT, null);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(
+                    "Redis couldn't be configured from URL in REDISTOGO_URL env var:"
+                            + redisHost);
+        }
+    }
 }
