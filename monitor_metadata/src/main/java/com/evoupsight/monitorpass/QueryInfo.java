@@ -77,9 +77,7 @@ public class QueryInfo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        scanTemplateSets(ad);
-        //return scanData(ad);
-        return null;
+        return scanData(ad);
     }
 
     /**
@@ -118,7 +116,7 @@ public class QueryInfo {
      * 返回key为templateId，value为若干setid
      * @param ad
      */
-    private void scanTemplateSets(HBaseAdmin ad) throws IOException {
+    private HashMap<String, HashSet<String>> scanTemplateSets(HBaseAdmin ad) throws IOException {
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf("monitor_sets"));
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
@@ -128,13 +126,11 @@ public class QueryInfo {
                 byte[] row = r.getRow();
                 String templateId = new String(row);
                 String[] cols = getColumnsInColumnFamily(r, "info");
-                // System.out.println("cols:" + new Gson().toJson(cols));
                 if (cols != null) {
                     for (String col : cols) {
                         // 查出列，找是否有类似info:setid286的列，这就是setid
                         if (col.contains("setid")) {
                             String setid = col.substring(5);
-                            // System.out.println("setid:" + setid);
                             if (templateSetsMap.containsKey(templateId)) {
                                 HashSet<String> sets = templateSetsMap.get(templateId);
                                 sets.add(setid);
@@ -150,7 +146,7 @@ public class QueryInfo {
             }
         }
         connection.close();
-        System.out.println("templateSetsMap:" + new Gson().toJson(templateSetsMap));
+        return templateSetsMap;
     }
 
     /**
@@ -161,6 +157,11 @@ public class QueryInfo {
         HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
         System.out.println("========hostTemplateMap===========");
         System.out.println(new Gson().toJson(hostTemplateMap));
+        System.out.println("==================================");
+
+        HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
+        System.out.println("========templateSetsMap===========");
+        System.out.println(new Gson().toJson(templateSetsMap));
         System.out.println("==================================");
 
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
