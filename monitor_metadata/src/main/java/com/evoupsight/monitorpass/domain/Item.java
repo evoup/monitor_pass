@@ -1,23 +1,26 @@
 package com.evoupsight.monitorpass.domain;
 
+/**
+ * @author evoup
+ */
 public class Item {
-    String itemid;
-    String type;
-    String dataType;
-    String snmpCommunity;
-    String snmpOid;
-    String hostId;
-    String hostName;
-    String name;
-    String key;
-    String status;
-    String lastlogsize;
-    String units;
-    String delay;
-    String history;
-    String valueType;
-    String multiplier;
-    String delta;
+    private String itemid;
+    private String type;
+    private String dataType;
+    private String snmpCommunity;
+    private String snmpOid;
+    private String hostId;
+    private String hostName;
+    private String name;
+    private String key;
+    private String status;
+    private String lastlogsize;
+    private String units;
+    private String delay;
+    private String history;
+    private String valueType;
+    private String multiplier;
+    private String delta;
 
     public String getItemid() {
         return itemid;
