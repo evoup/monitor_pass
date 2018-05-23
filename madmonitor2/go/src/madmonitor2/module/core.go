@@ -32,6 +32,7 @@ import (
 	"strconv"
 	"syscall"
 	"time"
+	"encoding/json"
 )
 
 // start unix timestamp
@@ -178,9 +179,11 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 		return service.Status()
 	}
 	go run_read(readChannel)
-	go run_reconnect(ServerConnection, reconnectChannel)
+
 	// we must open connection to server before send data
 	cName, foundServer, serverConn := ConnectToServer(true, ServerConnection)
+	go run_reconnect(ServerConnection, reconnectChannel)
+	go run_get_config(ServerConnection)
 	conn := serverConn.conn
 	///////// scram sha-1安全认证 ////////
 	clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
@@ -298,6 +301,44 @@ func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 			continue
 		} else {
 			lastOnline = false
+		}
+	}
+}
+
+// get conf from server
+func run_get_config(sc *ServerConn) {
+	for {
+		time.Sleep(time.Second*120)
+		//cName, _ := inc.ConfObject.GetString("ServerName")
+		cName := "host1"
+		_, err := sc.conn.Write([]byte("getconf|" + cName))
+		if err != nil {
+			fmt.Println("err:" + err.Error())
+		}
+		//serverReturnConfig := make([]byte, 9222)
+		//sc.conn.Read(serverReturnConfig)
+		buf := make([]byte, 0, 40960) // big buffer
+		tmp := make([]byte, 256)     // using small tmo buffer for demonstrating
+		for {
+			n, err := sc.conn.Read(tmp)
+			if err != nil {
+				//if err != io.EOF {
+				//	fmt.Println("read error:", err)
+				//}
+				break
+			}
+			//fmt.Println("got", n, "bytes.")
+			buf = append(buf, tmp[:n]...)
+
+		}
+		//serverReturnConfig1 := `[{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,iowait]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Total swap space","key":"system.swap.size[,total]","status":"0","lastlogsize":"0","units":"B","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,interrupt]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Free disk space on $1","key":"vfs.fs.size[{#FSNAME},free]","status":"0","lastlogsize":"0","units":"B","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,system]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Processor load (5 min average per core)","key":"system.cpu.load[percpu,avg5]","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Free inodes on $1 (percentage)","key":"vfs.fs.inode[{#FSNAME},pfree]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Total disk space on $1","key":"vfs.fs.size[{#FSNAME},total]","status":"0","lastlogsize":"0","units":"B","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Processor load (15 min average per core)","key":"system.cpu.load[percpu,avg15]","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Used disk space on $1","key":"vfs.fs.size[{#FSNAME},used]","status":"0","lastlogsize":"0","units":"B","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Checksum of $1","key":"vfs.file.cksum[/etc/passwd]","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Maximum number of processes","key":"kernel.maxproc","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Processor load (1 min average per core)","key":"system.cpu.load[percpu,avg1]","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Host name","key":"system.hostname","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"1","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Number of running processes","key":"proc.num[,,run]","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Maximum number of opened files","key":"kernel.maxfiles","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Version of zabbix_agent(d) running","key":"agent.version","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"1","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"System information","key":"system.uname","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"1","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Free swap space","key":"system.swap.size[,free]","status":"0","lastlogsize":"0","units":"B","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Number of logged in users","key":"system.users.num","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,idle]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,softirq]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Outgoing network traffic on $1","key":"net.if.out[{#IFNAME}]","status":"0","lastlogsize":"0","units":"bps","delay":"60","history":"7","valueType":"3","multiplier":"1","delta":"1"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,user]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Host name of zabbix_agentd running","key":"agent.hostname","status":"0","lastlogsize":"0","units":"","delay":"3600","history":"7","valueType":"1","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Free swap space in %","key":"system.swap.size[,pfree]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Host local time","key":"system.localtime","status":"0","lastlogsize":"0","units":"unixtime","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Agent ping","key":"agent.ping","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Interrupts per second","key":"system.cpu.intr","status":"0","lastlogsize":"0","units":"ips","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"1"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Free disk space on $1 (percentage)","key":"vfs.fs.size[{#FSNAME},pfree]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,steal]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Incoming network traffic on $1","key":"net.if.in[{#IFNAME}]","status":"0","lastlogsize":"0","units":"bps","delay":"60","history":"7","valueType":"3","multiplier":"1","delta":"1"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Available memory","key":"vm.memory.size[available]","status":"0","lastlogsize":"0","units":"B","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Number of processes","key":"proc.num[]","status":"0","lastlogsize":"0","units":"","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Context switches per second","key":"system.cpu.switches","status":"0","lastlogsize":"0","units":"sps","delay":"60","history":"7","valueType":"3","multiplier":"0","delta":"1"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Host boot time","key":"system.boottime","status":"0","lastlogsize":"0","units":"unixtime","delay":"600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"CPU $2 time","key":"system.cpu.util[,nice]","status":"0","lastlogsize":"0","units":"%","delay":"60","history":"7","valueType":"0","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"Total memory","key":"vm.memory.size[total]","status":"0","lastlogsize":"0","units":"B","delay":"3600","history":"7","valueType":"3","multiplier":"0","delta":"0"},{"type":"0","dataType":"0","snmpCommunity":"","snmpOid":"","name":"System uptime","key":"system.uptime","status":"0","lastlogsize":"0","units":"uptime","delay":"600","history":"7","valueType":"3","multiplier":"0","delta":"0"}]`
+		itemConf := []inc.ItemConf{}
+		err = json.Unmarshal([]byte(buf), &itemConf)
+		if err != nil {
+			fmt.Println("err:" + err.Error())
+		}
+		if err != nil {
+			utils.Log(HLog, "get conf error:" + err.Error(), 1, *Debug_level)
 		}
 	}
 }

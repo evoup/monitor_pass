@@ -123,7 +123,7 @@ type ReaderChannel struct {
 
 type ReconnectChannel struct {
 	ReconnectQueue chan string
-	LastConnected int
+	LastConnected  int
 }
 
 func (c *ReaderChannel) SetLinesCollected(i int) {
@@ -163,3 +163,34 @@ func (c *ReaderChannel) AddLinesCollected() {
 }
 
 var ConfObject = &jason.Object{}
+
+type ItemConf struct {
+	//	"type": "0",
+	Type string `json:"type"`
+	//	"dataType": "0",
+	DataType string `json:"dataType"`
+	//	"snmpCommunity": "",
+	SnmpCommunity string `json:"snmpCommunity"`
+	//	"snmpOid": "",
+	SnmpOid string `json:"snmpOid"`
+	//	"name": "CPU $2 time",
+	Name string `json:"name"`
+	//	"key": "system.cpu.util[,iowait]",
+	Key string `json:"key"`
+	//	"status": "0",
+	Status string `json:"status"`
+	//	"lastlogsize": "0",
+	LastLogSize string `json:"lastlogsize"`
+	//	"units": "%",
+	Units string `json:"units"`
+	//	"delay": "60",
+	Delay string `json:"delay"`
+	//	"history": "7",
+	History string `json:"history"`
+	//	"valueType": "0",
+	ValueType string `json:"valueType"`
+	//	"multiplier": "0",
+	Multiplier string `json:"multiplier"`
+	//	"delta": "0"
+	Delta string `json:"multiplier"`
+}
