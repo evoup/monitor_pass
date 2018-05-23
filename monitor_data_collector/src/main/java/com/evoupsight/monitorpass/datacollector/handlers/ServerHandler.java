@@ -3,8 +3,14 @@ package com.evoupsight.monitorpass.datacollector.handlers;
 
 import com.evoupsight.monitorpass.datacollector.auth.ScramSha1;
 import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolException;
+import com.evoupsight.monitorpass.datacollector.domain.HostTemplates;
+import com.evoupsight.monitorpass.datacollector.domain.ItemIdItem;
+import com.evoupsight.monitorpass.datacollector.domain.ItemSets;
+import com.evoupsight.monitorpass.datacollector.domain.TemplateSets;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -26,9 +32,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
@@ -67,12 +75,23 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("client message:" + msg);
         if (msg != null) {
+            HostTemplates hostTemplates = null;
+            TemplateSets templateSets = null;
+            ItemSets itemSets = null;
+            ItemIdItem itemIdItem = null;
             if ("getconf\r\n".equals(msg.toString()) || "getconf\n".equals(msg.toString()) ||
                     "getconf".equals(msg.toString())) {
                 Jedis resource = null;
                 try {
                     resource = jedisPool.getResource();
                     String value1 = resource.get("key1");
+                    hostTemplates = new Gson().fromJson(value1, HostTemplates.class);
+                    String value2 = resource.get("key2");
+                    templateSets = new Gson().fromJson(value2, TemplateSets.class);
+                    String value3 = resource.get("key3");
+                    itemSets = new Gson().fromJson(value3, ItemSets.class);
+                    String value4 = resource.get("key4");
+                    itemIdItem = new Gson().fromJson(value4, ItemIdItem.class);
                     System.out.println(value1);
                     ctx.channel().write(value1);
                 } catch (Exception ex) {
