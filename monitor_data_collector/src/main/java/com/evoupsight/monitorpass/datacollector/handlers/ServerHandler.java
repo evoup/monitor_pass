@@ -3,10 +3,7 @@ package com.evoupsight.monitorpass.datacollector.handlers;
 
 import com.evoupsight.monitorpass.datacollector.auth.ScramSha1;
 import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolException;
-import com.evoupsight.monitorpass.datacollector.domain.HostTemplates;
-import com.evoupsight.monitorpass.datacollector.domain.ItemIdItem;
-import com.evoupsight.monitorpass.datacollector.domain.ItemSets;
-import com.evoupsight.monitorpass.datacollector.domain.TemplateSets;
+import com.evoupsight.monitorpass.datacollector.domain.*;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
 import com.google.gson.Gson;
@@ -188,7 +185,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 // 找到就退出防止死循环
                 break;
             }
-            System.out.println("hostName:" + confHostName);
             if (StringUtils.isNotEmpty(confHostName)) {
                 HostTemplates hostTemplates;
                 TemplateSets templateSets;
@@ -206,6 +202,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     String value4 = resource.get("key4");
                     itemIdItem = new Gson().fromJson(value4, ItemIdItem.class);
                     // 返回以host为key，旗下若干item为value的map作为配置文件下发
+                    HashSet<String> matchItems = new HashSet<>();
                     if (hostTemplates != null) {
                         Set<Map.Entry<String, String[]>> entries = hostTemplates.entrySet();
                         for (Map.Entry<String, String[]> entry : entries) {
@@ -215,18 +212,32 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                                 HashSet<String> sets = templateSets.get(templateId);
                                 if (sets != null) {
                                     for (String setId : sets) {
-                                        System.out.println("HostName:" + hostName + " setId:" + setId);
                                         if (hostName.equals(confHostName)) {
-                                            System.out.println("found!");
+                                            Set<Map.Entry<String, HashSet<String>>> entriesItemSets = itemSets.entrySet();
+                                            for (Map.Entry<String, HashSet<String>> entriesItemSet : entriesItemSets) {
+                                                HashSet<String> mySets = entriesItemSet.getValue();
+                                                if (mySets != null) {
+                                                    for (String mySet : mySets) {
+                                                        if (mySet.equals(setId)) {
+                                                            matchItems.add(entriesItemSet.getKey());
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    System.out.println(value1);
+                    ArrayList<Item> items = new ArrayList<>();
+                    for (String matchItem : matchItems) {
+                        Item item = itemIdItem.get(matchItem);
+                        items.add(item);
+                    }
+                    String itemsJson = new Gson().toJson(items);
                     // 返回客户端配置信息
-                    ctx.channel().write(value1);
+                    ctx.channel().writeAndFlush(itemsJson).sync();
                     ctx.channel().close();
                 } catch (Exception ex) {
                     ex.printStackTrace();
