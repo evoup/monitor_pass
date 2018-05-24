@@ -122,7 +122,7 @@ func Init() (*log.Logger, *jason.Object) {
 	}
 
 	fmt.Println(status)
-	loadCollectors()
+	//loadCollectors()
 	return logger, object
 }
 
