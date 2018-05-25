@@ -5,10 +5,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.opentsdb.client.PoolingHttpClient;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+
 
 public class KafkaConsumerThread extends Thread {
 

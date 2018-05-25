@@ -173,8 +173,8 @@ public class SpringConfig {
     }
 
 
-    public @Bean
-    JedisPool getJedisPool() {
+    @Bean
+    public JedisPool getJedisPool() {
         try {
             URI jedisURI = new URI(redisHost);
             return new JedisPool(new JedisPoolConfig(), jedisURI.getHost(),
@@ -185,4 +185,6 @@ public class SpringConfig {
                             + redisHost);
         }
     }
+
+
 }
