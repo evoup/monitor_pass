@@ -190,16 +190,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 TemplateSets templateSets;
                 ItemSets itemSets = null;
                 ItemIdItem itemIdItem = null;
-                Jedis resource = null;
+                Jedis redis = null;
                 try {
-                    resource = jedisPool.getResource();
-                    String value1 = resource.get("key1");
+                    redis = jedisPool.getResource();
+                    String value1 = redis.get("key1");
                     hostTemplates = new Gson().fromJson(value1, HostTemplates.class);
-                    String value2 = resource.get("key2");
+                    String value2 = redis.get("key2");
                     templateSets = new Gson().fromJson(value2, TemplateSets.class);
-                    String value3 = resource.get("key3");
+                    String value3 = redis.get("key3");
                     itemSets = new Gson().fromJson(value3, ItemSets.class);
-                    String value4 = resource.get("key4");
+                    String value4 = redis.get("key4");
                     itemIdItem = new Gson().fromJson(value4, ItemIdItem.class);
                     // 返回以host为key，旗下若干item为value的map作为配置文件下发
                     HashSet<String> matchItems = new HashSet<>();
@@ -242,7 +242,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 } finally {
-                    jedisPool.returnResource(resource);
+                    if (redis != null) {
+                        redis.close();
+                    }
                 }
                 return true;
             }
