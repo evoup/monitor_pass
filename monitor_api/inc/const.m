@@ -21,7 +21,7 @@ define('__SUBVERSION','r1590');   //小版本号',即subversion版本号
  */
 define('__MDB_HOST',        $mdb_host);
 define('__MDB_PORT',        $mdb_port);
-define('__MDB_SENDTIMEOUT', '20000');  //20 seconds
+define('__MDB_SENDTIMEOUT', '10000');  //10 seconds
 define('__MDB_RECVTIMEOUT', '20000');  //20 seconds
 /* }}} */
 /* {{{ redis server
