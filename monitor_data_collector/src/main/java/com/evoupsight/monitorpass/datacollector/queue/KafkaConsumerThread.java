@@ -4,6 +4,7 @@ import com.evoupsight.monitorpass.datacollector.sender.Sender;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.log4j.Logger;
 import org.opentsdb.client.PoolingHttpClient;
 import java.util.Arrays;
 import java.util.Map;
@@ -11,8 +12,7 @@ import java.util.Properties;
 
 
 public class KafkaConsumerThread extends Thread {
-
-
+    private static final Logger LOG = Logger.getLogger(KafkaConsumerThread.class);
     private KafkaConsumer<String, String> consumer;
     private String openstdbServerUrl;
     private PoolingHttpClient httpClient;
@@ -39,6 +39,7 @@ public class KafkaConsumerThread extends Thread {
                 }
             }
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
             consumer.close();
