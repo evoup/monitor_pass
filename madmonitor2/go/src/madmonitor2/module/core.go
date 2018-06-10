@@ -181,16 +181,36 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	go run_read(readChannel)
 
 	// we must open connection to server before send data
-	cName, foundServer, serverConn := ConnectToServer(true, ServerConnection)
-	go run_reconnect(ServerConnection, reconnectChannel)
+	//cName, foundServer, serverConn := ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
+	ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
+	go run_reconnect(ServerConnection, readChannel, reconnectChannel)
 	go run_get_config(ServerConnection)
+	//auth(serverConn, cName, foundServer, readChannel, reconnectChannel)
+
+	go main_loop()
+
+	for {
+		select {
+		case killSignal := <-interrupt:
+			fmt.Println("Got signal:", killSignal)
+			utils.Log(HLog, "core.Init][last upload process exists", 1, *Debug_level)
+			if killSignal == os.Interrupt {
+				return "Daemon was interrupted by system signal", nil
+			}
+			return "Daemon was killed", nil
+		}
+	}
+}
+
+func auth(serverConn *ServerConn, cName string, foundServer bool, readChannel inc.ReaderChannel, reconnectChannel *inc.ReconnectChannel) {
 	conn := serverConn.conn
 	///////// scram sha-1安全认证 ////////
 	clientFirstMsg, cNonce := scramSha1FirstMessage(cName)
 	conn.Write([]byte(clientFirstMsg))
 	serverFirstMessageData := make([]byte, 1024)
 	conn.Read(serverFirstMessageData)
-	serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00") // removing NUL characters from bytes
+	serverFirstMessageData = bytes.Trim(serverFirstMessageData, "\x00")
+	// removing NUL characters from bytes
 	fmt.Println(string(serverFirstMessageData))
 	finalMessage, salt, sNonce, iter := scramSha1FinalMessage(serverFirstMessageData, cName, cNonce)
 	conn.Write(finalMessage)
@@ -225,20 +245,6 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	} else {
 		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
 		os.Exit(1)
-	}
-
-	go main_loop()
-
-	for {
-		select {
-		case killSignal := <-interrupt:
-			fmt.Println("Got signal:", killSignal)
-			utils.Log(HLog, "core.Init][last upload process exists", 1, *Debug_level)
-			if killSignal == os.Interrupt {
-				return "Daemon was interrupted by system signal", nil
-			}
-			return "Daemon was killed", nil
-		}
 	}
 }
 
@@ -275,7 +281,7 @@ func run_read(readChannel inc.ReaderChannel) {
 }
 
 // reconnect server channel
-func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
+func run_reconnect(sc *ServerConn, readChannel inc.ReaderChannel, reconnectChannel *inc.ReconnectChannel) {
 	lastOnline := true
 	for {
 		time.Sleep(time.Second*15)
@@ -288,7 +294,7 @@ func run_reconnect(sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 		}
 		if lastOnline==false {
 			fmt.Println("make new conn")
-			_, _, conn1 := ConnectToServer(false, sc)
+			_, _, conn1 := ConnectToServer(false, sc, readChannel, reconnectChannel)
 			if conn1 != nil {
 				sc = conn1
 				lastOnline = true

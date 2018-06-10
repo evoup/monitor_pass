@@ -31,7 +31,7 @@ type ServerConn struct {
 
 var ServerConnection = &ServerConn{}
 
-func ConnectToServer(exit bool, sc *ServerConn) (string,bool, *ServerConn) {
+func ConnectToServer(exit bool, sc *ServerConn, readChannel inc.ReaderChannel, reconnectChannel *inc.ReconnectChannel) (string,bool, *ServerConn) {
 	sendHost, _ := inc.ConfObject.GetString("SendHosts")
 	sendHosts := strings.Split(sendHost, ",")
 	sendPort, _ := inc.ConfObject.GetString("SendPort")
@@ -61,6 +61,7 @@ func ConnectToServer(exit bool, sc *ServerConn) (string,bool, *ServerConn) {
 			sc.conn=conn
 			sc.host=addr.IP.String()
 			sc.lastConnected = time.Now().Unix()
+			auth(sc, cName, foundServer, readChannel, reconnectChannel)
 			break
 		}
 	}

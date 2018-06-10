@@ -82,7 +82,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             String clientName;
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
+                LOG.error("invalid protocol:" + msg.toString());
                 ctx.channel().write("invalid protocol\n");
+                //ctx.channel().close();
                 return;
             }
             String clientFirstMessageBare = m.group(5);
@@ -162,6 +164,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         // 奇怪的状态，认为是初始化中
+        LOG.warn("strange status, set to initial");
         ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
     }
 
