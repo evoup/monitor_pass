@@ -73,6 +73,10 @@ func (p sysloadPlugin) Collect() {
 }
 
 func sysload() {
+	host, _ := inc.ConfObject.GetString("ServerName")
+	host = s.Replace(host, ".", "", -1)
+	host = s.Replace(host, "-", "", -1)
+	metricPrefix := "apps.backend." + host + "."
 	//convert_to_bytes("1234K");
 	collection_interval := SYSLOAD_DEFAULT_COLLECTION_INTERVAL
 	collect_every_cpu := true
@@ -138,11 +142,11 @@ func sysload() {
 				fmt.Printf("cpu.irq %v %v cpu=%v\n", timestamp, cpuinterrupt, cpuid)
 				fmt.Printf("cpu.idle %v %v cpu=%v\n", timestamp, cpuidle, cpuid)
 				// 第一列为具体的收集器名
-				inc.MsgQueue <- fmt.Sprintf("%v cpu.usr %v %v cpu=%v\n", "sysload", timestamp, cpuuser, cpuid)
-				inc.MsgQueue <- fmt.Sprintf("%v cpu.nice %v %v cpu=%v\n", "sysload", timestamp, cpunice, cpuid)
-				inc.MsgQueue <- fmt.Sprintf("%v cpu.sys %v %v cpu=%v\n", "sysload", timestamp, cpusystem, cpuid)
-				inc.MsgQueue <- fmt.Sprintf("%v cpu.irq %v %v cpu=%v\n", "sysload", timestamp, cpuinterrupt, cpuid)
-				inc.MsgQueue <- fmt.Sprintf("%v cpu.idle %v %v cpu=%v\n", "sysload", timestamp, cpuidle, cpuid)
+				inc.MsgQueue <- fmt.Sprintf("%v %vcpu.usr %v %v cpu=%v\n", "sysload", metricPrefix, timestamp, cpuuser, cpuid)
+				inc.MsgQueue <- fmt.Sprintf("%v %vcpu.nice %v %v cpu=%v\n", "sysload", metricPrefix, timestamp, cpunice, cpuid)
+				inc.MsgQueue <- fmt.Sprintf("%v %vcpu.sys %v %v cpu=%v\n", "sysload", metricPrefix, timestamp, cpusystem, cpuid)
+				inc.MsgQueue <- fmt.Sprintf("%v %vcpu.irq %v %v cpu=%v\n", "sysload", metricPrefix, timestamp, cpuinterrupt, cpuid)
+				inc.MsgQueue <- fmt.Sprintf("%v %vcpu.idle %v %v cpu=%v\n", "sysload", metricPrefix, timestamp, cpuidle, cpuid)
 			}
 			if err != nil {
 				break

@@ -24,6 +24,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	s "strings"
 )
 
 var FsTypeIgnore = map[string]bool{
@@ -61,6 +62,10 @@ func (p dfstatPlugin) Collect() {
 }
 
 func dfstat() {
+	host, _ := inc.ConfObject.GetString("ServerName")
+	host = s.Replace(host, ".", "", -1)
+	host = s.Replace(host, "-", "", -1)
+	metricPrefix := "apps.backend." + host + "."
 	collection_interval := DFSTAT_DEFAULT_COLLECTION_INTERVAL
 	f, err := os.Open("/proc/mounts")
 	if err != nil {
@@ -163,10 +168,10 @@ func dfstat() {
 				fmt.Printf("df.bytes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
 				fmt.Printf("df.bytes.free %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
 
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.total %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.used %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.bytes.free %v %v mount=%v fstype=%v\n", timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.total %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.used %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, uint64(fs.Frsize)*fs.Blocks, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.percentused %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.free %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
 
 				used = fs.Files - fs.Ffree
 				//# percent_used = 100 if r.f_files == 0 else used * 100.0 / r.f_files
@@ -191,12 +196,12 @@ func dfstat() {
 				fmt.Printf("df.inodes.total %v %v mount=%v fstype=%v\n", timestamp, fs.Files, devices[i].fsFile, devices[i].fsVfstype)
 				fmt.Printf("df.inodes.used %v %v mount=%v fstype=%v\n", timestamp, used, devices[i].fsFile, devices[i].fsVfstype)
 				fmt.Printf("df.inodes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
-				fmt.Printf("df.inodes.free %v %v mount=%v fstype=%v\n", fs.Ffree, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				fmt.Printf("df.inodes.free %v %v mount=%v fstype=%v\n", timestamp, fs.Ffree, devices[i].fsFile, devices[i].fsVfstype)
 
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.total %v %v mount=%v fstype=%v\n", timestamp, fs.Files, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.used %v %v mount=%v fstype=%v\n", timestamp, used, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.percentused %v %v mount=%v fstype=%v\n", timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
-				inc.MsgQueue <- fmt.Sprintf("dfstat df.inodes.free %v %v mount=%v fstype=%v\n", fs.Ffree, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.inodes.total %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, fs.Files, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.inodes.used %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, used, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.inodes.percentused %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
+				inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.inodes.free %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, fs.Ffree, devices[i].fsFile, devices[i].fsVfstype)
 			}
 		}
 		f.Seek(0, 0)

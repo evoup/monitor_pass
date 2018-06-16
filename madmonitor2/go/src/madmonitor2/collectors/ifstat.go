@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	s "strings"
 )
 
 var FIELDS = []string{"bytes", "packets", "errs", "dropped",
@@ -34,6 +35,10 @@ func (p ifstatPlugin) Collect() {
 }
 
 func ifstat() {
+	host, _ := inc.ConfObject.GetString("ServerName")
+	host = s.Replace(host, ".", "", -1)
+	host = s.Replace(host, "-", "", -1)
+	metricPrefix := "apps.backend." + host + "."
 	collectionInterval := IFSTAT_DEFAULT_COLLECTION_INTERVAL
 	f_netdev, err := os.Open("/proc/net/dev")
 	if err != nil {
@@ -58,7 +63,7 @@ func ifstat() {
 				//print("proc.net.%s %d %s iface=%s direction=%s"
 				//% (FIELDS[i], ts, stats[i], intf, direction(i)))
 				fmt.Print("ifstat proc.net.%v %v %v iface=%v direction=%v", FIELDS[i], ts, stats[i], intf, direction(i))
-				inc.MsgQueue <- fmt.Sprintf("ifstat proc.net.%v %v %v iface=%v direction=%v", FIELDS[i], ts, stats[i], intf, direction(i))
+				inc.MsgQueue <- fmt.Sprintf("ifstat %vproc.net.%v %v %v iface=%v direction=%v", FIELDS[i], metricPrefix, ts, stats[i], intf, direction(i))
 			}
 			//fields := strings.Fields(data[0][2])
 
