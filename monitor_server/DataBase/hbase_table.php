@@ -14,7 +14,7 @@
   +----------------------------------------------------------------------+
  */
 define(__THRIFT_ROOT,'../GPL/thrift');
-define(__MDB_HOST,'192.168.2.197');
+define(__MDB_HOST,'192.168.2.198');
 define(__MDB_PORT,'32777');
 define(__MDB_SENDTIMEOUT, '20000');  //10 seconds
 define(__MDB_RECVTIMEOUT, '20000');  //10 seconds

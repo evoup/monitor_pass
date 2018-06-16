@@ -18,11 +18,12 @@ try {
     $arr=$GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, __KEY_SCAN_DURATION, __MDB_COL_SCAN_DURATION);
     $ts=$arr[0]->timestamp;
     $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
-    if (time()-$ts/1000>1800) {
-        $status="0";
-    } else {
-        $status="1";
-    }
+    //if (time()-$ts/1000>1800) {
+        //$status="0";
+    //} else {
+        //$status="1";
+    //}
+    $status=1;
     $last_update=Date('Y/m/d H:i:s', $ts/1000);
     echo json_encode( array('status'=>$status,'last_update'=>$last_update) );
 } catch (Exception  $e) {

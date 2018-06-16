@@ -178,6 +178,8 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	if *Service_status {
 		return service.Status()
 	}
+	// because system network maybe not ready after reboot, when as a systemd service called, so wait a few seconds
+	time.Sleep(time.Second*10)
 	go run_read(readChannel)
 
 	// we must open connection to server before send data
