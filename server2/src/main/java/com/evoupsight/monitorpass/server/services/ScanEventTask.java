@@ -31,6 +31,7 @@ public class ScanEventTask {
     @Autowired
     public ScanEventTask(CuratorFramework cfClient) {
         this.cfClient = cfClient;
+        this.cfClient.close();
     }
 
     @Scheduled(fixedRate = 5000)
