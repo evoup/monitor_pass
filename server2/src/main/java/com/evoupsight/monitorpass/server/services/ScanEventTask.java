@@ -7,6 +7,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,13 +27,11 @@ public class ScanEventTask {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
-    private final CuratorFramework cfClient;
+
 
     @Autowired
-    public ScanEventTask(CuratorFramework cfClient) {
-        this.cfClient = cfClient;
-        this.cfClient.close();
-    }
+    @Qualifier("cfClient")
+    CuratorFramework cfClient;
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() throws Exception {

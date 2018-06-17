@@ -22,7 +22,7 @@ public class Config {
     @Value("${zk.servers}")
     String zkServers;
 
-    @Bean
+    @Bean(name = "cfClient")
     public CuratorFramework becameCurator() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
