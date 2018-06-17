@@ -29,13 +29,17 @@ public class ScanEventTask {
 
 
 
-    @Autowired
-    @Qualifier("cfClient")
+    private final
     CuratorFramework cfClient;
+
+    @Autowired
+    public ScanEventTask(@Qualifier("cfClient") CuratorFramework cfClient) {
+        this.cfClient = cfClient;
+        this.cfClient.start();
+    }
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() throws Exception {
-        cfClient.start();
         InterProcessLock lock = new InterProcessMutex(cfClient, LOCK_PATH);
         if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
             try {
@@ -50,7 +54,7 @@ public class ScanEventTask {
                     MY_NAME, DEFAULT_WAIT_TIME_SECONDS, LOCK_PATH);
         }
 
-        cfClient.close();
+//        cfClient.close();
 
         LOG.info("The time is now {}", DATE_FORMAT.format(new Date()));
     }
