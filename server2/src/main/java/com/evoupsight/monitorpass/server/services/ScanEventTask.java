@@ -31,14 +31,13 @@ public class ScanEventTask {
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() throws Exception {
         LOG.info(zkServers);
-        String hosts = "zk1:2181,zk2:2181,zk3:2181";
         String lockPath = "/hehe";
         String myName = "test";
         long waitTimeSeconds = DEFAULT_WAIT_TIME_SECONDS;
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
-        CuratorFramework client = CuratorFrameworkFactory.newClient(hosts, retryPolicy);
+        CuratorFramework client = CuratorFrameworkFactory.newClient(zkServers, retryPolicy);
         client.start();
         InterProcessLock lock = new InterProcessMutex(client, lockPath);
         if (lock.acquire(waitTimeSeconds, TimeUnit.SECONDS)) {
