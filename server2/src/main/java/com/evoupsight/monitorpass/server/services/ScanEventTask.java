@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
 
+import com.evoupsight.monitorpass.utils.Scan;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -53,6 +54,7 @@ public class ScanEventTask {
                 try {
                     //doSomeWork(myName);
                     LOG.info("doSomeWork");
+                    new Scan().saveLastScanTime(hbaseConf);
                     Thread.sleep(15000);
                 } finally {
                     lock.release();
