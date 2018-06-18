@@ -189,18 +189,18 @@ public class SpringConfig {
         }
     }
 
-    @Bean
-    public org.apache.hadoop.conf.Configuration hbaseConf() {
-        org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        URL resource = classLoader.getResource("hbase-site.xml");
-        if (resource != null) {
-            String path = resource.getPath();
-            config.addResource(new Path(path));
-            return config;
-        }
-        throw new RuntimeException("can not load hbase config");
-    }
+//    @Bean
+//    public org.apache.hadoop.conf.Configuration hbaseConf() {
+//        org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
+//        ClassLoader classLoader = this.getClass().getClassLoader();
+//        URL resource = classLoader.getResource("hbase-site.xml");
+//        if (resource != null) {
+//            String path = resource.getPath();
+//            config.addResource(new Path(path));
+//            return config;
+//        }
+//        throw new RuntimeException("can not load hbase config");
+//    }
 
 
 }

@@ -1,34 +1,46 @@
 package com.evoupsight.monitorpass.datacollector.utils;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
 
 import static com.evoupsight.monitorpass.constants.Constants.*;
 
 /**
  * @author evoup
  */
-@Component
 public class HbaseUtils {
     private static final Logger LOG = LoggerFactory.getLogger(HbaseUtils.class);
-    @Autowired
-    Configuration config;
 
     private static HbaseUtils instance;
+    private static Configuration config;
 
     public static synchronized HbaseUtils getInstance() {
         if (instance == null) {
             instance = new HbaseUtils();
+            config = instance.hbaseConf(instance);
         }
         return instance;
+    }
+
+    private Configuration hbaseConf(HbaseUtils hbaseUtils) {
+        org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
+        ClassLoader classLoader = hbaseUtils.getClass().getClassLoader();
+        URL resource = classLoader.getResource("hbase-site.xml");
+        if (resource != null) {
+            String path = resource.getPath();
+            config.addResource(new Path(path));
+            return config;
+        }
+        throw new RuntimeException("can not load hbase config");
     }
 
     public void saveLastScanTime(String host) throws IOException {

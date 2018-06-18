@@ -232,6 +232,8 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
             break;
         }
         if (!$err) {
+                                $host_arr['host1'] = array(0,"192.168.2.156", "2018-06-17", "node1", "3d");
+                                $host_arr['host2'] = array(1,"192.168.2.156", "2018-06-17", "node1", "3d");
             if (!empty($host_arr) && !$NotFound) {
                 echo json_encode($host_arr);
                 $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
