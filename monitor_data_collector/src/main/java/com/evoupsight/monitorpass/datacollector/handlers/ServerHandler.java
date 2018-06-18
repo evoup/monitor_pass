@@ -143,7 +143,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-            //HbaseUtils.getInstance().saveLastScanTime(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
+            HbaseUtils.getInstance().saveLastScanTime(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {

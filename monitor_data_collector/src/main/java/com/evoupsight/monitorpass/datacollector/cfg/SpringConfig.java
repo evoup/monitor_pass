@@ -199,7 +199,7 @@ public class SpringConfig {
             config.addResource(new Path(path));
             return config;
         }
-        return null;
+        throw new RuntimeException("can not load hbase config");
     }
 
 
