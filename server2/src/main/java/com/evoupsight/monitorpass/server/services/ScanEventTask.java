@@ -34,7 +34,7 @@ public class ScanEventTask {
     @Value("${zk.servers}")
     String zkServers;
 
-    final
+    private final
     Configuration hbaseConf;
 
     @Autowired
