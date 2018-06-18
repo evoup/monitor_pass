@@ -8,6 +8,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -24,6 +26,7 @@ import redis.clients.jedis.Protocol;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -184,6 +187,19 @@ public class SpringConfig {
                     "Redis couldn't be configured from URL in REDISTOGO_URL env var:"
                             + redisHost);
         }
+    }
+
+    @Bean
+    public org.apache.hadoop.conf.Configuration hbaseConf() {
+        org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        URL resource = classLoader.getResource("hbase-site.xml");
+        if (resource != null) {
+            String path = resource.getPath();
+            config.addResource(new Path(path));
+            return config;
+        }
+        return null;
     }
 
 

@@ -6,6 +6,7 @@ import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolEx
 import com.evoupsight.monitorpass.datacollector.domain.*;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
+import com.evoupsight.monitorpass.datacollector.utils.HbaseUtils;
 import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
@@ -142,6 +143,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
+            HbaseUtils.getInstance().saveLastScanTime(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
