@@ -7,6 +7,9 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.time.Duration;
 import java.util.NavigableMap;
 
+/**
+ * @author evoup
+ */
 public class Utils {
 
     public static JedisPoolConfig buildPoolConfig() {
@@ -25,19 +28,19 @@ public class Utils {
     }
 
 
-    public static String[] getColumnsInColumnFamily(Result r, String ColumnFamily)
+    public static String[] getColumnsInColumnFamily(Result r, String columnfamily)
     {
 
-        NavigableMap<byte[], byte[]> familyMap = r.getFamilyMap(Bytes.toBytes(ColumnFamily));
-        String[] Quantifers = new String[familyMap.size()];
+        NavigableMap<byte[], byte[]> familyMap = r.getFamilyMap(Bytes.toBytes(columnfamily));
+        String[] quantifers = new String[familyMap.size()];
 
         int counter = 0;
         for(byte[] bQunitifer : familyMap.keySet())
         {
-            Quantifers[counter++] = Bytes.toString(bQunitifer);
+            quantifers[counter++] = Bytes.toString(bQunitifer);
 
         }
 
-        return Quantifers;
+        return quantifers;
     }
 }
