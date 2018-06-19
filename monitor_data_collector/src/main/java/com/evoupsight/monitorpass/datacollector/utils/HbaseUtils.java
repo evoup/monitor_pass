@@ -52,7 +52,11 @@ public class HbaseUtils {
             connection = ConnectionFactory.createConnection(ad.getConfiguration());
             table = connection.getTable(TableName.valueOf(MDB_TAB_HOSTS));
             Put p = new Put(Bytes.toBytes(host));
-            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("lastin"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("last_upload"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
+            table.put(p);
+            table = connection.getTable(TableName.valueOf(MDB_TAB_HOST));
+            p = new Put(Bytes.toBytes(host));
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("last_upload"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
             table.put(p);
             LOG.info("host:" + host + "added to hbase");
         } catch (IOException e) {
