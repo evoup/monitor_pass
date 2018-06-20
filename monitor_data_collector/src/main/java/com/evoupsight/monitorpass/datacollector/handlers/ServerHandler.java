@@ -29,6 +29,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -71,7 +72,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("client message:" + msg);
-
         if (dispatchClientConfig(ctx, msg)) {
             return;
         }
@@ -143,7 +143,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-            HbaseUtils.getInstance().saveLastScanTime(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
+            HbaseUtils.getInstance().saveHostInfo(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(),
+                    ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress());
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {

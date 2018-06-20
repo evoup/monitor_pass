@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URL;
 
 import static com.evoupsight.monitorpass.constants.Constants.*;
@@ -43,7 +44,7 @@ public class HbaseUtils {
         throw new RuntimeException("can not load hbase config");
     }
 
-    public void saveLastScanTime(String host) throws IOException {
+    public void saveHostInfo(String host, String address) throws IOException {
         HBaseAdmin ad = null;
         Table table = null;
         Connection connection = null;
@@ -57,6 +58,8 @@ public class HbaseUtils {
             table = connection.getTable(TableName.valueOf(MDB_TAB_HOST));
             p = new Put(Bytes.toBytes(host));
             p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("last_upload"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
+
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("ip"), Bytes.toBytes(address));
             table.put(p);
             LOG.info("host:" + host + "added to hbase");
         } catch (IOException e) {

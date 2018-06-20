@@ -74,6 +74,14 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
                         if (!empty($TRowResult->row)) {
                             /*{{{ 获取监控状态
                              */
+                            if (!(isset($TRowResult->columns['info:monitored']) && 
+                                $TRowResult->columns['info:monitored'] != null && 
+                                $TRowResult->columns['info:monitored'] == 1)) {
+                                $notMonitoredArr = explode(',', $_CONFIG['not_monitored']['not_monitored']);
+                                $notMonitoredArr []= $TRowResult->row;
+                                $notMonitoredArr = array_filter($notMonitoredArr);
+                                $_CONFIG['not_monitored']['not_monitored']=join(',', $notMonitoredArr);
+                            }
                             $Monitored = in_array($TRowResult->row, explode(',', $_CONFIG['not_monitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
                             /* }}} */
                             switch ($GLOBALS['selector']) {
@@ -131,10 +139,11 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
                                 }
                                 break;
                             case(__SELECTOR_MASSUNMON): // 全部未监控的服务器 
+                                //echo $TRowResult->columns['info:last_upload']->value;
                                 $Monitored==__UI_UNMONITORED && $host_arr[$TRowResult->row] = array(
                                     __HOST_STATUS_UNKNOWN,
                                     $TRowResult->columns['info:ip']->value,
-                                    @date("Y-m-d H:i:s",$TRowResult->columns['info:last_upload']->value), // 上次上传时间 
+                                    @date("Y-m-d H:i:s",$TRowResult->columns['info:last_upload']->value/1000), // 上次上传时间 
                                     $monitorNode,
                                     getDhms($TRowResult->columns['info:summary_uptime']->value) // 总计运行时间 
                                 );
@@ -232,8 +241,8 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
             break;
         }
         if (!$err) {
-                                $host_arr['host1'] = array(0,"192.168.2.156", "2018-06-17", "node1", "3d");
-                                $host_arr['host2'] = array(1,"192.168.2.156", "2018-06-17", "node1", "3d");
+            //$host_arr['host1'] = array(0,"192.168.2.156", "2018-06-17", "node1", "3d");
+            //$host_arr['host2'] = array(1,"192.168.2.156", "2018-06-17", "node1", "3d");
             if (!empty($host_arr) && !$NotFound) {
                 echo json_encode($host_arr);
                 $GLOBALS['httpStatus'] = __HTTPSTATUS_OK;
