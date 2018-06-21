@@ -44,7 +44,7 @@ public class HbaseUtils {
         throw new RuntimeException("can not load hbase config");
     }
 
-    public void saveHostInfo(String host, String address) throws IOException {
+    public void saveHostInfo(String host, String clientAddress, String serverName) throws IOException {
         HBaseAdmin ad = null;
         Table table = null;
         Connection connection = null;
@@ -58,8 +58,8 @@ public class HbaseUtils {
             table = connection.getTable(TableName.valueOf(MDB_TAB_HOST));
             p = new Put(Bytes.toBytes(host));
             p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("last_upload"), Bytes.toBytes(String.valueOf(System.currentTimeMillis())));
-
-            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("ip"), Bytes.toBytes(address));
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("ip"), Bytes.toBytes(clientAddress));
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("data_collector"), Bytes.toBytes(serverName));
             table.put(p);
             LOG.info("host:" + host + "added to hbase");
         } catch (IOException e) {

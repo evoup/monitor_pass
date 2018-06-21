@@ -54,6 +54,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     String brokers;
     @Value("${kafka.topic}")
     String topic;
+    @Value("${datacollector.servername}")
+    String dataCollectorServerName;
     @Autowired
     protected JedisPool jedisPool;
 
@@ -144,7 +146,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
             HbaseUtils.getInstance().saveHostInfo(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(),
-                    ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress());
+                    ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress(), dataCollectorServerName);
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
