@@ -334,7 +334,7 @@ case(__SELECTOR_SINGLE):
         } catch (Exception $e) {
         }
         $arr = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $row_key,'info:last_upload');
-        $last_upload = @date("Y-m-d H:i:s", $arr[0]->value);
+        $last_upload = @date("Y-m-d H:i:s", $arr[0]->value/1000);
         if (!$err) {
             $post_info =$st!=5 ?($st ?"Server online." :"Server down.") :"Server unmonitored."; 
             $str = <<<EOT
