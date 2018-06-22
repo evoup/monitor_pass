@@ -77,12 +77,12 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
                             if (!(isset($TRowResult->columns['info:monitored']) && 
                                 $TRowResult->columns['info:monitored'] != null && 
                                 $TRowResult->columns['info:monitored'] == 1)) {
-                                $notMonitoredArr = explode(',', $_CONFIG['unmonitored']['not_monitored']);
+                                $notMonitoredArr = explode(',', $_CONFIG['not_monitored']['not_monitored']);
                                 $notMonitoredArr []= $TRowResult->row;
                                 $notMonitoredArr = array_filter($notMonitoredArr);
-                                $_CONFIG['unmonitored']['not_monitored']=join(',', $notMonitoredArr);
+                                $_CONFIG['not_monitored']['not_monitored']=join(',', $notMonitoredArr);
                             }
-                            $Monitored = in_array($TRowResult->row, explode(',', $_CONFIG['unmonitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
+                            $Monitored = in_array($TRowResult->row, explode(',', $_CONFIG['not_monitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
                             /* }}} */
                             switch ($GLOBALS['selector']) {
                             case(__SELECTOR_MASSUP): // 全部在线的服务器 
@@ -193,7 +193,7 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
 
                     /*{{{ 获取监控状态
                      */
-                    $Monitored = in_array($GLOBALS['rowKey'], explode(',', $_CONFIG['unmonitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
+                    $Monitored = in_array($GLOBALS['rowKey'], explode(',', $_CONFIG['not_monitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
                     /* }}} */
 
                     switch ($GLOBALS['selector']) {
@@ -305,7 +305,7 @@ case(__SELECTOR_SINGLE):
             $err = true;
         }
         try {
-            $unmonitored=explode(',',$_CONFIG['unmonitored']['not_monitored']);
+            $unmonitored=explode(',',$_CONFIG['not_monitored']['not_monitored']);
             $st = $GLOBALS['mdb_client']->get(__MDB_TAB_HOST, $row_key, 'info:status');
             $st = !in_array($row_key,$unmonitored) ?($st[0]->value==1 ?"1" :"0") :5;
             $autoScaleServers=getAutoScalingSrvs();
