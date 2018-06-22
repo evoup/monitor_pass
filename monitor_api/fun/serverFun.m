@@ -158,7 +158,7 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
                                 $host_arr[$TRowResult->row] = array(
                                     $Monitored!=__UI_UNMONITORED ?$hst_stat_arr[$TRowResult->row] :__HOST_STATUS_UNKNOWN, // 状态 
                                     $TRowResult->columns['info:ip']->value, // IP 
-                                    @date("Y-m-d H:i:s",$TRowResult->columns['info:last_upload']->value), // 上次上传时间 
+                                    @date("Y-m-d H:i:s",$TRowResult->columns['info:last_upload']->value/1000), // 上次上传时间 
                                     //$last_check_time, // 上次检查时间 
                                     $monitorNode,
                                     getDhms($TRowResult->columns['info:summary_uptime']->value) // 总计运行时间 
