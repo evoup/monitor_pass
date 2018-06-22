@@ -74,14 +74,15 @@ case(__SELECTOR_MOBCLIENT_ALLUNSCALING):
                         if (!empty($TRowResult->row)) {
                             /*{{{ 获取监控状态
                              */
-                            if (!(isset($TRowResult->columns['info:monitored']) && 
-                                $TRowResult->columns['info:monitored'] != null && 
-                                $TRowResult->columns['info:monitored'] == 1)) {
-                                $notMonitoredArr = explode(',', $_CONFIG['not_monitored']['not_monitored']);
-                                $notMonitoredArr []= $TRowResult->row;
-                                $notMonitoredArr = array_filter($notMonitoredArr);
-                                $_CONFIG['not_monitored']['not_monitored']=join(',', $notMonitoredArr);
-                            }
+                            //print_r($_CONFIG['not_monitored']);
+                            //if (!(isset($TRowResult->columns['info:monitored']) && 
+                                //$TRowResult->columns['info:monitored'] != null && 
+                                //$TRowResult->columns['info:monitored'] == 1)) {
+                                //$notMonitoredArr = explode(',', $_CONFIG['not_monitored']['not_monitored']);
+                                //$notMonitoredArr []= $TRowResult->row;
+                                //$notMonitoredArr = array_filter($notMonitoredArr);
+                                //$_CONFIG['not_monitored']['not_monitored']=join(',', $notMonitoredArr);
+                            //}
                             $Monitored = in_array($TRowResult->row, explode(',', $_CONFIG['not_monitored']['not_monitored'])) ?__UI_UNMONITORED :$monitorNode; // 从配置文件中一次性取出增加性能 
                             /* }}} */
                             switch ($GLOBALS['selector']) {
