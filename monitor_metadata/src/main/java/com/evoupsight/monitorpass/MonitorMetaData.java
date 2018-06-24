@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConf
 /**
  * @author evoup
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="com.evoupsight.monitorpass")
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class, ErrorWebFluxAutoConfiguration.class,
         EmbeddedWebServerFactoryCustomizerAutoConfiguration.class, ReactiveSecurityAutoConfiguration.class})
 public class MonitorMetaData implements CommandLineRunner {

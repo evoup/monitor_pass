@@ -12,21 +12,11 @@ import java.net.URL;
  * @author evoup
  */
 @Configuration
-//@ComponentScan("com.evoupsight")
 @PropertySources({
         @PropertySource("redis.properties")
 })
 @EnableScheduling
 public class Config {
-    /**
-     * Necessary to make the Value annotations work.
-     * 这个自动配置掉了
-     * @return
-     */
-//    @Bean
-//    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-//        return new PropertySourcesPlaceholderConfigurer();
-//    }
 
     @Bean
     public org.apache.hadoop.conf.Configuration hbaseConf() {

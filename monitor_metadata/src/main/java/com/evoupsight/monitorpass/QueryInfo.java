@@ -1,21 +1,24 @@
 package com.evoupsight.monitorpass;
 
 import com.evoupsight.monitorpass.domain.Item;
-import com.evoupsight.monitorpass.utils.Utils;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hbase.*;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
 import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
@@ -23,24 +26,20 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 /**
  * @author evoup
  */
+@Component
 public class QueryInfo {
-    public Configuration getHbaseConf() {
-        Configuration config = HBaseConfiguration.create();
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        URL resource = classLoader.getResource("hbase-site.xml");
-        if (resource != null) {
-            String path = resource.getPath();
-            config.addResource(new Path(path));
-            return config;
-        }
-        return null;
+    private final Configuration hbaseConf;
+
+    @Autowired
+    public QueryInfo(Configuration hbaseConf) {
+        this.hbaseConf = hbaseConf;
     }
 
+
     public void getRow() throws IOException {
-        Configuration config = getHbaseConf();
         HBaseAdmin ad = null;
         try {
-            ad = new HBaseAdmin(config);
+            ad = new HBaseAdmin(hbaseConf);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,11 +47,10 @@ public class QueryInfo {
     }
 
     public void getTables() {
-        Configuration config = getHbaseConf();
         // Instantiate HBaseAdmin class
         HBaseAdmin ad = null;
         try {
-            ad = new HBaseAdmin(config);
+            ad = new HBaseAdmin(hbaseConf);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,10 +72,9 @@ public class QueryInfo {
 
 
     public void getScanData() throws IOException {
-        Configuration config = getHbaseConf();
         HBaseAdmin ad = null;
         try {
-            ad = new HBaseAdmin(config);
+            ad = new HBaseAdmin(hbaseConf);
         } catch (IOException e) {
             e.printStackTrace();
         }
