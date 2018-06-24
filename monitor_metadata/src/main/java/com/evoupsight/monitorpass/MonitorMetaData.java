@@ -1,22 +1,31 @@
 package com.evoupsight.monitorpass;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import org.springframework.boot.Banner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 
-import java.io.IOException;
-
-import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
 
 /**
- * Hello world!
+ * @author evoup
  */
-public class MonitorMetaData {
-    public static void main(String[] args) throws IOException {
-        QueryInfo queryInfo = new QueryInfo();
-        //queryInfo.getRow();
-        queryInfo.getScanData();
+@SpringBootApplication
+@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class, ErrorWebFluxAutoConfiguration.class,
+        EmbeddedWebServerFactoryCustomizerAutoConfiguration.class, ReactiveSecurityAutoConfiguration.class})
+public class MonitorMetaData implements CommandLineRunner {
+    public static void main(String[] args) {
+        SpringApplication app = new SpringApplication(MonitorMetaData.class);
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
     }
 
-
+    @Override
+    public void run(String... args) {
+        // noop
+    }
 }
