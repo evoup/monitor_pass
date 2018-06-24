@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -29,6 +30,9 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 @Service
 public class QueryInfoService {
     private final Configuration hbaseConf;
+
+    @Value("${redis.host}")
+    String redisHost;
 
     @Autowired
     public QueryInfoService(Configuration hbaseConf) {
@@ -261,7 +265,7 @@ public class QueryInfoService {
         JedisPoolConfig poolConfig = buildPoolConfig();
 
         // 缓存成4个key就足够了
-        try (JedisPool jedisPool = new JedisPool(poolConfig, "datacollector"); Jedis jedis = jedisPool.getResource()) {
+        try (JedisPool jedisPool = new JedisPool(poolConfig, redisHost); Jedis jedis = jedisPool.getResource()) {
             // do simple operation to verify that the Jedis resource is working
             jedis.set("key1", json1);
             jedis.set("key2", json2);
