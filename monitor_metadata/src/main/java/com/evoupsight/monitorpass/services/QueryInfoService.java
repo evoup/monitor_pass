@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass;
+package com.evoupsight.monitorpass.services;
 
 import com.evoupsight.monitorpass.domain.Item;
 import com.google.gson.Gson;
@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -26,15 +26,14 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 /**
  * @author evoup
  */
-@Component
-public class QueryInfo {
+@Service
+public class QueryInfoService {
     private final Configuration hbaseConf;
 
     @Autowired
-    public QueryInfo(Configuration hbaseConf) {
+    public QueryInfoService(Configuration hbaseConf) {
         this.hbaseConf = hbaseConf;
     }
-
 
     public void getRow() throws IOException {
         HBaseAdmin ad = null;
