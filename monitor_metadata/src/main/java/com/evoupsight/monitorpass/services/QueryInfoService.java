@@ -100,9 +100,6 @@ public class QueryInfoService {
             for (Result r = rs.next(); r != null; r = rs.next()) {
                 byte[] row = r.getRow();
                 String hostName = new String(row);
-                LOG.info("host:" + hostName);
-                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
-                LOG.info("value:" + value);
                 // 数据收集器不为空，说明是实际的服务器
                 if (r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_collector")) != null) {
                     byte[] templateBytes = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("template"));
