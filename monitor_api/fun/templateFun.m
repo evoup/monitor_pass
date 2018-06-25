@@ -136,7 +136,7 @@ case(__OPERATION_READ): //查询操作
 /**
  * 返回以templated为key，setid为value的全部set
  */
-function getTemplateSetMapOld() {
+function getTemplateSetMap() {
     list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info')); //从row的起点开始 
     $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
     $itemArr=[];
@@ -162,7 +162,7 @@ function getTemplateSetMapOld() {
 /**
  * 返回templateId对多个setId
  */
-function getTemplateSetMap() {
+function getTemplateSetMapOld() {
     $single_redis_server = array(
         'host'     => __REDIS_HOST,
         'port'     => __REDIS_PORT
@@ -185,7 +185,7 @@ function getTemplateSetMap() {
 /**
  * 返回以setid为key，itemid为value的全部item
  */
-function getSetItemMapOld() {
+function getSetItemMap() {
     list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info')); //从row的起点开始 
     $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
     $itemArr=[];
@@ -205,7 +205,7 @@ function getSetItemMapOld() {
     return $itemArr;
 }
 
-function getSetItemMap() {
+function getSetItemMapOld() {
     $single_redis_server = array(
         'host'     => __REDIS_HOST,
         'port'     => __REDIS_PORT
