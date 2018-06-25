@@ -159,6 +159,9 @@ function getTemplateSetMapOld() {
     return $itemArr;
 }
 
+/**
+ * 返回templateId对多个setId
+ */
 function getTemplateSetMap() {
     $single_redis_server = array(
         'host'     => __REDIS_HOST,
@@ -170,7 +173,7 @@ function getTemplateSetMap() {
         $arr=json_decode($value);
         foreach ($arr as $templateid=>$val) {
             if ($templateid>=10001 && $templateid<=10104) {
-                $newArr[$templateid]=$val;
+                $newArr[$templateid]=$val; //val是setIds
             }
         }
         return $newArr;
