@@ -115,6 +115,8 @@ public class QueryInfoService {
                 }
 
             }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
         }
         connection.close();
         return hostTemplateMap;
