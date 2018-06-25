@@ -101,6 +101,7 @@ public class QueryInfoService {
                 byte[] row = r.getRow();
                 String hostName = new String(row);
                 byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
+                LOG.info("value:" + value);
                 // 数据收集器不为空，说明是实际的服务器
                 if (r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_collector")) != null) {
                     byte[] templateBytes = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("template"));
@@ -250,19 +251,19 @@ public class QueryInfoService {
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
         System.out.println("=========templateSetsMap==========");
         String json2 = new Gson().toJson(templateSetsMap);
-        LOG.info("json2:" + json2);
+        //LOG.info("json2:" + json2);
         System.out.println("==================================");
 
         HashMap<String, HashSet<String>> itemSetsMap = scanItemSets(ad);
         System.out.println("===========itemSetsMap============");
         String json3 = new Gson().toJson(itemSetsMap);
-        LOG.info("json3:" + json3);
+        //LOG.info("json3:" + json3);
         System.out.println("==================================");
 
         HashMap<String, Item> itemsMap = scanItems(ad);
         System.out.println("=============itemsMap=============");
         String json4 = new Gson().toJson(itemsMap);
-        LOG.info("json4:" + json4);
+        //LOG.info("json4:" + json4);
         System.out.println("==================================");
 
         JedisPoolConfig poolConfig = buildPoolConfig();
