@@ -10,6 +10,8 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
  */
 @Service
 public class QueryInfoService {
+    private static final Logger LOG = LoggerFactory.getLogger(QueryInfoService.class);
     private final Configuration hbaseConf;
 
     @Value("${redis.host}")
@@ -241,25 +244,25 @@ public class QueryInfoService {
         HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
         System.out.println("========hostTemplateMap===========");
         String json1 = new Gson().toJson(hostTemplateMap);
-        System.out.println(json1);
+        LOG.info("json1:" + json1);
         System.out.println("==================================");
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
         System.out.println("=========templateSetsMap==========");
         String json2 = new Gson().toJson(templateSetsMap);
-        System.out.println(json2);
+        LOG.info("json2:" + json2);
         System.out.println("==================================");
 
         HashMap<String, HashSet<String>> itemSetsMap = scanItemSets(ad);
         System.out.println("===========itemSetsMap============");
         String json3 = new Gson().toJson(itemSetsMap);
-        System.out.println(json3);
+        LOG.info("json3:" + json3);
         System.out.println("==================================");
 
         HashMap<String, Item> itemsMap = scanItems(ad);
         System.out.println("=============itemsMap=============");
         String json4 = new Gson().toJson(itemsMap);
-        System.out.println(json4);
+        LOG.info("json4:" + json4);
         System.out.println("==================================");
 
         JedisPoolConfig poolConfig = buildPoolConfig();
