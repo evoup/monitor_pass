@@ -136,7 +136,7 @@ case(__OPERATION_READ): //查询操作
 /**
  * 返回以templated为key，setid为value的全部set
  */
-function getTemplateSetMapNoCache() {
+function getTemplateSetMapOld() {
     list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info')); //从row的起点开始 
     $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
     $itemArr=[];
@@ -182,7 +182,7 @@ function getTemplateSetMap() {
 /**
  * 返回以setid为key，itemid为value的全部item
  */
-function getSetItemMap() {
+function getSetItemMapOld() {
     list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info')); //从row的起点开始 
     $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
     $itemArr=[];
@@ -200,4 +200,25 @@ function getSetItemMap() {
         }
     }
     return $itemArr;
+}
+
+function getSetItemMap() {
+    $single_redis_server = array(
+        'host'     => __REDIS_HOST,
+        'port'     => __REDIS_PORT
+    );
+    try {
+        $GLOBALS['redis_client'] = new Predis_Client($single_redis_server);
+        $value = $GLOBALS['redis_client']->get("key3");
+        $arr=json_decode($value);
+        $setItemArr=[];
+        foreach ($arr as $itemid=>$setIdsInfo) {
+            foreach ($setIdsInfo as $setId) {
+                $setItemArr[$setId][]=$itemid;
+            }
+        }
+        return $setItemArr;
+    } catch (Exception $e) {
+        return false;
+    }
 }
