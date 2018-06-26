@@ -31,6 +31,7 @@ define(__TABLE10_NAME,    'monitor_hosts'); //新主机表
 define(__TABLE11_NAME,    'monitor_items'); //新监控项表
 define(__TABLE12_NAME,    'monitor_sets'); //新监控集表
 define(__TABLE13_NAME,    'monitor_datacollectors'); //新数据收集器表
+define(__TABLE14_NAME,    'monitor_triggers'); //新触发器表
 
 
 chdir(dirname(__FILE__));
@@ -57,7 +58,8 @@ $all_create_tables = array(
     __TABLE10_NAME,
     __TABLE11_NAME,
     __TABLE12_NAME,
-    __TABLE13_NAME
+    __TABLE13_NAME,
+    __TABLE14_NAME
 );
 /*{{{ 删除表
  */
