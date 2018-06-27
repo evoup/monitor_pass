@@ -755,8 +755,8 @@ $table = __TABLE11_NAME;
 $itemsData = getItems();
 $items=[];
 for($i=1;$i<sizeof($itemsData);$i++) {
-    echo "add item:${itemid}\n";
     list($itemid,$type,$snmp_community,$snmp_oid,$hostid,$name,$key_,$delay,$history,$trends,$status,$value_type,$trapper_hosts,$units,$multiplier,$delta,$snmpv3_securityname,$snmpv3_securitylevel,$snmpv3_authpassphrase,$snmpv3_privpassphrase,$formula,$error,$lastlogsize,$logtimefmt,$templateid,$valuemapid,$delay_flex,$params,$ipmi_sensor,$data_type,$authtype,$username,$password,$publickey,$privatekey,$mtime,$flags,$filter,$interfaceid,$port,$description,$inventory_link,$lifetime,$snmpv3_authprotocol,$snmpv3_privprotocol,$state,$snmpv3_contextname)=$itemsData[$i];
+    echo "add item:${itemid}\n";
     $rowkey="$itemid";
     $sets=getItemsApplication($itemid);
     //print_r($sets);
@@ -985,7 +985,10 @@ try { //thrift出错直接抛出异常需要捕获
     $ret = false;
 }
 /* }}} */
+/* {{{ 默认触发器
+ */
 
+/*}}}*/
 
 closeMdb();
 
