@@ -26,7 +26,7 @@ define('__MDB_RECVTIMEOUT', '10000');  //10 seconds
 /* }}} */
 /* {{{ redis server
  */
-define('__REDIS_HOST',      '192.168.2.197');
+define('__REDIS_HOST',      '192.168.2.198');
 define('__REDIS_PORT',      '6379');
 /* }}} */
 /* {{{ services

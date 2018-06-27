@@ -160,7 +160,7 @@ case(__OPERATION_READ): //查询操作
 //}
 
 function getTemplateSetMap() {
-    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr);
+    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
 
     $rawCommand = "get key2\r\n";
 
@@ -225,7 +225,7 @@ function getTemplateSetMap() {
 //}
 
 function getSetItemMap() {
-    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr);
+    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
 
     $rawCommand = "get key3\r\n";
 
