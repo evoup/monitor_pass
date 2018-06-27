@@ -38,6 +38,7 @@ chdir(dirname(__FILE__));
 include_once('template.php');
 include_once('applications.php');
 include_once('items.php');
+include_once('triggers.php');
 include_once(__THRIFT_ROOT.'/Thrift.php');
 include_once(__THRIFT_ROOT.'/transport/TSocket.php');
 include_once(__THRIFT_ROOT.'/transport/TBufferedTransport.php');
@@ -213,8 +214,14 @@ $table_arr = array(
     ),
     array( //表13的family 
         array(
-            'column_family_name' => "info:", //存监控集
+            'column_family_name' => "info:", //存数据收集器
             'table_name'         => __TABLE13_NAME
+        )
+    ),
+    array( //表14的family 
+        array(
+            'column_family_name' => "info:", //存触发器
+            'table_name'         => __TABLE14_NAME
         )
     )
 );
