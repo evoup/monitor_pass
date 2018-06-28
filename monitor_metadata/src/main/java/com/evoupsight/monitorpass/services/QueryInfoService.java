@@ -134,6 +134,47 @@ public class QueryInfoService {
         return templateSetsMap;
     }
 
+    /**
+     * 返回key为templateId,value为map，map的key是setId，value是setName
+     */
+    private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails(HBaseAdmin ad) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+        HashMap<String, HashMap<String, String>> map = new HashMap<>();
+        Scan scan = new Scan();
+        try (ResultScanner rs = table.getScanner(scan)) {
+            for (Result r = rs.next(); r != null; r = rs.next()) {
+                byte[] row = r.getRow();
+                String templateId = new String(row);
+                String[] cols = getColumnsInColumnFamily(r, "info");
+                if (cols != null) {
+                    for (String col : cols) {
+                        // 查出列，找是否有类似info:setid286的列，这就是setid
+                        if (col.contains("setid")) {
+                            String setid = col.substring(5);
+                            if (map.containsKey(templateId)) {
+                                HashMap<String, String> sets = map.get(templateId);
+                                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
+                                if (value != null) {
+                                    sets.put(setid, new String(value));
+                                }
+                                map.put(templateId, sets);
+                            } else {
+                                HashMap<String, String> sets = new HashMap<>();
+                                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
+                                if (value != null) {
+                                    sets.put(setid, new String(value));
+                                }
+                                map.put(templateId, sets);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
 
 
     /**
@@ -266,15 +307,21 @@ public class QueryInfoService {
         //LOG.info("json4:" + json4);
         System.out.println("==================================");
 
+        HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails(ad);
+        System.out.println("=============setDetailsMap=============");
+        String json5 = new Gson().toJson(setDetailsMap);
+        //LOG.info("json5:" + json5);
+        System.out.println("==================================");
         JedisPoolConfig poolConfig = buildPoolConfig();
 
-        // 缓存成4个key就足够了
+        // 缓存成key
         try (JedisPool jedisPool = new JedisPool(poolConfig, redisHost); Jedis jedis = jedisPool.getResource()) {
             // do simple operation to verify that the Jedis resource is working
             jedis.set("key1", json1);
             jedis.set("key2", json2);
             jedis.set("key3", json3);
             jedis.set("key4", json4);
+            jedis.set("key5", json5);
             // flush Redis
             //jedis.flushAll();
         }
