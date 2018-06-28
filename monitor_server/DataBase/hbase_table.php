@@ -14,7 +14,7 @@
   +----------------------------------------------------------------------+
  */
 define(__THRIFT_ROOT,'../GPL/thrift');
-define(__MDB_HOST,'192.168.2.198');
+define(__MDB_HOST,'datanode1');
 define(__MDB_PORT,'9090');
 define(__MDB_SENDTIMEOUT, '20000');  //10 seconds
 define(__MDB_RECVTIMEOUT, '20000');  //10 seconds
@@ -987,6 +987,80 @@ try { //thrift出错直接抛出异常需要捕获
 /* }}} */
 /* {{{ 默认触发器
  */
+$table = __TABLE14_NAME;
+//trigger
+//触发器id,表达式，描述，url，状态，数值、优先级、最后变更、注释、错误、模板id，类型、状态、标记
+$triggersData = getTriggers();
+print_r($triggersData);
+$mutations = [];
+for($i=1;$i<sizeof($triggersData);$i++) {
+    list($triggerid,$expression,$description,$url,$status,$value,$priority,$lastchange,$comments,$error,$templateid,$type,$state,$flags)=$triggersData[$i];
+    echo "add trigger:${triggerid}\n";
+    $mutations[]=new Mutation( array(
+        'column' => "info:triggerid",
+        'value'  => "${triggerid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:expression",
+        'value'  => "${expression}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:description",
+        'value'  => "${description}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:url",
+        'value'  => "${url}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:status",
+        'value'  => "${status}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:value",
+        'value'  => "${value}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:priority",
+        'value'  => "${priority}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:lastchange",
+        'value'  => "${lastchange}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:comments",
+        'value'  => "${comments}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:error",
+        'value'  => "${error}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:templateid",
+        'value'  => "${templateid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:type",
+        'value'  => "${type}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:state",
+        'value'  => "${state}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:flags",
+        'value'  => "${flags}" 
+    ));
+    try { //thrift出错直接抛出异常需要捕获 
+        $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+        $ret = true;
+    } catch (Exception $e) { //抛出异常返回false 
+        echo $e;
+        $ret = false;
+    }
+
+}
 
 /*}}}*/
 
