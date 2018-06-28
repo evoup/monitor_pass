@@ -995,6 +995,7 @@ print_r($triggersData);
 $mutations = [];
 for($i=1;$i<sizeof($triggersData);$i++) {
     list($triggerid,$expression,$description,$url,$status,$value,$priority,$lastchange,$comments,$error,$templateid,$type,$state,$flags)=$triggersData[$i];
+    $rowkey=$triggerid;
     echo "add trigger:${triggerid}\n";
     $mutations[]=new Mutation( array(
         'column' => "info:triggerid",
