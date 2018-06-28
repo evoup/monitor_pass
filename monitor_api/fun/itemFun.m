@@ -126,10 +126,31 @@ case(__OPERATION_READ): //查询操作
 
 }
 
+function getSetName($colName) {
+    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
+
+    $rawCommand = "get key5\r\n";
+
+    fwrite($c, $rawCommand);
+
+    $rawResponse = fgets($c);
+    $rawResponse = fgets($c);
+    $arr=json_decode($rawResponse);
+    $itemArr = [];
+    $setName= [];
+    foreach($arr as $templateId => $setInfo) {
+        foreach ($setInfo as $setId => $setName) {
+            if ($colName=="setid".$setid) {
+                return $setName;
+            } 
+        }
+    }
+}
+
 /**
  *获取监控集的名字
  */
-function getSetName($colName) {
+function getSetNameOld($colName) {
     list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info'));
     try {
         $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
@@ -139,7 +160,7 @@ function getSetName($colName) {
             $get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
             if ($get_arr == null) break;
             foreach ( $get_arr as $TRowResult ) {
-                $item = $TRowResult->row;
+                //$item = $TRowResult->row;
                 $column = $TRowResult->columns;
                 foreach ($column as $family_column=>$Tcell) {
                     if ($family_column==$colName) {
