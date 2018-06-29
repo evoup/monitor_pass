@@ -1084,7 +1084,7 @@ $functionsData = getFunctions();
 $mutations = [];
 for($i=1;$i<sizeof($functionsData);$i++) {
     list($functionid,$itemid,$triggerid,$function,$parameter,$key)=$functionsData[$i];
-    $rowkey=$functionsData;
+    $rowkey=$functionid;
     echo "add function:${functionid}\n";
     $mutations[]=new Mutation( array(
         'column' => "info:functionid",
