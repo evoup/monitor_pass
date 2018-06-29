@@ -1,5 +1,6 @@
 package com.evoupsight.monitorpass.services;
 
+import com.evoupsight.monitorpass.domain.Function;
 import com.evoupsight.monitorpass.domain.Item;
 import com.evoupsight.monitorpass.domain.Trigger;
 import com.google.gson.Gson;
@@ -368,6 +369,50 @@ public class QueryInfoService {
         return triggerMap;
     }
 
+    private HashMap<String, Function> scanFunctions(HBaseAdmin ad) {
+        HashMap<String, Function> functionMap = new HashMap<>();
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
+            Scan scan = new Scan();
+            try (ResultScanner rs = table.getScanner(scan)) {
+                for (Result r = rs.next(); r != null; r = rs.next()) {
+                    byte[] row = r.getRow();
+                    Function function = new Function();
+                    byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("functionid"));
+                    if (value != null) {
+                        function.setFunctionid(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("function"));
+                    if (value != null) {
+                        function.setFunction(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("itemid"));
+                    if (value != null) {
+                        function.setItemid(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("key"));
+                    if (value != null) {
+                        function.setKey(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("parameter"));
+                    if (value != null) {
+                        function.setParameter(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("triggerid"));
+                    if (value != null) {
+                        function.setTriggerid(new String(value));
+                    }
+                    if (row != null) {
+                        functionMap.put(new String(row), function);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return functionMap;
+    }
+
 
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
@@ -392,6 +437,9 @@ public class QueryInfoService {
         HashMap<String, Trigger> triggerMap = scanTriggers(ad);
         String json6 = new Gson().toJson(triggerMap);
 
+        HashMap<String, Function> functionMap = scanFunctions(ad);
+        String json7 = new Gson().toJson(functionMap);
+
 
         JedisPoolConfig poolConfig = buildPoolConfig();
 
@@ -404,6 +452,7 @@ public class QueryInfoService {
             jedis.set("key4", json4);
             jedis.set("key5", json5);
             jedis.set("key6", json6);
+            jedis.set("key7", json7);
             // flush Redis
             //jedis.flushAll();
         }
