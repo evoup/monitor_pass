@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.URL;
 
-import static com.evoupsight.monitorpass.constants.Constants.*;
+import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_HOST;
+import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_HOSTS;
 
 /**
  * @author evoup

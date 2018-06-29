@@ -8,10 +8,8 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,14 +32,6 @@ public class ScanEventTask {
     @Value("${zk.servers}")
     String zkServers;
 
-    private final
-    Configuration hbaseConf;
-
-    @Autowired
-    public ScanEventTask(Configuration hbaseConf) {
-        this.hbaseConf = hbaseConf;
-    }
-
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         int baseSleepTimeMills = 1000;
@@ -52,9 +42,8 @@ public class ScanEventTask {
             InterProcessLock lock = new InterProcessMutex(cfClient, LOCK_PATH);
             if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
                 try {
-                    //doSomeWork(myName);
-                    LOG.info("doSomeWork");
-                    new Scan().saveLastScanTime(hbaseConf);
+                    LOG.info("server loop");
+                    Scan.getInstance().saveLastScanTime();
                     Thread.sleep(15000);
                 } finally {
                     lock.release();

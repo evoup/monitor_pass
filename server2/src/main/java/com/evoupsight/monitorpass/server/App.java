@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * @author evoup
  */
-@SpringBootApplication(scanBasePackages="com.evoupsight.monitorpass.server")
+@SpringBootApplication(scanBasePackages="com.evoupsight.monitorpass")
 @EnableScheduling
 public class App {
 

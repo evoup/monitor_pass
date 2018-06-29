@@ -6,24 +6,41 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 import static com.evoupsight.monitorpass.constants.Constants.KEY_SCAN_DURATION;
-import static com.evoupsight.monitorpass.constants.Constants.MDB_COL_SCAN_DURATION;
 import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_ENGINE;
 
+@Component
 public class Scan {
-        private static final Logger LOG = LoggerFactory.getLogger(Scan.class);
+    @Autowired
+    private Configuration hbaseConf;
 
-    public void saveLastScanTime(Configuration config) throws IOException {
-        HBaseAdmin ad = null;
+    private static final Logger LOG = LoggerFactory.getLogger(Scan.class);
+
+    private static Scan instance;
+    private HBaseAdmin hBaseAdmin;
+
+    private Scan() {
+    }
+
+    public synchronized static Scan getInstance() throws IOException {
+        if (instance == null) {
+            instance = new Scan();
+            instance.hBaseAdmin = new HBaseAdmin(instance.hbaseConf);
+        }
+        return instance;
+    }
+
+    public void saveLastScanTime() throws IOException {
         Table table = null;
         Connection connection = null;
-        String colFamily = MDB_COL_SCAN_DURATION;
+        HBaseAdmin ad = null;
         try {
-            // FIXME 这里要做成单例
-            ad = new HBaseAdmin(config);
+            ad = hBaseAdmin;
             connection = ConnectionFactory.createConnection(ad.getConfiguration());
             table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE));
             Put p = new Put(Bytes.toBytes(KEY_SCAN_DURATION));
