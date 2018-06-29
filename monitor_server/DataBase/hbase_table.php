@@ -994,7 +994,7 @@ $triggersData = getTriggers();
 //print_r($triggersData);
 $mutations = [];
 for($i=1;$i<sizeof($triggersData);$i++) {
-    list($triggerid,$expression,$description,$url,$status,$value,$priority,$lastchange,$comments,$error,$templateid,$type,$state,$flags)=$triggersData[$i];
+    list($triggerid,$expression,$description,$url,$status,$value,$priority,$lastchange,$comments,$error,$templateid,$type,$state,$flags,$hostid)=$triggersData[$i];
     $rowkey=$triggerid;
     echo "add trigger:${triggerid}\n";
     $mutations[]=new Mutation( array(
@@ -1052,6 +1052,10 @@ for($i=1;$i<sizeof($triggersData);$i++) {
     $mutations[]=new Mutation( array(
         'column' => "info:flags",
         'value'  => "${flags}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:hostid",
+        'value'  => "${hostid}" 
     ));
     try { //thrift出错直接抛出异常需要捕获 
         $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );

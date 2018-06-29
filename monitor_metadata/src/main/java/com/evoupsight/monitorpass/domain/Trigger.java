@@ -15,6 +15,7 @@ public class Trigger {
     private String type;
     private String state;
     private String flags;
+    private String hostid;
 
     public String getTriggerid() {
         return triggerid;
@@ -126,5 +127,13 @@ public class Trigger {
 
     public void setFlags(String flags) {
         this.flags = flags;
+    }
+
+    public String getHostid() {
+        return hostid;
+    }
+
+    public void setHostid(String hostid) {
+        this.hostid = hostid;
     }
 }

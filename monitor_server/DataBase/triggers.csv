@@ -1,296 +1,500 @@
-triggerid,expression,description,url,status,value,priority,lastchange,comments,error,templateid,type,state,flags
-10010,{13078}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-10011,{13084}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-10012,{12580}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0
-10016,{10199}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-10021,{12583}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-10041,{10204}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-10042,{12553}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-10043,{10208}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-10044,{10207}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-10045,{12927}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-10047,{12550}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-10190,{13082}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13000,{12144}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13015,{12641}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,NULL,0,0,0
-13017,{12651}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,NULL,0,0,0
-13019,{12649}<25,"Less than 25% free in the trends cache",,0,0,3,0,,,NULL,0,0,0
-13023,{12653}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,NULL,0,0,0
-13025,{12549}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,NULL,0,0,0
-13026,{12926}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13073,{12645}<25,"Less than 25% free in the history cache",,0,0,3,0,,,NULL,0,0,0
-13074,{12646}<5,"Less than 5% free in the value cache",,0,0,3,0,,,NULL,0,0,0
-13075,{12648}<5,"Less than 5% free in the value cache",,0,0,3,0,,,13074,0,0,0
-13080,({TRIGGER.VALUE}=0&{13099}>75)|({TRIGGER.VALUE}=1&{13099}>65),"Zabbix alerter processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13081,({TRIGGER.VALUE}=0&{13101}>75)|({TRIGGER.VALUE}=1&{13101}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13082,({TRIGGER.VALUE}=0&{13103}>75)|({TRIGGER.VALUE}=1&{13103}>65),"Zabbix db watchdog processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13083,({TRIGGER.VALUE}=0&{13105}>75)|({TRIGGER.VALUE}=1&{13105}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13084,({TRIGGER.VALUE}=0&{13107}>75)|({TRIGGER.VALUE}=1&{13107}>65),"Zabbix escalator processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13085,({TRIGGER.VALUE}=0&{13109}>75)|({TRIGGER.VALUE}=1&{13109}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13086,({TRIGGER.VALUE}=0&{13111}>75)|({TRIGGER.VALUE}=1&{13111}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13087,({TRIGGER.VALUE}=0&{13113}>75)|({TRIGGER.VALUE}=1&{13113}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13088,({TRIGGER.VALUE}=0&{13115}>75)|({TRIGGER.VALUE}=1&{13115}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13089,({TRIGGER.VALUE}=0&{13117}>75)|({TRIGGER.VALUE}=1&{13117}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13090,({TRIGGER.VALUE}=0&{13121}>75)|({TRIGGER.VALUE}=1&{13121}>65),"Zabbix node watcher processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13091,({TRIGGER.VALUE}=0&{13123}>75)|({TRIGGER.VALUE}=1&{13123}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13092,({TRIGGER.VALUE}=0&{13125}>75)|({TRIGGER.VALUE}=1&{13125}>65),"Zabbix proxy poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13093,({TRIGGER.VALUE}=0&{13029}>75)|({TRIGGER.VALUE}=1&{13029}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13094,({TRIGGER.VALUE}=0&{13129}>75)|({TRIGGER.VALUE}=1&{13129}>65),"Zabbix timer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13095,({TRIGGER.VALUE}=0&{13131}>75)|({TRIGGER.VALUE}=1&{13131}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13096,({TRIGGER.VALUE}=0&{13133}>75)|({TRIGGER.VALUE}=1&{13133}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13097,({TRIGGER.VALUE}=0&{13135}>75)|({TRIGGER.VALUE}=1&{13135}>65),"Zabbix vmware collector processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13243,{13080}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0
-13266,{12592}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13272,{12598}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13275,({TRIGGER.VALUE}=0&{13119}>75)|({TRIGGER.VALUE}=1&{13119}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13285,{13159}=0,"Telnet service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13287,{12671}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,NULL,0,0,2
-13288,{12672}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2
-13289,{12673}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2
-13291,"{12675} / {12676} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,NULL,0,0,2
-13292,"{12677} / {12678} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2
-13293,"{12679} / {12680} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2
-13294,{12681}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2
-13295,"{12682}<5 | {12682}>90","Baseboard Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13296,"{12683}<10 | {12683}>83","Baseboard Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13297,"{12684}<0.953 | {12684}>1.149","BB +1.05V PCH Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13298,"{12685}<0.985 | {12685}>1.117","BB +1.05V PCH Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13299,"{12686}<0.683 | {12686}>1.543","BB +1.1V P1 Vccp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13300,"{12687}<0.708 | {12687}>1.501","BB +1.1V P1 Vccp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13301,"{12688}<1.362 | {12688}>1.635","BB +1.5V P1 DDR3 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13302,"{12689}<1.401 | {12689}>1.589","BB +1.5V P1 DDR3 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13303,"{12690}<1.597 | {12690}>2.019","BB +1.8V SM Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13304,"{12691}<1.646 | {12691}>1.960","BB +1.8V SM Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13305,"{12692}<2.876 | {12692}>3.729","BB +3.3V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13306,"{12693}<2.982 | {12693}>3.625","BB +3.3V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13307,"{12694}<2.970 | {12694}>3.618","BB +3.3V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13308,"{12695}<3.067 | {12695}>3.525","BB +3.3V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13309,"{12696}<2.876 | {12696}>3.729","BB +3.3V STBY Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13310,"{12697}<2.982 | {12697}>3.625","BB +3.3V STBY Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13311,"{12698}<2.970 | {12698}>3.618","BB +3.3V STBY Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13312,"{12699}<3.067 | {12699}>3.525","BB +3.3V STBY Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13313,"{12700}<4.471 | {12700}>5.538","BB +5.0V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13314,"{12701}<4.362 | {12701}>5.663","BB +5.0V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13315,"{12702}<4.630 | {12702}>5.380","BB +5.0V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13316,"{12703}<4.483 | {12703}>5.495","BB +5.0V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13317,"{12704}<5 | {12704}>66","BB Ambient Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13318,"{12705}<10 | {12705}>61","BB Ambient Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13319,"{12706}<0 | {12706}>48","Front Panel Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13320,"{12707}<5 | {12707}>44","Front Panel Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13321,{12708}=0,Power,,0,0,2,0,,,NULL,0,0,0
-13322,{12709}=0,Power,,0,0,2,0,,,NULL,0,0,0
-13323,{12710}<324,"System Fan 2 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13324,{12711}<378,"System Fan 2 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13325,{12712}<324,"System Fan 3 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0
-13326,{12713}<378,"System Fan 3 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0
-13327,{13155}=0,"MySQL is down",,0,0,2,0,,,NULL,0,0,0
-13328,{12715}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13329,{12929}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13330,{12717}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13331,{12718}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13332,{13089}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13333,{13088}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13334,{13087}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13336,{12723}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13337,{12724}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0
-13338,{12725}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13339,{12726}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-13340,{12727}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13341,{12728}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13342,{12729}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13343,{12730}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13344,{12731}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13345,{12930}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13346,{12733}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13347,{12734}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13348,{13074}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13349,{13073}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13350,{13072}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13352,{12739}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13353,{12740}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0
-13354,{12741}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13355,{12742}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-13356,{12743}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13357,{12744}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13358,{12745}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13359,{12746}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13360,{12747}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13361,{12931}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13364,{13071}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13365,{13070}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13366,{13069}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13367,{13068}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0
-13368,{12755}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13370,{12757}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13371,{12758}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-13372,{12759}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13373,{12760}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13374,{12761}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13375,{12762}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13376,{12763}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13377,{12932}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13382,{13075}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13384,{12771}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13386,{12773}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13388,{12775}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13389,{12776}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13390,{12777}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13391,{12778}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13392,{12779}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13393,{12933}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13395,{12782}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13396,{13093}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13397,{13092}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13398,{13091}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13399,{13090}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0
-13400,{12787}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13401,{12788}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0
-13402,{12789}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13403,{12790}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-13404,{12791}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13405,{12792}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13406,{12793}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13407,{12794}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13408,{12795}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13409,{12934}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13410,{12797}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13411,{12798}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13414,{13086}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13416,{12803}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13418,{12805}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13419,{12806}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0
-13420,{12807}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13421,{12808}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13422,{12809}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13423,{12810}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13425,{12812}>0,"Host information was changed on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13428,{12815}<0,"{HOST.NAME} has just been restarted",,0,0,3,0,,,NULL,0,0,0
-13430,{13095}>300,"Too many processes on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13431,{12818}<100000,"Lack of free swap space on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13433,{12820}<10000,"Lack of free memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13435,{13094}>5,"Processor load is too high on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13436,({TRIGGER.VALUE}=0&{13136}>75)|({TRIGGER.VALUE}=1&{13136}>65),"Zabbix vmware collector processes more than 75% busy",,0,0,3,0,,,13097,0,0,0
-13437,{12824}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0
-13438,{12935}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0
-13439,{12826}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2
-13441,({TRIGGER.VALUE}=0&{13127}>75)|({TRIGGER.VALUE}=1&{13127}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13442,"{12830} > ({12831} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13443,"{12832} > ({12833} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13444,"{12834} > ({12835}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13445,{12836}>({12837}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13446,{12838}>({12839}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13447,{12840}>({12841}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13448,{12842}>({12843}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13449,{12844}>({12845}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13450,{12846}>({12847}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13451,{12848}>({12849}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13452,{12850}>({12851}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13453,{12852}<{12853},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13454,{12854}<{12855},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13455,{12856}<{12857},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13456,"{12858} = 1","gzip compression is off for connector http-8080 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13457,"{12859} = 1","gzip compression is off for connector http-8443 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13458,{12860}={12861},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13459,{12862}={12863},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13460,{12864}={12865},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13461,{12866}={12867},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13462,{12868}={12869},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13463,{12870}={12871},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13464,{12872}={12873},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13465,{12874}=1,"{HOST.NAME} is not reachable",,0,0,3,0,,,NULL,0,0,0
-13466,{12967}=1,"{HOST.NAME} uses suboptimal JIT compiler",,0,0,1,0,,,NULL,0,0,0
-13467,({TRIGGER.VALUE}=0&{13100}>75)|({TRIGGER.VALUE}=1&{13100}>65),"Zabbix Alerter Processes More Than 75% Busy",,0,0,3,0,,,13080,0,0,0
-13468,({TRIGGER.VALUE}=0&{13102}>75)|({TRIGGER.VALUE}=1&{13102}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,13081,0,0,0
-13469,({TRIGGER.VALUE}=0&{13104}>75)|({TRIGGER.VALUE}=1&{13104}>65),"Zabbix db watchdog processes more than 75% busy",,0,0,3,0,,,13082,0,0,0
-13470,({TRIGGER.VALUE}=0&{13106}>75)|({TRIGGER.VALUE}=1&{13106}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,13083,0,0,0
-13471,({TRIGGER.VALUE}=0&{13108}>75)|({TRIGGER.VALUE}=1&{13108}>65),"Zabbix escalator processes more than 75% busy",,0,0,3,0,,,13084,0,0,0
-13472,({TRIGGER.VALUE}=0&{13110}>75)|({TRIGGER.VALUE}=1&{13110}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,13085,0,0,0
-13473,({TRIGGER.VALUE}=0&{13112}>75)|({TRIGGER.VALUE}=1&{13112}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,13086,0,0,0
-13474,({TRIGGER.VALUE}=0&{13114}>75)|({TRIGGER.VALUE}=1&{13114}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,13087,0,0,0
-13475,({TRIGGER.VALUE}=0&{13116}>75)|({TRIGGER.VALUE}=1&{13116}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,13088,0,0,0
-13476,({TRIGGER.VALUE}=0&{13118}>75)|({TRIGGER.VALUE}=1&{13118}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,13089,0,0,0
-13477,({TRIGGER.VALUE}=0&{13120}>75)|({TRIGGER.VALUE}=1&{13120}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,13275,0,0,0
-13478,({TRIGGER.VALUE}=0&{13122}>75)|({TRIGGER.VALUE}=1&{13122}>65),"Zabbix node watcher processes more than 75% busy",,0,0,3,0,,,13090,0,0,0
-13479,({TRIGGER.VALUE}=0&{13124}>75)|({TRIGGER.VALUE}=1&{13124}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,13091,0,0,0
-13480,({TRIGGER.VALUE}=0&{13126}>75)|({TRIGGER.VALUE}=1&{13126}>65),"Zabbix proxy poller processes more than 75% busy",,0,0,3,0,,,13092,0,0,0
-13481,({TRIGGER.VALUE}=0&{13030}>75)|({TRIGGER.VALUE}=1&{13030}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,13093,0,0,0
-13482,({TRIGGER.VALUE}=0&{13128}>75)|({TRIGGER.VALUE}=1&{13128}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,13441,0,0,0
-13483,({TRIGGER.VALUE}=0&{13130}>75)|({TRIGGER.VALUE}=1&{13130}>65),"Zabbix timer processes more than 75% busy",,0,0,3,0,,,13094,0,0,0
-13484,({TRIGGER.VALUE}=0&{13132}>75)|({TRIGGER.VALUE}=1&{13132}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,13095,0,0,0
-13485,({TRIGGER.VALUE}=0&{13134}>75)|({TRIGGER.VALUE}=1&{13134}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,13096,0,0,0
-13486,{12895}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,13023,0,0,0
-13487,{12896}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,13015,0,0,0
-13488,{12897}<25,"Less than 25% free in the history cache",,0,0,3,0,,,13073,0,0,0
-13489,{12898}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,13017,0,0,0
-13490,{12899}<25,"Less than 25% free in the trends cache",,0,0,3,0,,,13019,0,0,0
-13491,{12900}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,10047,0,0,0
-13492,{12928}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,10045,0,0,0
-13493,{12902}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,10042,0,0,0
-13494,{12903}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,10041,0,0,0
-13495,{13085}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,10011,0,0,0
-13496,{13083}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,10190,0,0,0
-13497,{13079}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,10010,0,0,0
-13498,{13081}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,13243,0,0,0
-13499,{12908}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,10043,0,0,0
-13500,{12909}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,10012,0,0,0
-13501,{12910}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,10044,0,0,0
-13502,{12911}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,10021,0,0,0
-13503,{12912}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,10016,0,0,0
-13504,{12913}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,13000,0,0,0
-13505,{12914}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13272,0,0,2
-13506,{12915}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13266,0,0,2
-13507,{12936}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0
-13508,{12937}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13509,{12938}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13508,0,0,0
-13510,{12939}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13511,{12940}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13512,{12941}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13513,{12942}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13514,{12943}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13515,{12944}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13516,{12945}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0
-13517,{12946}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,NULL,0,0,0
-13518,{12947}<25,"Less than 25% free in the history cache",,0,0,3,0,,,NULL,0,0,0
-13519,{12948}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,NULL,0,0,0
-13520,{12949}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,NULL,0,0,0
-13521,({TRIGGER.VALUE}=0&{13137}>75)|({TRIGGER.VALUE}=1&{13137}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13522,({TRIGGER.VALUE}=0&{13139}>75)|({TRIGGER.VALUE}=1&{13139}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13523,({TRIGGER.VALUE}=0&{13141}>75)|({TRIGGER.VALUE}=1&{13141}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13524,({TRIGGER.VALUE}=0&{13142}>75)|({TRIGGER.VALUE}=1&{13142}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13525,({TRIGGER.VALUE}=0&{13143}>75)|({TRIGGER.VALUE}=1&{13143}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13526,({TRIGGER.VALUE}=0&{13144}>75)|({TRIGGER.VALUE}=1&{13144}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13527,({TRIGGER.VALUE}=0&{13145}>75)|({TRIGGER.VALUE}=1&{13145}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13528,({TRIGGER.VALUE}=0&{13146}>75)|({TRIGGER.VALUE}=1&{13146}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13529,({TRIGGER.VALUE}=0&{13147}>75)|({TRIGGER.VALUE}=1&{13147}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13530,({TRIGGER.VALUE}=0&{13148}>75)|({TRIGGER.VALUE}=1&{13148}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13531,({TRIGGER.VALUE}=0&{13149}>75)|({TRIGGER.VALUE}=1&{13149}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13532,({TRIGGER.VALUE}=0&{13150}>75)|({TRIGGER.VALUE}=1&{13150}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13533,({TRIGGER.VALUE}=0&{13151}>75)|({TRIGGER.VALUE}=1&{13151}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13534,({TRIGGER.VALUE}=0&{13138}>75)|({TRIGGER.VALUE}=1&{13138}>65),"Zabbix data sender processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13535,({TRIGGER.VALUE}=0&{13140}>75)|({TRIGGER.VALUE}=1&{13140}>65),"Zabbix heartbeat sender processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0
-13536,{12965}<25,"Less than 25% free in the vmware cache",,0,0,3,0,,,NULL,0,0,0
-13537,{12966}<25,"Less than 25% free in the vmware cache",,0,0,3,0,,,13536,0,0,0
-13538,{12968}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13539,{12969}>({12970}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13540,{12971}>({12972}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13541,{12973}={12974},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13542,{12975}={12976},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13543,{12977}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,,NULL,0,0,0
-13544,{12994}=0,"FTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13545,{12995}=0,"HTTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13546,{12996}=0,"HTTPS service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13547,{12997}=0,"IMAP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13548,{12998}=0,"LDAP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13549,{13154}=0,"NNTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13550,{13156}=0,"NTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13551,{13152}=0,"POP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13552,{13157}=0,"SMTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13553,{13158}=0,"SSH service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0
-13554,{13096}=0,"{HOST.NAME} is unavailable by ICMP",,0,0,3,0,,,NULL,0,0,0
-13555,{13097}>0.15,"Response time is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13556,{13098}>20,"Ping loss is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0
-13557,"{13160} = 1","gzip compression is off for connector http-8080 on {HOST.NAME}",,0,1,1,1529398802,,"Agent is unavailable.",13456,0,1,0
-13558,"{13161} = 1","gzip compression is off for connector http-8443 on {HOST.NAME}",,0,0,1,0,,"Catalina:type=ProtocolHandler,port=8443",13457,0,1,0
-13559,"{13162} > ({13163} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,0,0,2,0,,"Catalina:type=ThreadPool,name=http-8080",13442,0,1,0
-13560,"{13164} > ({13165} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,"Catalina:type=ThreadPool,name=http-8443",13443,0,1,0
-13561,"{13166} > ({13167}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,"Catalina:type=ThreadPool,name=jk-8009",13444,0,1,0
+triggerid,expression,description,url,status,value,priority,lastchange,comments,error,templateid,type,state,flags,hostid
+10016,{10199}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10001
+10041,{10204}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10001
+10044,{10207}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10001
+10043,{10208}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10001
+13000,{12144}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10001
+13025,{12549}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,NULL,0,0,0,10050
+10047,{12550}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10001
+10042,{12553}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10001
+10012,{12580}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0,10001
+10021,{12583}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10001
+13266,{12592}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10001
+13272,{12598}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10001
+13015,{12641}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,NULL,0,0,0,10047
+13073,{12645}<25,"Less than 25% free in the history cache",,0,0,3,0,,,NULL,0,0,0,10047
+13074,{12646}<5,"Less than 5% free in the value cache",,0,0,3,0,,,NULL,0,0,0,10047
+13075,{12648}<5,"Less than 5% free in the value cache",,0,0,3,0,,,13074,0,0,0,10084
+13019,{12649}<25,"Less than 25% free in the trends cache",,0,0,3,0,,,NULL,0,0,0,10047
+13017,{12651}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,NULL,0,0,0,10047
+13023,{12653}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,NULL,0,0,0,10047
+13287,{12671}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,NULL,0,0,2,10060
+13288,{12672}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2,10066
+13289,{12673}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2,10067
+13291,"{12675} / {12676} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,NULL,0,0,2,10068
+13291,"{12675} / {12676} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,NULL,0,0,2,10068
+13292,"{12677} / {12678} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2,10067
+13292,"{12677} / {12678} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2,10067
+13293,"{12679} / {12680} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2,10069
+13293,"{12679} / {12680} > 0.8","Free disk space is less than 20% on volume {#SNMPVALUE}",,0,0,2,0,,,13291,0,0,2,10069
+13294,{12681}=1,"Operational status was changed on {HOST.NAME} interface {#SNMPVALUE}",,0,0,1,0,,,13287,0,0,2,10069
+13295,"{12682}<5 | {12682}>90","Baseboard Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13296,"{12683}<10 | {12683}>83","Baseboard Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13297,"{12684}<0.953 | {12684}>1.149","BB +1.05V PCH Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13298,"{12685}<0.985 | {12685}>1.117","BB +1.05V PCH Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13299,"{12686}<0.683 | {12686}>1.543","BB +1.1V P1 Vccp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13300,"{12687}<0.708 | {12687}>1.501","BB +1.1V P1 Vccp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13301,"{12688}<1.362 | {12688}>1.635","BB +1.5V P1 DDR3 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13302,"{12689}<1.401 | {12689}>1.589","BB +1.5V P1 DDR3 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13303,"{12690}<1.597 | {12690}>2.019","BB +1.8V SM Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10071
+13304,"{12691}<1.646 | {12691}>1.960","BB +1.8V SM Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10071
+13305,"{12692}<2.876 | {12692}>3.729","BB +3.3V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10071
+13306,"{12693}<2.982 | {12693}>3.625","BB +3.3V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13307,"{12694}<2.970 | {12694}>3.618","BB +3.3V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10071
+13308,"{12695}<3.067 | {12695}>3.525","BB +3.3V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13309,"{12696}<2.876 | {12696}>3.729","BB +3.3V STBY Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10071
+13310,"{12697}<2.982 | {12697}>3.625","BB +3.3V STBY Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13311,"{12698}<2.970 | {12698}>3.618","BB +3.3V STBY Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10071
+13312,"{12699}<3.067 | {12699}>3.525","BB +3.3V STBY Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13313,"{12700}<4.471 | {12700}>5.538","BB +5.0V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13314,"{12701}<4.362 | {12701}>5.663","BB +5.0V Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10071
+13315,"{12702}<4.630 | {12702}>5.380","BB +5.0V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13316,"{12703}<4.483 | {12703}>5.495","BB +5.0V Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10071
+13317,"{12704}<5 | {12704}>66","BB Ambient Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10071
+13318,"{12705}<10 | {12705}>61","BB Ambient Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10071
+13319,"{12706}<0 | {12706}>48","Front Panel Temp Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13320,"{12707}<5 | {12707}>44","Front Panel Temp Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13321,{12708}=0,Power,,0,0,2,0,,,NULL,0,0,0,10072
+13322,{12709}=0,Power,,0,0,2,0,,,NULL,0,0,0,10071
+13323,{12710}<324,"System Fan 2 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13324,{12711}<378,"System Fan 2 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13325,{12712}<324,"System Fan 3 Critical [{ITEM.VALUE}]",,0,0,5,0,,,NULL,0,0,0,10072
+13326,{12713}<378,"System Fan 3 Non-Critical [{ITEM.VALUE}]",,0,0,4,0,,,NULL,0,0,0,10072
+13328,{12715}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10074
+13330,{12717}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10074
+13331,{12718}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10074
+13336,{12723}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10074
+13337,{12724}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0,10074
+13338,{12725}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10074
+13339,{12726}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10074
+13340,{12727}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10074
+13341,{12728}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10074
+13342,{12729}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10074
+13343,{12730}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10074
+13344,{12731}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10075
+13346,{12733}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10075
+13347,{12734}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10075
+13352,{12739}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10075
+13353,{12740}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0,10075
+13354,{12741}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10075
+13355,{12742}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10075
+13356,{12743}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10075
+13357,{12744}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10075
+13358,{12745}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10075
+13359,{12746}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10075
+13360,{12747}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10076
+13368,{12755}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10076
+13370,{12757}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10076
+13371,{12758}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10076
+13372,{12759}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10076
+13373,{12760}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10076
+13374,{12761}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10076
+13375,{12762}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10076
+13376,{12763}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10077
+13384,{12771}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10077
+13386,{12773}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10077
+13388,{12775}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10077
+13389,{12776}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10077
+13390,{12777}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10077
+13391,{12778}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10077
+13392,{12779}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10078
+13395,{12782}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10078
+13400,{12787}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10078
+13401,{12788}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,NULL,0,0,0,10078
+13402,{12789}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10078
+13403,{12790}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10078
+13404,{12791}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10078
+13405,{12792}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10078
+13406,{12793}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10078
+13407,{12794}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10078
+13408,{12795}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10079
+13410,{12797}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10079
+13411,{12798}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10079
+13416,{12803}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10079
+13418,{12805}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10079
+13419,{12806}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,NULL,0,0,0,10079
+13420,{12807}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10079
+13421,{12808}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10079
+13422,{12809}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10079
+13423,{12810}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10079
+13425,{12812}>0,"Host information was changed on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10081
+13428,{12815}<0,"{HOST.NAME} has just been restarted",,0,0,3,0,,,NULL,0,0,0,10081
+13431,{12818}<100000,"Lack of free swap space on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10081
+13433,{12820}<10000,"Lack of free memory on server {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10081
+13437,{12824}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10081
+13439,{12826}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,NULL,0,0,2,10081
+13442,"{12830} > ({12831} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13442,"{12830} > ({12831} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13443,"{12832} > ({12833} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13443,"{12832} > ({12833} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13444,"{12834} > ({12835}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13444,"{12834} > ({12835}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10083
+13445,{12836}>({12837}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13445,{12836}>({12837}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13446,{12838}>({12839}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13446,{12838}>({12839}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13447,{12840}>({12841}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13447,{12840}>({12841}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13448,{12842}>({12843}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13448,{12842}>({12843}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13449,{12844}>({12845}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13449,{12844}>({12845}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13450,{12846}>({12847}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13450,{12846}>({12847}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13451,{12848}>({12849}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13451,{12848}>({12849}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13452,{12850}>({12851}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13452,{12850}>({12851}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13453,{12852}<{12853},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13453,{12852}<{12853},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13454,{12854}<{12855},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13454,{12854}<{12855},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13455,{12856}<{12857},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13455,{12856}<{12857},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13456,"{12858} = 1","gzip compression is off for connector http-8080 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10083
+13457,"{12859} = 1","gzip compression is off for connector http-8443 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10083
+13458,{12860}={12861},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13458,{12860}={12861},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13459,{12862}={12863},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13459,{12862}={12863},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13460,{12864}={12865},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13460,{12864}={12865},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13461,{12866}={12867},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13461,{12866}={12867},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13462,{12868}={12869},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13462,{12868}={12869},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13463,{12870}={12871},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13463,{12870}={12871},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13464,{12872}={12873},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13464,{12872}={12873},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13465,{12874}=1,"{HOST.NAME} is not reachable",,0,0,3,0,,,NULL,0,0,0,10082
+13486,{12895}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,13023,0,0,0,10084
+13487,{12896}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,13015,0,0,0,10084
+13488,{12897}<25,"Less than 25% free in the history cache",,0,0,3,0,,,13073,0,0,0,10084
+13489,{12898}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,13017,0,0,0,10084
+13490,{12899}<25,"Less than 25% free in the trends cache",,0,0,3,0,,,13019,0,0,0,10084
+13491,{12900}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,10047,0,0,0,10084
+13493,{12902}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,,10042,0,0,0,10084
+13494,{12903}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,,10041,0,0,0,10084
+13499,{12908}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,,10043,0,0,0,10084
+13500,{12909}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.",,10012,0,0,0,10084
+13501,{12910}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,,10044,0,0,0,10084
+13502,{12911}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,,10021,0,0,0,10084
+13503,{12912}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,,10016,0,0,0,10084
+13504,{12913}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,13000,0,0,0,10084
+13505,{12914}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13272,0,0,2,10084
+13506,{12915}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13266,0,0,2,10084
+13026,{12926}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
+10045,{12927}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10001
+13492,{12928}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,10045,0,0,0,10084
+13329,{12929}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10074
+13345,{12930}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10075
+13361,{12931}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10076
+13377,{12932}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10077
+13393,{12933}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10078
+13409,{12934}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10079
+13438,{12935}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10081
+13507,{12936}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
+13508,{12937}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10001
+13509,{12938}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13508,0,0,0,10084
+13510,{12939}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10074
+13511,{12940}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10075
+13512,{12941}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10076
+13513,{12942}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10077
+13514,{12943}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10078
+13515,{12944}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10079
+13516,{12945}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10081
+13517,{12946}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,NULL,0,0,0,10048
+13518,{12947}<25,"Less than 25% free in the history cache",,0,0,3,0,,,NULL,0,0,0,10048
+13519,{12948}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,NULL,0,0,0,10048
+13520,{12949}>100,"More than 100 items having missing data for more than 10 minutes",,0,0,2,0,"zabbix[queue,10m] item is collecting data about how many items are missing data for more than 10 minutes (next parameter)",,NULL,0,0,0,10048
+13536,{12965}<25,"Less than 25% free in the vmware cache",,0,0,3,0,,,NULL,0,0,0,10047
+13537,{12966}<25,"Less than 25% free in the vmware cache",,0,0,3,0,,,13536,0,0,0,10084
+13466,{12967}=1,"{HOST.NAME} uses suboptimal JIT compiler",,0,0,1,0,,,NULL,0,0,0,10082
+13538,{12968}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13539,{12969}>({12970}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13539,{12969}>({12970}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13540,{12971}>({12972}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13540,{12971}>({12972}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10082
+13541,{12973}={12974},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13541,{12973}={12974},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13542,{12975}={12976},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13542,{12975}={12976},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10082
+13543,{12977}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,,NULL,0,0,0,10082
+13544,{12994}=0,"FTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10093
+13545,{12995}=0,"HTTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10094
+13546,{12996}=0,"HTTPS service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10095
+13547,{12997}=0,"IMAP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10096
+13548,{12998}=0,"LDAP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10097
+13093,({TRIGGER.VALUE}=0&{13029}>75)|({TRIGGER.VALUE}=1&{13029}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13481,({TRIGGER.VALUE}=0&{13030}>75)|({TRIGGER.VALUE}=1&{13030}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,13093,0,0,0,10084
+13367,{13068}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0,10076
+13366,{13069}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10076
+13365,{13070}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10076
+13364,{13071}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10076
+13350,{13072}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10075
+13349,{13073}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10075
+13348,{13074}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10075
+13382,{13075}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10077
+10010,{13078}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10001
+13497,{13079}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,10010,0,0,0,10084
+13243,{13080}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0,10001
+13498,{13081}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,13243,0,0,0,10084
+10190,{13082}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10001
+13496,{13083}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,10190,0,0,0,10084
+10011,{13084}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10001
+13495,{13085}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,10011,0,0,0,10084
+13414,{13086}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10079
+13334,{13087}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10074
+13333,{13088}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10074
+13332,{13089}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10074
+13399,{13090}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.",,NULL,0,0,0,10078
+13398,{13091}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10078
+13397,{13092}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10078
+13396,{13093}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10078
+13435,{13094}>5,"Processor load is too high on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10081
+13430,{13095}>300,"Too many processes on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10081
+13554,{13096}=0,"{HOST.NAME} is unavailable by ICMP",,0,0,3,0,,,NULL,0,0,0,10104
+13555,{13097}>0.15,"Response time is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10104
+13556,{13098}>20,"Ping loss is too high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10104
+13080,({TRIGGER.VALUE}=0&{13099}>75)|({TRIGGER.VALUE}=1&{13099}>65),"Zabbix alerter processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13467,({TRIGGER.VALUE}=0&{13100}>75)|({TRIGGER.VALUE}=1&{13100}>65),"Zabbix alerter processes more than 75% busy",,0,0,3,0,,,13080,0,0,0,10084
+13081,({TRIGGER.VALUE}=0&{13101}>75)|({TRIGGER.VALUE}=1&{13101}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13468,({TRIGGER.VALUE}=0&{13102}>75)|({TRIGGER.VALUE}=1&{13102}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,13081,0,0,0,10084
+13082,({TRIGGER.VALUE}=0&{13103}>75)|({TRIGGER.VALUE}=1&{13103}>65),"Zabbix db watchdog processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13469,({TRIGGER.VALUE}=0&{13104}>75)|({TRIGGER.VALUE}=1&{13104}>65),"Zabbix db watchdog processes more than 75% busy",,0,0,3,0,,,13082,0,0,0,10084
+13083,({TRIGGER.VALUE}=0&{13105}>75)|({TRIGGER.VALUE}=1&{13105}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13470,({TRIGGER.VALUE}=0&{13106}>75)|({TRIGGER.VALUE}=1&{13106}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,13083,0,0,0,10084
+13084,({TRIGGER.VALUE}=0&{13107}>75)|({TRIGGER.VALUE}=1&{13107}>65),"Zabbix escalator processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13471,({TRIGGER.VALUE}=0&{13108}>75)|({TRIGGER.VALUE}=1&{13108}>65),"Zabbix escalator processes more than 75% busy",,0,0,3,0,,,13084,0,0,0,10084
+13085,({TRIGGER.VALUE}=0&{13109}>75)|({TRIGGER.VALUE}=1&{13109}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13472,({TRIGGER.VALUE}=0&{13110}>75)|({TRIGGER.VALUE}=1&{13110}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,13085,0,0,0,10084
+13086,({TRIGGER.VALUE}=0&{13111}>75)|({TRIGGER.VALUE}=1&{13111}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13473,({TRIGGER.VALUE}=0&{13112}>75)|({TRIGGER.VALUE}=1&{13112}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,13086,0,0,0,10084
+13087,({TRIGGER.VALUE}=0&{13113}>75)|({TRIGGER.VALUE}=1&{13113}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13474,({TRIGGER.VALUE}=0&{13114}>75)|({TRIGGER.VALUE}=1&{13114}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,13087,0,0,0,10084
+13088,({TRIGGER.VALUE}=0&{13115}>75)|({TRIGGER.VALUE}=1&{13115}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13475,({TRIGGER.VALUE}=0&{13116}>75)|({TRIGGER.VALUE}=1&{13116}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,13088,0,0,0,10084
+13089,({TRIGGER.VALUE}=0&{13117}>75)|({TRIGGER.VALUE}=1&{13117}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13476,({TRIGGER.VALUE}=0&{13118}>75)|({TRIGGER.VALUE}=1&{13118}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,13089,0,0,0,10084
+13275,({TRIGGER.VALUE}=0&{13119}>75)|({TRIGGER.VALUE}=1&{13119}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13477,({TRIGGER.VALUE}=0&{13120}>75)|({TRIGGER.VALUE}=1&{13120}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,13275,0,0,0,10084
+13090,({TRIGGER.VALUE}=0&{13121}>75)|({TRIGGER.VALUE}=1&{13121}>65),"Zabbix node watcher processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13478,({TRIGGER.VALUE}=0&{13122}>75)|({TRIGGER.VALUE}=1&{13122}>65),"Zabbix node watcher processes more than 75% busy",,0,0,3,0,,,13090,0,0,0,10084
+13091,({TRIGGER.VALUE}=0&{13123}>75)|({TRIGGER.VALUE}=1&{13123}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13479,({TRIGGER.VALUE}=0&{13124}>75)|({TRIGGER.VALUE}=1&{13124}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,13091,0,0,0,10084
+13092,({TRIGGER.VALUE}=0&{13125}>75)|({TRIGGER.VALUE}=1&{13125}>65),"Zabbix proxy poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13480,({TRIGGER.VALUE}=0&{13126}>75)|({TRIGGER.VALUE}=1&{13126}>65),"Zabbix proxy poller processes more than 75% busy",,0,0,3,0,,,13092,0,0,0,10084
+13441,({TRIGGER.VALUE}=0&{13127}>75)|({TRIGGER.VALUE}=1&{13127}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13482,({TRIGGER.VALUE}=0&{13128}>75)|({TRIGGER.VALUE}=1&{13128}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,13441,0,0,0,10084
+13094,({TRIGGER.VALUE}=0&{13129}>75)|({TRIGGER.VALUE}=1&{13129}>65),"Zabbix timer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13483,({TRIGGER.VALUE}=0&{13130}>75)|({TRIGGER.VALUE}=1&{13130}>65),"Zabbix timer processes more than 75% busy",,0,0,3,0,,,13094,0,0,0,10084
+13095,({TRIGGER.VALUE}=0&{13131}>75)|({TRIGGER.VALUE}=1&{13131}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13484,({TRIGGER.VALUE}=0&{13132}>75)|({TRIGGER.VALUE}=1&{13132}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,13095,0,0,0,10084
+13096,({TRIGGER.VALUE}=0&{13133}>75)|({TRIGGER.VALUE}=1&{13133}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13485,({TRIGGER.VALUE}=0&{13134}>75)|({TRIGGER.VALUE}=1&{13134}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,13096,0,0,0,10084
+13097,({TRIGGER.VALUE}=0&{13135}>75)|({TRIGGER.VALUE}=1&{13135}>65),"Zabbix vmware collector processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10047
+13436,({TRIGGER.VALUE}=0&{13136}>75)|({TRIGGER.VALUE}=1&{13136}>65),"Zabbix vmware collector processes more than 75% busy",,0,0,3,0,,,13097,0,0,0,10084
+13521,({TRIGGER.VALUE}=0&{13137}>75)|({TRIGGER.VALUE}=1&{13137}>65),"Zabbix configuration syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13534,({TRIGGER.VALUE}=0&{13138}>75)|({TRIGGER.VALUE}=1&{13138}>65),"Zabbix data sender processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13522,({TRIGGER.VALUE}=0&{13139}>75)|({TRIGGER.VALUE}=1&{13139}>65),"Zabbix discoverer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13535,({TRIGGER.VALUE}=0&{13140}>75)|({TRIGGER.VALUE}=1&{13140}>65),"Zabbix heartbeat sender processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13523,({TRIGGER.VALUE}=0&{13141}>75)|({TRIGGER.VALUE}=1&{13141}>65),"Zabbix history syncer processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13524,({TRIGGER.VALUE}=0&{13142}>75)|({TRIGGER.VALUE}=1&{13142}>65),"Zabbix housekeeper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13525,({TRIGGER.VALUE}=0&{13143}>75)|({TRIGGER.VALUE}=1&{13143}>65),"Zabbix http poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13526,({TRIGGER.VALUE}=0&{13144}>75)|({TRIGGER.VALUE}=1&{13144}>65),"Zabbix icmp pinger processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13527,({TRIGGER.VALUE}=0&{13145}>75)|({TRIGGER.VALUE}=1&{13145}>65),"Zabbix ipmi poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13528,({TRIGGER.VALUE}=0&{13146}>75)|({TRIGGER.VALUE}=1&{13146}>65),"Zabbix java poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13529,({TRIGGER.VALUE}=0&{13147}>75)|({TRIGGER.VALUE}=1&{13147}>65),"Zabbix poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13530,({TRIGGER.VALUE}=0&{13148}>75)|({TRIGGER.VALUE}=1&{13148}>65),"Zabbix self-monitoring processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13531,({TRIGGER.VALUE}=0&{13149}>75)|({TRIGGER.VALUE}=1&{13149}>65),"Zabbix snmp trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13532,({TRIGGER.VALUE}=0&{13150}>75)|({TRIGGER.VALUE}=1&{13150}>65),"Zabbix trapper processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13533,({TRIGGER.VALUE}=0&{13151}>75)|({TRIGGER.VALUE}=1&{13151}>65),"Zabbix unreachable poller processes more than 75% busy",,0,0,3,0,,,NULL,0,0,0,10048
+13551,{13152}=0,"POP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10100
+13549,{13154}=0,"NNTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10098
+13327,{13155}=0,"MySQL is down",,0,0,2,0,,,NULL,0,0,0,10073
+13550,{13156}=0,"NTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10099
+13552,{13157}=0,"SMTP service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10101
+13553,{13158}=0,"SSH service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10102
+13285,{13159}=0,"Telnet service is down on {HOST.NAME}",,0,0,3,0,,,NULL,0,0,0,10103
+13557,{13160}=1,"{HOST.NAME} uses suboptimal JIT compiler",,0,0,1,0,,"Agent is unavailable.",13466,0,1,0,10105
+13558,{13161}<{13162},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10105
+13558,{13161}<{13162},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10105
+13559,{13163}<{13164},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10105
+13559,{13163}<{13164},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10105
+13560,{13165}<{13166},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10105
+13560,{13165}<{13166},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10105
+13561,{13167}={13168},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10105
+13561,{13167}={13168},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10105
+13562,{13169}>({13170}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10105
+13562,{13169}>({13170}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10105
+13563,{13171}={13172},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10105
+13563,{13171}={13172},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10105
+13564,{13173}>({13174}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10105
+13564,{13173}>({13174}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10105
+13565,{13175}={13176},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10105
+13565,{13175}={13176},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10105
+13566,{13177}>({13178}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10105
+13566,{13177}>({13178}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10105
+13567,{13179}={13180},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10105
+13567,{13179}={13180},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10105
+13568,{13181}>({13182}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10105
+13568,{13181}>({13182}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10105
+13569,{13183}={13184},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10105
+13569,{13183}={13184},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10105
+13570,{13185}>({13186}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10105
+13570,{13185}>({13186}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10105
+13571,{13187}={13188},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10105
+13571,{13187}={13188},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10105
+13572,{13189}>({13190}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10105
+13572,{13189}>({13190}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10105
+13573,{13191}={13192},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10105
+13573,{13191}={13192},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10105
+13574,{13193}>({13194}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10105
+13574,{13193}>({13194}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10105
+13575,{13195}={13196},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10105
+13575,{13195}={13196},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10105
+13576,{13197}>({13198}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10105
+13576,{13197}>({13198}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10105
+13577,{13199}={13200},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10105
+13577,{13199}={13200},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10105
+13578,{13201}>({13202}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10105
+13578,{13201}>({13202}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10105
+13579,{13203}>({13204}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10105
+13579,{13203}>({13204}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10105
+13580,{13205}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13538,0,1,0,10105
+13581,{13206}=1,"{HOST.NAME} is not reachable",,0,1,3,1525532220,,,13465,0,0,0,10105
+13582,{13207}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,"Agent is unavailable.",13543,0,1,0,10105
+13583,{13208}=0,"{HOST.NAME} is unavailable by ICMP",,0,0,3,1525535283,,,13554,0,0,0,10105
+13584,{13209}>20,"Ping loss is too high on {HOST.NAME}",,0,0,2,1525535283,,,13556,0,0,0,10105
+13585,{13210}>0.15,"Response time is too high on {HOST.NAME}",,0,0,2,1525535283,,,13555,0,0,0,10105
+13586,{13211}=1,"{HOST.NAME} uses suboptimal JIT compiler",,0,0,1,0,,"Agent is unavailable.",13466,0,1,0,10106
+13587,{13212}<{13213},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10106
+13587,{13212}<{13213},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10106
+13588,{13214}<{13215},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10106
+13588,{13214}<{13215},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10106
+13589,{13216}<{13217},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10106
+13589,{13216}<{13217},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10106
+13590,{13218}={13219},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10106
+13590,{13218}={13219},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10106
+13591,{13220}>({13221}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10106
+13591,{13220}>({13221}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10106
+13592,{13222}={13223},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10106
+13592,{13222}={13223},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10106
+13593,{13224}>({13225}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10106
+13593,{13224}>({13225}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10106
+13594,{13226}={13227},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10106
+13594,{13226}={13227},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10106
+13595,{13228}>({13229}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10106
+13595,{13228}>({13229}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10106
+13596,{13230}={13231},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10106
+13596,{13230}={13231},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10106
+13597,{13232}>({13233}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10106
+13597,{13232}>({13233}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10106
+13598,{13234}={13235},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10106
+13598,{13234}={13235},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10106
+13599,{13236}>({13237}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10106
+13599,{13236}>({13237}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10106
+13600,{13238}={13239},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10106
+13600,{13238}={13239},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10106
+13601,{13240}>({13241}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10106
+13601,{13240}>({13241}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10106
+13602,{13242}={13243},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10106
+13602,{13242}={13243},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10106
+13603,{13244}>({13245}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10106
+13603,{13244}>({13245}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10106
+13604,{13246}={13247},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10106
+13604,{13246}={13247},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10106
+13605,{13248}>({13249}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10106
+13605,{13248}>({13249}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10106
+13606,{13250}={13251},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10106
+13606,{13250}={13251},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10106
+13607,{13252}>({13253}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10106
+13607,{13252}>({13253}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10106
+13608,{13254}>({13255}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10106
+13608,{13254}>({13255}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10106
+13609,{13256}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13538,0,1,0,10106
+13610,{13257}=1,"{HOST.NAME} is not reachable",,0,1,3,1525593150,,,13465,0,0,0,10106
+13611,{13258}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,"Agent is unavailable.",13543,0,1,0,10106
+13612,{13259}=1,"{HOST.NAME} uses suboptimal JIT compiler",,0,0,1,0,,"Agent is unavailable.",13466,0,1,0,10107
+13613,{13260}<{13261},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10107
+13613,{13260}<{13261},"gc Concurrent Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13453,0,1,0,10107
+13614,{13262}<{13263},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10107
+13614,{13262}<{13263},"gc Mark Sweep Compact in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13454,0,1,0,10107
+13615,{13264}<{13265},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10107
+13615,{13264}<{13265},"gc PS Mark Sweep in fire fighting mode on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13455,0,1,0,10107
+13616,{13266}={13267},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10107
+13616,{13266}={13267},"mem Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13541,0,1,0,10107
+13617,{13268}>({13269}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10107
+13617,{13268}>({13269}*0.7),"70% mem Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13539,0,1,0,10107
+13618,{13270}={13271},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10107
+13618,{13270}={13271},"mem Non-Heap Memory fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13542,0,1,0,10107
+13619,{13272}>({13273}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10107
+13619,{13272}>({13273}*0.7),"70% mem Non-Heap Memory used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13540,0,1,0,10107
+13620,{13274}={13275},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10107
+13620,{13274}={13275},"mp CMS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13458,0,1,0,10107
+13621,{13276}>({13277}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10107
+13621,{13276}>({13277}*0.7),"70% mp CMS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13445,0,1,0,10107
+13622,{13278}={13279},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10107
+13622,{13278}={13279},"mp CMS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13459,0,1,0,10107
+13623,{13280}>({13281}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10107
+13623,{13280}>({13281}*0.7),"70% mp CMS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13446,0,1,0,10107
+13624,{13282}={13283},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10107
+13624,{13282}={13283},"mp Code Cache fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13460,0,1,0,10107
+13625,{13284}>({13285}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10107
+13625,{13284}>({13285}*0.7),"70% mp Code Cache used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13447,0,1,0,10107
+13626,{13286}={13287},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10107
+13626,{13286}={13287},"mp PS Old Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13462,0,1,0,10107
+13627,{13288}>({13289}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10107
+13627,{13288}>({13289}*0.7),"70% mp PS Old Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13449,0,1,0,10107
+13628,{13290}={13291},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10107
+13628,{13290}={13291},"mp PS Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13463,0,1,0,10107
+13629,{13292}>({13293}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10107
+13629,{13292}>({13293}*0.7),"70% mp PS Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13450,0,1,0,10107
+13630,{13294}={13295},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10107
+13630,{13294}={13295},"mp Perm Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13461,0,1,0,10107
+13631,{13296}>({13297}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10107
+13631,{13296}>({13297}*0.7),"70% mp Perm Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13448,0,1,0,10107
+13632,{13298}={13299},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10107
+13632,{13298}={13299},"mp Tenured Gen fully committed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",13464,0,1,0,10107
+13633,{13300}>({13301}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10107
+13633,{13300}>({13301}*0.7),"70% mp Tenured Gen used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13451,0,1,0,10107
+13634,{13302}>({13303}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10107
+13634,{13302}>({13303}*0.7),"70% os Opened File Descriptor Count used on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13452,0,1,0,10107
+13635,{13304}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13538,0,1,0,10107
+13636,{13305}=1,"{HOST.NAME} is not reachable",,0,1,3,1525593870,,,13465,0,0,0,10107
+13637,{13306}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,"Agent is unavailable.",13543,0,1,0,10107
+13638,{13307}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13507,0,1,0,10107
+13639,{13308}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,1,3,1525594290,,,13025,0,0,0,10107
+13640,{13309}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13026,0,1,0,10107
+13641,"{13310} > ({13311} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,1,0,2,0,,,NULL,0,0,0,10109
+13641,"{13310} > ({13311} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,1,0,2,0,,,NULL,0,0,0,10109
+13642,"{13312} > ({13313} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
+13642,"{13312} > ({13313} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
+13643,"{13314} > ({13315}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
+13643,"{13314} > ({13315}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
+13644,"{13316} = 1","gzip compression is off for connector http-8080 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10109
+13645,"{13317} = 1","gzip compression is off for connector http-8443 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10109
+13646,{13318}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10110
+13647,{13319}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10110
+13648,{13320}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10110
+13649,{13321}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13508,0,1,0,10111
+13650,{13322}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,1,3,1529842140,,,10047,0,0,0,10111
+13651,{13323}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10045,0,1,0,10111
+13652,{13324}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10042,0,1,0,10111
+13653,{13325}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10041,0,1,0,10111
+13654,{13326}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",10011,0,1,0,10111
+13655,{13327}>300,"Too many processes on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",10190,0,1,0,10111
+13656,{13328}>5,"Processor load is too high on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",10010,0,1,0,10111
+13657,{13329}>20,"Disk I/O is overloaded on {HOST.NAME}",,0,0,2,0,"OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.","Agent is unavailable.",13243,0,1,0,10111
+13658,{13330}>0,"Hostname was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10043,0,1,0,10111
+13659,{13331}<50,"Lack of free swap space on {HOST.NAME}",,0,0,2,0,"It probably means that the systems requires more physical memory.","Agent is unavailable.",10012,0,1,0,10111
+13660,{13332}>0,"Host information was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10044,0,1,0,10111
+13661,{13333}<0,"{HOST.NAME} has just been restarted",,0,0,1,0,,"Agent is unavailable.",10021,0,1,0,10111
+13662,{13334}>0,"/etc/passwd has been changed on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",10016,0,1,0,10111
+13663,{13335}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13000,0,1,0,10111
+13664,{13336}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13272,0,0,2,10111
+13665,{13337}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13266,0,0,2,10111
+13666,{13338}>33,"mytrigger  to high on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10001
+13667,{13339}>33,"mytrigger  to high on {HOST.NAME}",,0,0,2,0,,,13666,0,0,0,10084
+13668,{13340}>33,"mytrigger  to high on {HOST.NAME}",,0,0,2,0,,,13666,0,0,0,10111
