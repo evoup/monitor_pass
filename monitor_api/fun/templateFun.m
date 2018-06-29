@@ -277,6 +277,7 @@ function getTriggerMap() {
     $rawResponse = fgets($c);
     $arr=json_decode($rawResponse);
     print_r($arr);
+    die;
     $templateTriggers=[];
     foreach($arr as $triggerid => $triggerinfo) {
         $templateTriggers[$triggerinfo->templateid][]= $triggerinfo;

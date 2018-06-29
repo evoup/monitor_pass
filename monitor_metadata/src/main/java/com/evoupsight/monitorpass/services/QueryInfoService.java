@@ -351,7 +351,7 @@ public class QueryInfoService {
                     }
                     value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("hostid"));
                     if (value != null) {
-                        trigger.setFlags(new String(value));
+                        trigger.setHostid(new String(value));
                     }
                     if (row != null) {
                         triggerMap.put(new String(row), trigger);
