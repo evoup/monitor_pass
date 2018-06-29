@@ -95,8 +95,6 @@ case(__OPERATION_READ): //查询操作
             $err = true;
         }
 
-        //print_r($templateTriggerArr);
-        //die;
         list($table_name,$start_row,$family) = array(__MDB_TAB_HOSTS, '', array('info')); //从row的起点开始 
         try {
             $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
@@ -117,7 +115,7 @@ case(__OPERATION_READ): //查询操作
                            if ($hostid>=10001 && $hostid<=10104) {
                                if ($Tcell->value=="1") {
                                    $itemsUnderTemplate = sizeof($templateItemMap[$hostid]);
-                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,1,$templateid);
+                                   $templateArr[]=array($template,sizeof($setsArr[$hostid]),$itemsUnderTemplate,sizeof($templateTriggerArr[$templateid]),$templateid);
                                }
                            }
                         }
@@ -136,41 +134,12 @@ case(__OPERATION_READ): //查询操作
     break;
 }
 
-/**
- * 返回以templated为key，setid为value的全部set
- */
-//function getTemplateSetMap0() {
-    //list($table_name,$start_row,$family) = array(__MDB_TAB_SETS, '', array('info')); //从row的起点开始 
-    //$scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
-    //$itemArr=[];
-    //while (true) {
-        //$get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
-        //if ($get_arr == null) break;
-        //foreach ( $get_arr as $TRowResult ) {
-            //foreach(array_keys($TRowResult->columns) as $value) {
-                //if (strstr($value,"info:setid")) {
-                    //$setid=substr($value, 10);
-                    //$templateid=$TRowResult->row;
-                    //if ($templateid>=10001 && $templateid<=10104) {
-                        ////返回setid对应的item
-                        //$itemArr[$templateid][]=$setid;
-                    //}
-                //}
-            //}
-        //}
-    //}
-    //return $itemArr;
-//}
 
 function getTemplateSetMap() {
     $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
-
     $rawCommand = "get key2\r\n";
-
     fwrite($c, $rawCommand);
-
     $rawResponse = fgets($c);
-    //echo $rawResponse;
     $rawResponse = fgets($c);
         $arr=json_decode($rawResponse);
         foreach ($arr as $templateid=>$val) {
@@ -181,63 +150,13 @@ function getTemplateSetMap() {
         return $newArr;
 }
 
-/**
- * 返回templateId对多个setId
- */
-//function getTemplateSetMapOld() {
-    //$single_redis_server = array(
-        //'host'     => __REDIS_HOST,
-        //'port'     => __REDIS_PORT
-    //);
-    //try {
-        //$GLOBALS['redis_client'] = new Predis_Client($single_redis_server);
-        //$value = $GLOBALS['redis_client']->get("key2");
-        //$arr=json_decode($value);
-        //foreach ($arr as $templateid=>$val) {
-            //if ($templateid>=10001 && $templateid<=10104) {
-                //$newArr[$templateid]=$val; //val是setIds
-            //}
-        //}
-        //return $newArr;
-    //} catch (Exception $e) {
-        //return false;
-    //}
-//}
-
-/**
- * 返回以setid为key，itemid为value的全部item
- */
-//function getSetItemMap0() {
-    //list($table_name,$start_row,$family) = array(__MDB_TAB_ITEMS, '', array('info')); //从row的起点开始 
-    //$scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
-    //$itemArr=[];
-    //while (true) {
-        //$get_arr = $GLOBALS['mdb_client']->scannerGet($scanner);
-        //if ($get_arr == null) break;
-        //foreach ( $get_arr as $TRowResult ) {
-            //foreach(array_keys($TRowResult->columns) as $value) {
-                //if (strstr($value,"info:setid")) {
-                    //$mysetid=substr($value, 10);
-                    ////返回setid对应的item
-                    //$itemArr[$mysetid][]=$TRowResult->row;
-                //}
-            //}
-        //}
-    //}
-    //return $itemArr;
-//}
 
 function getSetItemMap() {
     $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
-
     $rawCommand = "get key3\r\n";
-
     fwrite($c, $rawCommand);
-
     $rawResponse = fgets($c);
-    //echo $rawResponse;
     $rawResponse = fgets($c);
-    //echo $rawResponse;
         $arr=json_decode($rawResponse);
         $setItemArr=[];
         foreach ($arr as $itemid=>$setIdsInfo) {
@@ -247,26 +166,6 @@ function getSetItemMap() {
         }
         return $setItemArr;
 }
-//function getSetItemMapOld() {
-    //$single_redis_server = array(
-        //'host'     => __REDIS_HOST,
-        //'port'     => __REDIS_PORT
-    //);
-    //try {
-        //$GLOBALS['redis_client'] = new Predis_Client($single_redis_server);
-        //$value = $GLOBALS['redis_client']->get("key3");
-        //$arr=json_decode($value);
-        //$setItemArr=[];
-        //foreach ($arr as $itemid=>$setIdsInfo) {
-            //foreach ($setIdsInfo as $setId) {
-                //$setItemArr[$setId][]=$itemid;
-            //}
-        //}
-        //return $setItemArr;
-    //} catch (Exception $e) {
-        //return false;
-    //}
-//}
 
 
 function getTriggerMap() {
@@ -276,11 +175,10 @@ function getTriggerMap() {
     $rawResponse = fgets($c);
     $rawResponse = fgets($c);
     $arr=json_decode($rawResponse);
-    print_r($arr);
-    die;
+    // hostid才是模板id
     $templateTriggers=[];
     foreach($arr as $triggerid => $triggerinfo) {
-        $templateTriggers[$triggerinfo->templateid][]= $triggerinfo;
+        $templateTriggers[$triggerinfo->hostid][]= $triggerinfo;
     }
     return $templateTriggers;
 }
