@@ -63,6 +63,7 @@ case(__OPERATION_READ): //查询操作
         $_SERVER['REQUEST_METHOD'] == 'GET') {  //查询全部 
         $setItemArr=getSetItemMap();
         $templateSetArr=getTemplateSetMap();
+        $templateTriggerArr=getTriggerMap();
         $templateItemMap=[];
         //模板、集
         foreach($templateSetArr as $template => $sets) {
@@ -94,6 +95,8 @@ case(__OPERATION_READ): //查询操作
             $err = true;
         }
 
+        //print_r($templateTriggerArr);
+        //die;
         list($table_name,$start_row,$family) = array(__MDB_TAB_HOSTS, '', array('info')); //从row的起点开始 
         try {
             $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row , $family);
@@ -264,3 +267,19 @@ function getSetItemMap() {
         //return false;
     //}
 //}
+
+
+function getTriggerMap() {
+    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
+    $rawCommand = "get key6\r\n";
+    fwrite($c, $rawCommand);
+    $rawResponse = fgets($c);
+    $rawResponse = fgets($c);
+    $arr=json_decode($rawResponse);
+    print_r($arr);
+    $templateTriggers=[];
+    foreach($arr as $triggerid => $triggerinfo) {
+        $templateTriggers[$triggerinfo->templateid][]= $triggerinfo;
+    }
+    return $templateTriggers;
+}

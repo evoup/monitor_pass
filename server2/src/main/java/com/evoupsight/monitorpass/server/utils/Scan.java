@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.utils;
+package com.evoupsight.monitorpass.server.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;

@@ -1,7 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
 
-import com.evoupsight.monitorpass.utils.Scan;
+import com.evoupsight.monitorpass.server.utils.Scan;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
