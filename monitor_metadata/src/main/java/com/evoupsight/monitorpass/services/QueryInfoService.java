@@ -372,7 +372,7 @@ public class QueryInfoService {
     private HashMap<String, Function> scanFunctions(HBaseAdmin ad) {
         HashMap<String, Function> functionMap = new HashMap<>();
         try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
+            Table table = connection.getTable(TableName.valueOf("monitor_functions"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
