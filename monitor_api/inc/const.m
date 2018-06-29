@@ -70,6 +70,7 @@ define('__SERVICE_HOST',              'host');
 define('__SERVICE_TEMPLATE',          'template');
 define('__SERVICE_DATA_COLLECTOR',    'datacollector');
 define('__SERVICE_ITEM',              'item');
+define('__SERVICE_TRIGGER',           'trigger');
 /* }}} */
 
 /* {{{ services
@@ -113,6 +114,7 @@ define('__PREFIX_HOST',              'host');
 define('__PREFIX_TEMPLATE',          'template');
 define('__PREFIX_DATA_COLLECTOR',    'datacollector');
 define('__PREFIX_ITEM',              'item');
+define('__PREFIX_TRIGGER',           'trigger');
 /* }}} */
 
 /* {{{ operations

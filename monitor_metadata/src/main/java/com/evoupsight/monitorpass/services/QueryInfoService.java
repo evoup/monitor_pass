@@ -305,6 +305,10 @@ public class QueryInfoService {
                     if (value != null) {
                         trigger.setExpression(new String(value));
                     }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("description"));
+                    if (value != null) {
+                        trigger.setDescription(new String(value));
+                    }
                     value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("url"));
                     if (value != null) {
                         trigger.setUrl(new String(value));
