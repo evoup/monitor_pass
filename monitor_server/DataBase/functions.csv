@@ -1,327 +1,500 @@
-functionid,itemid,triggerid,function,parameter
-10199,10019,10016,diff,0
-10204,10055,10041,last,0
-10207,10058,10044,diff,0
-10208,10057,10043,diff,0
-12144,22181,13000,last,0
-12549,22232,13025,nodata,5m
-12550,10020,10047,nodata,5m
-12553,10056,10042,last,0
-12580,17350,10012,last,0
-12583,10025,10021,change,0
-12592,22686,13266,last,0
-12598,22454,13272,last,0
-12641,22189,13015,min,10m
-12645,22183,13073,min,10m
-12646,22191,13074,min,10m
-12648,23620,13075,min,10m
-12649,22185,13019,min,10m
-12651,22396,13017,min,10m
-12653,22219,13023,min,10m
-12671,22704,13287,diff,0
-12672,22726,13288,diff,0
-12673,22741,13289,diff,0
-12675,22757,13291,last,0
-12676,22756,13291,last,0
-12677,22766,13292,last,0
-12678,22764,13292,last,0
-12679,22773,13293,last,0
-12680,22771,13293,last,0
-12681,22785,13294,diff,0
-12682,22808,13295,last,0
-12683,22808,13296,last,0
-12684,22809,13297,last,0
-12685,22809,13298,last,0
-12686,22810,13299,last,0
-12687,22810,13300,last,0
-12688,22811,13301,last,0
-12689,22811,13302,last,0
-12690,22800,13303,last,0
-12691,22800,13304,last,0
-12692,22801,13305,last,0
-12693,22812,13306,last,0
-12694,22801,13307,last,0
-12695,22812,13308,last,0
-12696,22802,13309,last,0
-12697,22813,13310,last,0
-12698,22802,13311,last,0
-12699,22813,13312,last,0
-12700,22814,13313,last,0
-12701,22803,13314,last,0
-12702,22814,13315,last,0
-12703,22803,13316,last,0
-12704,22804,13317,last,0
-12705,22804,13318,last,0
-12706,22815,13319,last,0
-12707,22815,13320,last,0
-12708,22816,13321,last,0
-12709,22805,13322,last,0
-12710,22817,13323,last,0
-12711,22817,13324,last,0
-12712,22818,13325,last,0
-12713,22818,13326,last,0
-12715,22833,13328,nodata,5m
-12717,22835,13330,last,0
-12718,22836,13331,last,0
-12723,22853,13336,diff,0
-12724,22856,13337,last,0
-12725,22858,13338,diff,0
-12726,22859,13339,change,0
-12727,22861,13340,diff,0
-12728,22862,13341,last,0
-12729,22869,13342,last,0
-12730,22872,13343,last,0
-12731,22873,13344,nodata,5m
-12733,22875,13346,last,0
-12734,22876,13347,last,0
-12739,22893,13352,diff,0
-12740,22896,13353,last,0
-12741,22898,13354,diff,0
-12742,22899,13355,change,0
-12743,22901,13356,diff,0
-12744,22902,13357,last,0
-12745,22909,13358,last,0
-12746,22912,13359,last,0
-12747,22913,13360,nodata,5m
-12755,22933,13368,diff,0
-12757,22938,13370,diff,0
-12758,22939,13371,change,0
-12759,22941,13372,diff,0
-12760,22942,13373,last,0
-12761,22949,13374,last,0
-12762,22952,13375,last,0
-12763,22953,13376,nodata,5m
-12771,22973,13384,diff,0
-12773,22978,13386,diff,0
-12775,22981,13388,diff,0
-12776,22982,13389,last,0
-12777,22989,13390,last,0
-12778,22992,13391,last,0
-12779,22993,13392,nodata,5m
-12782,22996,13395,last,0
-12787,23013,13400,diff,0
-12788,23016,13401,last,0
-12789,23018,13402,diff,0
-12790,23019,13403,change,0
-12791,23021,13404,diff,0
-12792,23022,13405,last,0
-12793,23029,13406,last,0
-12794,23032,13407,last,0
-12795,23033,13408,nodata,5m
-12797,23035,13410,last,0
-12798,23036,13411,last,0
-12803,23053,13416,diff,0
-12805,23058,13418,diff,0
-12806,23059,13419,change,0
-12807,23061,13420,diff,0
-12808,23062,13421,last,0
-12809,23069,13422,last,0
-12810,23072,13423,last,0
-12812,23149,13425,diff,0
-12815,23150,13428,change,0
-12818,23147,13431,last,0
-12820,23158,13433,last,0
-12824,23160,13437,nodata,5m
-12826,23165,13439,last,0
-12830,23226,13442,last,0
-12831,23227,13442,last,0
-12832,23235,13443,last,0
-12833,23236,13443,last,0
-12834,23243,13444,last,0
-12835,23244,13444,last,0
-12836,23193,13445,last,0
-12837,23192,13445,last,0
-12838,23196,13446,last,0
-12839,23195,13446,last,0
-12840,23199,13447,last,0
-12841,23198,13447,last,0
-12842,23202,13448,last,0
-12843,23201,13448,last,0
-12844,23205,13449,last,0
-12845,23204,13449,last,0
-12846,23208,13450,last,0
-12847,23207,13450,last,0
-12848,23211,13451,last,0
-12849,23210,13451,last,0
-12850,23214,13452,last,0
-12851,23213,13452,last,0
-12852,23183,13453,last,0
-12853,23177,13453,last,0
-12854,23179,13454,last,0
-12855,23181,13454,last,0
-12856,23186,13455,last,0
-12857,23187,13455,last,0
-12858,23222,13456,str,off
-12859,23231,13457,str,off
-12860,23191,13458,last,0
-12861,23192,13458,last,0
-12862,23194,13459,last,0
-12863,23195,13459,last,0
-12864,23197,13460,last,0
-12865,23198,13460,last,0
-12866,23200,13461,last,0
-12867,23201,13461,last,0
-12868,23203,13462,last,0
-12869,23204,13462,last,0
-12870,23206,13463,last,0
-12871,23207,13463,last,0
-12872,23209,13464,last,0
-12873,23210,13464,last,0
-12874,23188,13465,nodata,1m
-12895,23271,13486,min,10m
-12896,23273,13487,min,10m
-12897,23274,13488,min,10m
-12898,23275,13489,min,10m
-12899,23276,13490,min,10m
-12900,23287,13491,nodata,5m
-12902,23289,13493,last,0
-12903,23290,13494,last,0
-12908,23307,13499,diff,0
-12909,23310,13500,last,0
-12910,23312,13501,diff,0
-12911,23313,13502,change,0
-12912,23315,13503,diff,0
-12913,23316,13504,last,0
-12914,23282,13505,last,0
-12915,23284,13506,last,0
-12926,22231,13026,diff,0
-12927,10059,10045,diff,0
-12928,23288,13492,diff,0
-12929,22834,13329,diff,0
-12930,22874,13345,diff,0
-12931,22914,13361,diff,0
-12932,22954,13377,diff,0
-12933,22994,13393,diff,0
-12934,23034,13409,diff,0
-12935,23161,13438,diff,0
-12936,23318,13507,diff,0
-12937,23319,13508,diff,0
-12938,23327,13509,diff,0
-12939,23320,13510,diff,0
-12940,23321,13511,diff,0
-12941,23322,13512,diff,0
-12942,23323,13513,diff,0
-12943,23324,13514,diff,0
-12944,23325,13515,diff,0
-12945,23326,13516,diff,0
-12946,23357,13517,min,10m
-12947,23342,13518,min,10m
-12948,23341,13519,min,10m
-12949,23359,13520,min,10m
-12965,23634,13536,min,10m
-12966,23635,13537,min,10m
-12967,23212,13466,str,Client
-12968,23637,13538,last,0
-12969,23638,13539,last,0
-12970,23640,13539,last,0
-12971,23642,13540,last,0
-12972,23643,13540,last,0
-12973,23639,13541,last,0
-12974,23640,13541,last,0
-12975,23641,13542,last,0
-12976,23643,13542,last,0
-12977,23636,13543,str,Server
-12994,23644,13544,max,#3
-12995,23645,13545,max,#3
-12996,23646,13546,max,#3
-12997,23647,13547,max,#3
-12998,23648,13548,max,#3
-13029,22414,13093,min,10m
-13030,23266,13481,min,10m
-13068,23115,13367,avg,5m
-13069,22922,13366,avg,5m
-13070,22918,13365,avg,5m
-13071,22917,13364,avg,5m
-13072,22882,13350,avg,5m
-13073,22878,13349,avg,5m
-13074,22877,13348,avg,5m
-13075,22962,13382,avg,5m
-13078,10010,10010,avg,5m
-13079,23296,13497,avg,5m
-13080,17362,13243,avg,5m
-13081,23301,13498,avg,5m
-13082,10009,10190,avg,5m
-13083,23292,13496,avg,5m
-13084,10013,10011,avg,5m
-13085,23291,13495,avg,5m
-13086,23042,13414,avg,5m
-13087,22842,13334,avg,5m
-13088,22838,13333,avg,5m
-13089,22837,13332,avg,5m
-13090,23007,13399,avg,5m
-13091,23002,13398,avg,5m
-13092,22998,13397,avg,5m
-13093,22997,13396,avg,5m
-13094,23143,13435,avg,5m
-13095,23140,13430,avg,5m
-13096,23655,13554,max,#3
-13097,23656,13555,avg,5m
-13098,23657,13556,min,5m
-13099,22424,13080,avg,10m
-13100,23252,13467,avg,10m
-13101,22412,13081,avg,10m
-13102,23253,13468,avg,10m
-13103,22410,13082,avg,10m
-13104,23254,13469,avg,10m
-13105,22430,13083,avg,10m
-13106,23255,13470,avg,10m
-13107,22422,13084,avg,10m
-13108,23256,13471,avg,10m
-13109,22406,13085,avg,10m
-13110,23257,13472,avg,10m
-13111,22408,13086,avg,30m
-13112,23258,13473,avg,30m
-13113,22402,13087,avg,10m
-13114,23259,13474,avg,10m
-13115,22418,13088,avg,10m
-13116,23260,13475,avg,10m
-13117,22416,13089,avg,10m
-13118,23261,13476,avg,10m
-13119,22689,13275,avg,10m
-13120,23262,13477,avg,10m
-13121,22428,13090,avg,10m
-13122,23263,13478,avg,10m
-13123,22399,13091,avg,10m
-13124,23264,13479,avg,10m
-13125,22420,13092,avg,10m
-13126,23265,13480,avg,10m
-13127,23171,13441,avg,10m
-13128,23267,13482,avg,10m
-13129,22426,13094,avg,10m
-13130,23268,13483,avg,10m
-13131,22404,13095,avg,10m
-13132,23269,13484,avg,10m
-13133,22400,13096,avg,10m
-13134,23270,13485,avg,10m
-13135,22401,13097,avg,10m
-13136,23328,13436,avg,10m
-13137,23347,13521,avg,10m
-13138,23360,13534,avg,10m
-13139,23352,13522,avg,10m
-13140,23351,13535,avg,10m
-13141,23350,13523,avg,10m
-13142,23353,13524,avg,30m
-13143,23354,13525,avg,10m
-13144,23356,13526,avg,10m
-13145,23355,13527,avg,10m
-13146,23349,13528,avg,10m
-13147,23348,13529,avg,10m
-13148,23343,13530,avg,10m
-13149,23344,13531,avg,10m
-13150,23345,13532,avg,10m
-13151,23346,13533,avg,10m
-13152,23651,13551,max,#3
-13154,23649,13549,max,#3
-13155,22819,13327,last,0
-13156,23650,13550,max,#3
-13157,23652,13552,max,#3
-13158,23653,13553,max,#3
-13159,23654,13285,max,#3
-13160,23686,13557,str,off
-13161,23687,13558,str,off
-13162,23690,13559,last,0
-13163,23691,13559,last,0
-13164,23693,13560,last,0
-13165,23694,13560,last,0
-13166,23696,13561,last,0
-13167,23697,13561,last,0
+functionid,itemid,triggerid,function,parameter,key_
+10199,10019,10016,diff,0,vfs.file.cksum[/etc/passwd]
+10204,10055,10041,last,0,kernel.maxproc
+10207,10058,10044,diff,0,system.uname
+10208,10057,10043,diff,0,system.hostname
+12144,22181,13000,last,0,vm.memory.size[available]
+12549,22232,13025,nodata,5m,agent.ping
+12550,10020,10047,nodata,5m,agent.ping
+12553,10056,10042,last,0,kernel.maxfiles
+12580,17350,10012,last,0,"system.swap.size[,pfree]"
+12583,10025,10021,change,0,system.uptime
+12592,22686,13266,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12598,22454,13272,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12641,22189,13015,min,10m,"zabbix[rcache,buffer,pfree]"
+12645,22183,13073,min,10m,"zabbix[wcache,history,pfree]"
+12646,22191,13074,min,10m,"zabbix[vcache,buffer,pfree]"
+12648,23620,13075,min,10m,"zabbix[vcache,buffer,pfree]"
+12649,22185,13019,min,10m,"zabbix[wcache,trend,pfree]"
+12651,22396,13017,min,10m,"zabbix[wcache,text,pfree]"
+12653,22219,13023,min,10m,"zabbix[queue,10m]"
+12671,22704,13287,diff,0,ifOperStatus[{#SNMPVALUE}]
+12672,22726,13288,diff,0,ifOperStatus[{#SNMPVALUE}]
+12673,22741,13289,diff,0,ifOperStatus[{#SNMPVALUE}]
+12675,22757,13291,last,0,hrStorageUsed[{#SNMPVALUE}]
+12676,22756,13291,last,0,hrStorageSize[{#SNMPVALUE}]
+12677,22766,13292,last,0,hrStorageUsed[{#SNMPVALUE}]
+12678,22764,13292,last,0,hrStorageSize[{#SNMPVALUE}]
+12679,22773,13293,last,0,hrStorageUsed[{#SNMPVALUE}]
+12680,22771,13293,last,0,hrStorageSize[{#SNMPVALUE}]
+12681,22785,13294,diff,0,ifOperStatus[{#SNMPVALUE}]
+12682,22808,13295,last,0,baseboard_temp
+12683,22808,13296,last,0,baseboard_temp
+12684,22809,13297,last,0,bb_1.05v_pch
+12685,22809,13298,last,0,bb_1.05v_pch
+12686,22810,13299,last,0,bb_1.1v_p1_vccp
+12687,22810,13300,last,0,bb_1.1v_p1_vccp
+12688,22811,13301,last,0,bb_1.5v_p1_ddr3
+12689,22811,13302,last,0,bb_1.5v_p1_ddr3
+12690,22800,13303,last,0,bb_1.8v_sm
+12691,22800,13304,last,0,bb_1.8v_sm
+12692,22801,13305,last,0,bb_3.3v
+12693,22812,13306,last,0,bb_3.3v
+12694,22801,13307,last,0,bb_3.3v
+12695,22812,13308,last,0,bb_3.3v
+12696,22802,13309,last,0,bb_3.3v_stby
+12697,22813,13310,last,0,bb_3.3v_stby
+12698,22802,13311,last,0,bb_3.3v_stby
+12699,22813,13312,last,0,bb_3.3v_stby
+12700,22814,13313,last,0,bb_5.0v
+12701,22803,13314,last,0,bb_5.0v
+12702,22814,13315,last,0,bb_5.0v
+12703,22803,13316,last,0,bb_5.0v
+12704,22804,13317,last,0,bb_ambient_temp
+12705,22804,13318,last,0,bb_ambient_temp
+12706,22815,13319,last,0,front_panel_temp
+12707,22815,13320,last,0,front_panel_temp
+12708,22816,13321,last,0,power
+12709,22805,13322,last,0,power
+12710,22817,13323,last,0,system_fan_2
+12711,22817,13324,last,0,system_fan_2
+12712,22818,13325,last,0,system_fan_3
+12713,22818,13326,last,0,system_fan_3
+12715,22833,13328,nodata,5m,agent.ping
+12717,22835,13330,last,0,kernel.maxfiles
+12718,22836,13331,last,0,kernel.maxproc
+12723,22853,13336,diff,0,system.hostname
+12724,22856,13337,last,0,"system.swap.size[,pfree]"
+12725,22858,13338,diff,0,system.uname
+12726,22859,13339,change,0,system.uptime
+12727,22861,13340,diff,0,vfs.file.cksum[/etc/passwd]
+12728,22862,13341,last,0,vm.memory.size[available]
+12729,22869,13342,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12730,22872,13343,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12731,22873,13344,nodata,5m,agent.ping
+12733,22875,13346,last,0,kernel.maxfiles
+12734,22876,13347,last,0,kernel.maxproc
+12739,22893,13352,diff,0,system.hostname
+12740,22896,13353,last,0,"system.swap.size[,pfree]"
+12741,22898,13354,diff,0,system.uname
+12742,22899,13355,change,0,system.uptime
+12743,22901,13356,diff,0,vfs.file.cksum[/etc/passwd]
+12744,22902,13357,last,0,vm.memory.size[available]
+12745,22909,13358,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12746,22912,13359,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12747,22913,13360,nodata,5m,agent.ping
+12755,22933,13368,diff,0,system.hostname
+12757,22938,13370,diff,0,system.uname
+12758,22939,13371,change,0,system.uptime
+12759,22941,13372,diff,0,vfs.file.cksum[/etc/passwd]
+12760,22942,13373,last,0,vm.memory.size[available]
+12761,22949,13374,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12762,22952,13375,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12763,22953,13376,nodata,5m,agent.ping
+12771,22973,13384,diff,0,system.hostname
+12773,22978,13386,diff,0,system.uname
+12775,22981,13388,diff,0,vfs.file.cksum[/etc/passwd]
+12776,22982,13389,last,0,vm.memory.size[available]
+12777,22989,13390,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12778,22992,13391,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12779,22993,13392,nodata,5m,agent.ping
+12782,22996,13395,last,0,kernel.maxproc
+12787,23013,13400,diff,0,system.hostname
+12788,23016,13401,last,0,"system.swap.size[,pfree]"
+12789,23018,13402,diff,0,system.uname
+12790,23019,13403,change,0,system.uptime
+12791,23021,13404,diff,0,vfs.file.cksum[/etc/passwd]
+12792,23022,13405,last,0,vm.memory.size[available]
+12793,23029,13406,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12794,23032,13407,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12795,23033,13408,nodata,5m,agent.ping
+12797,23035,13410,last,0,kernel.maxfiles
+12798,23036,13411,last,0,kernel.maxproc
+12803,23053,13416,diff,0,system.hostname
+12805,23058,13418,diff,0,system.uname
+12806,23059,13419,change,0,system.uptime
+12807,23061,13420,diff,0,vfs.file.cksum[/etc/passwd]
+12808,23062,13421,last,0,vm.memory.size[available]
+12809,23069,13422,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12810,23072,13423,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12812,23149,13425,diff,0,system.uname
+12815,23150,13428,change,0,system.uptime
+12818,23147,13431,last,0,"system.swap.size[,free]"
+12820,23158,13433,last,0,vm.memory.size[free]
+12824,23160,13437,nodata,5m,agent.ping
+12826,23165,13439,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12830,23226,13442,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8080"",currentThreadsBusy]"
+12831,23227,13442,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8080"",maxThreads]"
+12832,23235,13443,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8443"",currentThreadsBusy]"
+12833,23236,13443,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8443"",maxThreads]"
+12834,23243,13444,last,0,"jmx[""Catalina:type=ThreadPool,name=jk-8009"",currentThreadsBusy]"
+12835,23244,13444,last,0,"jmx[""Catalina:type=ThreadPool,name=jk-8009"",maxThreads]"
+12836,23193,13445,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.used]"
+12837,23192,13445,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+12838,23196,13446,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.used]"
+12839,23195,13446,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+12840,23199,13447,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.used]"
+12841,23198,13447,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+12842,23202,13448,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.used]"
+12843,23201,13448,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+12844,23205,13449,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.used]"
+12845,23204,13449,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+12846,23208,13450,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.used]"
+12847,23207,13450,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+12848,23211,13451,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.used]"
+12849,23210,13451,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+12850,23214,13452,last,0,"jmx[""java.lang:type=OperatingSystem"",OpenFileDescriptorCount]"
+12851,23213,13452,last,0,"jmx[""java.lang:type=OperatingSystem"",MaxFileDescriptorCount]"
+12852,23183,13453,last,0,"jmx[""java.lang:type=GarbageCollector,name=ParNew"",CollectionCount]"
+12853,23177,13453,last,0,"jmx[""java.lang:type=GarbageCollector,name=ConcurrentMarkSweep"",CollectionCount]"
+12854,23179,13454,last,0,"jmx[""java.lang:type=GarbageCollector,name=Copy"",CollectionCount]"
+12855,23181,13454,last,0,"jmx[""java.lang:type=GarbageCollector,name=MarkSweepCompact"",CollectionCount]"
+12856,23186,13455,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS Scavenge"",CollectionCount]"
+12857,23187,13455,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS MarkSweep"",CollectionCount]"
+12858,23222,13456,str,off,"jmx[""Catalina:type=ProtocolHandler,port=8080"",compression]"
+12859,23231,13457,str,off,"jmx[""Catalina:type=ProtocolHandler,port=8443"",compression]"
+12860,23191,13458,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.committed]"
+12861,23192,13458,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+12862,23194,13459,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.committed]"
+12863,23195,13459,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+12864,23197,13460,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.committed]"
+12865,23198,13460,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+12866,23200,13461,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.committed]"
+12867,23201,13461,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+12868,23203,13462,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.committed]"
+12869,23204,13462,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+12870,23206,13463,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.committed]"
+12871,23207,13463,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+12872,23209,13464,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.committed]"
+12873,23210,13464,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+12874,23188,13465,nodata,1m,"jmx[""java.lang:type=Runtime"",Uptime]"
+12895,23271,13486,min,10m,"zabbix[queue,10m]"
+12896,23273,13487,min,10m,"zabbix[rcache,buffer,pfree]"
+12897,23274,13488,min,10m,"zabbix[wcache,history,pfree]"
+12898,23275,13489,min,10m,"zabbix[wcache,text,pfree]"
+12899,23276,13490,min,10m,"zabbix[wcache,trend,pfree]"
+12900,23287,13491,nodata,5m,agent.ping
+12902,23289,13493,last,0,kernel.maxfiles
+12903,23290,13494,last,0,kernel.maxproc
+12908,23307,13499,diff,0,system.hostname
+12909,23310,13500,last,0,"system.swap.size[,pfree]"
+12910,23312,13501,diff,0,system.uname
+12911,23313,13502,change,0,system.uptime
+12912,23315,13503,diff,0,vfs.file.cksum[/etc/passwd]
+12913,23316,13504,last,0,vm.memory.size[available]
+12914,23282,13505,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+12915,23284,13506,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+12926,22231,13026,diff,0,agent.version
+12927,10059,10045,diff,0,agent.version
+12928,23288,13492,diff,0,agent.version
+12929,22834,13329,diff,0,agent.version
+12930,22874,13345,diff,0,agent.version
+12931,22914,13361,diff,0,agent.version
+12932,22954,13377,diff,0,agent.version
+12933,22994,13393,diff,0,agent.version
+12934,23034,13409,diff,0,agent.version
+12935,23161,13438,diff,0,agent.version
+12936,23318,13507,diff,0,agent.hostname
+12937,23319,13508,diff,0,agent.hostname
+12938,23327,13509,diff,0,agent.hostname
+12939,23320,13510,diff,0,agent.hostname
+12940,23321,13511,diff,0,agent.hostname
+12941,23322,13512,diff,0,agent.hostname
+12942,23323,13513,diff,0,agent.hostname
+12943,23324,13514,diff,0,agent.hostname
+12944,23325,13515,diff,0,agent.hostname
+12945,23326,13516,diff,0,agent.hostname
+12946,23357,13517,min,10m,"zabbix[rcache,buffer,pfree]"
+12947,23342,13518,min,10m,"zabbix[wcache,history,pfree]"
+12948,23341,13519,min,10m,"zabbix[wcache,text,pfree]"
+12949,23359,13520,min,10m,"zabbix[queue,10m]"
+12965,23634,13536,min,10m,"zabbix[vmware,buffer,pfree]"
+12966,23635,13537,min,10m,"zabbix[vmware,buffer,pfree]"
+12967,23212,13466,str,Client,"jmx[""java.lang:type=Compilation"",Name]"
+12968,23637,13538,last,0,"jmx[""java.lang:type=OperatingSystem"",ProcessCpuLoad]"
+12969,23638,13539,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.used]"
+12970,23640,13539,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+12971,23642,13540,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.used]"
+12972,23643,13540,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+12973,23639,13541,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.committed]"
+12974,23640,13541,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+12975,23641,13542,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.committed]"
+12976,23643,13542,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+12977,23636,13543,str,Server,"jmx[""java.lang:type=Runtime"",VmName]"
+12994,23644,13544,max,#3,net.tcp.service[ftp]
+12995,23645,13545,max,#3,net.tcp.service[http]
+12996,23646,13546,max,#3,net.tcp.service[https]
+12997,23647,13547,max,#3,net.tcp.service[imap]
+12998,23648,13548,max,#3,net.tcp.service[ldap]
+13029,22414,13093,min,10m,"zabbix[process,self-monitoring,avg,busy]"
+13030,23266,13481,min,10m,"zabbix[process,self-monitoring,avg,busy]"
+13068,23115,13367,avg,5m,"system.stat[cpu,wa]"
+13069,22922,13366,avg,5m,"system.cpu.load[percpu,avg1]"
+13070,22918,13365,avg,5m,proc.num[]
+13071,22917,13364,avg,5m,"proc.num[,,run]"
+13072,22882,13350,avg,5m,"system.cpu.load[percpu,avg1]"
+13073,22878,13349,avg,5m,proc.num[]
+13074,22877,13348,avg,5m,"proc.num[,,run]"
+13075,22962,13382,avg,5m,"system.cpu.load[percpu,avg1]"
+13078,10010,10010,avg,5m,"system.cpu.load[percpu,avg1]"
+13079,23296,13497,avg,5m,"system.cpu.load[percpu,avg1]"
+13080,17362,13243,avg,5m,"system.cpu.util[,iowait]"
+13081,23301,13498,avg,5m,"system.cpu.util[,iowait]"
+13082,10009,10190,avg,5m,proc.num[]
+13083,23292,13496,avg,5m,proc.num[]
+13084,10013,10011,avg,5m,"proc.num[,,run]"
+13085,23291,13495,avg,5m,"proc.num[,,run]"
+13086,23042,13414,avg,5m,"system.cpu.load[percpu,avg1]"
+13087,22842,13334,avg,5m,"system.cpu.load[percpu,avg1]"
+13088,22838,13333,avg,5m,proc.num[]
+13089,22837,13332,avg,5m,"proc.num[,,run]"
+13090,23007,13399,avg,5m,"system.cpu.util[,iowait]"
+13091,23002,13398,avg,5m,"system.cpu.load[percpu,avg1]"
+13092,22998,13397,avg,5m,proc.num[]
+13093,22997,13396,avg,5m,"proc.num[,,run]"
+13094,23143,13435,avg,5m,"system.cpu.load[percpu,avg1]"
+13095,23140,13430,avg,5m,proc.num[]
+13096,23655,13554,max,#3,icmpping
+13097,23656,13555,avg,5m,icmppingsec
+13098,23657,13556,min,5m,icmppingloss
+13099,22424,13080,avg,10m,"zabbix[process,alerter,avg,busy]"
+13100,23252,13467,avg,10m,"zabbix[process,alerter,avg,busy]"
+13101,22412,13081,avg,10m,"zabbix[process,configuration syncer,avg,busy]"
+13102,23253,13468,avg,10m,"zabbix[process,configuration syncer,avg,busy]"
+13103,22410,13082,avg,10m,"zabbix[process,db watchdog,avg,busy]"
+13104,23254,13469,avg,10m,"zabbix[process,db watchdog,avg,busy]"
+13105,22430,13083,avg,10m,"zabbix[process,discoverer,avg,busy]"
+13106,23255,13470,avg,10m,"zabbix[process,discoverer,avg,busy]"
+13107,22422,13084,avg,10m,"zabbix[process,escalator,avg,busy]"
+13108,23256,13471,avg,10m,"zabbix[process,escalator,avg,busy]"
+13109,22406,13085,avg,10m,"zabbix[process,history syncer,avg,busy]"
+13110,23257,13472,avg,10m,"zabbix[process,history syncer,avg,busy]"
+13111,22408,13086,avg,30m,"zabbix[process,housekeeper,avg,busy]"
+13112,23258,13473,avg,30m,"zabbix[process,housekeeper,avg,busy]"
+13113,22402,13087,avg,10m,"zabbix[process,http poller,avg,busy]"
+13114,23259,13474,avg,10m,"zabbix[process,http poller,avg,busy]"
+13115,22418,13088,avg,10m,"zabbix[process,icmp pinger,avg,busy]"
+13116,23260,13475,avg,10m,"zabbix[process,icmp pinger,avg,busy]"
+13117,22416,13089,avg,10m,"zabbix[process,ipmi poller,avg,busy]"
+13118,23261,13476,avg,10m,"zabbix[process,ipmi poller,avg,busy]"
+13119,22689,13275,avg,10m,"zabbix[process,java poller,avg,busy]"
+13120,23262,13477,avg,10m,"zabbix[process,java poller,avg,busy]"
+13121,22428,13090,avg,10m,"zabbix[process,node watcher,avg,busy]"
+13122,23263,13478,avg,10m,"zabbix[process,node watcher,avg,busy]"
+13123,22399,13091,avg,10m,"zabbix[process,poller,avg,busy]"
+13124,23264,13479,avg,10m,"zabbix[process,poller,avg,busy]"
+13125,22420,13092,avg,10m,"zabbix[process,proxy poller,avg,busy]"
+13126,23265,13480,avg,10m,"zabbix[process,proxy poller,avg,busy]"
+13127,23171,13441,avg,10m,"zabbix[process,snmp trapper,avg,busy]"
+13128,23267,13482,avg,10m,"zabbix[process,snmp trapper,avg,busy]"
+13129,22426,13094,avg,10m,"zabbix[process,timer,avg,busy]"
+13130,23268,13483,avg,10m,"zabbix[process,timer,avg,busy]"
+13131,22404,13095,avg,10m,"zabbix[process,trapper,avg,busy]"
+13132,23269,13484,avg,10m,"zabbix[process,trapper,avg,busy]"
+13133,22400,13096,avg,10m,"zabbix[process,unreachable poller,avg,busy]"
+13134,23270,13485,avg,10m,"zabbix[process,unreachable poller,avg,busy]"
+13135,22401,13097,avg,10m,"zabbix[process,vmware collector,avg,busy]"
+13136,23328,13436,avg,10m,"zabbix[process,vmware collector,avg,busy]"
+13137,23347,13521,avg,10m,"zabbix[process,configuration syncer,avg,busy]"
+13138,23360,13534,avg,10m,"zabbix[process,data sender,avg,busy]"
+13139,23352,13522,avg,10m,"zabbix[process,discoverer,avg,busy]"
+13140,23351,13535,avg,10m,"zabbix[process,heartbeat sender,avg,busy]"
+13141,23350,13523,avg,10m,"zabbix[process,history syncer,avg,busy]"
+13142,23353,13524,avg,30m,"zabbix[process,housekeeper,avg,busy]"
+13143,23354,13525,avg,10m,"zabbix[process,http poller,avg,busy]"
+13144,23356,13526,avg,10m,"zabbix[process,icmp pinger,avg,busy]"
+13145,23355,13527,avg,10m,"zabbix[process,ipmi poller,avg,busy]"
+13146,23349,13528,avg,10m,"zabbix[process,java poller,avg,busy]"
+13147,23348,13529,avg,10m,"zabbix[process,poller,avg,busy]"
+13148,23343,13530,avg,10m,"zabbix[process,self-monitoring,avg,busy]"
+13149,23344,13531,avg,10m,"zabbix[process,snmp trapper,avg,busy]"
+13150,23345,13532,avg,10m,"zabbix[process,trapper,avg,busy]"
+13151,23346,13533,avg,10m,"zabbix[process,unreachable poller,avg,busy]"
+13152,23651,13551,max,#3,net.tcp.service[pop]
+13154,23649,13549,max,#3,net.tcp.service[nntp]
+13155,22819,13327,last,0,mysql.ping
+13156,23650,13550,max,#3,net.tcp.service[ntp]
+13157,23652,13552,max,#3,net.tcp.service[smtp]
+13158,23653,13553,max,#3,net.tcp.service[ssh]
+13159,23654,13285,max,#3,net.tcp.service[telnet]
+13160,23669,13557,str,Client,"jmx[""java.lang:type=Compilation"",Name]"
+13161,23681,13558,last,0,"jmx[""java.lang:type=GarbageCollector,name=ParNew"",CollectionCount]"
+13162,23671,13558,last,0,"jmx[""java.lang:type=GarbageCollector,name=ConcurrentMarkSweep"",CollectionCount]"
+13163,23673,13559,last,0,"jmx[""java.lang:type=GarbageCollector,name=Copy"",CollectionCount]"
+13164,23675,13559,last,0,"jmx[""java.lang:type=GarbageCollector,name=MarkSweepCompact"",CollectionCount]"
+13165,23679,13560,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS Scavenge"",CollectionCount]"
+13166,23677,13560,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS MarkSweep"",CollectionCount]"
+13167,23683,13561,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.committed]"
+13168,23684,13561,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13169,23685,13562,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.used]"
+13170,23684,13562,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13171,23686,13563,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.committed]"
+13172,23687,13563,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13173,23688,13564,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.used]"
+13174,23687,13564,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13175,23690,13565,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.committed]"
+13176,23691,13565,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13177,23692,13566,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.used]"
+13178,23691,13566,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13179,23693,13567,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.committed]"
+13180,23694,13567,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13181,23695,13568,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.used]"
+13182,23694,13568,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13183,23696,13569,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.committed]"
+13184,23697,13569,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13185,23698,13570,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.used]"
+13186,23697,13570,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13187,23699,13571,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.committed]"
+13188,23700,13571,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13189,23701,13572,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.used]"
+13190,23700,13572,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13191,23702,13573,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.committed]"
+13192,23703,13573,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13193,23704,13574,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.used]"
+13194,23703,13574,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13195,23705,13575,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.committed]"
+13196,23706,13575,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13197,23707,13576,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.used]"
+13198,23706,13576,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13199,23708,13577,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.committed]"
+13200,23709,13577,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13201,23710,13578,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.used]"
+13202,23709,13578,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13203,23712,13579,last,0,"jmx[""java.lang:type=OperatingSystem"",OpenFileDescriptorCount]"
+13204,23711,13579,last,0,"jmx[""java.lang:type=OperatingSystem"",MaxFileDescriptorCount]"
+13205,23713,13580,last,0,"jmx[""java.lang:type=OperatingSystem"",ProcessCpuLoad]"
+13206,23714,13581,nodata,1m,"jmx[""java.lang:type=Runtime"",Uptime]"
+13207,23715,13582,str,Server,"jmx[""java.lang:type=Runtime"",VmName]"
+13208,23721,13583,max,#3,icmpping
+13209,23722,13584,min,5m,icmppingloss
+13210,23723,13585,avg,5m,icmppingsec
+13211,23727,13586,str,Client,"jmx[""java.lang:type=Compilation"",Name]"
+13212,23739,13587,last,0,"jmx[""java.lang:type=GarbageCollector,name=ParNew"",CollectionCount]"
+13213,23729,13587,last,0,"jmx[""java.lang:type=GarbageCollector,name=ConcurrentMarkSweep"",CollectionCount]"
+13214,23731,13588,last,0,"jmx[""java.lang:type=GarbageCollector,name=Copy"",CollectionCount]"
+13215,23733,13588,last,0,"jmx[""java.lang:type=GarbageCollector,name=MarkSweepCompact"",CollectionCount]"
+13216,23737,13589,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS Scavenge"",CollectionCount]"
+13217,23735,13589,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS MarkSweep"",CollectionCount]"
+13218,23741,13590,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.committed]"
+13219,23742,13590,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13220,23743,13591,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.used]"
+13221,23742,13591,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13222,23744,13592,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.committed]"
+13223,23745,13592,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13224,23746,13593,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.used]"
+13225,23745,13593,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13226,23748,13594,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.committed]"
+13227,23749,13594,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13228,23750,13595,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.used]"
+13229,23749,13595,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13230,23751,13596,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.committed]"
+13231,23752,13596,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13232,23753,13597,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.used]"
+13233,23752,13597,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13234,23754,13598,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.committed]"
+13235,23755,13598,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13236,23756,13599,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.used]"
+13237,23755,13599,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13238,23757,13600,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.committed]"
+13239,23758,13600,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13240,23759,13601,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.used]"
+13241,23758,13601,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13242,23760,13602,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.committed]"
+13243,23761,13602,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13244,23762,13603,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.used]"
+13245,23761,13603,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13246,23763,13604,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.committed]"
+13247,23764,13604,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13248,23765,13605,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.used]"
+13249,23764,13605,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13250,23766,13606,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.committed]"
+13251,23767,13606,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13252,23768,13607,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.used]"
+13253,23767,13607,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13254,23770,13608,last,0,"jmx[""java.lang:type=OperatingSystem"",OpenFileDescriptorCount]"
+13255,23769,13608,last,0,"jmx[""java.lang:type=OperatingSystem"",MaxFileDescriptorCount]"
+13256,23771,13609,last,0,"jmx[""java.lang:type=OperatingSystem"",ProcessCpuLoad]"
+13257,23772,13610,nodata,1m,"jmx[""java.lang:type=Runtime"",Uptime]"
+13258,23773,13611,str,Server,"jmx[""java.lang:type=Runtime"",VmName]"
+13259,23782,13612,str,Client,"jmx[""java.lang:type=Compilation"",Name]"
+13260,23794,13613,last,0,"jmx[""java.lang:type=GarbageCollector,name=ParNew"",CollectionCount]"
+13261,23784,13613,last,0,"jmx[""java.lang:type=GarbageCollector,name=ConcurrentMarkSweep"",CollectionCount]"
+13262,23786,13614,last,0,"jmx[""java.lang:type=GarbageCollector,name=Copy"",CollectionCount]"
+13263,23788,13614,last,0,"jmx[""java.lang:type=GarbageCollector,name=MarkSweepCompact"",CollectionCount]"
+13264,23792,13615,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS Scavenge"",CollectionCount]"
+13265,23790,13615,last,0,"jmx[""java.lang:type=GarbageCollector,name=PS MarkSweep"",CollectionCount]"
+13266,23796,13616,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.committed]"
+13267,23797,13616,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13268,23798,13617,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.used]"
+13269,23797,13617,last,0,"jmx[""java.lang:type=Memory"",HeapMemoryUsage.max]"
+13270,23799,13618,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.committed]"
+13271,23800,13618,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13272,23801,13619,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.used]"
+13273,23800,13619,last,0,"jmx[""java.lang:type=Memory"",NonHeapMemoryUsage.max]"
+13274,23803,13620,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.committed]"
+13275,23804,13620,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13276,23805,13621,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.used]"
+13277,23804,13621,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Old Gen"",Usage.max]"
+13278,23806,13622,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.committed]"
+13279,23807,13622,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13280,23808,13623,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.used]"
+13281,23807,13623,last,0,"jmx[""java.lang:type=MemoryPool,name=CMS Perm Gen"",Usage.max]"
+13282,23809,13624,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.committed]"
+13283,23810,13624,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13284,23811,13625,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.used]"
+13285,23810,13625,last,0,"jmx[""java.lang:type=MemoryPool,name=Code Cache"",Usage.max]"
+13286,23812,13626,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.committed]"
+13287,23813,13626,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13288,23814,13627,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.used]"
+13289,23813,13627,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Old Gen"",Usage.max]"
+13290,23815,13628,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.committed]"
+13291,23816,13628,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13292,23817,13629,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.used]"
+13293,23816,13629,last,0,"jmx[""java.lang:type=MemoryPool,name=PS Perm Gen"",Usage.max]"
+13294,23818,13630,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.committed]"
+13295,23819,13630,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13296,23820,13631,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.used]"
+13297,23819,13631,last,0,"jmx[""java.lang:type=MemoryPool,name=Perm Gen"",Usage.max]"
+13298,23821,13632,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.committed]"
+13299,23822,13632,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13300,23823,13633,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.used]"
+13301,23822,13633,last,0,"jmx[""java.lang:type=MemoryPool,name=Tenured Gen"",Usage.max]"
+13302,23825,13634,last,0,"jmx[""java.lang:type=OperatingSystem"",OpenFileDescriptorCount]"
+13303,23824,13634,last,0,"jmx[""java.lang:type=OperatingSystem"",MaxFileDescriptorCount]"
+13304,23826,13635,last,0,"jmx[""java.lang:type=OperatingSystem"",ProcessCpuLoad]"
+13305,23827,13636,nodata,1m,"jmx[""java.lang:type=Runtime"",Uptime]"
+13306,23828,13637,str,Server,"jmx[""java.lang:type=Runtime"",VmName]"
+13307,23834,13638,diff,0,agent.hostname
+13308,23835,13639,nodata,5m,agent.ping
+13309,23836,13640,diff,0,agent.version
+13310,23861,13641,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8080"",currentThreadsBusy]"
+13311,23862,13641,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8080"",maxThreads]"
+13312,23864,13642,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8443"",currentThreadsBusy]"
+13313,23865,13642,last,0,"jmx[""Catalina:type=ThreadPool,name=http-8443"",maxThreads]"
+13314,23867,13643,last,0,"jmx[""Catalina:type=ThreadPool,name=jk-8009"",currentThreadsBusy]"
+13315,23868,13643,last,0,"jmx[""Catalina:type=ThreadPool,name=jk-8009"",maxThreads]"
+13316,23857,13644,str,off,"jmx[""Catalina:type=ProtocolHandler,port=8080"",compression]"
+13317,23858,13645,str,off,"jmx[""Catalina:type=ProtocolHandler,port=8443"",compression]"
+13318,23869,13646,diff,0,agent.hostname
+13319,23870,13647,nodata,5m,agent.ping
+13320,23871,13648,diff,0,agent.version
+13321,23881,13649,diff,0,agent.hostname
+13322,23882,13650,nodata,5m,agent.ping
+13323,23883,13651,diff,0,agent.version
+13324,23884,13652,last,0,kernel.maxfiles
+13325,23885,13653,last,0,kernel.maxproc
+13326,23886,13654,avg,5m,"proc.num[,,run]"
+13327,23887,13655,avg,5m,proc.num[]
+13328,23891,13656,avg,5m,"system.cpu.load[percpu,avg1]"
+13329,23896,13657,avg,5m,"system.cpu.util[,iowait]"
+13330,23902,13658,diff,0,system.hostname
+13331,23905,13659,last,0,"system.swap.size[,pfree]"
+13332,23907,13660,diff,0,system.uname
+13333,23908,13661,change,0,system.uptime
+13334,23910,13662,diff,0,vfs.file.cksum[/etc/passwd]
+13335,23911,13663,last,0,vm.memory.size[available]
+13336,23876,13664,last,0,"vfs.fs.inode[{#FSNAME},pfree]"
+13337,23878,13665,last,0,"vfs.fs.size[{#FSNAME},pfree]"
+13338,10010,13666,last,,"system.cpu.load[percpu,avg1]"
+13339,23296,13667,last,,"system.cpu.load[percpu,avg1]"
+13340,23891,13668,last,,"system.cpu.load[percpu,avg1]"

@@ -32,6 +32,7 @@ define(__TABLE11_NAME,    'monitor_items'); //新监控项表
 define(__TABLE12_NAME,    'monitor_sets'); //新监控集表
 define(__TABLE13_NAME,    'monitor_datacollectors'); //新数据收集器表
 define(__TABLE14_NAME,    'monitor_triggers'); //新触发器表
+define(__TABLE15_NAME,    'monitor_functions'); //新函数表（待定）
 
 
 chdir(dirname(__FILE__));
@@ -39,6 +40,7 @@ include_once('template.php');
 include_once('applications.php');
 include_once('items.php');
 include_once('triggers.php');
+include_once('functions.php');
 include_once(__THRIFT_ROOT.'/Thrift.php');
 include_once(__THRIFT_ROOT.'/transport/TSocket.php');
 include_once(__THRIFT_ROOT.'/transport/TBufferedTransport.php');
@@ -60,7 +62,8 @@ $all_create_tables = array(
     __TABLE11_NAME,
     __TABLE12_NAME,
     __TABLE13_NAME,
-    __TABLE14_NAME
+    __TABLE14_NAME,
+    __TABLE15_NAME
 );
 /*{{{ 删除表
  */
@@ -223,7 +226,13 @@ $table_arr = array(
             'column_family_name' => "info:", //存触发器
             'table_name'         => __TABLE14_NAME
         )
-    )
+    ),
+    array( //表15的family 
+        array(
+            'column_family_name' => "info:", //存函数
+            'table_name'         => __TABLE15_NAME
+        )
+    ),
 );
 foreach ($table_arr as $table) {
     foreach ($table as $column_fm) {
@@ -1068,6 +1077,47 @@ for($i=1;$i<sizeof($triggersData);$i++) {
 }
 
 /*}}}*/
+
+$table = __TABLE15_NAME;
+//functionid,itemid,triggerid,function,parameter,key_
+$functionsData = getFunctions();
+$mutations = [];
+for($i=1;$i<sizeof($functionsData);$i++) {
+    list($functionid,$itemid,$triggerid,$function,$parameter,$key)=$functionsData[$i];
+    $rowkey=$functionsData;
+    echo "add function:${functionid}\n";
+    $mutations[]=new Mutation( array(
+        'column' => "info:functionid",
+        'value'  => "${functionid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:itemid",
+        'value'  => "${itemid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:triggerid",
+        'value'  => "${triggerid}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:function",
+        'value'  => "${function}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:parameter",
+        'value'  => "${parameter}" 
+    ));
+    $mutations[]=new Mutation( array(
+        'column' => "info:key",
+        'value'  => "${key}" 
+    ));
+    try { //thrift出错直接抛出异常需要捕获 
+        $GLOBALS['mdb_client']->mutateRow( $table, $rowkey, $mutations );
+        $ret = true;
+    } catch (Exception $e) { //抛出异常返回false 
+        echo $e;
+        $ret = false;
+    }
+}
 
 closeMdb();
 
