@@ -21,9 +21,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -81,7 +78,7 @@ public class QueryInfoService {
     }
 
 
-    public void getScanData() throws IOException {
+    public void getScanData() {
         HBaseAdmin ad = null;
         try {
             ad = new HBaseAdmin(hbaseConf);
@@ -93,265 +90,277 @@ public class QueryInfoService {
 
     /**
      * 返回key为hostName，value为template id数组的map
+     *
      * @param ad
      */
-    private HashMap<String, String[]> scanHosts(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
-        Scan scan = new Scan();
+    private HashMap<String, String[]> scanHosts(HBaseAdmin ad) {
         HashMap<String, String[]> hostTemplateMap = new HashMap<>();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                String hostName = new String(row);
-                // 数据收集器不为空，说明是实际的服务器
-                if (r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_collector")) != null) {
-                    byte[] templateBytes = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("template"));
-                    if (templateBytes != null) {
-                        String templateStr = new String(templateBytes);
-                        if (StringUtils.isNotEmpty(templateStr)) {
-                            String[] templateArr = templateStr.split("\\|");
-                            hostTemplateMap.put(hostName, templateArr);
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
+            Scan scan = new Scan();
+            try (ResultScanner rs = table.getScanner(scan)) {
+                for (Result r = rs.next(); r != null; r = rs.next()) {
+                    byte[] row = r.getRow();
+                    String hostName = new String(row);
+                    // 数据收集器不为空，说明是实际的服务器
+                    if (r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_collector")) != null) {
+                        byte[] templateBytes = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("template"));
+                        if (templateBytes != null) {
+                            String templateStr = new String(templateBytes);
+                            if (StringUtils.isNotEmpty(templateStr)) {
+                                String[] templateArr = templateStr.split("\\|");
+                                hostTemplateMap.put(hostName, templateArr);
+                            }
                         }
                     }
-                }
 
+                }
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-        connection.close();
         return hostTemplateMap;
     }
 
     /**
      * 返回key为templateId，value为若干setid
+     *
      * @param ad
      */
-    private HashMap<String, HashSet<String>> scanTemplateSets(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+    private HashMap<String, HashSet<String>> scanTemplateSets(HBaseAdmin ad) {
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
-        Scan scan = new Scan();
-        templateSetsMap = makeMap(table, templateSetsMap, scan);
-        connection.close();
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+            Scan scan = new Scan();
+            templateSetsMap = makeMap(table, templateSetsMap, scan);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
         return templateSetsMap;
     }
 
     /**
      * 返回key为templateId,value为map，map的key是setId，value是setName
      */
-    private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+    private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails(HBaseAdmin ad) {
         HashMap<String, HashMap<String, String>> map = new HashMap<>();
-        Scan scan = new Scan();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                String templateId = new String(row);
-                String[] cols = getColumnsInColumnFamily(r, "info");
-                if (cols != null) {
-                    for (String col : cols) {
-                        // 查出列，找是否有类似info:setid286的列，这就是setid
-                        if (col.contains("setid")) {
-                            String setid = col.substring(5);
-                            if (map.containsKey(templateId)) {
-                                HashMap<String, String> sets = map.get(templateId);
-                                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
-                                if (value != null) {
-                                    sets.put(setid, new String(value));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+            Scan scan = new Scan();
+            try (ResultScanner rs = table.getScanner(scan)) {
+                for (Result r = rs.next(); r != null; r = rs.next()) {
+                    byte[] row = r.getRow();
+                    String templateId = new String(row);
+                    String[] cols = getColumnsInColumnFamily(r, "info");
+                    if (cols != null) {
+                        for (String col : cols) {
+                            // 查出列，找是否有类似info:setid286的列，这就是setid
+                            if (col.contains("setid")) {
+                                String setid = col.substring(5);
+                                if (map.containsKey(templateId)) {
+                                    HashMap<String, String> sets = map.get(templateId);
+                                    byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
+                                    if (value != null) {
+                                        sets.put(setid, new String(value));
+                                    }
+                                    map.put(templateId, sets);
+                                } else {
+                                    HashMap<String, String> sets = new HashMap<>();
+                                    byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
+                                    if (value != null) {
+                                        sets.put(setid, new String(value));
+                                    }
+                                    map.put(templateId, sets);
                                 }
-                                map.put(templateId, sets);
-                            } else {
-                                HashMap<String, String> sets = new HashMap<>();
-                                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes(col));
-                                if (value != null) {
-                                    sets.put(setid, new String(value));
-                                }
-                                map.put(templateId, sets);
                             }
                         }
                     }
                 }
             }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
         }
         return map;
     }
 
 
-
     /**
      * 返回key为itemId，value为若干setid
+     *
      * @param ad
      */
-    private  HashMap<String, HashSet<String>> scanItemSets(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_items"));
+    private HashMap<String, HashSet<String>> scanItemSets(HBaseAdmin ad) {
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
-        Scan scan = new Scan();
-        setItemsMap = makeMap(table, setItemsMap, scan);
-        connection.close();
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_items"));
+            Scan scan = new Scan();
+            setItemsMap = makeMap(table, setItemsMap, scan);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
         return setItemsMap;
     }
 
     /**
      * 返回itemId,value为对应Item的map
      */
-    private HashMap<String, Item> scanItems(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_items"));
+    private HashMap<String, Item> scanItems(HBaseAdmin ad) {
         HashMap<String, Item> itemMap = new HashMap<>();
-        Scan scan = new Scan();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                Item item = new Item();
-                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
-                if (value != null) {
-                    item.setType(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_type"));
-                if (value != null) {
-                    item.setDataType(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("snmp_community"));
-                if (value != null) {
-                    item.setSnmpCommunity(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("snmp_oid"));
-                if (value != null) {
-                    item.setSnmpOid(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("host_id"));
-                if (value != null) {
-                    item.setHostId(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("name"));
-                if (value != null) {
-                    item.setName(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("key_"));
-                if (value != null) {
-                    item.setKey(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("delay"));
-                if (value != null) {
-                    item.setDelay(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("history"));
-                if (value != null) {
-                    item.setHistory(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("status"));
-                if (value != null) {
-                    item.setStatus(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("value_type"));
-                if (value != null) {
-                    item.setValueType(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("units"));
-                if (value != null) {
-                    item.setUnits(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("multiplier"));
-                if (value != null) {
-                    item.setMultiplier(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("delta"));
-                if (value != null) {
-                    item.setDelta(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastlogsize"));
-                if (value != null) {
-                    item.setLastlogsize(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_type"));
-                if (value != null) {
-                    item.setDataType(new String(value));
-                }
-
-                if (row != null) {
-                    itemMap.put(new String(row), item);
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_items"));
+            Scan scan = new Scan();
+            try (ResultScanner rs = table.getScanner(scan)) {
+                for (Result r = rs.next(); r != null; r = rs.next()) {
+                    byte[] row = r.getRow();
+                    Item item = new Item();
+                    byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
+                    if (value != null) {
+                        item.setType(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_type"));
+                    if (value != null) {
+                        item.setDataType(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("snmp_community"));
+                    if (value != null) {
+                        item.setSnmpCommunity(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("snmp_oid"));
+                    if (value != null) {
+                        item.setSnmpOid(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("host_id"));
+                    if (value != null) {
+                        item.setHostId(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("name"));
+                    if (value != null) {
+                        item.setName(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("key_"));
+                    if (value != null) {
+                        item.setKey(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("delay"));
+                    if (value != null) {
+                        item.setDelay(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("history"));
+                    if (value != null) {
+                        item.setHistory(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("status"));
+                    if (value != null) {
+                        item.setStatus(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("value_type"));
+                    if (value != null) {
+                        item.setValueType(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("units"));
+                    if (value != null) {
+                        item.setUnits(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("multiplier"));
+                    if (value != null) {
+                        item.setMultiplier(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("delta"));
+                    if (value != null) {
+                        item.setDelta(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastlogsize"));
+                    if (value != null) {
+                        item.setLastlogsize(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("data_type"));
+                    if (value != null) {
+                        item.setDataType(new String(value));
+                    }
+                    if (row != null) {
+                        itemMap.put(new String(row), item);
+                    }
                 }
             }
+        } catch (Exception e) {
+           LOG.error(e.getMessage(), e);
         }
-        connection.close();
         return itemMap;
     }
 
-    private HashMap<String, Trigger> scanTriggers(HBaseAdmin ad) throws IOException {
-        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
-        Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
-        Scan scan = new Scan();
+    private HashMap<String, Trigger> scanTriggers(HBaseAdmin ad) {
         HashMap<String, Trigger> triggerMap = new HashMap<>();
-        try (ResultScanner rs = table.getScanner(scan)) {
-            for (Result r = rs.next(); r != null; r = rs.next()) {
-                byte[] row = r.getRow();
-                Trigger trigger = new Trigger();
-                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("triggerid"));
-                if (value != null) {
-                    trigger.setTriggerid(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("expression"));
-                if (value != null) {
-                    trigger.setExpression(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("url"));
-                if (value != null) {
-                    trigger.setUrl(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("status"));
-                if (value != null) {
-                    trigger.setStatus(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("value"));
-                if (value != null) {
-                    trigger.setValue(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("priority"));
-                if (value != null) {
-                    trigger.setPriority(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastchange"));
-                if (value != null) {
-                    trigger.setLastchange(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("comments"));
-                if (value != null) {
-                    trigger.setComments(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("error"));
-                if (value != null) {
-                    trigger.setError(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("templateid"));
-                if (value != null) {
-                    trigger.setTemplateid(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
-                if (value != null) {
-                    trigger.setType(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("state"));
-                if (value != null) {
-                    trigger.setState(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("flags"));
-                if (value != null) {
-                    trigger.setFlags(new String(value));
-                }
-                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("hostid"));
-                if (value != null) {
-                    trigger.setFlags(new String(value));
-                }
-                if (row != null) {
-                    triggerMap.put(new String(row), trigger);
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
+            Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
+            Scan scan = new Scan();
+            try (ResultScanner rs = table.getScanner(scan)) {
+                for (Result r = rs.next(); r != null; r = rs.next()) {
+                    byte[] row = r.getRow();
+                    Trigger trigger = new Trigger();
+                    byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("triggerid"));
+                    if (value != null) {
+                        trigger.setTriggerid(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("expression"));
+                    if (value != null) {
+                        trigger.setExpression(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("url"));
+                    if (value != null) {
+                        trigger.setUrl(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("status"));
+                    if (value != null) {
+                        trigger.setStatus(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("value"));
+                    if (value != null) {
+                        trigger.setValue(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("priority"));
+                    if (value != null) {
+                        trigger.setPriority(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastchange"));
+                    if (value != null) {
+                        trigger.setLastchange(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("comments"));
+                    if (value != null) {
+                        trigger.setComments(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("error"));
+                    if (value != null) {
+                        trigger.setError(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("templateid"));
+                    if (value != null) {
+                        trigger.setTemplateid(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
+                    if (value != null) {
+                        trigger.setType(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("state"));
+                    if (value != null) {
+                        trigger.setState(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("flags"));
+                    if (value != null) {
+                        trigger.setFlags(new String(value));
+                    }
+                    value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("hostid"));
+                    if (value != null) {
+                        trigger.setFlags(new String(value));
+                    }
+                    if (row != null) {
+                        triggerMap.put(new String(row), trigger);
+                    }
                 }
             }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
         }
-        connection.close();
         return triggerMap;
     }
 
@@ -359,7 +368,7 @@ public class QueryInfoService {
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
      */
-    private void scanData(HBaseAdmin ad) throws IOException {
+    private void scanData(HBaseAdmin ad) {
         // 获取主机和模板
         HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
         String json1 = new Gson().toJson(hostTemplateMap);
