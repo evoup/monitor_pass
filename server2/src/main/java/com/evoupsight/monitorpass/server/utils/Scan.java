@@ -6,32 +6,30 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 import static com.evoupsight.monitorpass.constants.Constants.KEY_SCAN_DURATION;
 import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_ENGINE;
 
-@Component
-@Scope(value = "singleton")
+/**
+ * @author evoup
+ */
 public class Scan {
-    @Autowired
-    private Configuration hbaseConf;
 
     private static final Logger LOG = LoggerFactory.getLogger(Scan.class);
 
     private static Scan instance;
     private HBaseAdmin hBaseAdmin;
+    private Configuration hbaseConf;
 
     private Scan() {
     }
 
-    public synchronized static Scan getInstance() throws IOException {
+    public synchronized static Scan getInstance(Configuration hbaseConf) throws IOException {
         if (instance == null) {
             instance = new Scan();
+            instance.hbaseConf = hbaseConf;
             instance.hBaseAdmin = new HBaseAdmin(instance.hbaseConf);
         }
         return instance;

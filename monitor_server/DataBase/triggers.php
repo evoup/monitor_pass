@@ -15,7 +15,7 @@
  */
 
 //全部导出的
-//triggerid,expression,description,url,status,value,priority,lastchange,comments,error,templateid,type,state,flags
+//triggerid,expression,description,url,status,value,priority,lastchange,comments,error,templateid,type,state,flags,hostid
 
 //实际需要的
 //除了triggerid不要，其他都要
@@ -35,7 +35,7 @@ function getTriggers() {
     return $ret;
 }
 
-// 触发器id,表达式，描述，url，状态，数值、优先级、最后变更、注释、错误、模板id，类型、状态、标记
+// 触发器id,表达式，描述，url，状态，数值、优先级、最后变更、注释、错误、模板id，类型、状态、标记、真模板id
 //$triggersData = getTriggers();
 //$triggers=[];
 //for($i=1;$i<sizeof($triggersData);$i++) {
