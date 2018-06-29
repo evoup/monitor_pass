@@ -284,34 +284,21 @@ public class QueryInfoService {
     private void scanData(HBaseAdmin ad) throws IOException {
         // 获取主机和模板
         HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
-        System.out.println("========hostTemplateMap===========");
         String json1 = new Gson().toJson(hostTemplateMap);
-        LOG.info("json1:" + json1);
-        System.out.println("==================================");
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
-        System.out.println("=========templateSetsMap==========");
         String json2 = new Gson().toJson(templateSetsMap);
-        //LOG.info("json2:" + json2);
-        System.out.println("==================================");
 
         HashMap<String, HashSet<String>> itemSetsMap = scanItemSets(ad);
-        System.out.println("===========itemSetsMap============");
         String json3 = new Gson().toJson(itemSetsMap);
-        //LOG.info("json3:" + json3);
-        System.out.println("==================================");
 
         HashMap<String, Item> itemsMap = scanItems(ad);
-        System.out.println("=============itemsMap=============");
         String json4 = new Gson().toJson(itemsMap);
-        //LOG.info("json4:" + json4);
-        System.out.println("==================================");
 
         HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails(ad);
-        System.out.println("=============setDetailsMap=============");
         String json5 = new Gson().toJson(setDetailsMap);
-        //LOG.info("json5:" + json5);
-        System.out.println("==================================");
+
+
         JedisPoolConfig poolConfig = buildPoolConfig();
 
         // 缓存成key

@@ -23,8 +23,6 @@ public class CacheTask {
 
     @Scheduled(fixedDelay = 5000)
     public void cache() throws IOException {
-        LOG.info("test");
-        queryInfoService.getRow();
         queryInfoService.getScanData();
     }
 }
