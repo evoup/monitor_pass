@@ -22,6 +22,7 @@ public class Scan {
         Connection connection = null;
         String colFamily = MDB_COL_SCAN_DURATION;
         try {
+            // FIXME 这里要做成单例
             ad = new HBaseAdmin(config);
             connection = ConnectionFactory.createConnection(ad.getConfiguration());
             table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE));

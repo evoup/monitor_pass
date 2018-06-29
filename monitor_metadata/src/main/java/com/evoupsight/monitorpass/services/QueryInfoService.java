@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.services;
 
 import com.evoupsight.monitorpass.domain.Item;
+import com.evoupsight.monitorpass.domain.Trigger;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -20,6 +21,9 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -277,6 +281,76 @@ public class QueryInfoService {
         return itemMap;
     }
 
+    private HashMap<String, Trigger> scanTriggers(HBaseAdmin ad) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
+        Scan scan = new Scan();
+        HashMap<String, Trigger> triggerMap = new HashMap<>();
+        try (ResultScanner rs = table.getScanner(scan)) {
+            for (Result r = rs.next(); r != null; r = rs.next()) {
+                byte[] row = r.getRow();
+                Trigger trigger = new Trigger();
+                byte[] value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("triggerid"));
+                if (value != null) {
+                    trigger.setTriggerid(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("expression"));
+                if (value != null) {
+                    trigger.setExpression(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("url"));
+                if (value != null) {
+                    trigger.setUrl(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("status"));
+                if (value != null) {
+                    trigger.setStatus(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("value"));
+                if (value != null) {
+                    trigger.setValue(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("priority"));
+                if (value != null) {
+                    trigger.setPriority(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("lastchange"));
+                if (value != null) {
+                    trigger.setLastchange(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("comments"));
+                if (value != null) {
+                    trigger.setComments(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("error"));
+                if (value != null) {
+                    trigger.setError(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("templateid"));
+                if (value != null) {
+                    trigger.setTemplateid(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("type"));
+                if (value != null) {
+                    trigger.setType(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("state"));
+                if (value != null) {
+                    trigger.setState(new String(value));
+                }
+                value = r.getValue(Bytes.toBytes("info"), Bytes.toBytes("flags"));
+                if (value != null) {
+                    trigger.setFlags(new String(value));
+                }
+                if (row != null) {
+                    triggerMap.put(new String(row), trigger);
+                }
+            }
+        }
+        connection.close();
+        return triggerMap;
+    }
+
 
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
@@ -298,6 +372,9 @@ public class QueryInfoService {
         HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails(ad);
         String json5 = new Gson().toJson(setDetailsMap);
 
+        HashMap<String, Trigger> triggerMap = scanTriggers(ad);
+        String json6 = new Gson().toJson(triggerMap);
+
 
         JedisPoolConfig poolConfig = buildPoolConfig();
 
@@ -309,6 +386,7 @@ public class QueryInfoService {
             jedis.set("key3", json3);
             jedis.set("key4", json4);
             jedis.set("key5", json5);
+            jedis.set("key6", json6);
             // flush Redis
             //jedis.flushAll();
         }
