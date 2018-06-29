@@ -991,7 +991,7 @@ $table = __TABLE14_NAME;
 //trigger
 //触发器id,表达式，描述，url，状态，数值、优先级、最后变更、注释、错误、模板id，类型、状态、标记
 $triggersData = getTriggers();
-print_r($triggersData);
+//print_r($triggersData);
 $mutations = [];
 for($i=1;$i<sizeof($triggersData);$i++) {
     list($triggerid,$expression,$description,$url,$status,$value,$priority,$lastchange,$comments,$error,$templateid,$type,$state,$flags)=$triggersData[$i];
