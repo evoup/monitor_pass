@@ -12,11 +12,10 @@
         <table class="table table-striped table-bordered table-condensed">
             <thead>
                 <tr>
-                    <th>模板</th>
-                    <th>监控集</th>
-                    <th>监控点</th>
-                    <th>触发器</th>
-                    <th>操作</th>
+                    <th>触发器名</th>
+                    <th>表达式</th>
+                    <th>状态</th>
+                    <th>等级</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,16 +24,16 @@
 				 %>
                 <tr>
                     <td>
-                       <div><%= item[0] ? item[0] : '' %></div>
+                       <div><a href="editTrigger.html?version=1.0&triggerid=<%= item[6] %>"><%= item[2] ? item[2] : '' %></a></div>
                     </td>
                     <td>
                        <div><%= item[1] ? item[1] : '' %></div>
                     </td>
                     <td>
-                      <div><a href="item.html?version=1.0&templateid=<%= item[4] %>"><%= item[2] ? item[2] : '' %></a></div>
+                    	<div><%= item[4]==0 ? '启用' : '停用' %></div>
                     </td>
                     <td>
-                      <div><a href="trigger.html?version=1.0&templateid=<%= item[4] %>"><%= item[3] ? item[3] : '' %></a></div>
+                    	<div><%= item[6]==0 ? '未分类' : '' %><%= item[6]==1 ? '信息' : '' %><%= item[6]==2 ? '警告' : '' %><%= item[6]==3 ? '中等' : '' %><%= item[6]==4 ? '高' : '' %><%= item[6]==5 ? '灾难' : '' %></div>
                     </td>
                     <td>
                     	<% if(item[3] != 0) { %>
@@ -56,17 +55,17 @@
 </head>
 <body>
     <header>
-        <h1>模板管理</h1>
+        <h1>触发器管理</h1>
         <div id="toolbar">
         	<div class="box_1">
-        		<button class="btn" id="add"><i class="icon-plus-sign"></i> 添加模板</button>
+        		<button class="btn" id="add"><i class="icon-plus-sign"></i> 添加触发器</button>
         	</div>  
         </div> 
     </header>	
 
 
     <div id="mainbody">
-        <div id="templates">
+        <div id="triggers">
         </div>
     </div>
 
@@ -82,35 +81,27 @@ $(function(){
 	
     var smartMad = window.smartMad = window.smartMad || {};
 	
-    var getTemplateAllConf = {
-        url: smartMad._url + smartMad.api.getTemplateAll
+    var templateid = urlParams('templateid');
+    var getItemAllConf = {
+        url: smartMad._url + smartMad.api.getTriggerOfTemplate + templateid
     };
 	
-    var getTemplateAllCall = function(e, json){
-    
+    var getItemAllCall = function(e, json){
         var $th = $(this), data, html;
-        
-        //$th.html(JSON.stringify(json));return;
-        ///////////////////////////////////////////////
-        
         data = {
             json: json
         };
-        
-        /////////////////////////////////////////////
-        
         html = template('t_a', data);
         $th.html(html);
-		
     };
 	
 
     ///////////////////////////////////////////////////////////	
 	  //init
    	///////////////////////////////////////////////////////////
-    var $templates = $('#templates');
+    var $triggers = $('#triggers');
     
-    $templates.bind('ajax.success', getTemplateAllCall).getData(getTemplateAllConf);
+    $triggers.bind('ajax.success', getItemAllCall).getData(getItemAllConf);
 	
     ///////////////////////////////////////////////////////////
 	//event bind

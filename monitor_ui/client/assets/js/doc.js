@@ -92,6 +92,10 @@ smartMad.api = {
   getItemOfTemplate: '/get/item/@template/',
   getItem: '/get/item/@self/',
 
+  // Trigger
+  getTriggerOfTemplate: '/get/trigger/@template/',
+  getTrigger: '/get/trigger/@self/',
+
   // DataCollector 
   createDataCollector: '/create/dataCollector/@self',
   getDataCollectorAll: '/get/dataCollector/@all',
