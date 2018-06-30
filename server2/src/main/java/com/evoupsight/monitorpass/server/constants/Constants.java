@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.constants;
+package com.evoupsight.monitorpass.server.constants;
 
 /**
  * @author evoup

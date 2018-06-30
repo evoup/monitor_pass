@@ -9,8 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static com.evoupsight.monitorpass.constants.Constants.KEY_SCAN_DURATION;
-import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_ENGINE;
+import static com.evoupsight.monitorpass.server.constants.Constants.KEY_SCAN_DURATION;
+import static com.evoupsight.monitorpass.server.constants.Constants.MDB_TAB_ENGINE;
+
 
 /**
  * @author evoup
@@ -40,10 +41,18 @@ public class Scan {
     }
 
     /**
+     * 执行所有工作
+     */
+    public void doAllJob() throws IOException {
+        saveLastScanTime();
+        scanHostDown();
+    }
+
+    /**
      * 保存上次扫描时间
      * @throws IOException 异常
      */
-    public void saveLastScanTime() throws IOException {
+    private void saveLastScanTime() throws IOException {
         LOG.debug("save scan time");
         try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE))) {
@@ -51,5 +60,14 @@ public class Scan {
             p.addColumn(Bytes.toBytes("scan"), Bytes.toBytes("duration"), Bytes.toBytes(System.currentTimeMillis()));
             table.put(p);
         }
+    }
+
+
+
+    /**
+     * 检查是否宕机
+     */
+    private void scanHostDown() {
+
     }
 }

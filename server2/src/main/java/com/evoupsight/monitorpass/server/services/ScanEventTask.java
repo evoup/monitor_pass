@@ -20,7 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static com.evoupsight.monitorpass.constants.Constants.*;
+import static com.evoupsight.monitorpass.server.constants.Constants.DEFAULT_WAIT_TIME_SECONDS;
+import static com.evoupsight.monitorpass.server.constants.Constants.LOCK_PATH;
+import static com.evoupsight.monitorpass.server.constants.Constants.MY_NAME;
+
 
 /**
  * @author evoup
@@ -34,8 +37,12 @@ public class ScanEventTask {
     @Value("${zk.servers}")
     String zkServers;
 
+    private final Configuration hbaseConf;
+
     @Autowired
-    private Configuration hbaseConf;
+    public ScanEventTask(Configuration hbaseConf) {
+        this.hbaseConf = hbaseConf;
+    }
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
@@ -48,7 +55,7 @@ public class ScanEventTask {
             if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
                 try {
                     LOG.info("server loop");
-                    Scan.getInstance(hbaseConf).saveLastScanTime();
+                    Scan.getInstance(hbaseConf).doAllJob();
                     Thread.sleep(15000);
                 } finally {
                     lock.release();
