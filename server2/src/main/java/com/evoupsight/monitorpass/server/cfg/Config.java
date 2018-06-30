@@ -19,7 +19,7 @@ import java.time.Duration;
  */
 @Configuration
 @PropertySources({
-        @PropertySource("server.properties")
+        @PropertySource({"server.properties", "redis.properties"})
 })
 public class Config {
 
