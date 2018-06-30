@@ -1,14 +1,12 @@
 package com.evoupsight.monitorpass.server.services;
 
 
-import com.evoupsight.monitorpass.server.utils.Scan;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static com.evoupsight.monitorpass.server.constants.Constants.DEFAULT_WAIT_TIME_SECONDS;
-import static com.evoupsight.monitorpass.server.constants.Constants.LOCK_PATH;
-import static com.evoupsight.monitorpass.server.constants.Constants.MY_NAME;
+import static com.evoupsight.monitorpass.server.constants.Constants.*;
 
 
 /**
@@ -37,11 +33,11 @@ public class ScanEventTask {
     @Value("${zk.servers}")
     String zkServers;
 
-    private final Configuration hbaseConf;
+    private final ScanService scanService;
 
     @Autowired
-    public ScanEventTask(Configuration hbaseConf) {
-        this.hbaseConf = hbaseConf;
+    public ScanEventTask(ScanService scanService) {
+        this.scanService = scanService;
     }
 
     @Scheduled(fixedRate = 5000)
@@ -55,7 +51,7 @@ public class ScanEventTask {
             if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
                 try {
                     LOG.info("server loop");
-                    Scan.getInstance(hbaseConf).doAllJob();
+                    scanService.doAllJob();
                     Thread.sleep(15000);
                 } finally {
                     lock.release();

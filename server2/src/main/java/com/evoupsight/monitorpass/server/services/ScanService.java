@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.server.utils;
+package com.evoupsight.monitorpass.server.services;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
@@ -6,6 +6,10 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 
@@ -16,28 +20,19 @@ import static com.evoupsight.monitorpass.server.constants.Constants.MDB_TAB_ENGI
 /**
  * @author evoup
  */
-public class Scan {
+@Service
+public class ScanService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Scan.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
 
-    private static Scan instance;
-    private Configuration hbaseConf;
+    private final Configuration hbaseConf;
 
-    private Scan() {
-    }
+    private final JedisPool jedisPool;
 
-    /**
-     * 单例
-     * @param hbaseConf hbase配置
-     * @return Scan
-     */
-    public synchronized static Scan getInstance(Configuration hbaseConf) {
-        if (instance == null) {
-            instance = new Scan();
-            instance.hbaseConf = hbaseConf;
-
-        }
-        return instance;
+    @Autowired
+    private ScanService(JedisPool jedisPool, Configuration hbaseConf) {
+        this.jedisPool = jedisPool;
+        this.hbaseConf = hbaseConf;
     }
 
     /**
@@ -68,6 +63,8 @@ public class Scan {
      * 检查是否宕机
      */
     private void scanHostDown() {
-
+        try (Jedis resource = jedisPool.getResource()) {
+            String value1 = resource.get("key1");
+        }
     }
 }
