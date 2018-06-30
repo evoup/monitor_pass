@@ -67,6 +67,7 @@ public class ScanService {
     private void scanHostDown() {
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
+            LOG.info("value1:" + value1);
             HostTemplateDto hostTemplateDto = new Gson().fromJson(value1, HostTemplateDto.class);
             LOG.info(new Gson().toJson(hostTemplateDto));
         }
