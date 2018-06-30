@@ -1,5 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
+import com.evoupsight.monitorpass.server.dto.HostTemplateDto;
+import com.google.gson.Gson;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -38,7 +40,7 @@ public class ScanService {
     /**
      * 执行所有工作
      */
-    public void doAllJob() throws IOException {
+    void doAllJob() throws IOException {
         saveLastScanTime();
         scanHostDown();
     }
@@ -65,6 +67,8 @@ public class ScanService {
     private void scanHostDown() {
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
+            HostTemplateDto hostTemplateDto = new Gson().fromJson(value1, HostTemplateDto.class);
+            LOG.info(new Gson().toJson(hostTemplateDto));
         }
     }
 }

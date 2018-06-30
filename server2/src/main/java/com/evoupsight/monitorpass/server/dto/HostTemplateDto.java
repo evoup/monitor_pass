@@ -10,10 +10,26 @@ public class HostTemplateDto {
     /**
      * 主机
      */
-    String host;
+    private String host;
 
     /**
      * 模板ids
      */
-    ArrayList<String> templateIds;
+    private ArrayList<String> templateIds;
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public ArrayList<String> getTemplateIds() {
+        return templateIds;
+    }
+
+    public void setTemplateIds(ArrayList<String> templateIds) {
+        this.templateIds = templateIds;
+    }
 }
