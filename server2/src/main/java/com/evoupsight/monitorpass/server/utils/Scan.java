@@ -20,7 +20,6 @@ public class Scan {
     private static final Logger LOG = LoggerFactory.getLogger(Scan.class);
 
     private static Scan instance;
-    private HBaseAdmin hBaseAdmin;
     private Configuration hbaseConf;
 
     private Scan() {
@@ -36,7 +35,7 @@ public class Scan {
         if (instance == null) {
             instance = new Scan();
             instance.hbaseConf = hbaseConf;
-            instance.hBaseAdmin = new HBaseAdmin(instance.hbaseConf);
+
         }
         return instance;
     }
@@ -46,28 +45,12 @@ public class Scan {
      * @throws IOException 异常
      */
     public void saveLastScanTime() throws IOException {
-        Table table = null;
-        Connection connection = null;
-        HBaseAdmin ad = null;
-        try {
-            ad = hBaseAdmin;
-            connection = ConnectionFactory.createConnection(ad.getConfiguration());
-            table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE));
+        try (HBaseAdmin ad = new HBaseAdmin(this.hbaseConf);
+             Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE))) {
             Put p = new Put(Bytes.toBytes(KEY_SCAN_DURATION));
             p.addColumn(Bytes.toBytes("scan"), Bytes.toBytes("duration"), Bytes.toBytes(System.currentTimeMillis()));
             table.put(p);
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        } finally {
-            if (table != null) {
-                table.close();
-            }
-            if (ad != null) {
-                ad.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 }

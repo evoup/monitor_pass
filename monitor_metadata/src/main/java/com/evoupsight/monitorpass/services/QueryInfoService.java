@@ -79,14 +79,15 @@ public class QueryInfoService {
     }
 
 
-    public void getScanData() {
-        HBaseAdmin ad = null;
-        try {
-            ad = new HBaseAdmin(hbaseConf);
+    /**
+     * 扫描需要缓存的表数据
+     */
+    void getScanData() {
+        try (HBaseAdmin ad = new HBaseAdmin(hbaseConf)) {
+            scanData(ad);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
-        scanData(ad);
     }
 
     /**

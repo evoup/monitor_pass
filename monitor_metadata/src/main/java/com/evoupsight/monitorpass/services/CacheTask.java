@@ -1,7 +1,5 @@
 package com.evoupsight.monitorpass.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CacheTask {
-    private static final Logger LOG = LoggerFactory.getLogger(CacheTask.class);
     private final QueryInfoService queryInfoService;
 
     @Autowired
