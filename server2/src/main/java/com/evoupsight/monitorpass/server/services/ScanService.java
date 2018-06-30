@@ -40,7 +40,7 @@ public class ScanService {
     /**
      * 执行所有工作
      */
-    void doAllJob() throws IOException {
+    void doAllJobs() throws IOException {
         saveLastScanTime();
         scanHostDown();
     }

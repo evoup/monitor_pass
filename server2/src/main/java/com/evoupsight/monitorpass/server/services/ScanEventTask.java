@@ -41,7 +41,7 @@ public class ScanEventTask {
     }
 
     @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
+    public void doAllJobs() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
@@ -51,7 +51,7 @@ public class ScanEventTask {
             if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
                 try {
                     LOG.info("server loop");
-                    scanService.doAllJob();
+                    scanService.doAllJobs();
                     Thread.sleep(15000);
                 } finally {
                     lock.release();
