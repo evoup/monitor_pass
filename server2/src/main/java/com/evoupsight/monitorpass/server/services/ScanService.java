@@ -19,6 +19,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.KEY_SCAN_DURATION;
 import static com.evoupsight.monitorpass.server.constants.Constants.MDB_TAB_ENGINE;
@@ -72,9 +73,9 @@ public class ScanService {
     private void scanHostDown() {
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
-            Object o = new Gson().fromJson(value1,
+            List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
                     new TypeToken<ArrayList<HostTemplateDto>>(){}.getType());
-            LOG.info(new Gson().toJson(o));
+            LOG.info(new Gson().toJson(hostTemplateDtos));
         }
     }
 }
