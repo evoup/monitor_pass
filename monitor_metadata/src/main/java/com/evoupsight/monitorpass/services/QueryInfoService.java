@@ -15,17 +15,14 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static com.evoupsight.monitorpass.utils.Utils.buildPoolConfig;
 import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 
 /**
@@ -35,13 +32,12 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 public class QueryInfoService {
     private static final Logger LOG = LoggerFactory.getLogger(QueryInfoService.class);
     private final Configuration hbaseConf;
-
-    @Value("${redis.host}")
-    String redisHost;
+    private final JedisPool jedisPool;
 
     @Autowired
-    public QueryInfoService(Configuration hbaseConf) {
+    public QueryInfoService(Configuration hbaseConf, JedisPool jedisPool) {
         this.hbaseConf = hbaseConf;
+        this.jedisPool = jedisPool;
     }
 
     public void getRow() throws IOException {
@@ -442,10 +438,10 @@ public class QueryInfoService {
         String json7 = new Gson().toJson(functionMap);
 
 
-        JedisPoolConfig poolConfig = buildPoolConfig();
+
 
         // 缓存成key
-        try (JedisPool jedisPool = new JedisPool(poolConfig, redisHost); Jedis jedis = jedisPool.getResource()) {
+        try (Jedis jedis = jedisPool.getResource()) {
             // do simple operation to verify that the Jedis resource is working
             jedis.set("key1", json1);
             jedis.set("key2", json2);
@@ -454,8 +450,6 @@ public class QueryInfoService {
             jedis.set("key5", json5);
             jedis.set("key6", json6);
             jedis.set("key7", json7);
-            // flush Redis
-            //jedis.flushAll();
         }
 
     }
@@ -467,9 +461,9 @@ public class QueryInfoService {
      * @param rowKey    RowKey名称
      * @param colFamily 列族名称
      * @param col       列名称
-     * @throws IOException
+     * @throws IOException 异常
      */
-    public void getData(String tableName, String rowKey, String colFamily, String col, HBaseAdmin ad) throws IOException {
+    private void getData(String tableName, String rowKey, String colFamily, String col, HBaseAdmin ad) throws IOException {
         Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
         Table table = connection.getTable(TableName.valueOf(tableName));
         Get get = new Get(Bytes.toBytes(rowKey));
@@ -502,7 +496,7 @@ public class QueryInfoService {
      *
      * @param result
      */
-    public static void showCell(Result result) {
+    private static void showCell(Result result) {
         Cell[] cells = result.rawCells();
         for (Cell cell : cells) {
             System.out.println("RowName: " + new String(CellUtil.cloneRow(cell)) + " ");
