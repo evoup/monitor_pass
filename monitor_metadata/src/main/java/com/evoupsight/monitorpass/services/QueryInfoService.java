@@ -3,6 +3,7 @@ package com.evoupsight.monitorpass.services;
 import com.evoupsight.monitorpass.domain.Function;
 import com.evoupsight.monitorpass.domain.Item;
 import com.evoupsight.monitorpass.domain.Trigger;
+import com.evoupsight.monitorpass.dto.HostTemplateDto;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -20,6 +21,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -91,8 +93,8 @@ public class QueryInfoService {
      *
      * @param ad
      */
-    private HashMap<String, String[]> scanHosts(HBaseAdmin ad) {
-        HashMap<String, String[]> hostTemplateMap = new HashMap<>();
+    private HostTemplateDto scanHosts(HBaseAdmin ad) {
+        HostTemplateDto hostTemplateDto = new HostTemplateDto();
         try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
             Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
             Scan scan = new Scan();
@@ -107,7 +109,8 @@ public class QueryInfoService {
                             String templateStr = new String(templateBytes);
                             if (StringUtils.isNotEmpty(templateStr)) {
                                 String[] templateArr = templateStr.split("\\|");
-                                hostTemplateMap.put(hostName, templateArr);
+                                hostTemplateDto.setHost(hostName);
+                                hostTemplateDto.setTemplateIds(Arrays.asList(templateArr));
                             }
                         }
                     }
@@ -117,7 +120,7 @@ public class QueryInfoService {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-        return hostTemplateMap;
+        return hostTemplateDto;
     }
 
     /**
@@ -416,8 +419,8 @@ public class QueryInfoService {
      */
     private void scanData(HBaseAdmin ad) {
         // 获取主机和模板
-        HashMap<String, String[]> hostTemplateMap = scanHosts(ad);
-        String json1 = new Gson().toJson(hostTemplateMap);
+        HostTemplateDto hostTemplateDto = scanHosts(ad);
+        String json1 = new Gson().toJson(hostTemplateDto);
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
         String json2 = new Gson().toJson(templateSetsMap);

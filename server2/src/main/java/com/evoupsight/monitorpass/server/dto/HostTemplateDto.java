@@ -1,6 +1,6 @@
 package com.evoupsight.monitorpass.server.dto;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author evoup
@@ -15,7 +15,7 @@ public class HostTemplateDto {
     /**
      * 模板ids
      */
-    private ArrayList<String> templateIds;
+    private List<String> templateIds;
 
     public String getHost() {
         return host;
@@ -25,11 +25,11 @@ public class HostTemplateDto {
         this.host = host;
     }
 
-    public ArrayList<String> getTemplateIds() {
+    public List<String> getTemplateIds() {
         return templateIds;
     }
 
-    public void setTemplateIds(ArrayList<String> templateIds) {
+    public void setTemplateIds(List<String> templateIds) {
         this.templateIds = templateIds;
     }
 }
