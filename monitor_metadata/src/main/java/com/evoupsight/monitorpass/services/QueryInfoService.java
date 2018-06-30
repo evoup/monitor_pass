@@ -21,9 +21,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 
@@ -93,8 +91,8 @@ public class QueryInfoService {
      *
      * @param ad
      */
-    private HostTemplateDto scanHosts(HBaseAdmin ad) {
-        HostTemplateDto hostTemplateDto = new HostTemplateDto();
+    private List<HostTemplateDto> scanHosts(HBaseAdmin ad) {
+        List<HostTemplateDto> hostTemplateDtos = new ArrayList<>();
         try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
             Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
             Scan scan = new Scan();
@@ -109,8 +107,10 @@ public class QueryInfoService {
                             String templateStr = new String(templateBytes);
                             if (StringUtils.isNotEmpty(templateStr)) {
                                 String[] templateArr = templateStr.split("\\|");
+                                HostTemplateDto hostTemplateDto = new HostTemplateDto();
                                 hostTemplateDto.setHost(hostName);
                                 hostTemplateDto.setTemplateIds(Arrays.asList(templateArr));
+                                hostTemplateDtos.add(hostTemplateDto);
                             }
                         }
                     }
@@ -120,7 +120,7 @@ public class QueryInfoService {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-        return hostTemplateDto;
+        return hostTemplateDtos;
     }
 
     /**
@@ -419,8 +419,7 @@ public class QueryInfoService {
      */
     private void scanData(HBaseAdmin ad) {
         // 获取主机和模板
-        HostTemplateDto hostTemplateDto = scanHosts(ad);
-        String json1 = new Gson().toJson(hostTemplateDto);
+        String json1 = new Gson().toJson(scanHosts(ad));
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
         String json2 = new Gson().toJson(templateSetsMap);
