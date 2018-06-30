@@ -24,11 +24,22 @@ case(__OPERATION_READ): //查询操作
         // 根据templateId查下面的触发器
         $arr=getTriggers($templateId);
         // 只要几个项目，名字，表达式，是否启用，等级
+        $functionArr=getFunction();
         $newArr=[];
         foreach ($arr as $triggerInfo) {
+            $expression=$triggerInfo->expression;
+            $pattern='/{(.*)}/';
+            preg_match($pattern, $expression, $matches, PREG_OFFSET_CAPTURE);
+            $functionid = $matches[1][0];
+            $key=$functionArr->$functionid->key;
+            $parameter=$functionArr->$functionid->parameter;
+            $function=$functionArr->$functionid->function;
+            $realFunction="${key}.${function}($parameter)";
+            $realExpression=preg_replace($pattern, $realFunction, $expression);
             $newArr[]=array(
             $triggerInfo->triggerid,
-            $triggerInfo->expression,
+            //$expression,
+            $realExpression,
             $triggerInfo->description,
             $triggerInfo->url,
             $triggerInfo->status,
@@ -66,3 +77,12 @@ function getTriggers($templateId) {
     return $templateTriggers[$templateId];
 }
 
+function getFunction() {
+    $c = fsockopen(__REDIS_HOST, __REDIS_PORT, $errCode, $errStr, 5);
+    $rawCommand = "get key7\r\n";
+    fwrite($c, $rawCommand);
+    $rawResponse = fgets($c);
+    $rawResponse = fgets($c);
+    $arr=json_decode($rawResponse);
+    return $arr;
+}

@@ -26,6 +26,12 @@ public class Scan {
     private Scan() {
     }
 
+    /**
+     * 单例
+     * @param hbaseConf hbase配置
+     * @return Scan
+     * @throws IOException 异常
+     */
     public synchronized static Scan getInstance(Configuration hbaseConf) throws IOException {
         if (instance == null) {
             instance = new Scan();
@@ -35,6 +41,10 @@ public class Scan {
         return instance;
     }
 
+    /**
+     * 保存上次扫描时间
+     * @throws IOException 异常
+     */
     public void saveLastScanTime() throws IOException {
         Table table = null;
         Connection connection = null;
