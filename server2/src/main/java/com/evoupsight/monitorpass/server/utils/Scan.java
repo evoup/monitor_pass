@@ -29,9 +29,8 @@ public class Scan {
      * 单例
      * @param hbaseConf hbase配置
      * @return Scan
-     * @throws IOException 异常
      */
-    public synchronized static Scan getInstance(Configuration hbaseConf) throws IOException {
+    public synchronized static Scan getInstance(Configuration hbaseConf) {
         if (instance == null) {
             instance = new Scan();
             instance.hbaseConf = hbaseConf;
@@ -45,8 +44,8 @@ public class Scan {
      * @throws IOException 异常
      */
     public void saveLastScanTime() throws IOException {
-        try (HBaseAdmin ad = new HBaseAdmin(this.hbaseConf);
-             Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        LOG.debug("save scan time");
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE))) {
             Put p = new Put(Bytes.toBytes(KEY_SCAN_DURATION));
             p.addColumn(Bytes.toBytes("scan"), Bytes.toBytes("duration"), Bytes.toBytes(System.currentTimeMillis()));
