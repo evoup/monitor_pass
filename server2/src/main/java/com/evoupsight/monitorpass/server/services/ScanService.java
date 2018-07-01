@@ -102,7 +102,7 @@ public class ScanService {
                     if (StringUtils.isNotEmpty(host)) {
                         String myhost = StringUtils.remove(host, "-");
                         HttpGet httpGet = new HttpGet(opentsdbUrl +
-                                "/api/query?start=5m-ago&m=sum:rate:apps.backend." + myhost +
+                                "/api/query?start=5m-ago&m=sum:apps.backend." + myhost +
                                 ".proc.loadavg.5min%7Bhost=" + host + "%7D");
                         httpResponse = httpClient.execute(httpGet);
                         if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
