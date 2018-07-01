@@ -29,6 +29,7 @@ import redis.clients.jedis.JedisPool;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 
@@ -156,7 +157,38 @@ public class ScanService {
     private void runExpression(String host, List<String> hostTemplateIds, TriggerDto trigger) {
         if (trigger != null && StringUtils.isNotEmpty(trigger.getHostid())) {
             if (hostTemplateIds.contains(trigger.getHostid())) {
+                String myhost = StringUtils.remove(host, "-");
                 LOG.info("host:{} call expression:{}", host, trigger.getExpression());
+                // {13078}>5 <=> system.cpu.load[allcpu,avg1].avg(5m)>5 => proc.loadavg.1min>5
+                // 例子：如果表达式为{13078}>5，视作是查询proc.loadavg.1min，函数为avg,参数为5m，就是调用
+                // opentsdb的http://opentsdb2:14242/api/query?start=5m-ago&m=avg:apps.backend.evoupzhanqi.proc.loadavg.1min
+                if ("{13078}>5".equals(trigger.getExpression())) {
+                    HttpResponse httpResponse = null;
+                    HttpGet httpGet = new HttpGet(opentsdbUrl +
+                            "/api/query?start=5m-ago&m=sum:apps.backend." + myhost +
+                            ".proc.loadavg.5min");
+                    try {
+                        httpResponse = httpClient.execute(httpGet);
+                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
+                            HttpEntity entity = httpResponse.getEntity();
+                            //将entity当中的数据转换为字符串
+                            String response = EntityUtils.toString(entity, "utf-8");
+                            ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
+                            }.getType());
+                            if (queryDtos != null && queryDtos.get(0).getDps() != null) {
+                                List<Object> list = new ArrayList<>();
+                                queryDtos.get(0).getDps().forEach((time, datapoint) -> list.add(datapoint));
+                                DoubleSummaryStatistics stats = list.stream().mapToDouble((x) -> new Double(x.toString())).summaryStatistics();
+                                double average = stats.getAverage();
+                                LOG.info("average:" + average);
+                            }
+                        }
+                    } catch (IOException e) {
+                        LOG.error(e.getMessage(), e);
+                    } finally {
+                        releaseResponse(httpResponse);
+                    }
+                }
             }
         }
     }
