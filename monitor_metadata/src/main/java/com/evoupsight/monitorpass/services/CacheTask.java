@@ -11,22 +11,18 @@ import redis.clients.jedis.JedisPool;
  */
 @Component
 public class CacheTask {
-//    private final QueryInfoService queryInfoService;
-//
-//    @Autowired
-//    public CacheTask(QueryInfoService queryInfoService) {
-//        this.queryInfoService = queryInfoService;
-//    }
+    private final JedisPool jedisPool;
+
+    private final Configuration hBaseConf;
 
     @Autowired
-    private JedisPool jedisPool;
-
-    @Autowired
-    private Configuration hBaseConf;
+    public CacheTask(JedisPool jedisPool, Configuration hBaseConf) {
+        this.jedisPool = jedisPool;
+        this.hBaseConf = hBaseConf;
+    }
 
     @Scheduled(fixedDelay = 5000)
     public void cache() {
-        QueryInfoService.getInstance(hBaseConf, jedisPool).getScanData();
-//        queryInfoService.getScanData();
+        QueryInfoService.getInstance(hBaseConf, jedisPool).cacheData();
     }
 }

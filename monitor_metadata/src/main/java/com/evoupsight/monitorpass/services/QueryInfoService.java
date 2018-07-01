@@ -15,8 +15,6 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -28,21 +26,12 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 /**
  * @author evoup
  */
-//@Service
 public class QueryInfoService {
     private static final Logger LOG = LoggerFactory.getLogger(QueryInfoService.class);
-//    private final Configuration hbaseConf;
-//    private final JedisPool jedisPool;
-
-//    @Autowired
-//    public QueryInfoService(Configuration hbaseConf, JedisPool jedisPool) {
-//        this.hbaseConf = hbaseConf;
-//        this.jedisPool = jedisPool;
-//    }
     private static QueryInfoService instance;
     private Configuration hbaseConf;
     private JedisPool jedisPool;
-    public static synchronized QueryInfoService getInstance(Configuration hbaseConf, JedisPool jedisPool) {
+    static synchronized QueryInfoService getInstance(Configuration hbaseConf, JedisPool jedisPool) {
         if (instance == null) {
             instance = new QueryInfoService();
             instance.hbaseConf = hbaseConf;
@@ -85,13 +74,6 @@ public class QueryInfoService {
 
     }
 
-
-    /**
-     * 扫描需要缓存的表数据
-     */
-    void getScanData() {
-            scanData();
-    }
 
     /**
      * 返回key为hostName，value为template id数组的map
@@ -418,7 +400,7 @@ public class QueryInfoService {
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
      */
-    private void scanData() {
+    public void cacheData() {
         Gson gson = new Gson();
         // 获取主机和模板
         String json1 = gson.toJson(scanHosts());
