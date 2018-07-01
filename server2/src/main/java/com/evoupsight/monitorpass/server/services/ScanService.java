@@ -3,6 +3,7 @@ package com.evoupsight.monitorpass.server.services;
 import com.evoupsight.monitorpass.server.dto.HostTemplateDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
@@ -93,9 +94,11 @@ public class ScanService {
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
                     String host = hostTemplateDto.getHost();
-                    if (host != null) {
+                    if (StringUtils.isNotEmpty(host)) {
+                        String myhost = StringUtils.remove(host, "-");
                         HttpGet httpGet = new HttpGet(opentsdbUrl +
-                                "/api/query?start=5m-ago&m=sum:rate:apps.backend.evoupzhanqi.proc.loadavg.5min%7Bhost=evoup-zhanqi%7D");
+                                "/api/query?start=5m-ago&m=sum:rate:apps.backend." + myhost +
+                                ".proc.loadavg.5min%7Bhost=" + host + "%7D");
                         httpResponse = httpClient.execute(httpGet);
                         HttpEntity entity = httpResponse.getEntity();
                         //将entity当中的数据转换为字符串
