@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.util.EntityUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ public class ScanService {
      * 检查是否宕机
      */
     private void scanHostDown() {
-        HttpResponse response = null;
+        HttpResponse httpResponse = null;
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
@@ -96,27 +96,29 @@ public class ScanService {
                     if (host != null) {
                         HttpGet httpGet = new HttpGet(opentsdbUrl +
                                 "/api/query?start=5m-ago&m=sum:rate:apps.backend.evoupzhanqi.proc.loadavg.5min%7Bhost=evoup-zhanqi%7D");
-                        response = httpClient.execute(httpGet);
-                        HttpEntity entity = response.getEntity();
-                        LOG.info("entity content:" + new Gson().toJson(entity.getContent()));
+                        httpResponse = httpClient.execute(httpGet);
+                        HttpEntity entity = httpResponse.getEntity();
+                        //将entity当中的数据转换为字符串
+                        String response = EntityUtils.toString(entity, "utf-8");
+                        LOG.info("response:" + response);
                     }
                 }
             }
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
         } finally {
-            releaseResponse(response);
+            releaseResponse(httpResponse);
         }
     }
 
     /**
      * 清理
-     * @param response 回复
+     * @param rp 回复
      */
-    private void releaseResponse(HttpResponse response) {
-        if (response != null) {
+    private void releaseResponse(HttpResponse rp) {
+        if (rp != null) {
             try {
-                HttpEntity entity = response.getEntity();
+                HttpEntity entity = rp.getEntity();
                 if (entity != null) {
                     InputStream instream = entity.getContent();
                     try {
