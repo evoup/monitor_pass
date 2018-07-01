@@ -98,7 +98,7 @@ public class ScanService {
                                 "/api/query?start=5m-ago&m=sum:rate:apps.backend.evoupzhanqi.proc.loadavg.5min%7Bhost=evoup-zhanqi%7D");
                         response = httpClient.execute(httpGet);
                         HttpEntity entity = response.getEntity();
-                        LOG.info("entity content:" + entity.getContent());
+                        LOG.info("entity content:" + new Gson().toJson(entity.getContent()));
                     }
                 }
             }
