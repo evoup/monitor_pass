@@ -3,6 +3,7 @@ package com.evoupsight.monitorpass.server.cfg;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.opentsdb.client.PoolingHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,5 +54,10 @@ public class Config {
         poolConfig.setNumTestsPerEvictionRun(3);
         poolConfig.setBlockWhenExhausted(true);
         return new JedisPool(poolConfig, redisHost);
+    }
+
+    @Bean(name = "http_client_pool")
+    public PoolingHttpClient poolingHttpClient() {
+        return new PoolingHttpClient();
     }
 }
