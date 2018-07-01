@@ -30,8 +30,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.evoupsight.monitorpass.server.constants.Constants.KEY_SCAN_DURATION;
-import static com.evoupsight.monitorpass.server.constants.Constants.MDB_TAB_ENGINE;
+import static com.evoupsight.monitorpass.server.constants.Constants.*;
 
 
 /**
@@ -95,6 +94,7 @@ public class ScanService {
             LOG.info(new Gson().toJson(hostTemplateDtos));
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
+                    String hostStatus = HOST_STATUS_DOWN;
                     String host = hostTemplateDto.getHost();
                     if (StringUtils.isNotEmpty(host)) {
                         String myhost = StringUtils.remove(host, "-");
@@ -110,7 +110,9 @@ public class ScanService {
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>(){}.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
                         }
+                        hostStatus = HOST_STATUS_UP;
                     }
+                    saveHostStatus(hostStatus, host);
                 }
             }
         } catch (IOException e) {
@@ -119,6 +121,24 @@ public class ScanService {
             releaseResponse(httpResponse);
         }
     }
+
+
+    /**
+     * 保存host状态
+     * @param hostStatus host状态
+     * @param host　host名字
+     */
+    private void saveHostStatus(String hostStatus, String host) {
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
+             Table table = connection.getTable(TableName.valueOf(MDB_TAB_HOST))) {
+            Put p = new Put(Bytes.toBytes(host));
+            p.addColumn(Bytes.toBytes("info"), Bytes.toBytes("status"), Bytes.toBytes(hostStatus));
+            table.put(p);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+    }
+
 
     /**
      * 清理

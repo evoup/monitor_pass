@@ -15,6 +15,12 @@ public class Constants {
     public static final String KEY_SCAN_DURATION = "durationtime";
     public static final String MDB_COL_SCAN_DURATION = "scan:duration";
 
+    public static final String MDB_TAB_HOST = "monitor_host";
+
+    public static final String HOST_STATUS_UP = "1";
+    public static final String HOST_STATUS_DOWN = "0";
+    public static final String HOST_STATUS_UNKNOWN = "5";
+
 
     /**
      * 事件状态
