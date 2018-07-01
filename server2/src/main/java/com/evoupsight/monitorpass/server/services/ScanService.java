@@ -107,8 +107,8 @@ public class ScanService {
                             //将entity当中的数据转换为字符串
                             String response = EntityUtils.toString(entity, "utf-8");
                             LOG.info("response:" + response);
-                            QueryDto queryDto = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>(){}.getType());
-                            LOG.info("queryDto:" + gson.toJson(queryDto));
+                            ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>(){}.getType());
+                            LOG.info("queryDtos:" + gson.toJson(queryDtos));
                         }
                     }
                 }
