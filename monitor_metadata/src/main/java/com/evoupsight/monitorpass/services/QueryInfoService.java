@@ -28,16 +28,27 @@ import static com.evoupsight.monitorpass.utils.Utils.getColumnsInColumnFamily;
 /**
  * @author evoup
  */
-@Service
+//@Service
 public class QueryInfoService {
     private static final Logger LOG = LoggerFactory.getLogger(QueryInfoService.class);
-    private final Configuration hbaseConf;
-    private final JedisPool jedisPool;
+//    private final Configuration hbaseConf;
+//    private final JedisPool jedisPool;
 
-    @Autowired
-    public QueryInfoService(Configuration hbaseConf, JedisPool jedisPool) {
-        this.hbaseConf = hbaseConf;
-        this.jedisPool = jedisPool;
+//    @Autowired
+//    public QueryInfoService(Configuration hbaseConf, JedisPool jedisPool) {
+//        this.hbaseConf = hbaseConf;
+//        this.jedisPool = jedisPool;
+//    }
+    private static QueryInfoService instance;
+    private Configuration hbaseConf;
+    private JedisPool jedisPool;
+    public static synchronized QueryInfoService getInstance(Configuration hbaseConf, JedisPool jedisPool) {
+        if (instance == null) {
+            instance = new QueryInfoService();
+            instance.hbaseConf = hbaseConf;
+            instance.jedisPool = jedisPool;
+        }
+        return instance;
     }
 
     public void getRow() throws IOException {
