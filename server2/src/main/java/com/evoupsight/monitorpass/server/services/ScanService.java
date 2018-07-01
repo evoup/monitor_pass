@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
 import com.evoupsight.monitorpass.server.dto.HostTemplateDto;
+import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
@@ -86,6 +87,7 @@ public class ScanService {
      */
     private void scanHostDown() {
         HttpResponse httpResponse = null;
+        Gson gson = new Gson();
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
@@ -100,10 +102,14 @@ public class ScanService {
                                 "/api/query?start=5m-ago&m=sum:rate:apps.backend." + myhost +
                                 ".proc.loadavg.5min%7Bhost=" + host + "%7D");
                         httpResponse = httpClient.execute(httpGet);
-                        HttpEntity entity = httpResponse.getEntity();
-                        //将entity当中的数据转换为字符串
-                        String response = EntityUtils.toString(entity, "utf-8");
-                        LOG.info("response:" + response);
+                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode()==200) {
+                            HttpEntity entity = httpResponse.getEntity();
+                            //将entity当中的数据转换为字符串
+                            String response = EntityUtils.toString(entity, "utf-8");
+                            LOG.info("response:" + response);
+                            QueryDto queryDto = gson.fromJson(response, QueryDto.class);
+                            LOG.info("queryDto:" + gson.toJson(queryDto));
+                        }
                     }
                 }
             }
