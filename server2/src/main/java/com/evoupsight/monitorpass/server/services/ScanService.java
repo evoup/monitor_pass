@@ -95,7 +95,7 @@ public class ScanService {
                     String host = hostTemplateDto.getHost();
                     if (host != null) {
                         HttpGet httpGet = new HttpGet(opentsdbUrl +
-                                "/api/query?start=5m-ago&m=sum:rate:apps.backend.evoupzhanqi.proc.loadavg.5min{host=evoup-zhanqi}");
+                                "/api/query?start=5m-ago&m=sum:rate:apps.backend.evoupzhanqi.proc.loadavg.5min%7Bhost=evoup-zhanqi%7D");
                         response = httpClient.execute(httpGet);
                         HttpEntity entity = response.getEntity();
                         LOG.info("entity:" + new Gson().toJson(entity));
