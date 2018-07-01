@@ -79,21 +79,15 @@ public class QueryInfoService {
      * 扫描需要缓存的表数据
      */
     void getScanData() {
-        try (HBaseAdmin ad = new HBaseAdmin(hbaseConf)) {
-            scanData(ad);
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
+            scanData();
     }
 
     /**
      * 返回key为hostName，value为template id数组的map
-     *
-     * @param ad
      */
-    private List<HostTemplateDto> scanHosts(HBaseAdmin ad) {
+    private List<HostTemplateDto> scanHosts() {
         List<HostTemplateDto> hostTemplateDtos = new ArrayList<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_hosts"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
@@ -125,12 +119,10 @@ public class QueryInfoService {
 
     /**
      * 返回key为templateId，value为若干setid
-     *
-     * @param ad
      */
-    private HashMap<String, HashSet<String>> scanTemplateSets(HBaseAdmin ad) {
+    private HashMap<String, HashSet<String>> scanTemplateSets() {
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
             Scan scan = new Scan();
             templateSetsMap = makeMap(table, templateSetsMap, scan);
@@ -143,9 +135,9 @@ public class QueryInfoService {
     /**
      * 返回key为templateId,value为map，map的key是setId，value是setName
      */
-    private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails(HBaseAdmin ad) {
+    private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails() {
         HashMap<String, HashMap<String, String>> map = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
@@ -187,12 +179,10 @@ public class QueryInfoService {
 
     /**
      * 返回key为itemId，value为若干setid
-     *
-     * @param ad
      */
-    private HashMap<String, HashSet<String>> scanItemSets(HBaseAdmin ad) {
+    private HashMap<String, HashSet<String>> scanItemSets() {
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
             Scan scan = new Scan();
             setItemsMap = makeMap(table, setItemsMap, scan);
@@ -205,9 +195,9 @@ public class QueryInfoService {
     /**
      * 返回itemId,value为对应Item的map
      */
-    private HashMap<String, Item> scanItems(HBaseAdmin ad) {
+    private HashMap<String, Item> scanItems() {
         HashMap<String, Item> itemMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
@@ -289,9 +279,9 @@ public class QueryInfoService {
         return itemMap;
     }
 
-    private HashMap<String, Trigger> scanTriggers(HBaseAdmin ad) {
+    private HashMap<String, Trigger> scanTriggers() {
         HashMap<String, Trigger> triggerMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_triggers"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
@@ -369,9 +359,9 @@ public class QueryInfoService {
         return triggerMap;
     }
 
-    private HashMap<String, Function> scanFunctions(HBaseAdmin ad) {
+    private HashMap<String, Function> scanFunctions() {
         HashMap<String, Function> functionMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf("monitor_functions"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
@@ -417,29 +407,27 @@ public class QueryInfoService {
     /**
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
      */
-    private void scanData(HBaseAdmin ad) {
+    private void scanData() {
         // 获取主机和模板
-        String json1 = new Gson().toJson(scanHosts(ad));
+        String json1 = new Gson().toJson(scanHosts());
 
-        HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets(ad);
+        HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets();
         String json2 = new Gson().toJson(templateSetsMap);
 
-        HashMap<String, HashSet<String>> itemSetsMap = scanItemSets(ad);
+        HashMap<String, HashSet<String>> itemSetsMap = scanItemSets();
         String json3 = new Gson().toJson(itemSetsMap);
 
-        HashMap<String, Item> itemsMap = scanItems(ad);
+        HashMap<String, Item> itemsMap = scanItems();
         String json4 = new Gson().toJson(itemsMap);
 
-        HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails(ad);
+        HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails();
         String json5 = new Gson().toJson(setDetailsMap);
 
-        HashMap<String, Trigger> triggerMap = scanTriggers(ad);
+        HashMap<String, Trigger> triggerMap = scanTriggers();
         String json6 = new Gson().toJson(triggerMap);
 
-        HashMap<String, Function> functionMap = scanFunctions(ad);
+        HashMap<String, Function> functionMap = scanFunctions();
         String json7 = new Gson().toJson(functionMap);
-
-
 
 
         // 缓存成key
