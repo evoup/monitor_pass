@@ -80,8 +80,11 @@ public class QueryInfoService {
      */
     private List<HostTemplateDto> scanHosts() {
         List<HostTemplateDto> hostTemplateDtos = new ArrayList<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_hosts"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_hosts"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -106,6 +109,8 @@ public class QueryInfoService {
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return hostTemplateDtos;
     }
@@ -115,23 +120,32 @@ public class QueryInfoService {
      */
     private HashMap<String, HashSet<String>> scanTemplateSets() {
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_sets"));
             Scan scan = new Scan();
             templateSetsMap = makeMap(table, templateSetsMap, scan);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return templateSetsMap;
     }
+
 
     /**
      * 返回key为templateId,value为map，map的key是setId，value是setName
      */
     private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails() {
         HashMap<String, HashMap<String, String>> map = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_sets"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -165,6 +179,8 @@ public class QueryInfoService {
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return map;
     }
@@ -175,12 +191,17 @@ public class QueryInfoService {
      */
     private HashMap<String, HashSet<String>> scanItemSets() {
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_items"));
             Scan scan = new Scan();
             setItemsMap = makeMap(table, setItemsMap, scan);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return setItemsMap;
     }
@@ -190,8 +211,11 @@ public class QueryInfoService {
      */
     private HashMap<String, Item> scanItems() {
         HashMap<String, Item> itemMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_items"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -268,14 +292,19 @@ public class QueryInfoService {
             }
         } catch (Exception e) {
            LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return itemMap;
     }
 
     private HashMap<String, Trigger> scanTriggers() {
         HashMap<String, Trigger> triggerMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_triggers"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_triggers"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -348,14 +377,19 @@ public class QueryInfoService {
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return triggerMap;
     }
 
     private HashMap<String, Function> scanFunctions() {
         HashMap<String, Function> functionMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
-             Table table = connection.getTable(TableName.valueOf("monitor_functions"))) {
+        Connection connection = null;
+        Table table = null;
+        try {
+            connection = ConnectionFactory.createConnection(hbaseConf);
+            table = connection.getTable(TableName.valueOf("monitor_functions"));
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -392,8 +426,24 @@ public class QueryInfoService {
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            closeConnTbl(connection, table);
         }
         return functionMap;
+    }
+
+
+    private void closeConnTbl(Connection connection, Table table) {
+        try {
+            if (null != table) {
+                table.close();
+            }
+            if (null != connection && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
 
