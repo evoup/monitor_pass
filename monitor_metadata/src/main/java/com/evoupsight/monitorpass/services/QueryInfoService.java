@@ -93,8 +93,8 @@ public class QueryInfoService {
      */
     private List<HostTemplateDto> scanHosts(HBaseAdmin ad) {
         List<HostTemplateDto> hostTemplateDtos = new ArrayList<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_hosts"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_hosts"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -130,8 +130,8 @@ public class QueryInfoService {
      */
     private HashMap<String, HashSet<String>> scanTemplateSets(HBaseAdmin ad) {
         HashMap<String, HashSet<String>> templateSetsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
             Scan scan = new Scan();
             templateSetsMap = makeMap(table, templateSetsMap, scan);
         } catch (Exception e) {
@@ -145,8 +145,8 @@ public class QueryInfoService {
      */
     private HashMap<String, HashMap<String, String>> scanTemplateSetsDetails(HBaseAdmin ad) {
         HashMap<String, HashMap<String, String>> map = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_sets"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_sets"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -192,8 +192,8 @@ public class QueryInfoService {
      */
     private HashMap<String, HashSet<String>> scanItemSets(HBaseAdmin ad) {
         HashMap<String, HashSet<String>> setItemsMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_items"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
             Scan scan = new Scan();
             setItemsMap = makeMap(table, setItemsMap, scan);
         } catch (Exception e) {
@@ -207,8 +207,8 @@ public class QueryInfoService {
      */
     private HashMap<String, Item> scanItems(HBaseAdmin ad) {
         HashMap<String, Item> itemMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_items"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_items"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -291,8 +291,8 @@ public class QueryInfoService {
 
     private HashMap<String, Trigger> scanTriggers(HBaseAdmin ad) {
         HashMap<String, Trigger> triggerMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_triggers"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_triggers"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
@@ -371,8 +371,8 @@ public class QueryInfoService {
 
     private HashMap<String, Function> scanFunctions(HBaseAdmin ad) {
         HashMap<String, Function> functionMap = new HashMap<>();
-        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration())) {
-            Table table = connection.getTable(TableName.valueOf("monitor_functions"));
+        try (Connection connection = ConnectionFactory.createConnection(ad.getConfiguration());
+             Table table = connection.getTable(TableName.valueOf("monitor_functions"))) {
             Scan scan = new Scan();
             try (ResultScanner rs = table.getScanner(scan)) {
                 for (Result r = rs.next(); r != null; r = rs.next()) {
