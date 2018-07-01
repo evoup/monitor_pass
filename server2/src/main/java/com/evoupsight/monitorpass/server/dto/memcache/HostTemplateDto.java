@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.server.dto;
+package com.evoupsight.monitorpass.server.dto.memcache;
 
 import java.util.List;
 

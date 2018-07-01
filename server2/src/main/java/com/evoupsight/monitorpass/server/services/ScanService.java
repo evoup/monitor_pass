@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
-import com.evoupsight.monitorpass.server.dto.HostTemplateDto;
+import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
+import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
 import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ import redis.clients.jedis.JedisPool;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
@@ -92,7 +94,7 @@ public class ScanService {
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
                     new TypeToken<ArrayList<HostTemplateDto>>() {
                     }.getType());
-            LOG.info(new Gson().toJson(hostTemplateDtos));
+            LOG.trace(new Gson().toJson(hostTemplateDtos));
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
                     String hostStatus = HOST_STATUS_DOWN;
@@ -116,6 +118,7 @@ public class ScanService {
                         }
 
                     }
+                    goThroughTriggers(host, hostTemplateDto.getTemplateIds());
                     saveHostStatus(hostStatus, host);
                 }
             }
@@ -123,6 +126,38 @@ public class ScanService {
             LOG.error(e.getMessage(), e);
         } finally {
             releaseResponse(httpResponse);
+        }
+    }
+
+
+    /**
+     * 检查表达式
+     */
+    private void goThroughTriggers(String host, List<String> templateIds) {
+        try (Jedis resource = jedisPool.getResource()) {
+            String value = resource.get("key6");
+            // key为triggerid
+            HashMap<String, TriggerDto> triggerDtos = new Gson().fromJson(value,
+                    new TypeToken<HashMap<String, TriggerDto>>() {
+                    }.getType());
+            // key为triggerid，用不到
+            if (triggerDtos != null) {
+                triggerDtos.forEach((triggerid, triggerinfo) -> runExpression(host, templateIds, triggerinfo));
+            }
+        }
+    }
+
+    /**
+     * 执行表达式
+     * @param host　主机名
+     * @param hostTemplateIds　主机对应的模板
+     * @param trigger　触发器
+     */
+    private void runExpression(String host, List<String> hostTemplateIds, TriggerDto trigger) {
+        if (trigger != null && StringUtils.isNotEmpty(trigger.getHostid())) {
+            if (hostTemplateIds.contains(trigger.getHostid())) {
+                LOG.info("host:{} call expression:{}", host, trigger.getExpression());
+            }
         }
     }
 
