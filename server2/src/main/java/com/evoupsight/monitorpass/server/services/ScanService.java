@@ -67,6 +67,7 @@ public class ScanService {
 
     /**
      * 保存上次扫描时间
+     *
      * @throws IOException 异常
      */
     private void saveLastScanTime() throws IOException {
@@ -80,7 +81,6 @@ public class ScanService {
     }
 
 
-
     /**
      * 检查是否宕机
      */
@@ -90,7 +90,8 @@ public class ScanService {
         try (Jedis resource = jedisPool.getResource()) {
             String value1 = resource.get("key1");
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
-                    new TypeToken<ArrayList<HostTemplateDto>>(){}.getType());
+                    new TypeToken<ArrayList<HostTemplateDto>>() {
+                    }.getType());
             LOG.info(new Gson().toJson(hostTemplateDtos));
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
@@ -102,15 +103,18 @@ public class ScanService {
                                 "/api/query?start=5m-ago&m=sum:rate:apps.backend." + myhost +
                                 ".proc.loadavg.5min%7Bhost=" + host + "%7D");
                         httpResponse = httpClient.execute(httpGet);
-                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode()==200) {
+                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                             HttpEntity entity = httpResponse.getEntity();
                             //将entity当中的数据转换为字符串
                             String response = EntityUtils.toString(entity, "utf-8");
-                            LOG.info("response:" + response);
-                            ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>(){}.getType());
+                            ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
+                            }.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
+                            if (queryDtos != null && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
+                                hostStatus = HOST_STATUS_UP;
+                            }
                         }
-                        hostStatus = HOST_STATUS_UP;
+
                     }
                     saveHostStatus(hostStatus, host);
                 }
@@ -125,8 +129,9 @@ public class ScanService {
 
     /**
      * 保存host状态
+     *
      * @param hostStatus host状态
-     * @param host　host名字
+     * @param host       　host名字
      */
     private void saveHostStatus(String hostStatus, String host) {
         try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
@@ -142,6 +147,7 @@ public class ScanService {
 
     /**
      * 清理
+     *
      * @param rp 回复
      */
     private void releaseResponse(HttpResponse rp) {
