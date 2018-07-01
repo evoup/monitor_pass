@@ -408,26 +408,27 @@ public class QueryInfoService {
      * 获取全部items，通过template查set，通过item查询属于set的，最后归入host
      */
     private void scanData() {
+        Gson gson = new Gson();
         // 获取主机和模板
-        String json1 = new Gson().toJson(scanHosts());
+        String json1 = gson.toJson(scanHosts());
 
         HashMap<String, HashSet<String>> templateSetsMap = scanTemplateSets();
-        String json2 = new Gson().toJson(templateSetsMap);
+        String json2 = gson.toJson(templateSetsMap);
 
         HashMap<String, HashSet<String>> itemSetsMap = scanItemSets();
-        String json3 = new Gson().toJson(itemSetsMap);
+        String json3 = gson.toJson(itemSetsMap);
 
         HashMap<String, Item> itemsMap = scanItems();
-        String json4 = new Gson().toJson(itemsMap);
+        String json4 = gson.toJson(itemsMap);
 
         HashMap<String, HashMap<String, String>> setDetailsMap = scanTemplateSetsDetails();
-        String json5 = new Gson().toJson(setDetailsMap);
+        String json5 = gson.toJson(setDetailsMap);
 
         HashMap<String, Trigger> triggerMap = scanTriggers();
-        String json6 = new Gson().toJson(triggerMap);
+        String json6 = gson.toJson(triggerMap);
 
         HashMap<String, Function> functionMap = scanFunctions();
-        String json7 = new Gson().toJson(functionMap);
+        String json7 = gson.toJson(functionMap);
 
 
         // 缓存成key
