@@ -107,9 +107,11 @@ public class ScanService {
                     String host = hostTemplateDto.getHost();
                     if (StringUtils.isNotEmpty(host)) {
                         String myhost = StringUtils.remove(host, "-");
-                        HttpGet httpGet = new HttpGet(opentsdbUrl +
+                        String apiUrl = opentsdbUrl +
                                 "/api/query?start=5m-ago&m=sum:apps.backend." + myhost +
-                                ".proc.loadavg.5min%7Bhost=" + host + "%7D");
+                                ".proc.loadavg.5min%7Bhost=" + host + "%7D";
+                        LOG.info("apiUrl:" + apiUrl);
+                        HttpGet httpGet = new HttpGet(apiUrl);
                         httpResponse = httpClient.execute(httpGet);
                         if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                             HttpEntity entity = httpResponse.getEntity();
