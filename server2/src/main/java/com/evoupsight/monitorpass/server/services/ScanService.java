@@ -124,6 +124,9 @@ public class ScanService {
                             if (queryDtos.size()>0) {
                                 LOG.info("size>0");
                             }
+                            if ((Arrays.asList(queryDtos).size()>0)) {
+                                LOG.info("条件２满足");
+                            }
                             if (queryDtos != null && (Arrays.asList(queryDtos).size()>0) && queryDtos.get(0) != null &&  queryDtos.get(0).getDps() != null &&
                                     queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
