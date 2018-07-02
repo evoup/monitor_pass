@@ -121,21 +121,14 @@ public class ScanService {
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
-                            if (queryDtos.size()>0) {
-                                LOG.info("size>0");
-                            }
-                            LOG.info(new Gson().toJson(Arrays.asList(queryDtos)));
-                            if ((Arrays.asList(queryDtos).size()>0)) {
-                                LOG.info("条件２满足");
-                            }
-                            if (queryDtos != null && (Arrays.asList(queryDtos).size()>0) && queryDtos.get(0) != null &&  queryDtos.get(0).getDps() != null &&
-                                    queryDtos.get(0).getDps().size() > 0) {
+                            if (queryDtos != null && queryDtos.size()> 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
                             }
                         }
-
                     }
-                    goThroughTriggers(host, hostTemplateDto.getTemplateIds());
+                    if (hostStatus.equals(HOST_STATUS_UP)) {
+                        goThroughTriggers(host, hostTemplateDto.getTemplateIds());
+                    }
                     saveHostStatus(hostStatus, host);
                 }
             }
