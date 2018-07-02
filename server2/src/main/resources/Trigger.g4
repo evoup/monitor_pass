@@ -1,4 +1,4 @@
-grammar Server;
+grammar Trigger;
 
 expr: expr op=('*'|'/') expr # MulDiv
     | expr op=('+'|'-') expr # AddSub

@@ -1,4 +1,4 @@
-// Generated from /home/evoup/projects/gitProjects/monitor_pass/server2/src/main/resources/Server.g4 by ANTLR 4.7
+// Generated from /home/evoup/projects/gitProjects/monitor_pass/server2/src/main/resources/Trigger.g4 by ANTLR 4.7
 package com.evoupsight.monitorpass.server.exporession;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class ServerLexer extends Lexer {
+public class TriggerLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -76,13 +76,13 @@ public class ServerLexer extends Lexer {
 	}
 
 
-	public ServerLexer(CharStream input) {
+	public TriggerLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Server.g4"; }
+	public String getGrammarFileName() { return "Trigger.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

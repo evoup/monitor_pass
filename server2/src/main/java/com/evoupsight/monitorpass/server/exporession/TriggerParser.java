@@ -1,4 +1,4 @@
-// Generated from /home/evoup/projects/gitProjects/monitor_pass/server2/src/main/resources/Server.g4 by ANTLR 4.7
+// Generated from /home/evoup/projects/gitProjects/monitor_pass/server2/src/main/resources/Trigger.g4 by ANTLR 4.7
 package com.evoupsight.monitorpass.server.exporession;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class ServerParser extends Parser {
+public class TriggerParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -72,7 +72,7 @@ public class ServerParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Server.g4"; }
+	public String getGrammarFileName() { return "Trigger.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -83,7 +83,7 @@ public class ServerParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public ServerParser(TokenStream input) {
+	public TriggerParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -99,15 +99,12 @@ public class ServerParser extends Parser {
 		}
 	}
 	public static class MonstrContext extends ExprContext {
-		public TerminalNode MONSTR() { return getToken(ServerParser.MONSTR, 0); }
+		public TerminalNode MONSTR() { return getToken(TriggerParser.MONSTR, 0); }
 		public MonstrContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterMonstr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitMonstr(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitMonstr(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class BinaryExpressionContext extends ExprContext {
@@ -125,12 +122,9 @@ public class ServerParser extends Parser {
 		}
 		public BinaryExpressionContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterBinaryExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitBinaryExpression(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitBinaryExpression(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class MulDivContext extends ExprContext {
@@ -143,12 +137,9 @@ public class ServerParser extends Parser {
 		}
 		public MulDivContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterMulDiv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitMulDiv(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitMulDiv(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class AddSubContext extends ExprContext {
@@ -161,28 +152,22 @@ public class ServerParser extends Parser {
 		}
 		public AddSubContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterAddSub(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitAddSub(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitAddSub(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ParensContext extends ExprContext {
-		public TerminalNode LPAREN() { return getToken(ServerParser.LPAREN, 0); }
+		public TerminalNode LPAREN() { return getToken(TriggerParser.LPAREN, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode RPAREN() { return getToken(ServerParser.RPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(TriggerParser.RPAREN, 0); }
 		public ParensContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterParens(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitParens(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitParens(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ComparatorExpressionContext extends ExprContext {
@@ -200,39 +185,30 @@ public class ServerParser extends Parser {
 		}
 		public ComparatorExpressionContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterComparatorExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitComparatorExpression(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitComparatorExpression(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class NotExpressionContext extends ExprContext {
-		public TerminalNode NOT() { return getToken(ServerParser.NOT, 0); }
+		public TerminalNode NOT() { return getToken(TriggerParser.NOT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public NotExpressionContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterNotExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitNotExpression(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitNotExpression(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class IntContext extends ExprContext {
-		public TerminalNode INT() { return getToken(ServerParser.INT, 0); }
+		public TerminalNode INT() { return getToken(TriggerParser.INT, 0); }
 		public IntContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterInt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitInt(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitInt(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class BoolExpressionContext extends ExprContext {
@@ -241,12 +217,9 @@ public class ServerParser extends Parser {
 		}
 		public BoolExpressionContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterBoolExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitBoolExpression(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitBoolExpression(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -426,22 +399,19 @@ public class ServerParser extends Parser {
 	}
 
 	public static class ComparatorContext extends ParserRuleContext {
-		public TerminalNode GT() { return getToken(ServerParser.GT, 0); }
-		public TerminalNode GE() { return getToken(ServerParser.GE, 0); }
-		public TerminalNode LT() { return getToken(ServerParser.LT, 0); }
-		public TerminalNode LE() { return getToken(ServerParser.LE, 0); }
-		public TerminalNode EQ() { return getToken(ServerParser.EQ, 0); }
+		public TerminalNode GT() { return getToken(TriggerParser.GT, 0); }
+		public TerminalNode GE() { return getToken(TriggerParser.GE, 0); }
+		public TerminalNode LT() { return getToken(TriggerParser.LT, 0); }
+		public TerminalNode LE() { return getToken(TriggerParser.LE, 0); }
+		public TerminalNode EQ() { return getToken(TriggerParser.EQ, 0); }
 		public ComparatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparator; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterComparator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitComparator(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitComparator(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -476,19 +446,16 @@ public class ServerParser extends Parser {
 	}
 
 	public static class BoolContext extends ParserRuleContext {
-		public TerminalNode TRUE() { return getToken(ServerParser.TRUE, 0); }
-		public TerminalNode FALSE() { return getToken(ServerParser.FALSE, 0); }
+		public TerminalNode TRUE() { return getToken(TriggerParser.TRUE, 0); }
+		public TerminalNode FALSE() { return getToken(TriggerParser.FALSE, 0); }
 		public BoolContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_bool; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterBool(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitBool(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitBool(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -523,8 +490,8 @@ public class ServerParser extends Parser {
 	}
 
 	public static class NestedConditionContext extends ParserRuleContext {
-		public TerminalNode LPAREN() { return getToken(ServerParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(ServerParser.RPAREN, 0); }
+		public TerminalNode LPAREN() { return getToken(TriggerParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(TriggerParser.RPAREN, 0); }
 		public List<ConditionContext> condition() {
 			return getRuleContexts(ConditionContext.class);
 		}
@@ -548,12 +515,9 @@ public class ServerParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_nestedCondition; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterNestedCondition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitNestedCondition(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitNestedCondition(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -638,12 +602,9 @@ public class ServerParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_condition; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterCondition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitCondition(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitCondition(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -726,12 +687,9 @@ public class ServerParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_component; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterComponent(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitComponent(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitComponent(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -772,14 +730,14 @@ public class ServerParser extends Parser {
 	}
 
 	public static class MultiAttrCompContext extends ParserRuleContext {
-		public TerminalNode LPAREN() { return getToken(ServerParser.LPAREN, 0); }
+		public TerminalNode LPAREN() { return getToken(TriggerParser.LPAREN, 0); }
 		public List<PredicateContext> predicate() {
 			return getRuleContexts(PredicateContext.class);
 		}
 		public PredicateContext predicate(int i) {
 			return getRuleContext(PredicateContext.class,i);
 		}
-		public TerminalNode RPAREN() { return getToken(ServerParser.RPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(TriggerParser.RPAREN, 0); }
 		public List<AndContext> and() {
 			return getRuleContexts(AndContext.class);
 		}
@@ -791,12 +749,9 @@ public class ServerParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_multiAttrComp; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterMultiAttrComp(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitMultiAttrComp(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitMultiAttrComp(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -843,9 +798,9 @@ public class ServerParser extends Parser {
 	}
 
 	public static class PredicateContext extends ParserRuleContext {
-		public List<TerminalNode> INT() { return getTokens(ServerParser.INT); }
+		public List<TerminalNode> INT() { return getTokens(TriggerParser.INT); }
 		public TerminalNode INT(int i) {
-			return getToken(ServerParser.INT, i);
+			return getToken(TriggerParser.INT, i);
 		}
 		public ComparatorContext comparator() {
 			return getRuleContext(ComparatorContext.class,0);
@@ -855,12 +810,9 @@ public class ServerParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_predicate; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterPredicate(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitPredicate(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitPredicate(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -890,18 +842,15 @@ public class ServerParser extends Parser {
 	}
 
 	public static class UnaryContext extends ParserRuleContext {
-		public TerminalNode NOT() { return getToken(ServerParser.NOT, 0); }
+		public TerminalNode NOT() { return getToken(TriggerParser.NOT, 0); }
 		public UnaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unary; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterUnary(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitUnary(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitUnary(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -927,18 +876,15 @@ public class ServerParser extends Parser {
 	}
 
 	public static class AndContext extends ParserRuleContext {
-		public TerminalNode AND() { return getToken(ServerParser.AND, 0); }
+		public TerminalNode AND() { return getToken(TriggerParser.AND, 0); }
 		public AndContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_and; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterAnd(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitAnd(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitAnd(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -964,19 +910,16 @@ public class ServerParser extends Parser {
 	}
 
 	public static class BinaryContext extends ParserRuleContext {
-		public TerminalNode AND() { return getToken(ServerParser.AND, 0); }
-		public TerminalNode OR() { return getToken(ServerParser.OR, 0); }
+		public TerminalNode AND() { return getToken(TriggerParser.AND, 0); }
+		public TerminalNode OR() { return getToken(TriggerParser.OR, 0); }
 		public BinaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_binary; }
 		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).enterBinary(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ServerListener ) ((ServerListener)listener).exitBinary(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TriggerVisitor ) return ((TriggerVisitor<? extends T>)visitor).visitBinary(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
