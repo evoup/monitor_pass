@@ -100,7 +100,7 @@ public class ScanService {
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
                     new TypeToken<ArrayList<HostTemplateDto>>() {
                     }.getType());
-            LOG.trace(new Gson().toJson(hostTemplateDtos));
+            LOG.info(new Gson().toJson(hostTemplateDtos));
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
                     String hostStatus = HOST_STATUS_DOWN;
