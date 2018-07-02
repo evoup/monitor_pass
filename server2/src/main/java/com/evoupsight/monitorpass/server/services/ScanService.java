@@ -100,7 +100,6 @@ public class ScanService {
             List<HostTemplateDto> hostTemplateDtos = new Gson().fromJson(value1,
                     new TypeToken<ArrayList<HostTemplateDto>>() {
                     }.getType());
-            LOG.info(new Gson().toJson(hostTemplateDtos));
             if (hostTemplateDtos != null) {
                 for (HostTemplateDto hostTemplateDto : hostTemplateDtos) {
                     String hostStatus = HOST_STATUS_DOWN;
@@ -110,17 +109,14 @@ public class ScanService {
                         String apiUrl = opentsdbUrl +
                                 "/api/query?start=5m-ago&m=sum:apps.backend." + myhost +
                                 ".proc.loadavg.5min%7Bhost=" + host + "%7D";
-                        LOG.info("apiUrl:" + apiUrl);
                         HttpGet httpGet = new HttpGet(apiUrl);
                         httpResponse = httpClient.execute(httpGet);
                         if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                             HttpEntity entity = httpResponse.getEntity();
                             //将entity当中的数据转换为字符串
                             String response = EntityUtils.toString(entity, "utf-8");
-                            LOG.info("response:" + response);
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
-                            LOG.info("queryDtos:" + gson.toJson(queryDtos));
                             if (queryDtos != null && queryDtos.size()> 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
                             }
