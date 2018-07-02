@@ -3,7 +3,7 @@ package com.evoupsight.monitorpass.server.exporession;
 import org.apache.commons.lang.math.NumberUtils;
 
 public class MainVisitor {
-    private static class Visitor extends TriggerBaseVisitor<Object> {
+    public static class Visitor extends TriggerBaseVisitor<Object> {
         @Override
         public Object visitParens(TriggerParser.ParensContext ctx) {
             return visit(ctx.expr());

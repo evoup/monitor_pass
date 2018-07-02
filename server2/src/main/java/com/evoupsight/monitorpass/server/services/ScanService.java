@@ -3,8 +3,15 @@ package com.evoupsight.monitorpass.server.services;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
 import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
+import com.evoupsight.monitorpass.server.exporession.MainVisitor;
+import com.evoupsight.monitorpass.server.exporession.TriggerLexer;
+import com.evoupsight.monitorpass.server.exporession.TriggerParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
@@ -181,6 +188,14 @@ public class ScanService {
                                 DoubleSummaryStatistics stats = list.stream().mapToDouble((x) -> new Double(x.toString())).summaryStatistics();
                                 double average = stats.getAverage();
                                 LOG.info("average:" + average);
+                                CharStream input = new ANTLRInputStream("{" + average + "}>1 AND TRUE");
+                                TriggerLexer lexer = new TriggerLexer(input);
+                                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                                TriggerParser parser = new TriggerParser(tokens);
+                                ParseTree tree = parser.expr();
+                                MainVisitor.Visitor eval = new MainVisitor.Visitor();
+                                Object visit = eval.visit(tree);
+                                LOG.info("解析结果:" + visit);
                             }
                         }
                     } catch (IOException e) {
