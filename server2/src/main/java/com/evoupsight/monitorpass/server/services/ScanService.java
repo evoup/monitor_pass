@@ -124,6 +124,7 @@ public class ScanService {
                             if (queryDtos.size()>0) {
                                 LOG.info("size>0");
                             }
+                            LOG.info(new Gson().toJson(Arrays.asList(queryDtos)));
                             if ((Arrays.asList(queryDtos).size()>0)) {
                                 LOG.info("条件２满足");
                             }
