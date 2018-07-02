@@ -190,7 +190,7 @@ public class ScanService {
                                 DoubleSummaryStatistics stats = list.stream().mapToDouble((x) -> new Double(x.toString())).summaryStatistics();
                                 double average = stats.getAverage();
                                 LOG.info("average:" + average);
-                                CharStream input = new ANTLRInputStream("{" + average + "}>1 AND TRUE");
+                                CharStream input = new ANTLRInputStream("{" + average + "}>0.2 AND TRUE");
                                 TriggerLexer lexer = new TriggerLexer(input);
                                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                                 TriggerParser parser = new TriggerParser(tokens);
