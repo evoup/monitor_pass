@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
@@ -35,10 +36,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
 
@@ -120,7 +118,7 @@ public class ScanService {
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
-                            if (queryDtos != null && queryDtos.get(0) != null &&  queryDtos.get(0).getDps() != null &&
+                            if (queryDtos != null && (Arrays.asList(queryDtos).size()>0) && queryDtos.get(0) != null &&  queryDtos.get(0).getDps() != null &&
                                     queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
                             }
