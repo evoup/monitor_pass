@@ -121,6 +121,9 @@ public class ScanService {
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
+                            if (queryDtos.size()>0) {
+                                LOG.info("size>0");
+                            }
                             if (queryDtos != null && (Arrays.asList(queryDtos).size()>0) && queryDtos.get(0) != null &&  queryDtos.get(0).getDps() != null &&
                                     queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
