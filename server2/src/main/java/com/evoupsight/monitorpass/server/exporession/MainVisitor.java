@@ -74,10 +74,7 @@ public class MainVisitor {
 
         @Override
         public Object visitMonstr(TriggerParser.MonstrContext ctx) {
-            System.out.println(ctx.getText());
-            // FIXME 这里增加查询opentsdb的逻辑，然后要返回数据，数据可以是数字或者字符串
-            // 先返回字符串
-            return 2;
+            return ctx.getText();
         }
 
         private static double asDouble(Object obj) {

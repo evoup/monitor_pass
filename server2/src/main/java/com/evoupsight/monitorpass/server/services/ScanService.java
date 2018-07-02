@@ -197,7 +197,7 @@ public class ScanService {
                                 ParseTree tree = parser.expr();
                                 MainVisitor.Visitor eval = new MainVisitor.Visitor();
                                 Object visit = eval.visit(tree);
-                                LOG.info("解析结果:" + visit);
+                                LOG.info("Trigger result:" + visit);
                             }
                         }
                     } catch (IOException e) {
