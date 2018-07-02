@@ -79,7 +79,9 @@ public class MainVisitor {
 
         @Override
         public Object visitMonstr(TriggerParser.MonstrContext ctx) {
-            return ctx.getText();
+            // {}里面已经由函数计算出来了，去掉{}返回结果
+            String text = ctx.getText();
+            return text.substring(1, text.length()-1);
         }
 
         private static double asDouble(Object obj) {
