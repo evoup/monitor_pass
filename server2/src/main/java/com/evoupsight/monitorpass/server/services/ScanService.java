@@ -115,6 +115,7 @@ public class ScanService {
                             HttpEntity entity = httpResponse.getEntity();
                             //将entity当中的数据转换为字符串
                             String response = EntityUtils.toString(entity, "utf-8");
+                            LOG.info("response:" + response);
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
                             LOG.info("queryDtos:" + gson.toJson(queryDtos));
