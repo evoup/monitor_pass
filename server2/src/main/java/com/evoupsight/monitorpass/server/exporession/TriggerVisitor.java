@@ -18,6 +18,13 @@ public interface TriggerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMonstr(TriggerParser.MonstrContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Float}
+	 * labeled alternative in {@link TriggerParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloat(TriggerParser.FloatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BinaryExpression}
 	 * labeled alternative in {@link TriggerParser#expr}.
 	 * @param ctx the parse tree

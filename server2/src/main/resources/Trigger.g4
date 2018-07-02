@@ -8,6 +8,7 @@ expr: expr op=('*'|'/') expr # MulDiv
     | left=expr op=binary right=expr     # BinaryExpression
     | bool                               # BoolExpression
     | INT                    # Int
+    | FLT                    # Float
 //    | '('expr')'             # Parens
     | LPAREN expr RPAREN     # Parens
     | MONSTR                 # Monstr
@@ -38,6 +39,9 @@ binary
  ;
 
 INT: [0-9]+ ;
+FLT : INT+ '.' INT*
+    | '.' INT+
+    ;
 MUL: '*' ;
 DIV: '/' ;
 ADD: '+' ;

@@ -68,6 +68,11 @@ public class MainVisitor {
         }
 
         @Override
+        public Object visitFloat(TriggerParser.FloatContext ctx) {
+            return NumberUtils.toDouble(ctx.getText());
+        }
+
+        @Override
         public Object visitBoolExpression(TriggerParser.BoolExpressionContext ctx) {
             return "TRUE".equals(ctx.getText());
         }
