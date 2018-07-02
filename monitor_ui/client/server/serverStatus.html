@@ -5,7 +5,6 @@
 <title>SmartMad Monitor</title>
 <link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
 <link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
-
   <!-- template
     ================================================== -->
     <script id="t_a" type="text/html">
@@ -162,7 +161,7 @@ h3 {
                     <a href="#1" data-toggle="tab">明细状况</a>
                 </li>
                 <li style="display:none;">
-                    <a href="#2" data-toggle="tab">实时监控图表</a>
+                    <a href="#2" data-toggle="tab" onclick="javascript:getLoad();">实时监控图表</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -182,6 +181,8 @@ h3 {
                 <div class="tab-pane" id="2">
                     <h3>主机负载：</h4>
                     <div id="container_loadAverage">
+                    <!--<iframe src="http://localhost:8004/grafana/d-solo/FEDkgTHmz/jian-kong-shu-ju-zhi-biao?orgId=1&panelId=2&from=1530521927710&to=1530525527710&var-group=apps&var-endpoint=backend&var-host=evoupzhanqi" width="80%" height="200" frameborder="0"></iframe>-->
+                    <iframe id="iframe0" src="http://localhost:8004/grafana/d-solo/FEDkgTHmz/jian-kong-shu-ju-zhi-biao?orgId=1&panelId=2&from=1530524586030&to=1530528186031&var-group=apps&var-endpoint=backend&var-host=evoupInspiron3443" width="95%" height="250" frameborder="0"></iframe>
                     </div>
 					<br />
                     <h3>TCP 连接数：</h4>
@@ -208,7 +209,8 @@ h3 {
 <script src="../assets/js/library/template.js"></script>
 <script src="../assets/js/doc.js?t=20130516173114"></script>
 <script src="../assets/js/helper.js?t=20130516173114"></script>	
-<script src="../assets/js/server/chart.js"></script>
+<!--<script src="../assets/js/server/chart.js"></script>-->
+<script src="../assets/js/server/grafana.js"></script>
 <script>
 $(function(){
 	var smartMad = window.smartMad = window.smartMad || {};
@@ -240,7 +242,8 @@ $(function(){
 		if(json.status == 1){
 			$('.nav-tabs li:nth-child(2)').show();
 			//调用线性图表
-			lineChart();
+			<!--lineChart();-->
+      <!--graph(serverName);-->
 		}
 		
 		delete json.desc;
