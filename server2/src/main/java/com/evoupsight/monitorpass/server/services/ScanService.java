@@ -171,7 +171,7 @@ public class ScanService {
                     HttpResponse httpResponse = null;
                     HttpGet httpGet = new HttpGet(opentsdbUrl +
                             "/api/query?start=5m-ago&m=sum:apps.backend." + myhost +
-                            ".proc.loadavg.5min");
+                            ".proc.loadavg.1min");
                     try {
                         httpResponse = httpClient.execute(httpGet);
                         if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
