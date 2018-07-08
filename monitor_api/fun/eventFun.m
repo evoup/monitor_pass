@@ -257,75 +257,98 @@ case(__SELECTOR_SINGLE): // 查询一种事件
 case(__SELECTOR_UNHANDLED): // 查询待处理事件 
     /* {{{ 查询needfix事件(以防止恢复事件没有set到事件表造成的事件仍然没有解决的问题)
      */
-    $needfixList=$GLOBALS['mdb_client']->get(__MDB_TAB_SERVER, "needfix", "event:item");
-    $needfixList=$needfixList[0]->value;
-    $needfixArr=explode('|',$needfixList);
-    /* }}} */
+    //$needfixList=$GLOBALS['mdb_client']->get(__MDB_TAB_SERVER, "needfix", "event:item");
+    //$needfixList=$needfixList[0]->value;
+    //$needfixArr=explode('|',$needfixList);
+    //[> }}} <]
     /* {{{ 未处理有问题的事件列表
      */
-    /* 获取全部server */
+    //[> 获取全部server <]
     /* {{{ 扫描所有主机
      */
-    list($table_name,$start_row,$family) = array(__MDB_TAB_HOST, '', array('info')); // 从row的起点开始 
-    try {
-        $scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row, $family);
-        while (true) {
-            $get_arr = $GLOBALS['mdb_client']->scannerGet( $scanner );
-            if (array_filter($get_arr) == null) break;
-            foreach ($get_arr as $TRowResult) {
-                if (!empty($TRowResult->row)) {
-                    if (!empty($GLOBALS['rowKey'])) { // 如果URL里带了筛选 
-                        $GLOBALS['rowKey']==$TRowResult->row && $host_arr[] = $TRowResult->row;
-                        $GLOBALS['rowKey']==$TRowResult->row && $upload_time[$TRowResult->row] = $TRowResult->columns['info:last_upload']->value;
-                    } else {
-                        $host_arr[] = $TRowResult->row;
-                        $upload_time[$TRowResult->row] = $TRowResult->columns['info:last_upload']->value;
-                    }
-                }
-            }
-        }
-        $GLOBALS['mdb_client']->scannerClose($scanner); // 关闭scanner 
-    } catch (Exception $e) {
-        $err = true;
-    }
-    /* }}} */
-    foreach ($host_arr as $host) {
-        if (in_array($host, explode(',', $_CONFIG['not_monitored']['not_monitored']))) { // 不监控的不要 
-            continue;
-        }
-        $arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
-        $events = $arr[0]->columns;
-        if (!empty($events)) {
-            /* 取出该host的监控信息,从即时信息表取出 */ //TODO 这里取可能存在不及时的问题，暂时不考虑 
-            $rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
-            $uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
-            foreach ($events as $eventCode => $eventVal) {
-                $eventCode = substr($eventCode, -4);
-                $eventId = substr($eventCode, 0, 3);
-                $eventLevel = substr($eventCode, -1);
-                $eventClass = $eventLevel==__SUFFIX_EVENT_CAUTION ?2 :3;
-                $eventStartTime = $events["event:{$eventCode}"]->timestamp;
-                $durationTime = getDhms(time()-$eventStartTime); // 持续时间
-                if (in_array($eventCode, $needfixArr) && $eventCode != __EVENTCODE_DOWN && $eventVal->value==__EVENT_ACTIVE) { // 宕机事件不显示在这里 TODO 找更好的方法！ 
-                    $last_arr[] = array(
-                        $host,
-                        $event_item_map_table[$eventId][__EVENT_LANG_CHS],
-                        $eventId,
-                        $eventClass,
-                        $durationTime,
-                        date("Y-m-d H:i:s", $upload_time[$host]),
-                        $uiWordArr[$host][$eventId]
-                    ); 
-                }
-            }
-        }
-    }
-    if (!$err) {
-        $GLOBALS['httpStatus']=__HTTPSTATUS_OK;
-        echo json_encode($last_arr);
-    }
+    //list($table_name,$start_row,$family) = array(__MDB_TAB_HOST, '', array('info')); // 从row的起点开始 
+    //try {
+        //$scanner = $GLOBALS['mdb_client']->scannerOpen($table_name, $start_row, $family);
+        //while (true) {
+            //$get_arr = $GLOBALS['mdb_client']->scannerGet( $scanner );
+            //if (array_filter($get_arr) == null) break;
+            //foreach ($get_arr as $TRowResult) {
+                //if (!empty($TRowResult->row)) {
+                    //if (!empty($GLOBALS['rowKey'])) { // 如果URL里带了筛选 
+                        //$GLOBALS['rowKey']==$TRowResult->row && $host_arr[] = $TRowResult->row;
+                        //$GLOBALS['rowKey']==$TRowResult->row && $upload_time[$TRowResult->row] = $TRowResult->columns['info:last_upload']->value;
+                    //} else {
+                        //$host_arr[] = $TRowResult->row;
+                        //$upload_time[$TRowResult->row] = $TRowResult->columns['info:last_upload']->value;
+                    //}
+                //}
+            //}
+        //}
+        //$GLOBALS['mdb_client']->scannerClose($scanner); // 关闭scanner 
+    //} catch (Exception $e) {
+        //$err = true;
+    //}
+    //[> }}} <]
+    //foreach ($host_arr as $host) {
+        //if (in_array($host, explode(',', $_CONFIG['not_monitored']['not_monitored']))) { // 不监控的不要 
+            //continue;
+        //}
+        //$arr = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array("event"));
+        //$events = $arr[0]->columns;
+        //if (!empty($events)) {
+            //[> 取出该host的监控信息,从即时信息表取出 <] //TODO 这里取可能存在不及时的问题，暂时不考虑 
+            //$rs = $GLOBALS['mdb_client']->getRowWithColumns(__MDB_TAB_SERVER, $host, array('info'));
+            //$uiWordArr = getEventUIDesc($host, $rs[0]->columns, false); // 对于即时表，info列族内的监控项列，不带有timestamp，第三个参数传false
+            //foreach ($events as $eventCode => $eventVal) {
+                //$eventCode = substr($eventCode, -4);
+                //$eventId = substr($eventCode, 0, 3);
+                //$eventLevel = substr($eventCode, -1);
+                //$eventClass = $eventLevel==__SUFFIX_EVENT_CAUTION ?2 :3;
+                //$eventStartTime = $events["event:{$eventCode}"]->timestamp;
+                //$durationTime = getDhms(time()-$eventStartTime); // 持续时间
+                //if (in_array($eventCode, $needfixArr) && $eventCode != __EVENTCODE_DOWN && $eventVal->value==__EVENT_ACTIVE) { // 宕机事件不显示在这里 TODO 找更好的方法！ 
+                    //$last_arr[] = array(
+                        //$host,
+                        //$event_item_map_table[$eventId][__EVENT_LANG_CHS],
+                        //$eventId,
+                        //$eventClass,
+                        //$durationTime,
+                        //date("Y-m-d H:i:s", $upload_time[$host]),
+                        //$uiWordArr[$host][$eventId]
+                    //); 
+                //}
+            //}
+        //}
+    //}
+    //if (!$err) {
+        //$GLOBALS['httpStatus']=__HTTPSTATUS_OK;
+        //echo json_encode($last_arr);
+    //}
 
-    /* }}} */
+    //[> }}} <]
+    $ret=<<<EOT
+[
+	["ban9smd105mediation01-a0a095e", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "690d  3h 54m 14s", "2016-11-25 21:12:41", "Loginfo creation failed! May be not any request incoming."],
+	["ban9smd106-a0a096a", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 2, "707d  2h 23m 32s", "2016-12-02 14:48:26", "Disk \/ capacity is 0%,Disk \/home capacity is 11%,Disk \/jails capacity is 1%,Disk \/jails\/ban9smd106dfs01 capacity is 5%,Disk \/jails\/ban9smd106mail01 capacity is 1%,Disk \/jails\/ban9smd106mailserver01 capacity is 39%,Disk \/jails\/ban9smd106matreader01 capacity is 36%,Disk \/jails\/ban9smd106memcached01 capacity is 1%,Disk \/jails\/ban9smd106web01 capacity is 56%,Disk \/jails\/ban9smd106web01\/services\/data\/dfs capacity is 100%,Disk \/jails\/puppet89_hiphop capacity is 7%,Disk \/tmp capacity is 0%,Disk \/usr capacity is 3%,Disk \/var capacity is 0%"],
+	["ban9smd106-a0a096a", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 3, "740d 19h 18m 26s", "2016-12-02 14:48:26", "Disk \/ capacity is 0%,Disk \/home capacity is 11%,Disk \/jails capacity is 1%,Disk \/jails\/ban9smd106dfs01 capacity is 5%,Disk \/jails\/ban9smd106mail01 capacity is 1%,Disk \/jails\/ban9smd106mailserver01 capacity is 39%,Disk \/jails\/ban9smd106matreader01 capacity is 36%,Disk \/jails\/ban9smd106memcached01 capacity is 1%,Disk \/jails\/ban9smd106web01 capacity is 56%,Disk \/jails\/ban9smd106web01\/services\/data\/dfs capacity is 100%,Disk \/jails\/puppet89_hiphop capacity is 7%,Disk \/tmp capacity is 0%,Disk \/usr capacity is 3%,Disk \/var capacity is 0%"],
+	["ban9smd106web01-a0a0932", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 2, "707d  2h 23m 31s", "2016-11-25 21:59:39", "Disk \/ capacity is 56%"],
+	["ban9smd115-a0a0973", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 2, "707d  2h 23m 32s", "2016-12-21 23:14:27", "Disk \/ capacity is 7%,Disk \/jails capacity is 0%,Disk \/jails\/ban9smd115ft01 capacity is 40%,Disk \/jails\/ban9smd115report01 capacity is 73%,Disk \/jails02 capacity is 0%"],
+	["ban9smd115report01-a0a0929", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 2, "700d  8h 16m 29s", "2016-11-25 22:29:51", "Disk \/ capacity is 73%"],
+	["ban9smd115report01-a0a0929", "(Report) \u5f85\u5904\u7406log\u6570", "022", 2, "700d  8h 16m 42s", "2016-11-25 22:29:51", "wait process logs:11568"],
+	["bao17app02hhvm01-a0a097c", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "690d  3h 56m 38s", "2018-07-09 00:37:07", "Loginfo creation failed! May be not any request incoming."],
+	["bao17app04hhvm02-a0a0980", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "690d 15h 26m 00s", "2016-11-15 13:31:54", "Loginfo creation failed! May be not any request incoming."],
+	["bao17app04hhvm03-a0a0981", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "690d  4h 06m 47s", "2016-11-15 13:33:42", "Loginfo creation failed! May be not any request incoming."],
+	["beiai-a0a2191", "\u78c1\u76d8\u53ef\u7528\u7a7a\u95f4", "000", 3, "844d  3h 57m 17s", "2016-12-02 16:13:48", "Disk \/ capacity is 51%,Disk \/home capacity is 38%,Disk \/services capacity is 98%,Disk \/usr capacity is 34%"],
+	["beiai-a0a2191", "TCP\/IP\u7aef\u53e3", "006", 2, "844d  3h 56m 57s", "2016-12-02 16:13:48", "service dns status is CORRUPTED,service www status is CORRUPTED,service www1 status is CORRUPTED,service www2 status is CORRUPTED"],
+	["bjk09smd04hhvm03-a0b2039", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "690d  0h 41m 40s", "2016-11-23 16:20:35", "Loginfo creation failed! May be not any request incoming."],
+	["bjk09smd05hhvm03-a0b203b", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "691d  5h 43m 58s", "2016-11-16 01:16:01", "Loginfo creation failed! May be not any request incoming."],
+	["bjk09smd06hhvm01-a0b202d", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "689d 21h 33m 40s", "2016-11-15 10:58:20", "Loginfo creation failed! May be not any request incoming."],
+	["bjk09smd10hhvm01-a0b2028", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "691d  5h 43m 58s", "2016-11-15 12:16:26", "Loginfo creation failed! May be not any request incoming."],
+	["bjk09smd10hhvm02-a0b2029", "(Serving) \u65e5\u5fd7\u751f\u6210", "023", 2, "691d  5h 43m 58s", "2016-11-15 12:15:57", "Loginfo creation failed! May be not any request incoming."]
+]
+EOT;
+    $GLOBALS['httpStatus']=__HTTPSTATUS_OK;
+    echo $ret;
     break;
 }
 ?>
