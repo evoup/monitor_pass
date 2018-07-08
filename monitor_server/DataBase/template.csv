@@ -1,8 +1,5 @@
 hostid,proxy_hostid,host,status,disable_until,error,available,errors_from,lastaccess,ipmi_authtype,ipmi_privilege,ipmi_username,ipmi_password,ipmi_disable_until,ipmi_available,snmp_disable_until,snmp_available,maintenanceid,maintenance_status,maintenance_type,maintenance_from,ipmi_errors_from,snmp_errors_from,ipmi_error,snmp_error,jmx_disable_until,jmx_available,jmx_errors_from,jmx_error,name,flags,templateid
 10001,NULL,"Template OS Linux",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template OS Linux",0,NULL
-10047,NULL,"Template App Zabbix Server",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App Zabbix Server",0,NULL
-10048,NULL,"Template App Zabbix Proxy",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App Zabbix Proxy",0,NULL
-10050,NULL,"Template App Zabbix Agent",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App Zabbix Agent",0,NULL
 10060,NULL,"Template SNMP Interfaces",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template SNMP Interfaces",0,NULL
 10065,NULL,"Template SNMP Generic",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template SNMP Generic",0,NULL
 10066,NULL,"Template SNMP Device",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template SNMP Device",0,NULL
@@ -22,12 +19,9 @@ hostid,proxy_hostid,host,status,disable_until,error,available,errors_from,lastac
 10081,NULL,"Template OS Windows",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template OS Windows",0,NULL
 10082,NULL,"Template JMX Generic",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template JMX Generic",0,NULL
 10083,NULL,"Template JMX Tomcat",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template JMX Tomcat",0,NULL
-10084,NULL,"Zabbix server",1,0,,0,0,0,-1,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Zabbix server",0,NULL
 10088,NULL,"Template Virt VMware",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template Virt VMware",0,NULL
 10089,NULL,"Template Virt VMware Guest",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template Virt VMware Guest",0,NULL
-10090,NULL,{#VM.UUID},0,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,{#VM.NAME},2,NULL
 10091,NULL,"Template Virt VMware Hypervisor",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template Virt VMware Hypervisor",0,NULL
-10092,NULL,{#HV.UUID},0,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,{#HV.NAME},2,NULL
 10093,NULL,"Template App FTP Service",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App FTP Service",0,NULL
 10094,NULL,"Template App HTTP Service",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App HTTP Service",0,NULL
 10095,NULL,"Template App HTTPS Service",3,0,,0,0,0,0,2,,,0,0,0,0,NULL,0,0,0,0,0,,,0,0,0,,"Template App HTTPS Service",0,NULL

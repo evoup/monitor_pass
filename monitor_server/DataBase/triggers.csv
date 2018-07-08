@@ -184,26 +184,26 @@ triggerid,expression,description,url,status,value,priority,lastchange,comments,e
 13504,{12913}<20M,"Lack of available memory on server {HOST.NAME}",,0,0,3,0,,,13000,0,0,0,10084
 13505,{12914}<20,"Free inodes is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13272,0,0,2,10084
 13506,{12915}<20,"Free disk space is less than 20% on volume {#FSNAME}",,0,0,2,0,,,13266,0,0,2,10084
-13026,{12926}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
-10045,{12927}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10001
-13492,{12928}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,10045,0,0,0,10084
-13329,{12929}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10074
-13345,{12930}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10075
-13361,{12931}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10076
-13377,{12932}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10077
-13393,{12933}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10078
-13409,{12934}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10079
-13438,{12935}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10081
-13507,{12936}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
-13508,{12937}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10001
-13509,{12938}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13508,0,0,0,10084
-13510,{12939}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10074
-13511,{12940}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10075
-13512,{12941}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10076
-13513,{12942}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10077
-13514,{12943}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10078
-13515,{12944}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10079
-13516,{12945}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10081
+13026,{12926}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
+10045,{12927}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10001
+13492,{12928}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,10045,0,0,0,10084
+13329,{12929}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10074
+13345,{12930}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10075
+13361,{12931}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10076
+13377,{12932}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10077
+13393,{12933}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10078
+13409,{12934}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10079
+13438,{12935}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10081
+13507,{12936}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10050
+13508,{12937}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10001
+13509,{12938}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13508,0,0,0,10084
+13510,{12939}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10074
+13511,{12940}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10075
+13512,{12941}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10076
+13513,{12942}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10077
+13514,{12943}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10078
+13515,{12944}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10079
+13516,{12945}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10081
 13517,{12946}<25,"Less than 25% free in the configuration cache",,0,0,3,0,"Consider increasing CacheSize in the zabbix_server.conf configuration file",,NULL,0,0,0,10048
 13518,{12947}<25,"Less than 25% free in the history cache",,0,0,3,0,,,NULL,0,0,0,10048
 13519,{12948}<25,"Less than 25% free in the text history cache",,0,0,3,0,,,NULL,0,0,0,10048
@@ -464,9 +464,9 @@ triggerid,expression,description,url,status,value,priority,lastchange,comments,e
 13635,{13304}>0.7,"70% os Process CPU Load on {HOST.NAME}",,0,0,3,0,,"Agent is unavailable.",13538,0,1,0,10107
 13636,{13305}=1,"{HOST.NAME} is not reachable",,0,1,3,1525593870,,,13465,0,0,0,10107
 13637,{13306}#1,"{HOST.NAME} runs suboptimal VM type",,0,0,1,0,,"Agent is unavailable.",13543,0,1,0,10107
-13638,{13307}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13507,0,1,0,10107
+13638,{13307}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13507,0,1,0,10107
 13639,{13308}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,1,3,1525594290,,,13025,0,0,0,10107
-13640,{13309}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13026,0,1,0,10107
+13640,{13309}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13026,0,1,0,10107
 13641,"{13310} > ({13311} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,1,0,2,0,,,NULL,0,0,0,10109
 13641,"{13310} > ({13311} * 0.7)","70% http-8080 worker threads busy on {HOST.NAME}",,1,0,2,0,,,NULL,0,0,0,10109
 13642,"{13312} > ({13313} * 0.7)","70% http-8443 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
@@ -475,12 +475,12 @@ triggerid,expression,description,url,status,value,priority,lastchange,comments,e
 13643,"{13314} > ({13315}  *0.7)","70% jk-8009 worker threads busy on {HOST.NAME}",,0,0,2,0,,,NULL,0,0,0,10109
 13644,"{13316} = 1","gzip compression is off for connector http-8080 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10109
 13645,"{13317} = 1","gzip compression is off for connector http-8443 on {HOST.NAME}",,0,0,1,0,,,NULL,0,0,0,10109
-13646,{13318}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10110
+13646,{13318}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,,13507,0,0,0,10110
 13647,{13319}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,0,3,0,,,13025,0,0,0,10110
-13648,{13320}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10110
-13649,{13321}>0,"Host name of zabbix_agentd was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13508,0,1,0,10111
+13648,{13320}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,,13026,0,0,0,10110
+13649,{13321}>0,"Host name of agent was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",13508,0,1,0,10111
 13650,{13322}=1,"Zabbix agent on {HOST.NAME} is unreachable for 5 minutes",,0,1,3,1529842140,,,10047,0,0,0,10111
-13651,{13323}>0,"Version of zabbix_agent(d) was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10045,0,1,0,10111
+13651,{13323}>0,"Version of agent was changed on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10045,0,1,0,10111
 13652,{13324}<1024,"Configured max number of opened files is too low on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10042,0,1,0,10111
 13653,{13325}<256,"Configured max number of processes is too low on {HOST.NAME}",,0,0,1,0,,"Agent is unavailable.",10041,0,1,0,10111
 13654,{13326}>30,"Too many processes running on {HOST.NAME}",,0,0,2,0,,"Agent is unavailable.",10011,0,1,0,10111
