@@ -5,7 +5,7 @@ $(function(){
     var $server_listen = $('#server_listen');
     var $event_listen = $('#event_listen');
     var $unhandled = $('#unhandled');
-    var _url = "http://" + domain + "/mmsapi" + version;
+    var _url = "http://" + domain + ":8004/mmsapi" + version;
     
 	var pullDownAction = Gmonitor.pullDownAction;
     
