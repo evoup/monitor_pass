@@ -1,15 +1,12 @@
 grammar Trigger;
 
-expr: expr op=('*'|'/') expr # MulDiv
-    | expr op=('+'|'-') expr # AddSub
-//    | expr op=('<'|'>') expr # LtGt
-//  可以直接left出来，不必之后再int left = visit(ctx.expr(0));
+expr: expr op=(MUL|DIV) expr # MulDiv
+    | expr op=(ADD|SUB) expr # AddSub
     | left=expr op=comparator right=expr # ComparatorExpression
     | left=expr op=binary right=expr     # BinaryExpression
     | bool                               # BoolExpression
     | INT                    # Int
     | FLT                    # Float
-//    | '('expr')'             # Parens
     | LPAREN expr RPAREN     # Parens
     | MONSTR                 # Monstr
     | NOT expr               # NotExpression
@@ -29,8 +26,6 @@ condition: predicate (binary predicate)*
 component: predicate | multiAttrComp;
 multiAttrComp : LPAREN predicate (and predicate)+ RPAREN;
 predicate : INT comparator INT;
-//comparator : GT | GE | LT | LE | EQ ;
-//binary: AND | OR ;
 unary: NOT;
 and: AND;
 
