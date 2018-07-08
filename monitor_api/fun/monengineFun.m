@@ -15,61 +15,65 @@
 $GLOBALS['httpStatus'] = __HTTPSTATUS_BAD_REQUEST; //默认返回400 
 header("Content-type: application/json; charset=utf-8");
 
-if (!canAccess('read_enginestatus')) {
-    $GLOBALS['httpStatus'] = __HTTPSTATUS_FORBIDDEN;
-    return;
-}
-if (!$err) {
-    $result=$GLOBALS['mdb_client']->scannerOpen(__MDB_TAB_ENGINE, '', (array)'scan:usable');
-    while (true) {
-        $record = $GLOBALS['mdb_client']->scannerGet($result);
-        if ($record == NULL) {
-            break;
-        }
-        $recordArray = array();
-        foreach($record as $TRowResult) {
-            $row=$TRowResult->row;
-            list(,$serverNode)=explode('|',$row);
-            $tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:pid");
-            $serverNodes[$serverNode]['process_pid']=$tempArr[0]->value;
-            $tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:master");
-            $serverNodes[$serverNode]['action_bemaster']=$tempArr[0]->value==1?0:1; // 是master bemaster就不出 
-            $tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:usable");
-            $serverNodes[$serverNode]['process_status']=$tempArr[0]->value==1?1:0;
-            $serverNodes[$serverNode]['action_start']=$serverNodes[$serverNode]['process_status']?0:1;
-            $serverNodes[$serverNode]['action_stop']=$serverNodes[$serverNode]['action_start']?0:1;
-            $tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:procstart");
-            $serverNodes[$serverNode]['process_starttime']=$tempArr[0]->value;
+//if (!canAccess('read_enginestatus')) {
+    //$GLOBALS['httpStatus'] = __HTTPSTATUS_FORBIDDEN;
+    //return;
+//}
+//if (!$err) {
+    //$result=$GLOBALS['mdb_client']->scannerOpen(__MDB_TAB_ENGINE, '', (array)'scan:usable');
+    //while (true) {
+        //$record = $GLOBALS['mdb_client']->scannerGet($result);
+        //if ($record == NULL) {
+            //break;
+        //}
+        //$recordArray = array();
+        //foreach($record as $TRowResult) {
+            //$row=$TRowResult->row;
+            //list(,$serverNode)=explode('|',$row);
+            //$tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:pid");
+            //$serverNodes[$serverNode]['process_pid']=$tempArr[0]->value;
+            //$tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:master");
+            //$serverNodes[$serverNode]['action_bemaster']=$tempArr[0]->value==1?0:1; // 是master bemaster就不出 
+            //$tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:usable");
+            //$serverNodes[$serverNode]['process_status']=$tempArr[0]->value==1?1:0;
+            //$serverNodes[$serverNode]['action_start']=$serverNodes[$serverNode]['process_status']?0:1;
+            //$serverNodes[$serverNode]['action_stop']=$serverNodes[$serverNode]['action_start']?0:1;
+            //$tempArr = $GLOBALS['mdb_client']->get(__MDB_TAB_ENGINE, 'monitorengine|'.$serverNode, "scan:procstart");
+            //$serverNodes[$serverNode]['process_starttime']=$tempArr[0]->value;
 
-        }
-    }
-    foreach (array_keys($serverNodes) as $serverNode) {
-        if (!empty($serverNodes[$serverNode]['process_starttime'])) {
-            $process_starttime=date('Y-m-d H:i:s',$serverNodes[$serverNode]['process_starttime']);
-        } else {
-            $process_starttime='';
-        }
-        if (!empty($serverNodes[$serverNode]['process_starttime'])) {
-            $process_uptime= getDhms(time()-$serverNodes[$serverNode]['process_starttime']);
-        } else {
-            $process_uptime ='';
-        }
-        if ($serverNodes[$serverNode]['action_bemaster']) {
-            $process_uptime='已结束';
-        }
-        $tempStr[$serverNode]
-                = array(
-                "process_status"    => "{$serverNodes[$serverNode]['process_status']}",
-                "action_start"      => "{$serverNodes[$serverNode]['action_start']}",
-                "action_stop"       => "{$serverNodes[$serverNode]['action_stop']}",
-                "action_restart"    => 1,
-                "action_bemaster"   => "{$serverNodes[$serverNode]['action_bemaster']}",
-                "process_starttime" => $process_starttime,
-                "process_uptime"    => $process_uptime,
-                "process_pid"       => "{$serverNodes[$serverNode]['process_pid']}" 
-            );
-    }
-    echo json_encode($tempStr);
+        //}
+    //}
+    //foreach (array_keys($serverNodes) as $serverNode) {
+        //if (!empty($serverNodes[$serverNode]['process_starttime'])) {
+            //$process_starttime=date('Y-m-d H:i:s',$serverNodes[$serverNode]['process_starttime']);
+        //} else {
+            //$process_starttime='';
+        //}
+        //if (!empty($serverNodes[$serverNode]['process_starttime'])) {
+            //$process_uptime= getDhms(time()-$serverNodes[$serverNode]['process_starttime']);
+        //} else {
+            //$process_uptime ='';
+        //}
+        //if ($serverNodes[$serverNode]['action_bemaster']) {
+            //$process_uptime='已结束';
+        //}
+        //$tempStr[$serverNode]
+                //= array(
+                //"process_status"    => "{$serverNodes[$serverNode]['process_status']}",
+                //"action_start"      => "{$serverNodes[$serverNode]['action_start']}",
+                //"action_stop"       => "{$serverNodes[$serverNode]['action_stop']}",
+                //"action_restart"    => 1,
+                //"action_bemaster"   => "{$serverNodes[$serverNode]['action_bemaster']}",
+                //"process_starttime" => $process_starttime,
+                //"process_uptime"    => $process_uptime,
+                //"process_pid"       => "{$serverNodes[$serverNode]['process_pid']}" 
+            //);
+    //}
+    //echo json_encode($tempStr);
+$ret=<<<EOT
+{"bam4atd50monitor01":{"process_status":"1","action_start":"0","action_stop":"1","action_restart":1,"action_bemaster":"0","process_starttime":"2017-08-28 13:36:03","process_uptime":"314d  8h 05m 35s","process_pid":"4116"},"bam4atd51monitor02":{"process_status":"1","action_start":"0","action_stop":"1","action_restart":1,"action_bemaster":"1","process_starttime":"2015-07-05 11:42:27","process_uptime":"\u5df2\u7ed3\u675f","process_pid":"14202"}}
+EOT;
+    echo $ret;
     $GLOBALS['httpStatus']=__HTTPSTATUS_OK;
-}
+//}
 ?>
