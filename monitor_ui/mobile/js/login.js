@@ -18,7 +18,7 @@ function login(version, domain){
     else {
         $.ajax({
             type: "post",
-            url: "http://" + domain + "/mmsapi" + version + "/update/login/@self",
+            url: "http://" + domain + ":8004/mmsapi" + version + "/update/login/@self",
             async: false,
             data: data,
             success: function(json, textStatus, jqXHR){//如果调用php成功
@@ -47,7 +47,7 @@ $(document).ready(function(){
     
     $.ajax({
         type: "get",
-        url: "http://" + domain + "/mmsapi" + version + "/get/login/@self",
+        url: "http://" + domain + ":8004/mmsapi" + version + "/get/login/@self",
         async: true,
         dataType: "json",
         success: function(json, textStatus, jqXHR){
