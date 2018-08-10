@@ -13,6 +13,9 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author evoup
+ */
 @Service
 public class ConsumeService {
     private static final Logger LOG = Logger.getLogger(ConsumeService.class);
