@@ -1,16 +1,16 @@
 package com.evoupsight.monitorpass.datacollector.services;
 
+import com.evoupsight.monitorpass.datacollector.domain.ObjNameAttributes;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.management.MBeanAttributeInfo;
-import javax.management.MBeanInfo;
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
+import javax.management.*;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.*;
 
 /**
@@ -35,19 +35,35 @@ public class JmxPollerService {
 
             //端口最好是动态取得
             //ObjectName threadObjName = new ObjectName("Catalina:type=ThreadPool,name=http-8089");
-            ObjectName objectName = new ObjectName("Catalina:type=ProtocolHandler,port=8080");
-            MBeanInfo mbInfo = mbsc.getMBeanInfo(objectName);
-
-            //tomcat是否用gzip压缩
+            String objectNameStr = "Catalina:type=ProtocolHandler,port=8080";
             String attrName = "compression";
-            MBeanAttributeInfo[] mbAttributes = mbInfo.getAttributes();
-            if (mbAttributes != null) {
-                for (MBeanAttributeInfo mbAttribute : mbAttributes) {
-                    if (attrName.equals(mbAttribute.getName())) {
-                        System.out.println(attrName + ":" + mbsc.getAttribute(objectName, attrName));
-                    }
+            ObjNameAttributes objNameAttributes = new ObjNameAttributes();
+            objNameAttributes.setMonitoredObject(objectNameStr, attrName);
+            Map<String, Set<String>> map = objNameAttributes.getObjNameAttributes();
+            map.forEach((k,v) -> {
+                ObjectName objectName = null;
+                try {
+                    objectName = new ObjectName(k);
+                } catch (MalformedObjectNameException e) {
+                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
-            }
+                try {
+                    MBeanInfo mbInfo = mbsc.getMBeanInfo(objectName);
+                    //tomcat是否用gzip压缩
+                    MBeanAttributeInfo[] mbAttributes = mbInfo.getAttributes();
+                    if (mbAttributes != null) {
+                        for (MBeanAttributeInfo mbAttribute : mbAttributes) {
+                            if (attrName.equals(mbAttribute.getName())) {
+                                System.out.println(attrName + ":" + mbsc.getAttribute(objectName, attrName));
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
+                }
+            });
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
