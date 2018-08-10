@@ -38,6 +38,13 @@ public class ConsumeService {
     }
 
     private void consume() {
+        Map<String, Object> config = setKafkaConfig();
+        for (int i = 0; i < 5; i++) {
+            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient).start();
+        }
+    }
+
+    private Map<String, Object> setKafkaConfig() {
         Map<String, Object> config = new HashMap<>();
         config.put("bootstrap.servers", brokers);
         config.put("group.id", groupId);
@@ -45,8 +52,6 @@ public class ConsumeService {
         config.put("auto.commit.interval.ms", 1000);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        for (int i = 0; i < 5; i++) {
-            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient).start();
-        }
+        return config;
     }
 }
