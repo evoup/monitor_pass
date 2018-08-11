@@ -55,7 +55,7 @@ public class JmxPollerService {
                     if (mbAttributes != null) {
                         for (MBeanAttributeInfo mbAttribute : mbAttributes) {
                             if (attrName.equals(mbAttribute.getName())) {
-                                System.out.println(attrName + ":" + mbsc.getAttribute(objectName, attrName));
+                                LOG.info("jmx metric:" + attrName + ":" + mbsc.getAttribute(objectName, attrName));
                             }
                         }
                     }
