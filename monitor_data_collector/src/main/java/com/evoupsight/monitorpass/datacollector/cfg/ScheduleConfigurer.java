@@ -21,20 +21,16 @@ public class ScheduleConfigurer implements SchedulingConfigurer
 
     @Bean()
     public ThreadPoolTaskScheduler taskScheduler() {
-        return new ThreadPoolTaskScheduler();
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(10);
+        threadPoolTaskScheduler.initialize();
+        return threadPoolTaskScheduler;
     }
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar)
     {
         taskRegistrar.setTaskScheduler(taskScheduler());
-        taskRegistrar.addFixedDelayTask(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                jmxPollerService.poll();
-            }
-        }, 10000);
+        taskRegistrar.addFixedDelayTask(() -> jmxPollerService.poll(), 10000);
     }
 }
