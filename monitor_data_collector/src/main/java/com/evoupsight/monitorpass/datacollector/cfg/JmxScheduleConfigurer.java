@@ -22,7 +22,7 @@ public class JmxScheduleConfigurer implements SchedulingConfigurer
     @Bean()
     public ThreadPoolTaskScheduler taskSchedulerJmx() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(10);
+        threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.initialize();
         return threadPoolTaskScheduler;
     }

@@ -9,8 +9,6 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-import java.io.IOException;
-
 /**
  * @author evoup
  */
@@ -23,7 +21,7 @@ public class SnmpScheduleConfigurer implements SchedulingConfigurer {
     @Bean()
     public ThreadPoolTaskScheduler taskSchedulerSnmp() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(10);
+        threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.initialize();
         return threadPoolTaskScheduler;
     }
@@ -32,11 +30,7 @@ public class SnmpScheduleConfigurer implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setTaskScheduler(taskSchedulerSnmp());
         taskRegistrar.addFixedDelayTask(() -> {
-            try {
-                snmpPollerService.poll();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            snmpPollerService.poll();
         }, 10000);
     }
 
