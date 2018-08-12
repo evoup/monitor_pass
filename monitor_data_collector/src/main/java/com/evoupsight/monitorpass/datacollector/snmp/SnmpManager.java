@@ -73,6 +73,7 @@ public class SnmpManager {
             pdu.add(new VariableBinding(oid));
         }
         pdu.setType(PDU.GET);
+        snmp.setTimeoutModel(new DefaultTimeoutModel());
         ResponseEvent event = snmp.send(pdu, getTarget(), null);
         if (event != null) {
             return event;

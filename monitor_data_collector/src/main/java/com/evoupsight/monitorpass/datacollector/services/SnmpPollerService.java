@@ -3,6 +3,8 @@ package com.evoupsight.monitorpass.datacollector.services;
 import com.evoupsight.monitorpass.datacollector.snmp.SnmpManager;
 import org.apache.log4j.Logger;
 import org.snmp4j.smi.OID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,15 +17,14 @@ import java.util.concurrent.*;
  */
 @Service
 public class SnmpPollerService {
+    @Autowired
+    @Qualifier("snmpExecutorServiceThreadPool")
+    protected ExecutorService es;
     private static final Logger LOG = Logger.getLogger(SnmpPollerService.class);
 
     public void poll() {
         int totaltaskNum = 50;
 
-        ExecutorService es = Executors.newFixedThreadPool(5);
-//        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("snmp-pool-%d").build();
-//        ExecutorService es = new ThreadPoolExecutor(5, 200, 0L,
-//                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
         List<Callable<Boolean>> callableTasks = new ArrayList<>();
         for (int i = 0; i < totaltaskNum; i++) {
             callableTasks.add(callableTask);
@@ -36,8 +37,8 @@ public class SnmpPollerService {
         } catch (InterruptedException e) {
             e.printStackTrace();
             LOG.error(e.getMessage(), e);
-        } finally {
-            es.shutdownNow();
+//        } finally {
+//            es.shutdownNow();
         }
     }
 
