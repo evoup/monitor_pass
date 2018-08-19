@@ -11,7 +11,7 @@
 		$(document).ready(function(){
 			var ver=url_params("version");	
       $("#rightIframe").attr("src","serverList.html?version="+ver);
-		  bindClickMenu("#rightIframe",["serverList.html?version="+ver,/*"serverStatus.html?version="+ver*/"serversList.html?version="+ver,"serversVisual.html?version="+ver]);	
+      bindClickMenu("#rightIframe",["serverList.html?version="+ver,/*"serverStatus.html?version="+ver*/"serversList.html?version="+ver,"serversVisual.html?version="+ver, "fileDispatch.html?version="+ver, "commandRun.html?version="+ver]);	
 			contentHeight(); 
 		  /*if(ver!="alpha"){
 			  //console.log("ok");
