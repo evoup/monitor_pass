@@ -11,48 +11,34 @@
     <script id="t_a" type="text/html">
 				<form class="form-horizontal" id="form" onsubmit="return false;">
 					 <fieldset>
-					 	<legend>文件批量分发</legend>
-					 	<br />
                         <div class="control-group">
-                            <label class="control-label">服务器组：</label>
+                            <label class="control-label">上传文件：</label>
                             <div class="controls">
-                                <!--<input type="text" class="validate[required,custom[url]] text-input"  name="watchdogUrl" value="" style="width:540px;" >-->
-                                <select>
-                                    <option value="1">hosts</option>
-                                    <option value="1">hosts1</option>
-                                </select>
+                                <input type="file" class="file"  name="" value="" >
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">服务器：</label>
+                            <label class="control-label">分发路径：</label>
                             <div class="controls">
-                                <input type="text" class="text-input" value="" style="width:210px;" >
-                                <!--<p class="help-block">如不填写代表服务器组内全部服务器</p>-->
+                                <input type="text" class="text-input" value="/services/apps/" style="width:210px;" >
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">用户：</label>
+                            <label class="control-label">所有者(Owner)：</label>
                             <div class="controls">
-                                <input type="text" class="text-input" value="" style="width:210px;" >
+                                <input type="text" class="text-input" value="madhouse" style="width:210px;" >
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">使用sudo：</label>
+                            <label class="control-label">组(Group)：</label>
                             <div class="controls">
-                                <input type="checkbox" class="text-input" value="">
+                                <input type="text" class="text-input" value="madhouse" style="width:210px;" >
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Forks：</label>
+                            <label class="control-label">权限掩码(Mode)：</label>
                             <div class="controls">
-                                <input type="text" class="text-input" value="0" style="width:210px;" >
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">脚本：</label>
-                            <div class="controls">
-                                <input type="textarea" value="#!/bin/bash" style="width:540px;height:110px;vertical-align:top;padding:6 12px" rows="4"
-                                              cols="25">
+                                <input type="text" class="text-input" value="0644" style="width:210px;" >
                             </div>
                         </div>
 					 </fieldset>
@@ -81,7 +67,7 @@
 </head>
 <body>
     <header>
-        <h1><span id="title">常规设置</span></h1>
+        <h1><span id="title">文件批量分发</span></h1>
         <div class="row" id="toolbar">
                 <div class="box_1">
                     <button class="btn" id="info" data-toggle="modal" data-target="#modal"  data-keyboard="true" data-backdrop="true">
