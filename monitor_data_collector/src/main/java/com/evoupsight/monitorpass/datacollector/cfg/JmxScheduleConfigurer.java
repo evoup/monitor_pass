@@ -14,27 +14,23 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  */
 @Configuration
 @EnableScheduling
-public class ScheduleConfigurer implements SchedulingConfigurer
+public class JmxScheduleConfigurer implements SchedulingConfigurer
 {
     @Autowired
     JmxPollerService jmxPollerService;
 
     @Bean()
-    public ThreadPoolTaskScheduler taskScheduler() {
-        return new ThreadPoolTaskScheduler();
+    public ThreadPoolTaskScheduler taskSchedulerJmx() {
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(1);
+        threadPoolTaskScheduler.initialize();
+        return threadPoolTaskScheduler;
     }
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar)
     {
-        taskRegistrar.setTaskScheduler(taskScheduler());
-        taskRegistrar.addFixedDelayTask(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                jmxPollerService.poll();
-            }
-        }, 10000);
+        taskRegistrar.setTaskScheduler(taskSchedulerJmx());
+        taskRegistrar.addFixedDelayTask(() -> jmxPollerService.poll(), 10000);
     }
 }

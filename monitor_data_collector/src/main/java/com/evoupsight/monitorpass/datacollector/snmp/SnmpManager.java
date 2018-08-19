@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.datacollector.snmp;
 
 
+import org.apache.log4j.Logger;
 import org.snmp4j.*;
 import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.SnmpConstants;
@@ -9,34 +10,23 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 import java.io.IOException;
 
-public class SNMPManager {
+/**
+ * @author evoup
+ */
+public class SnmpManager {
+    private static final Logger LOG = Logger.getLogger(SnmpManager.class);
 
-    Snmp snmp = null;
-    String address = null;
+    private Snmp snmp = null;
+    private String address;
+    private String community = "public";
 
     /**
      * Constructor
      *
      * @param add
      */
-    public SNMPManager(String add) {
+    public SnmpManager(String add) {
         address = add;
-    }
-
-    public static void main(String[] args) throws IOException {
-/**
- * Port 161 is used for Read and Other operations
- * Port 162 is used for the trap generation
- */
-        SNMPManager client = new SNMPManager("udp:127.0.0.1/161");
-        client.start();
-/**
- * OID - .1.3.6.1.2.1.1.1.0 => SysDec
- * OID - .1.3.6.1.2.1.1.5.0 => SysName
- * => MIB explorer will be usefull here, as discussed in previous article
- */
-        String sysDescr = client.getAsString(new OID(".1.3.6.1.2.1.1.1.0"));
-        System.out.println(sysDescr);
     }
 
     /**
@@ -49,8 +39,12 @@ public class SNMPManager {
     public void start() throws IOException {
         TransportMapping transport = new DefaultUdpTransportMapping();
         snmp = new Snmp(transport);
-// Do not forget this line!
+        // Do not forget this line!
         transport.listen();
+    }
+
+    public void close() throws IOException {
+        snmp.close();
     }
 
     /**
@@ -60,7 +54,8 @@ public class SNMPManager {
      * @return
      * @throws IOException
      */
-    public String getAsString(OID oid) throws IOException {
+    public String getAsString(OID oid, String community) throws IOException {
+        this.community = community;
         ResponseEvent event = get(new OID[]{oid});
         return event.getResponse().get(0).getVariable().toString();
     }
@@ -78,6 +73,7 @@ public class SNMPManager {
             pdu.add(new VariableBinding(oid));
         }
         pdu.setType(PDU.GET);
+        snmp.setTimeoutModel(new DefaultTimeoutModel());
         ResponseEvent event = snmp.send(pdu, getTarget(), null);
         if (event != null) {
             return event;
@@ -94,12 +90,11 @@ public class SNMPManager {
     private Target getTarget() {
         Address targetAddress = GenericAddress.parse(address);
         CommunityTarget target = new CommunityTarget();
-        target.setCommunity(new OctetString("public"));
+        target.setCommunity(new OctetString(community));
         target.setAddress(targetAddress);
         target.setRetries(2);
         target.setTimeout(1500);
         target.setVersion(SnmpConstants.version2c);
         return target;
     }
-
 }

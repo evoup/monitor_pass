@@ -8,8 +8,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -26,7 +24,6 @@ import redis.clients.jedis.Protocol;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -166,8 +163,7 @@ public class SpringConfig {
 
     @Bean(name = "new_kafka_producer_pool")
     public ExecutorService kafkaExecutorService() {
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-        return executorService;
+        return Executors.newFixedThreadPool(5);
     }
 
     @Bean(name = "http_client_pool")
@@ -202,5 +198,21 @@ public class SpringConfig {
 //        throw new RuntimeException("can not load hbase config");
 //    }
 
+
+    @Bean(name = "jmxExecutorServiceThreadPool")
+    public ExecutorService jmxExecutorServiceThreadPool() {
+        // ExecutorService es = Executors.newFixedThreadPool(5);
+        // ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("snmp-pool-%d").build();
+        // ExecutorService es = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        return Executors.newFixedThreadPool(5);
+    }
+
+    @Bean(name = "snmpExecutorServiceThreadPool")
+    public ExecutorService snmpExecutorServiceThreadPool() {
+        // ExecutorService es = Executors.newFixedThreadPool(5);
+        // ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("snmp-pool-%d").build();
+        // ExecutorService es = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        return Executors.newFixedThreadPool(5);
+    }
 
 }

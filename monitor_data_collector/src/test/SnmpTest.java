@@ -1,4 +1,4 @@
-//import com.evoupsight.monitorPass.dataCollector.snmp.SNMPManager;
+//import com.evoupsight.monitorPass.dataCollector.snmp.SnmpManager;
 //import org.junit.Test;
 //import org.snmp4j.smi.OID;
 //
@@ -14,7 +14,7 @@
 // * Port 161 is used for Read and Other operations
 // * Port 162 is used for the trap generation
 // */
-//        SNMPManager client = new SNMPManager("udp:127.0.0.1/161");
+//        SnmpManager client = new SnmpManager("udp:127.0.0.1/161");
 //        client.start();
 ///**
 // * OID - .1.3.6.1.2.1.1.1.0 => SysDec
