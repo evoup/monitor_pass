@@ -11,7 +11,8 @@
 		$(document).ready(function(){
 			var ver=url_params("version");	
       $("#rightIframe").attr("src","serverList.html?version="+ver);
-      bindClickMenu("#rightIframe",["serverList.html?version="+ver,/*"serverStatus.html?version="+ver*/"serversList.html?version="+ver,"serversVisual.html?version="+ver, "fileDispatch.html?version="+ver, "commandRun.html?version="+ver]);	
+      //bindClickMenu("#rightIframe",["serverList.html?version="+ver,/*"serverStatus.html?version="+ver*/"serversList.html?version="+ver,"serversVisual.html?version="+ver, "fileDispatch.html?version="+ver, "commandRun.html?version="+ver]);	
+      bindClickMenu("#rightIframe",["serverList.html?version="+ver,/*"serverStatus.html?version="+ver*/"serversList.html?version="+ver,"inventory.html?version="+ver, "fileDispatch.html?version="+ver, "commandRun.html?version="+ver]);	
 			contentHeight(); 
 		  /*if(ver!="alpha"){
 			  //console.log("ok");
@@ -31,7 +32,7 @@
 					 <a href="javascript:void(0)" class="click_visited" style="color:#FFFFFF;"><cite style="background-position  : -226px -0px;"></cite>服务器列表</a>
 					 <!--a href="javascript:void(0)"><img src="../images/server_status_icon.png"/><cite>服务器状态</cite></a-->
 					 <a href="javascript:void(0)"><cite style="background-position  : -242px -0px;"></cite>服务器组列表</a>
-					 <a href="javascript:void(0)"><cite style="background-position  : -226px -0px;"></cite>服务器</a>
+					 <a href="javascript:void(0)"><cite style="background-position  : -226px -0px;"></cite>资产管理</a>
 					 <a href="javascript:void(0)"><cite style="background-position  : -226px -0px;"></cite>文件批量分发</a>
 					 <a href="javascript:void(0)"><cite style="background-position  : -226px -0px;"></cite>命令批量执行</a>
 				 </div>
