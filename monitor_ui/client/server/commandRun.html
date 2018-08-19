@@ -11,8 +11,8 @@
     <script id="t_a" type="text/html">
 				<form class="form-horizontal" id="form" onsubmit="return false;">
 					 <fieldset>
-					 	<legend>命令批量执行</legend>
-					 	<br />
+						 <!--<legend>命令批量执行</legend>-->
+						 <!--<br />-->
                         <div class="control-group">
                             <label class="control-label">服务器组：</label>
                             <div class="controls">
@@ -27,7 +27,7 @@
                             <label class="control-label">服务器：</label>
                             <div class="controls">
                                 <input type="text" class="text-input" value="" style="width:210px;" >
-                                <!--<p class="help-block">如不填写代表服务器组内全部服务器</p>-->
+                                <p class="help-block">如不填写代表服务器组内全部服务器</p>
                             </div>
                         </div>
                         <div class="control-group">
@@ -49,9 +49,15 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">脚本：</label>
+                            <label class="control-label">脚本命令：</label>
                             <div class="controls">
-                                <textarea id="textarea" value="#!/bin/bash" style="width:540px;height:110px;vertical-align:top;padding:6px" rows="4" cols="25" >#!/usr/bin/env bash</textarea>
+                                <textarea id="textarea" value="#!/bin/bash" style="width:540px;height:80px;vertical-align:top;padding:6px" rows="4" cols="25" >#!/usr/bin/env bash</textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">命令参数：</label>
+                            <div class="controls">
+                                <input type="text" class="text-input" value="" style="width:210px;" >
                             </div>
                         </div>
 					 </fieldset>
@@ -62,11 +68,6 @@
                     <button class='btn btn-info' name="submit">
                         	提交 
                     </button>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button class='btn' name="reset">
-                        	重置 
-                    </button>					
-					<input type="reset" style="display:none;">
                 </div>			
 			</form>
 			
@@ -80,7 +81,7 @@
 </head>
 <body>
     <header>
-        <h1><span id="title">常规设置</span></h1>
+        <h1><span id="title">命令批量执行</span></h1>
         <div class="row" id="toolbar">
                 <div class="box_1">
                     <button class="btn" id="info" data-toggle="modal" data-target="#modal"  data-keyboard="true" data-backdrop="true">
