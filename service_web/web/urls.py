@@ -20,5 +20,6 @@ from monitor_web import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.index)
+    url(r'^$', views.index),
+    path('servers/', views.server_list)
 ]

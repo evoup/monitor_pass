@@ -24,5 +24,9 @@ class Server(models.Model):
     name = models.CharField(max_length=40, null=False)
     ip = models.CharField(max_length=20, null=False)
 
+    class Meta:
+        # ordering = ('id',)
+        verbose_name_plural = '服务器表'
+
     def __str__(self):
         return self.name

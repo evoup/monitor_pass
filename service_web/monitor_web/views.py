@@ -1,7 +1,30 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import JSONParser
+from monitor_web.models import Server
 
 # Create your views here.
+from monitor_web.serializers import ServerSerializer
+
 
 def index(request):
     return HttpResponse("hello")
+
+
+@csrf_exempt
+def server_list(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        servers = Server.objects.all()
+        serializer = ServerSerializer(servers, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = ServerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
