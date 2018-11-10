@@ -1,10 +1,11 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import viewsets
 from rest_framework.parsers import JSONParser
-from monitor_web.models import Server
+from monitor_web.models import Server, UserProfile
 
 # Create your views here.
-from monitor_web.serializers import ServerSerializer
+from monitor_web.serializers import ServerSerializer, UserProfileSerializer
 
 
 def index(request):
@@ -28,3 +29,11 @@ def server_list(request):
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
