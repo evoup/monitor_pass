@@ -1,7 +1,9 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from monitor_web.models import Server, UserProfile
 
 # Create your views here.
@@ -13,6 +15,8 @@ def index(request):
 
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, ))
 def server_list(request):
     """
     List all code snippets, or create a new snippet.
