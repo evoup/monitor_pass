@@ -1,0 +1,208 @@
+html{-webkit-text-size-adjust:none;} /*chrome 字体小于12px*/
+
+*{
+ margin:0px;
+ padding:0px;
+}
+a{
+ outline:none;
+}
+cite{
+ font-style:normal;
+}
+body{
+ background:url(../images/loginBackground.png) 0 0 repeat;
+}
+.header{
+ width:100%;
+ height:40px;
+ background:-webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#AFC6E0));
+ font-weight:bold;
+ text-shadow: 1px 2px 3px #000000;
+ color:#FFFFFF;
+ font-size:18px;
+ font-family:Arial;  
+}
+.wrapper #loginForm{
+ width:580px;
+ height:380px;
+ border:1px solid #808080;
+ margin:120px auto 0px;
+ background:url(../images/globe.png) bottom right  no-repeat,-webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#E4EDF6)); 
+ background:url(../images/globe.png) bottom right  no-repeat,-moz-linear-gradient(top,#FFFFFF,#E4EDF6); 
+ background:url(../images/globe.png) bottom right  no-repeat,-o-linear-gradient(top,#FFFFFF,#E4EDF6);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF',endColorstr='#E4EDF6'); 
+ box-shadow:2px 2px 3px #a0a0a0;
+ -webkit-box-shadow:2px 2px 3px #a0a0a0;
+ -moz-box-shadow:2px 2px 3px #a0a0a0;
+ -o-box-shadow:2px 2px 3px #a0a0a0;
+ -ms-box-shadow:2px 2px 3px #a0a0a0;
+}
+.wrapper #loginForm legend{ /*login logo style*/
+ margin-left:20px;
+ font-weight:bold;
+ text-shadow: 1px 1px 2px rgba(67,8,7,0.8);
+ -webkit-text-shadow:1px 1px 2px rgba(67,8,7,0.8);
+ -moz-text-shadow:1px 1px 2px rgba(67,8,7,0.8);
+ -o-text-shadow:1px 1px 2px rgba(67,8,7,0.8);
+ -ms-text-shadow:1px 1px 2px rgba(67,8,7,0.8);
+ color:#c60000;
+ font: 20px Arial,"黑体";
+}
+
+/*.wrapper #loginForm legend:after{ 
+ position:absolute;
+ content:"Madhouse亿动广告传媒|monitor core";
+ color:#ea0000; 
+ -webkit-mask-image:-webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.9)), color-stop(40%, rgba(0, 0, 0, 0.5)),to(rgba(0, 0, 0, 0)));
+ text-shadow:0px 0px 1px rgba(234,0,0,1);
+ margin-left:0px;
+}
+
+.wrapper #loginForm legend:before{
+ content:"Madhouse亿动广告传媒|monitor core";
+ text-shadow:0px 0px 3px rgba(110,0,0,0.8);
+ position:absolute;
+ margin-left:180px;
+ color:rgba(0,0,0,0);
+ -webkit-mask-image:-webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), color-stop(50%, rgba(0, 0, 0, 0.4)), color-stop(70%, rgba(0, 0, 0, 0.7)),to(rgba(0, 0, 0, 0.9))); 
+ z-index:99;
+}*/
+
+.wrapper #loginForm ul{
+  width:500px;
+  height:240px;
+  margin:40px auto;
+}
+
+.wrapper #loginForm ul li{
+  list-style:none;
+  padding:12px;
+}
+.wrapper #loginForm ul li .tag{
+  color:#000000;
+  display:inline-block;
+  margin-right:10px;
+  font-size:16px;  
+  color:#404040;
+  font-weight:bold;
+  width:100px;
+  text-align:right;
+}
+.wrapper #loginForm ul li input[type="text"],.wrapper #loginForm ul li input[type="password"]{
+  width:240px;
+  height:30px;
+  border-radius:6px;
+  border:1px solid #909090;
+  -webkit-transition: box-shadow 0.30s ease-in-out;
+  -moz-transition:  box-shadow 0.30s ease-in-out;
+  -o-transition:  box-shadow 0.30s ease-in-out;
+  -ms-transition:  box-shadow 0.30s ease-in-out;
+  padding-left:8px;
+}
+.wrapper #loginForm ul li input[type="checkbox"]{
+  margin-right:5px;
+  margin-left:5px;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  -o-appearance:none;
+  -ms-appearance:none;
+  width:13px;
+  height:13px;
+  color: #666666;
+  padding: 0px;
+  cursor:pointer;
+  vertical-align:bottom;
+  border:1px solid #C0C0C0;
+  border-radius:1px;
+  -webkit-border-radius:1px;
+  -moz-border-radius:1px;
+  -o-border-radius:1px;
+  -ms-border-radius:1px;
+  box-sizing:border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-transform:translateY(-1px);
+  -moz-transform:translate(0px -1px);
+  -o-transform:translate(0px -1px);
+  -ms-transform:translate(0px -1px);
+}
+
+.wrapper #loginForm ul li input[type="checkbox"]:checked::after{
+  content:url(../images/checkmark.png);
+  display:inline-block;
+  -webkit-transform:translate(-6px,-5px);
+  -moz-transform:translate(-6px,-5px);
+  -o-transform:translate(-6px,-5px);
+  -ms-transform:translate(-6px,-5px);
+}
+.wrapper #loginForm ul li input:focus{
+  outline:none;
+  border:#87C6F9 1px solid;
+  box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -webkit-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -moz-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -o-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -ms-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+}
+.wrapper #loginForm ul li cite{
+  font-size:13px;
+  font-style:normal;
+  vertical-align:baseline;
+  height:16px;
+  color:#404040;
+}
+.wrapper #loginForm input[type="submit"]{
+  width:180px;
+  height:40px;
+  margin-top:10px;
+  margin-left:140px;
+  font-size:16px;
+  font-weight:bold;
+  background: -webkit-gradient(linear, left top, left bottom, from(#F4F4F4), to(#E6E6E6));
+  background: -moz-linear-gradient(top, #F4F4F4, #E6E6E6);
+  background: -o-linear-gradient(top, #F4F4F4, #E6E6E6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F4F4F4',endColorstr='#E6E6E6');
+  border:1px solid #999999;
+  box-shadow:1px 2px 3px #c0c0c0;
+  -webkit-box-shadow:1px 2px 3px #c0c0c0;
+  -moz-box-shadow:1px 2px 3px #c0c0c0;
+  -o-box-shadow:1px 2px 3px #c0c0c0;
+  -ms-box-shadow:1px 2px 3px #c0c0c0;
+  color:#404040;
+  -webkit-transition: box-shadow 0.30s ease-in-out;
+  -moz-transition:  box-shadow 0.30s ease-in-out;
+  -o-transition:  box-shadow 0.30s ease-in-out;
+  -ms-transition:  box-shadow 0.30s ease-in-out;
+  cursor:pointer;
+}
+
+.wrapper #loginForm input[type="submit"]:hover{
+  background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#EBEBEB));
+  background: -moz-linear-gradient(top, #FFFFFF, #EBEBEB);
+  background: -o-linear-gradient(top, #FFFFFF, #EBEBEB);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF',endColorstr='#EBEBEB');
+  box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -webkit-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -moz-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -o-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  -ms-box-shadow: 0 0 8px rgba(103, 166, 217, 1);
+  border:#87C6F9 1px solid;
+}
+
+.wrapper p#note{
+  font-size:12px;
+  color:#C63244;
+  text-align:center;
+  margin-top:0px;
+}
+
+.wrapper .footer{
+ text-align:center;
+ margin:10px 0px 0px 0px;
+ font-size:14px;
+ color:#a0a0a0;
+ font-family:Arail;
+}

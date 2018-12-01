@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SmartMad Monitor</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+  <!-- 主机 template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+        <ul class="list_1">
+            <% var i, len, item; %>
+            <% for (i = 0,len = statistics.length; i < len; i ++) { item = statistics[i]; %>
+            <li>
+                <label>
+                    <%= item.name %>
+                </label>
+                <a href="<%= item.href %>">
+                	<strong class="<%= item.className %>">
+                		<%= item.coun %>
+                	</strong>
+				</a>
+            </li>
+            <% } %>
+        </ul>
+    </script>
+	
+  <!-- 监控事件 template
+    ================================================== -->
+    <script id="t_b" type="text/html">
+        <ul class="list_1">
+            <% for (var i = 0,len = list.length; i < len; i ++) { var item = list[i]; %>
+            <li>
+                <label>
+                    <%= item.name %>
+                </label>
+                <a href="<%= item.href %>">
+                	<strong class="<%= item.className %>"><%= item.coun %></strong>
+				</a>
+            </li>
+            <% } %>
+        </ul>
+    </script>
+ 
+  <!-- 服务器状态  template 
+    ================================================== -->	
+    <script id="t_e" type="text/html">
+    	<% var map = {normal : '', caution : '', danger : 'flicker'}; %>
+        <ul class="list_1">
+            <li>
+                <label>
+                    	主程序
+                </label>
+                <span class="<%= map[o.nodeSta] %>"> <%= o.node %> </span>
+            </li>
+            <li>
+                <label>
+                    MDB
+                </label>
+                <span class="<%= map[o.mdbSta] %>"> <%= o.mdb %> </span>
+            </li>
+            <li>
+                <label>
+                    	监控状态
+                </label>
+                <span class="<%= o.statusClass %>"> <%= o.status %> </span>
+            </li>
+        </ul>
+    </script>		
+	
+  <!-- 监控事件health template
+    ================================================== -->
+    <script id="t_d" type="text/html">
+        <ul class="list_1">
+            <% var arr = {hosts:'主机health', events:'事件health',scalings:'Auto Scaling 服务比'}; %>
+            <% for (var i in list) { %>
+            <li>
+                <label>
+                    <%= arr[i] %>
+                </label>
+                <span><%= list[i] + '%' %></span>
+            </li>
+            <% } %>
+        </ul>
+    </script>
+
+	
+  <!-- 待处理事件列表 template
+    ================================================== -->
+    <script id="t_c" type="text/html">
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        状态
+                    </th>
+                    <th>
+                        主机
+                    </th>
+                    <th>
+                        事件项
+                    </th>
+                    <th>
+                        持续时间
+                    </th>
+                    <th>
+                        上次检查
+                    </th>
+                    <th width="36%">
+                        状态信息 
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (var i = 0,len = list.length; i < len; i ++) { var item = list[i]; %>
+                <tr>
+                    <td>
+                        <i class="<%= item[7] %>" title="<%= item[10] %>"></i>
+                    </td>
+                    <td>
+                        <a href="<%= item[8] %>"><%= item[0] %></a>
+                    </td>
+                    <td>
+                        <%= item[1] %>
+                    </td>
+                    <td>
+                        <%= item[4] %>
+                    </td>
+                    <td>
+                        <%= item[5] %>
+                    </td>
+                    <td width="36%">
+						<a href="#" style="display:inline-block;height:16px;overflow:hidden;text-overflow:ellipsis;" rel="tooltip"   data-original-title="<%= item[6] %>"> <%= item[6] %></a>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </script>
+ 
+
+
+<style>
+
+#server,#health,#event,#status{
+	height:100%;
+}
+.list_1{
+	height:100%;
+}
+#server .list_1 li{
+	height:23%;
+}
+.list_1 li{
+	border-bottom: solid 1px #c2c5d8;
+	line-height:2;	
+	height:32%;
+}
+.list_1 li label {
+    display: inline-block;
+    width: 6em;
+    font-size: 12px;
+    border-right: solid 1px #c2c5d8;
+	margin-bottom:0;
+	padding:10px 1em;
+	height:100%;
+}
+
+.list_1 li strong, .list_1 li span {
+    padding-left: 1em;
+    font-size: 12px;
+}
+
+.list_1 li:last-child{
+	border-bottom:none;
+}
+
+#view2 td {
+    padding: 0;
+	background:#fff;
+	height:180px;
+	vertical-align: top;
+	overflow:hidden;
+}
+
+#overview th {
+    padding-left: 1em;
+}
+
+#overview td i {
+    font-style: normal;
+}
+
+h2{
+	font-size:18px;
+	line-height:1.5;
+	border-top:1px #4c79b1 dotted;	
+	margin-bottom:-5px;
+	font-weight:400;
+}
+h2 span{
+	position:relative;
+	top:-15px;
+	background:#fff;
+	padding-right:7px;
+}
+</style>
+
+</head>
+<body>
+    <header>
+        <h1>状态概览</h1>
+        <div id="toolbar">
+                <div class="btn-group box_1">
+                    <button class="btn" id="refresh">
+                        <i class="icon-refresh"></i> 刷新
+                    </button>
+                    <button class="btn" id="set"  data-toggle="modal" data-target="#setModal"  data-keyboard="true" data-backdrop="true">
+                      <i class="icon-cog"></i>  设置
+                    </button>
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group box_2" style="display:none;">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="notification">使用桌面提醒</a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>	
+
+
+    <div id="mainbody">
+        <div id="overview">
+			
+            <table class="table table-striped table-bordered table-condensed" id="view2" style="display:;">
+                <thead>
+                    <tr>
+                        <th width="20%">
+                            	主机
+                        </th>
+                        <th width="20%">
+                            	监控事件
+                        </th>
+                        <th width="40%">
+                            	服务器状态
+                        </th>
+                        <th width="20%">
+                            	监控事件health
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="server">
+                            </div>
+                        </td>
+                        <td>
+                            <div id="event">
+                            </div>
+                        </td>
+                        <td>
+                            <div id="status">
+                            </div>
+                        </td>
+                        <td>
+                            <div id="health">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>		
+			
+        </div>
+		
+        <br/>
+        <h2 id="unhandled_title"><span># 待处理事件列表</span></h2>
+        <div id="unhandled">
+        </div>		
+					
+    </div>
+
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="setModal_">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>桌面提醒调整</h3>
+  </div>
+  <div class="modal-body">
+    <form>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="x" value="1">通知级别
+            </label>
+        </div>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="y" value="1">通知间隔时间
+            </label>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">关闭</a>
+    <a href="#" class="btn btn-info" id="saveSet">保存更改</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+    var version = urlParams('version');
+    var domain = domainURI();
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    //检测中央节点和服务器的监控状态
+    var _x = function(o){
+        if (o.nodeSta == 'danger' || o.mdbSta == 'danger') {
+            o.status = '紧急';
+            o.statusClass = 'flicker';
+            return;
+        }
+        if (o.nodeSta == 'caution' || o.mdbSta == 'caution') {
+            o.status = '注意';
+            o.statusClass = '';
+            return;
+        }
+        if (o.nodeSta == 'normal' || o.mdbSta == 'normal') {
+            o.status = '良好';
+            o.statusClass = '';
+            return;
+        }
+    };
+    
+    var serverCall = function(e, json){
+    
+        var $th = $(this), num = 0, count = 0, notMonitorNum = 0,noscal=0, data, html, current;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        for (var k in json) {
+            current = json[k];
+            $.each(json[k], function(k, v){
+                if (k == 0) {
+                    switch (v) {
+                        case "0":
+                            num++;
+                            break;
+                        case "1":
+                            count++;
+                            break;
+                        case "2":
+                            count++;
+                            break;
+                        case "3":
+                            count++;
+                            break;
+                        case "4":
+                            count++;
+                            break;
+                        case "5":
+                            notMonitorNum++;
+                            break;
+                        case "6":
+                            noscal++;
+                            break;							
+                    }
+                }
+            });
+        }
+        
+        /////////////////////////////////////////////// 
+        
+        data = {
+            list: json,
+            statistics: [{
+                className: num > 0 ? 'flicker' : '',
+                href: '../server/serverList.html?version=' + smartMad.version + '&status=down',
+                name: '宕机',
+                coun: num
+            }, {
+                className: '',
+                href: '../server/serverList.html?version=' + smartMad.version + '&status=up',
+                name: '在线',
+                coun: count
+            }, {
+                className: '',
+                href: '../server/serverList.html?version=' + smartMad.version + '&status=unmonitored',
+                name: '未监控',
+                coun: notMonitorNum
+            }, {
+                className: '',
+                href: '../server/serverList.html?version=' + smartMad.version + '&status=unscaling',
+                name: 'Auto Scaling 未服务',
+                coun: noscal
+            }]
+        
+        };
+		
+        ///////////////////////////////////////////
+		
+        html = template('t_a', data);
+        $th.html(html);
+		
+		///////////////////////////////////////////
+		//桌面提醒
+		if(num){
+			$(window).trigger('notification',[{body:'宕机: ' + num}]);
+		}
+    };
+    
+    var eventCall = function(e, json){
+        var $th = $(this), data, arr = [], i, o, html, conf = {
+            'warning': '严重',
+            'caution': '注意',
+            'ok': '正常'
+        };
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////
+        
+        for (var i in json) {
+            o = {};
+            o.name = conf[i];
+            o.coun = json[i];
+            o.className = (i == 'warning' || i == 'caution') && json[i] > 0 ? i == 'warning' ? 'flicker' : '' : '';
+            o.href = '../monitor/monitorEvent.html?version=' + smartMad.version + '&eventStatus=' + i;
+            arr.push(o);
+        }
+		
+		///////////////////////////////////////////
+        
+        data = {
+            list: arr
+        };
+        html = template('t_b', data);
+        $th.html(html);
+        
+    };
+    
+    var monengineCall = function(e, json){
+    
+        var $th = $(this), str, sta, on = 0, down = 0, total = 0, data;
+        
+        //$th.html(JSON.stringify(json));return;
+        
+        for (var i = 0, l = json.length; i < l; i++) {
+            if (json[i].status === 1) {
+                on++;
+            }
+            else 
+                if (json[i].status === 0) {
+                    down++;
+                }
+        }
+        
+        total = on + down;
+        str = on + "个中央节点on" + " &nbsp;&nbsp;&nbsp; " + down + "个中央节点down";
+        
+        /////////////////////////////////////////////
+        if (down == 0) {
+            sta = 'normal';
+        }
+        else 
+            if (parseFloat(down / total) >= parseFloat(1 / 3) && parseFloat(down / total) < parseFloat(2 / 3)) {
+                sta = 'caution';
+            }
+            else 
+                if (parseFloat(down / total) >= parseFloat(2 / 3)) {
+                    sta = 'danger';
+                }
+        
+        ////////////////////////////////////////////////
+        
+        data = {
+            node: str,
+            nodeSta: sta
+        };
+        
+        //-----------------------------------------------------------------------------
+		
+        var mdbCall = function(e, json){
+        
+            var on = 0, down = 0, str, sta, total, html;
+            
+            //$th.html(JSON.stringify(json));return;
+            
+            for (var i = 0, l = json.length; i < l; i++) {
+                if (json[i].status == 1) {
+                    on++;
+                }
+                else 
+                    if (json[i].status == 0) {
+                        down++;
+                    }
+            }
+            
+            total = on + down;
+            str = on + "个服务器on" + " &nbsp;&nbsp;&nbsp; " + down + "个服务器down";
+            
+            /////////////////////////////////////////
+            
+            if (down == 0) {
+                sta = 'normal';
+            }
+            else 
+                if (parseFloat(down / total) >= parseFloat(1 / 3) && parseFloat(down / total) < parseFloat(2 / 3)) {
+                    sta = 'caution';
+                }
+                else 
+                    if (parseFloat(down / total) >= parseFloat(2 / 3)) {
+                        sta = 'danger';
+                    }
+            
+            ////////////////////////////////////////
+            data.mdb = str;
+            data.mdbSta = sta;
+            _x(data);
+            
+            ///////////////////////////////////////////
+            
+            html = template('t_e', {
+                o: data
+            });
+            $th.html(html);
+            
+        };
+        
+        //-------------------------------------------------------------------------------
+        $('<i></i>').bind('ajax.success', mdbCall).getData(mdbConf);
+        
+    };
+    
+    
+    var healthCall = function(e, json){
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////	
+		
+		///////////////////////////////////////////
+		
+        $th.html(template('t_d', {
+            list: json
+        }));
+        
+    };
+    
+    var unhandledCall = function(e, json){
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////
+        
+        $.each(json, function(k, v){
+            switch (v[3]) {
+                case 2:
+                    v[7] = 'icon32-warning';
+					v[10] = '注意';
+                    break;
+                case 3:
+                    v[7] = 'icon32-danger';
+					v[10] = '严重';
+                    break;
+                default:
+            }
+            v[8] = '../server/serverStatus.html?name=' + v[0] + '&version=' + smartMad.version;
+        });
+        
+        data = {
+            list: json
+        };
+        html = template('t_c', data);
+        $th.html(html);
+		
+        ///////////////////////////////////////////////////
+		$('.tooltip').remove();
+		
+        $th.find('a[rel="tooltip"]').tooltip({
+            animation: true,
+            trigger: 'click',
+            placement: 'left'
+        });
+    };
+    
+    /////////////////////////////////////////////////////////
+    
+    var serverConf = {
+        url: _url + "/get/server/@all",
+        interval: 180000
+    };
+    
+    var eventConf = {
+        url: _url + "/get/status/@eventsummary",
+        interval: 180000
+    };
+    
+    var unhandledConf = {
+        url: _url + "/get/event/@unhandled",
+        interval: 180000,
+        success: function(json, textStatus, jqXHR){
+            if (json == null || empty(json)) {
+                this.html('<div class="error">没有需要处理的事件 .</div>');
+                return;
+            }
+            this.trigger('ajax.success', [json]);
+        }
+    };
+    
+    var monengineConf = {
+        url: _url + "/get/status/@monengine",
+        interval: 180000
+    };
+    
+    var mdbConf = {
+        url: _url + "/get/status/@mdb",
+    };
+    
+    var healthConf = {
+        url: _url + "/get/status/@health",
+        interval: 180000
+    };
+    
+    
+    //////////////////////////////////////////////////////////
+    //桌面提醒
+	//////////////////////////////////////////////////////////
+		
+	var notificationCall = function(e,parms){
+		var body = parms.body;
+		var lastBody = notificationCall.lastBody || '';
+		var lastTime = notificationCall[lastBody];
+		
+		if(body == lastBody && (lastTime && new Date - lastTime < 4 * 60 * 60 * 1000)) {
+			return;
+		}
+		
+		notificationCall[lastBody] = new Date - 0;
+		notificationCall.lastBody = body;
+		
+		message(parms);		
+	};
+	
+
+    function useNotification(){
+        if (window.webkitNotifications) {
+            if (webkitNotifications.checkPermission() == 0 ) {
+				$(window).unbind('notification', notificationCall);
+                $(window).bind('notification', notificationCall);
+				useNotification = function(){
+					$(window).unbind('notification', notificationCall);
+					$(window).bind('notification', notificationCall);
+				};
+            }
+        }
+    };
+	
+	$(window).bind( 'blur', function(){
+		 smartMad.nofificationTimer = setTimeout(function(){
+		 	useNotification();
+			},4 * 60 * 60 * 1000);
+	}).bind( 'focus', function(){
+		if(smartMad.nofificationTimer){
+			clearTimeout(smartMad.nofificationTimer);
+			delete smartMad.nofificationTime;
+		}
+		 $(window).unbind('notification', notificationCall);
+	}); 
+	
+	
+    $('#notification').click(function(){
+        if (window.webkitNotifications) {
+        
+            var status = webkitNotifications.checkPermission();
+            
+            switch (status) {
+                case 0: // granted
+                	message({body:'hello world!'});
+                    break;
+                case 1: // default
+                    webkitNotifications.requestPermission();
+                    break;
+                case 2: // denied
+                    return;        }
+            
+        }
+    });
+		
+	//////////////////////////////////////////////////////////
+	//init 
+    //////////////////////////////////////////////////////////
+	
+	$('#server').bind('ajax.success', serverCall);
+	$('#event').bind('ajax.success', eventCall);
+	$('#unhandled').bind('ajax.success', unhandledCall);
+	$('#status').bind('ajax.success', monengineCall);
+	//$('#status').bind('ajax.success', mdbCall);
+	$('#health').bind('ajax.success', healthCall);
+	
+    var init = function(){
+        
+        //请求服务器监听数据
+        $('#server').getData(serverConf);
+        
+        //请求事件监听数据
+        $('#event').getData(eventConf);
+        
+        //未处理事件监听数据
+        $('#unhandled').getData(unhandledConf);
+        
+        $('#status').getData(monengineConf);
+        //$('#status').getData(mdbConf);
+        $('#health').getData(healthConf);
+    };
+	
+	$('#refresh').click(init).click();
+	
+});
+</script>
+</body>
+</html>

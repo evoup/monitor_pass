@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+		<link rel="stylesheet" type="text/css" href="../css/about.css"/>
+		<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+		<script type="text/javascript" src="../js/base.js"></script>
+		<script type="text/javascript" src="../js/configure/UserForm.js"></script>
+		<script type="text/javascript" src="../js/ajax_post.js"></script>
+  </head>
+  <body>
+   <div class="bar">监控面板</div>
+	 <div class="title">添加一个新用户 <!--img src="../images/return.png" width="32px" height="32px" style="margin-right:50px;float:right;"/--></div>
+	 <div id="Tips"><div></div><cite></cite></div>
+	 <div class="form_container">
+     <h5>常规设置</h5>
+		 <hr/>
+		 <form id="User_form" onsubmit="return false">
+			 <ul>
+				 <li>
+				  <label class="tag">用户名：</label>
+					<input type="text" name="UserId"/><br/>
+					<cite>格式：数字，字母，下划线或者中划线（用户名不能含有中文）</cite>
+				 </li>
+         <li>
+          <label class="tag">真实名字：</label>
+					<input type="text" name="realname"/><br/>
+          <cite>用户的真实名字</cite>
+         </li>
+         <li>
+          <label class="tag">Email：</label>
+					<input type="text" name="email"/><br/>
+          <cite>请输入正确的邮箱格式</cite>
+         </li>
+         <li>
+          <label class="tag">登录密码：</label>
+					<input type="password" name="passwd"/><br/>
+          <cite>登录管理界面的密码</cite>
+         </li>
+         <li>
+          <label class="tag">接收报警类型：</label>
+					<select name="mailtype">
+					  <option value="1">不接收</option>
+						<option value="2">普通报警</option>
+						<option value="3">严重报警</option>
+						<option value="4">所有报警</option>
+						<option value="5">按用户组所属服务器组设置</option>
+					</select><br/>
+          <cite>接收报警邮件的类型</cite>
+				 </li>
+				 <li>
+				  <label class="tag">描述：</label>
+					<textarea name="desc"></textarea><br/>
+					<cite>用户的描述</cite>
+				 </li>
+				 <li>
+				  <input type="submit" value="保存"/>
+			 		<input type="reset" id="return" value="返回"/>
+         </li> 
+			 </ul>
+		 </form>	 
+	 </div>
+  </body>
+</html>

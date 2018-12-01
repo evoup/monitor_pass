@@ -1,0 +1,164 @@
+<script id="serverStatus_t_c" type="text/html">
+
+<ul class="list_2">
+	
+    <%var map = {
+			host:'主机名',
+			desc:'描述',
+			group:'隶属组',
+			post_info:'信息',
+			addr:'IP地址',
+			status:'主机状态',
+			summary_uptime:'运行时间',
+			last_check:'上次更新',
+			client_ver:'客户端版本号'
+		};
+		 for (var i in list) {  %>
+
+		<li>
+		<h6><%= map[i] || i %>：</h6><p><%= list[i] || 'null' %></p>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+
+<h3>基本状态</h3>
+<div id="server_status">
+</div>
+<h3>明细状态</h3>
+<div id="server_detail">
+</div>
+
+
+
+<script>
+$(function(){
+    var version = urlParams('version');
+    var domain = domainURI();
+	var _url = "http://" + domain + "/mmsapi" + version;
+	
+    var serverId;
+	
+    var conf_1;
+    var conf_2;
+	
+	var title = '服务器明细状态';
+	var layerId = 'serverStatus';
+	
+	var $parent = $('#' + layerId);
+    var $server_status = $parent.find('#server_status');
+	var $server_detail = $parent.find('#server_detail');	
+    
+    
+    $server_status.bind('ajax.success', function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        if (json == null) {
+            $th.html('<div class="error">服务器返回的数据为空</div>');
+            return;
+        }
+        
+        ///////////////////////////////////////////
+        data = {
+            list: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('serverStatus_t_c', data);
+        $th.html(html);
+        
+    });
+    
+    $server_detail.bind('ajax.success', function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        if (json == null) {
+            $th.html('<div class="error">服务器返回的数据为空</div>');
+            return;
+        }
+        
+        
+        ///////////////////////////////////////////
+        data = {
+            list: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('serverStatus_t_c', data);
+        $th.html(html);
+        
+    });
+    
+    
+	/////////////////////////////////////////////////////
+	
+    var controler = {
+       // botMenu: $parent.find('.botMenu'),
+        pullDownAction: function(){
+            this.recover();
+        },
+        init: function(param){
+            this.recover = function(){
+                $('#title').text(title);
+                
+                serverId = urlParams('name');
+                
+                conf_1 = {
+                    url: _url + "/get/server/@self/" + serverId
+                };
+                conf_2 = {
+                    url: _url + "/get/server/@self_detail/" + serverId
+                };
+                
+                $server_status.getData(conf_1);
+                $server_detail.getData(conf_2);
+            };
+			
+            this.recover();
+			
+        }
+        
+    };
+	
+	/////////////////////////////////////////////////
+	var layer = extend(app.face[layerId],controler);
+	layer.init();
+	
+	
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

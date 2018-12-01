@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="../css/global.css" />
+<script src="../js/jquery-1.7.1.js"></script>
+<script src="../js/template.js"></script>
+<script src="../js/iscroll.js"></script>
+<script src="../js/helper.js"></script>
+<script src="../js/server/serverGroup.js"></script>
+
+
+<script id="t_a" type="text/html">
+
+<ul class="list_3">
+
+    <% for (var i in list) { var item = list[i];
+			var className = item[3]*1 > 0 ? item[4]*1 > 0 ? 'icon_warning':'icon_caution' :  item[4]*1 > 0 ? 'icon_warning':'icon_up';
+	 %>
+
+		<li class="<%= cl %>">
+		<p><a href="javascript:void (0);"><%= i %></a><label class="<%= className %>"></label></p>
+		<div class="box">
+		<p><span>在线数：</span><%= item[0] %></p>
+		<p><span>宕机数：</span><%= item[1] %></p>
+		<p><span>正常事件数：</span><%= item[2] %></p>
+		<p><span>注意事件数：</span><%= item[3] %></p>
+		<p><span>严重事件数：</span><%= item[4] %></p>
+		<% if(item[5] != 0) { %>
+		<p><button class="modify" data-param="<%= i %>">修改</button>&nbsp;&nbsp;&nbsp;<button class="delete" data-param="<%= i %>">删除</button></p>
+		<% } %>
+		</div>
+		</li>
+
+    <% } %>
+
+</ul>
+
+</script>
+
+
+
+<style>
+</style>
+</head>
+<body>
+<div id="header">
+    <h2 id="title"><a href="javascript:history.back();void (0);" id="back">返回</a><span>服务器组</span><a href="javascript:void (0);" id="home">Home</a></h2>
+</div>
+<div id="wrapper">
+    <div id="scroller">
+        <div id="mainbody">
+        	<div id="content">
+            	<div id="server_group">
+            	</div>
+			</div>
+        </div>
+    </div>
+</div>
+<div id="footer">
+    <div id="control_bar">
+        <a href="javascript:void(0);" id="show">显示列表详情</a>
+        <a href="javascript:void(0);" id="add">添加服务器组</a>
+		<a href="javascript:void(0);" id="top">top</a>
+    </div>
+</div>
+</body>
+</html>

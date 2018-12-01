@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Madhouse|monitor core</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+    	<% 
+			var map = {
+				all_default_gp_down : '所有默认组的服务器宕机报警',
+				all_cust_gp_down : '所有自定义组的服务器宕机报警',
+				one_default_gp_down : '单个默认组全部服务器都宕机报警',
+				one_cust_gp_down : '单个自定义组全部服务器都宕机报警',
+				one_default_server_down : '单台默认组中的服务器宕机报警',
+				one_cust_server_down : '单台自定义组中的服务器宕机报警',
+				general_server_event : '通常的服务器事件报警',				
+			};
+		 %>
+				<form class="form-horizontal" id="form" onsubmit="return false;">
+					 <fieldset>
+					 	<legend>常规设置</legend>
+						<p class="help-block" style="padding:5px 0;">修改监控系统的报警间隔秒数设置.</p>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="current_engine"> 当前主监控引擎（扫描报警）：</label>
+							<div class="controls" >
+								<select name="current_engine">
+										<% for(var j in engineJson){
+											 j = engineJson[j]; %>
+					 						<option value="<%= j.name %>" <%= j.name == json.current_engine && 'selected' %> ><%= j.name %></option>
+										<% } %>
+					 			</select> 
+								<p class="help-block">同一时刻只有一个监控引擎扫描监控数据和报警，这台服务器称主监控引擎.</p>
+                            </div>
+							
+                        </div>							
+						
+						<% for(var i in map) { %>
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> <%= map[i] %>： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="<%= i %>" value="<%= json[i] %>">
+                            </div>
+                        </div>
+						<% } %>
+						
+                     <div class="control-group">
+                         <label class="control-label" for="recover_notifiction">恢复通知：</label>
+                         <div class="controls">
+                             <label class="checkbox inline">
+                                 <input type="checkbox" name="recover_notifiction" <%= json.recover_notifiction == 1 && 'checked' %> >&nbsp;
+                             </label>
+							 <p class="help-block">当服务器事件趋于正常的恢复通知.</p>
+                         </div>
+						 
+					</div>						
+						
+					 </fieldset>
+					 
+                <div class="form-actions">
+                    <button class='btn btn-info' name="submit">
+                        	保存 
+                    </button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class='btn' name="reset">
+                        	重置 
+                    </button>					
+					<input type="reset" style="display:none;">
+                </div>			
+			</form>
+			
+    </script>
+
+	
+<style>
+.form-horizontal .control-label{
+	width:240px;
+}	
+.form-horizontal .controls{
+	margin-left:260px;
+}
+.form-horizontal .form-actions{
+	padding-left:260px;
+}
+</style>
+
+</head>
+<body>
+    <header>
+        <h1><span id="title">报警设置</span></h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info" data-toggle="modal" data-target="#modal"  data-keyboard="true" data-backdrop="true">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group" style="display:none;">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="notification"></a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>	
+	
+    <div id="mainbody">
+    	<div id="selEngine"></div>
+        <div id="set_form">
+        </div>
+    </div>
+	
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>help</h3>
+  </div>
+  <div class="modal-body">
+  		此页面用于修改监控系统的常规设置.
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"  data-dismiss="modal">关闭</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>	
+<script>
+$(function(){
+	
+	var smartMad = window.smartMad = window.smartMad || {};
+	
+	////////////////////////////////////////////////////
+	//常规选项设置
+	////////////////////////////////////////////////////
+	var formConf = {
+		url: smartMad._url + smartMad.api.getAlarmSet
+	};	
+	var formCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		
+		smartMad.alarmJson = json;
+		
+        data = {
+            json: json,
+			engineJson: smartMad.engineJson
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+		
+		$('#form').validationEngine();
+		
+	};	
+	
+	
+	////////////////////////////////////////////////////////
+	//提交保存
+	////////////////////////////////////////////////////////
+    $('#mainbody')
+	.delegate('button[name="submit"]', 'click', function(){
+		//表单验证
+		if(!$('#form').validationEngine('validate')){
+			return;
+		}
+		
+        var conf = {
+			url: smartMad._url + smartMad.api.updateAlarmSet
+        };
+		var data = {};
+		
+		var alarmJson = smartMad.alarmJson;
+		
+		for(var i in alarmJson){
+			if(i == 'current_engine'){
+				data[i] = $('select[name="' + i + '"]').val();
+			}else if( i == 'recover_notifiction'){
+				data[i] = $('input[name="' + i + '"]').attr('checked') ? 1 : 0;
+			}else{
+				data[i] = $('input[name="' + i + '"]').val();
+			}
+		}
+		
+        conf.data = data;	
+		
+        $(this).postData(conf);
+    })
+	.delegate('button[name="reset"]', 'click', function(){
+		//$('#set_form').getData(formConf);
+	});
+    
+	////////////////////////////////////////////////////////
+	//init
+	////////////////////////////////////////////////////////
+	
+  //$('#set_form').bind('ajax.success', formCall);
+	$('#set_form').bind('ajax.success', formCall).getData(formConf);
+	
+	$('#selEngine')
+	.bind('ajax.success', function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+		///////////////////////////////////////////////////
+		
+		smartMad.engineJson = json;
+		
+		$th.hide();
+		
+		$('#set_form').getData(formConf);
+	})
+	.getData({
+		url: smartMad._url + smartMad.api.getStaMonengine
+	});
+	
+});
+</script>
+</body>
+</html>

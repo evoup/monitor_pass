@@ -1,0 +1,569 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Madhouse|monitor core</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+    	<% var json = json || {}; var upload_direction = json.upload_direction || {}; %>
+				<form class="form-horizontal" id="form" onsubmit="return false;">
+					 <fieldset>
+					 	<br />
+                        <div class="control-group">
+                            <label class="control-label" for="server_name"> 服务器名： </label>
+                            <div class="controls">
+                                <input type="text" name="server_name" id="server_name" value="<%= json.server_name || '' %>" <%= json.server_name && 'disabled' %> >
+                                <p class="help-block">与之关联的服务器的名字</p>
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="alias"> 别名： </label>
+                            <div class="controls">
+                                <input type="text"  name="alias" id="alias" value="<%= json.alias || '' %>" >
+                                <p class="help-block">简短的描述</p>
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="ip"> IP： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[ipv4]] text-input" name="ip" id="ip" value="<%= json.ip || '' %>">
+                                <p class="help-block">输入该服务器的IP地址</p>
+                            </div>
+                        </div>
+						
+                        <div class="control-group">
+                            <label class="control-label" for="auth_type"> 认证方式：</label>
+                            <div class="controls">
+                                <select name="auth_type" id="auth_type">
+						   			<option value="0">scram-sha1认证</option>
+							 		<option value="1">无认证</option>
+                                </select>
+								<p class="help-block">访问服务端的认证方式</p>
+                            </div>
+                        </div>							
+						
+                        <div class="control-group">
+                            <label class="control-label" for="upload_direction"> 上传方向：</label>
+                            <div class="controls">
+                                <select name="upload_direction" id="upload_direction">
+                                	<% for(var i in upload_direction) { %>
+                                    <option value="<%= i %>"  <%= upload_direction[i] && 'selected' %>><%= i %></option>
+									<% } %>
+                                </select>
+								<p class="help-block">指定优先上传监控信息的那台数据收集器（如果该服务端不可到达，客户端会尝试其他数据收集器）</p>
+                            </div>
+                        </div>					
+						
+                        <div class="control-group">
+                            <label class="control-label" for="monitored"> 监控：</label>
+                            <div class="controls">
+                                <select name="monitored" id="monitored">
+						   			<option value="0" <%= json.monitored == 0 && 'selected' %> >否</option>
+							 		<option value="1" <%= json.monitored == 1 && 'selected' %> >是</option>
+                                </select>
+								<p class="help-block">被纳入监控范围内的服务器，服务端才会检查上传事件和报警</p>
+                            </div>
+                        </div>	
+						
+                        <div class="control-group">
+                            <label class="control-label" for="memo"> 备注：</label>
+                            <div class="controls">
+                                <textarea name="memo" id="memo" rows="3"  value="<%= json.memo || '' %>" ><%= json.memo || '' %></textarea>
+								<p class="help-block">可选的备注信息</p>
+                            </div>
+                        </div>					
+						
+                        <div class="control-group">
+                            <label class="control-label" for="district"> 机房所在地区：</label>
+                            <div class="controls">
+                                <select name="district" id="district">
+                                </select>
+                            </div>
+                        </div>	
+						
+                        <div class="control-group">
+                            <label class="control-label" for="carrier"> 运营商：</label>
+                            <div class="controls">
+                                <select name="carrier" id="carrier">
+                                </select>
+                            </div>
+                        </div>													
+																													
+						
+                        <div class="form-actions">
+                            <button class='btn btn-info' name="submit"> 保存 </button>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<button class='btn' name="return"> 返回 </button>
+                            <input type="reset" style="display:none;">
+                        </div>
+				</fieldset>
+			</form>
+			
+    </script>
+
+  <!-- template
+    ================================================== -->
+    <script id="t_b" type="text/html">
+         <%
+            var empty = function (obj){
+            				for (var name in obj) {
+            					return false;
+            				}
+            				return true;
+            			};
+         %>    	
+        <ul class="accordion" id="accordion">
+            <% for (var i in json) { var item = json[i], arr = map[i]; %>
+			<li class="accordion-group">
+				<i class="icon40-<%= i %>"></i>
+            <div class="accordion-heading">
+                <h5>
+					<label class="checkbox inline">
+                            <input type="checkbox" name="<%= i %>" title="<%= empty(item) ? '不可用' : '全选' %>"  <%= empty(item) ? 'disabled' : '' %> <%= isAll[i] ? 'checked' : '' %> />&nbsp;<%= arr && arr[0] %> 
+                    </label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<% if(!empty(item)){ %>
+						<a data-toggle="collapse" data-parent="#accordion" href="#<%= i %>">明细  ▼</a>	
+					<% } %>
+				</h5>
+				<p class="help-block"><%= arr && arr[1] %></p>
+            </div>
+			
+            <div class="accordion-body collapse" id="<%= i %>">
+            	<% for(var j in item ) { %>
+                        <label class="checkbox inline">
+                            <input type="checkbox" data-all="<%= i %>" name="<%= j %>" value="<%= item[j] %>" <%= item[j] && 'checked' %> />&nbsp;<%= j %>
+                        </label>	
+				<% } %>
+            </div>
+			</li>
+            <% } %>
+        </ul>
+		
+    </script>
+	
+ <!-- template
+    ================================================== -->
+    <script id="t_c" type="text/html">
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+					<th> 服务器组名 </th>
+                    <th> 描述 </th>
+					<th> 是否隶属此组 </th>
+                    <th> 操作 </th>					
+                </tr>
+            </thead>
+            <tbody>
+                <% for (var i in json) {
+                var item = json[i]; %>
+                <tr>
+                    <td>
+                        <%= i %>
+                    </td>
+                    <td>
+                        <%= item[1] %>
+                    </td>
+                    <td>
+						<i class="<%= item[0] ? 'icon-ok' : '' %>"></i>
+						<label class="checkbox inline" style="display:none;">
+                            <input type="checkbox" name='group' value="<%= i %>" <%= item[0] ? 'checked' : '' %> />&nbsp;<%= '' %> 
+                    	</label>
+                    </td>					
+                    <td>
+                        <button class="btn" data-mark="<%= item[0] ? 1 : 0 %>" title="<%= item[0] ? '从该组移除' : '添加到该组' %>">
+                        	<i class="<%= item[0] ? 'icon-minus' : 'icon-plus' %>"></i>
+						</button>
+                    </td>  					
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+				
+    </script>	
+	
+<style>
+#monitor_option{
+	padding:0 30px;
+}	
+#monitor_option ul li{
+	padding:10px 0 10px 10px;
+	margin-bottom:5px;
+}
+#monitor_option ul li h5{
+	margin-bottom:5px;
+}
+#monitor_option ul li > div:last-child{
+	padding-left:70px;
+}
+
+#monitor_option ul li i {
+	float:left; margin-right:30px;
+}	
+
+label[class="checkbox inline"]{
+	display:inline-block;
+	width:320px;
+}
+.checkbox.inline + .checkbox.inline{
+	margin-left:0;
+}
+
+</style>
+
+</head>
+<body>
+    <header>
+        <h1>修改服务器  &nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;<span id="serverName"></span></h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group" style="display:none;">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="notification"></a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>	
+	
+    <div id="mainbody">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#general" data-toggle="tab">常规设置</a>
+                </li>
+                <li>
+                    <a href="#in_group" data-toggle="tab">隶属服务器组</a>
+                </li>
+                <li>
+                    <a href="#monitor_option" data-toggle="tab">监控项</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="general">
+                </div>
+                <div class="tab-pane" id="in_group">
+                </div>
+                <div class="tab-pane" id="monitor_option">
+                </div>
+            </div>
+        </div>
+    </div>
+	
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>OK</h3>
+  </div>
+  <div class="modal-body">
+    <form>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="x" value="1">通知级别
+            </label>
+        </div>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="y" value="1">通知间隔时间
+            </label>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">关闭</a>
+    <a href="#" class="btn btn-info" id="saveSet">保存更改</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var _url = 'http://' + domain + '/mmsapi' + version;
+	
+	var hostname = urlParams('name') || urlParams('hostname') || '';
+	
+	//判断是修改还是创建
+	var submitUrl = _url + (hostname ? '/update/server/@self_setting/' + hostname : '/create/server/@self_setting/' );
+	
+	
+	////////////////////////////////////////////////////
+	//常规选项设置
+	////////////////////////////////////////////////////
+	var generalConf = {
+		url: _url + '/get/server/@self_setting/' + hostname
+	};	
+	var generalCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+
+		smartMad.general_json = json;
+		
+        ///////////////////////////////////////////////
+        data = {
+            json: json
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+		
+		///////////////////////////////////////////////
+		//表单验证
+		$('#form').validationEngine();			
+		
+	};
+	
+	////////////////////////////////////////////////////
+	//获取机房所在地区数据，设置下拉选项框
+	////////////////////////////////////////////////////
+	var districtConf = {
+		url: _url + '/get/district/@all'
+	};	
+    var districtCall = function(e, json){
+        var x = arguments.callee;
+        var info = smartMad.general_json;
+        var options = '';
+		
+        x.count = (x.count || 0) + 1;
+		
+        if (!info && x.count < 50) {
+            setTimeout(function(){
+                x(e, json)
+            }, 100);
+            return;
+        }
+		
+        for (var i in json) {
+            options += '<option value="' + (i * 1) + '"' + (i * 1 == info.district * 1 ? ' selected="selected"' : '') + '>' + json[i] + '</option>';
+        }
+        $('select[name="district"]').html(options);
+    };
+	
+		
+	////////////////////////////////////////////////////
+	//获取机房所在地区数据，设置下拉选项框
+	////////////////////////////////////////////////////	 
+	var carrierConf = {
+		url: _url + '/get/carrier/@all'
+	};	
+    var carrierCall = function(e, json){
+        var x = arguments.callee;
+        var info = smartMad.general_json;
+        var options = '';
+		
+        x.count = (x.count || 0) + 1;
+        if (!info && x.count < 50) {
+            setTimeout(function(){
+                x(e, json)
+            }, 100);
+            return;
+        }
+		
+        for (var i in json) {
+            options += '<option value="' + (i * 1) + '"' + (i * 1 == info.carrier * 1 ? ' selected="selected"' : '') + '>' + json[i] + '</option>';
+        }
+        $('select[name="carrier"]').html(options);
+        
+    };
+	
+	
+	////////////////////////////////////////////////////
+	//隶属组
+	////////////////////////////////////////////////////		
+	var inGroupConf = {
+		url: _url + '/get/server/@self_group/' + hostname
+	};	
+	var inGroupCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        data = {
+            json: json
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_c', data);
+        $th.html(html);	
+		
+		///////////////////////////////////////////////
+		
+		$th.find('table').delegate('button','click',function(){
+			var $th = $(this);
+			var mark = $th.attr('data-mark') * 1;
+			if(mark){
+				$th.find('i').removeClass('icon-minus').addClass('icon-plus');
+				//$th.find('span').html('添加到该组');
+				$th.parent().prev().find('i').toggleClass('icon-ok').end().find(':checkbox').attr('checked',false);
+				$th.attr('data-mark',0).attr('title','添加到该组');
+			}else{
+				$th.find('i').removeClass('icon-plus').addClass('icon-minus');
+				//$th.find('span').html('从该组移除');
+				$th.parent().prev().find('i').toggleClass('icon-ok').end().find(':checkbox').attr('checked',true);				
+				$th.attr('data-mark',1).attr('title','从该组移除');
+			}
+			
+		});	
+	};		
+	
+	
+	////////////////////////////////////////////////////
+	//监控选项
+	////////////////////////////////////////////////////	
+	var monitorOptionConf = {
+		url: _url + '/get/monitoritem/@all/' + hostname
+	};	
+	var monitorOptionCall = function(e,json){
+		var $th = $(this), data, html, isAll = {};
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		for(var i in json){
+			var item = json[i];
+			isAll[i] = true;
+			for(var j in item){
+				if(!(item[j]*1)){
+					isAll[i] = false;
+					break;
+				}
+			}
+		}
+		
+        ///////////////////////////////////////////////
+        data = {
+            json: json,
+			isAll: isAll,
+			map: smartMad.monitorOptionMap
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_b', data);
+        $th.html(html);	
+		
+		////////////////////////////////////////////////
+		
+		$th.delegate(':checkbox[title="全选"]','click',function(){
+			var $th = $(this);
+			var name = $th.attr('name');
+			$(':checkbox[data-all="' + name + '"]').attr('checked',!!$th.attr('checked'));
+		});	
+		
+		$th.delegate(':checkbox[data-all]','click',function(){
+			var $th = $(this);
+			var all = $th.attr('data-all');
+			
+			if($th.attr('checked') && $(':checkbox[data-all="' + all + '"]').length == $(':checkbox[data-all="' + all + '"]:checked').length){
+				$('input[type="checkbox"][name="' + all + '"]').attr('checked',true);
+			}else{
+				$(':checkbox[name="' + all + '"]').attr('checked',false);
+			}
+		});			
+		
+	};	
+	
+	////////////////////////////////////////////////////////
+	//init
+	////////////////////////////////////////////////////////
+	$('#serverName').text(hostname);
+	
+	$('#general').bind('ajax.success',generalCall).getData(generalConf);
+	
+	$('#in_group').bind('ajax.success',inGroupCall).getData(inGroupConf);
+	
+	$('#monitor_option').bind('ajax.success',monitorOptionCall).getData(monitorOptionConf);
+	
+	$('<i></i>').bind('ajax.success',districtCall).getData(districtConf);
+	$('<i></i>').bind('ajax.success',carrierCall).getData(carrierConf);
+	
+	//提交保存
+    $('#mainbody').delegate('button[name="submit"]', 'click', function(){
+        var conf = {data:{}};
+		var general_json = smartMad.general_json;
+		
+		var group = '';
+		var monitoritem = '';
+		
+		
+		//表单验证
+		if(!$('#form').validationEngine('validate')){
+			return;
+		}			
+		
+		for (var i in general_json){
+			conf.data[i] = $('[name="' + i + '"]').val();
+		}
+		
+		$(':checkbox[name="group"]:checked').each(function(){
+			group += $(this).val() + '|'; 
+		});
+		
+		conf.data['group'] = group;
+		
+		//console.log(group);return;
+		
+		$('#monitor_option h5 :checkbox').each(function(i){
+			var name = $(this).attr('name');
+			monitoritem += i != 0 ? '#' + name : name;
+			$(':checkbox[data-all="' + name + '"]').each(function(){
+				var $th = $(this);
+				monitoritem += '|';
+				monitoritem += $th.attr('name');
+				monitoritem += ':';
+				monitoritem += !!$th.attr('checked') ? '1' : '0';
+			});
+		});
+		
+		conf.data['monitoritem'] = monitoritem;
+		
+        conf.url = submitUrl;
+		
+		//console.log(JSON.stringify(conf));
+		
+        $(this).postData(conf);
+    });
+	
+	$('#mainbody').delegate('button[name="return"]', 'click', function(){
+	    history.back();
+	 });
+    
+});
+</script>
+</body>
+</html>

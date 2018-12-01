@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Madhouse|monitor core</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+         <form class="" id="form" onsubmit="return false;">
+             <fieldset>
+                 <legend>
+                     	 修改监控系统的扫描设置
+                 </legend>
+                 <div style="padding:7px 0 7px 20px;">
+                     <p>
+                         <label class="checkbox inline">
+                             <input type="checkbox" name="showAll"/> &nbsp;直接显示所有明细
+                         </label>
+                     </p>
+                 </div>	
+				 			 
+                 <ul class="accordion" id="accordion">
+                 <%	
+				 	 var item ;
+				 	 for (i in json) { item = json[i]; 
+					%>                 	
+                     <li class="accordion-group">
+                         <div class="accordion-heading">
+                         	<h5 data-toggle="collapse" data-parent="#accordion" href="#<%= map[i] %>" class="switch">
+                         		<%= item[4] %> &nbsp; ▼
+							</h5>
+							
+                         </div>
+						 
+                         <div class="accordion-body collapse" id="<%= map[i] %>">
+                         	
+                 <div class="control-group accordion-inner">
+                     
+                     <div class="controls">
+                         <div class="input-prepend input-append">
+                             <span class="add-on">每</span><input type="text" class="validate[required,custom[integer1]] text-input"  name="<%= i + '_1' %>" value="<%= item[0] %>"><span class="add-on">分钟扫描一次事件</span>
+                         </div>
+                     </div>
+					 
+                     <div class="controls">
+                         <div class="input-prepend input-append">
+                             <span class="add-on">每</span><input type="text" class="validate[required,custom[integer1]] text-input"  name="<%= i + '_2' %>" value="<%= item[1] %>"><span class="add-on">分钟重新初始化事件检查，累计直到达到</span><input type="text" class="validate[required,custom[integer1]] text-input"  name="<%= i + '_3' %>" value="<%= item[2] %>"><span class="add-on">次则生成警报</span>							 
+                         </div>
+                     </div>
+					 
+                     <div class="controls">
+                         <div class="input-prepend input-append">
+                             <span class="add-on">每</span><input type="text" class="validate[required,custom[integer1]] text-input"  name="<%= i + '_4' %>" value="<%= item[3] %>"><span class="add-on">次连续回归正常，则生成恢复通知</span>
+                         </div>
+                     </div>			 					 
+					 
+                 </div>							
+							
+							
+                         </div>
+                     </li>
+					 <% } %>
+                 </ul>			 
+				 
+             </fieldset>
+             <div class="form-actions">
+                 <button class='btn btn-info' name="submit">
+                     	保存 
+                 </button>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <button class='btn' name="reset">
+                   		  重置 
+                 </button>
+             </div>
+         </form>
+			
+    </script>
+
+	
+<style>
+.control-group{
+	margin-bottom:0;
+}
+
+h5 {
+ 	position:relative;
+    padding: 7px 0 7px 20px;
+	cursor:pointer;
+}
+.controls{
+	padding:5px 0;
+}
+input{
+	width:80px;
+}
+</style>
+
+</head>
+<body>
+    <header>
+        <h1><span id="title">扫描设置</span></h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="info" data-toggle="modal" data-target="#modal"  data-keyboard="true" data-backdrop="true">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group" style="display:none;">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="notification"></a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>	
+	
+    <div id="mainbody">
+        <div id="set_form">
+        </div>
+    </div>
+	
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>help</h3>
+  </div>
+  <div class="modal-body">
+  	nothing.
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"  data-dismiss="modal">关闭</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>	
+<script>
+$(function(){
+	
+	var smartMad = window.smartMad = window.smartMad || {};
+	
+	////////////////////////////////////////////////////
+	//常规选项设置
+	////////////////////////////////////////////////////
+	var formConf = {
+		url: smartMad._url + smartMad.api.getScanSet
+	};	
+	var formCall = function(e,json){
+		var $th = $(this), data, html;
+		
+		//$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		
+		var map = {};
+		
+		for(var i in json){
+			map[i] = i.replace('.','_');
+		}
+		
+		smartMad.scanJson = json;
+		
+        data = {
+            json: json,
+			map: map
+        };
+        
+        ///////////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+		
+		$('#form').validationEngine();
+		
+		$('#accordion')
+		.on('shown',function(){
+			console.log(arguments);
+			$(this).find('.accordion-body.in').css({'overflow':'visible'});
+		})
+		.on('hide',function(){
+			console.log(arguments);
+			$(this).find('.accordion-body').css({'overflow':'hidden'});
+		})		
+		
+	};	
+	
+	
+	////////////////////////////////////////////////////////
+	//提交保存
+	////////////////////////////////////////////////////////
+    $('#mainbody')
+	.delegate('button[name="submit"]', 'click', function(){
+		//表单验证
+		if(!$('#form').validationEngine('validate')){
+			$('.accordion-body').addClass('in').css({'height':'auto','overflow':'visible'});
+			return;
+		}
+		
+        var conf = {
+			url: smartMad._url + smartMad.api.updateScanSet
+        };
+		var data = {};
+		
+		var scabJson = smartMad.scanJson;
+		
+		for(var i in scabJson){
+			data[i] = $('input[name="' + i + '_1"]').val() + '|' + $('input[name="' + i + '_2"]').val() + '|' + $('input[name="' + i + '_3"]').val() + '|' + $('input[name="' + i + '_4"]').val();
+		}
+		
+        conf.data = data;	
+		
+        $(this).postData(conf);
+    })
+	.delegate('input[name="showAll"]', 'click', function(){
+        var $th = $(this);
+        if ($th.attr('checked')) {
+			$('.accordion-body').addClass('in').css({'height':'auto','overflow':'visible'});
+        }
+        else {
+			$('.accordion-body').removeClass('in').css({'height':'0','overflow':'hidden'});
+        }
+	})
+	.delegate('button[name="reset"]', 'click', function(){
+		//$('#set_form').getData(formConf);
+	});	
+    
+	////////////////////////////////////////////////////////
+	//init
+	////////////////////////////////////////////////////////
+	
+	$('#set_form').bind('ajax.success', formCall).getData(formConf);
+	
+	
+});
+</script>
+</body>
+</html>

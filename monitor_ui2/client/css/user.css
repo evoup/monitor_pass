@@ -1,0 +1,85 @@
+.main .content .addUser{
+  width:90%;
+}
+.main .content form ul li{
+ list-style:none;
+}
+.main .content ul{
+ clear:both;
+ /*height:300px;*/
+ margin:25px 10px 10px 0px;
+ padding:0px;
+}
+.main .content li{
+ padding: 15px;
+ display: list-item;
+}
+.main .content .tag{
+  font-size:14px;
+  color:#000000;
+  width:120px;
+  display:inline-block;
+  margin-right:10px;
+  text-align:right;
+  width:120px;
+}
+.main .content em{
+ color:#ff0000;
+ font-style:normal;
+ margin-right:5px;
+}
+.main .content input, .main .content textarea, .main .content select{
+ /*vertical-align:top;*/
+}
+.main .content .txt{ 
+ width:200px;
+ height:18px;
+}
+.main .content select{
+ width:210px;
+ height:25px;
+}
+.main .content select option{
+ margin:3px 0px 0px 0px;
+}
+.main .content input[type="text"],.main .content select,.main .content textarea{
+ border-bottom-left-radius: 5px 5px;
+ border-bottom-right-radius: 5px 5px;
+ border-top-left-radius: 5px 5px;
+ border-top-right-radius: 5px 5px;
+ /*-webkit-appearance:textarea;*/
+ border:1px solid #808080;
+
+}
+.main .content input[type="radio"],.main .content select,.main .content .txt,.main .content  textarea{
+   margin-left:15px;
+   padding:2px 3px;
+}
+.main .content input[type="button"]{
+  width:30px;
+  height:20px;
+  margin-left:150px;
+}
+.main .content input[type="submit"],.main .content input[type="reset"]{
+ background:#AAFFAA;
+ color:#6F7989;
+ cursor:pointer;
+ font-family:微软雅黑;
+ font-size:15px;
+ font-weight:bold;
+ height:25px;
+ text-shadow:#FFFFF 0px 0px 1px;
+ width:80px;
+ margin:0px 10px 0px 32px; 
+ border-radius:5px 5px;
+}
+
+.main .content cite{
+ color:#AAAAAA;
+ display:block;
+ font-style:normal;
+ margin-left:15px;
+ padding:5px 0px 0px 142px;
+ font-size:14px;
+}
+

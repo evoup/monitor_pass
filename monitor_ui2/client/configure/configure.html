@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+	<title>configure</title>
+	<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/about.css"/>
+  <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="../js/base.js"></script>
+  <!--script type="text/javascript" src="../js/configure.js"></script-->
+  <script type="text/javascript">
+		$(document).ready(function(){
+			var ver=url_params("version");
+			$("#rightIframe").attr("src","common_settings.html?version="+ver);
+      bindClickMenu(
+          "#rightIframe",
+          [
+              "common_settings.html?version="+ver,
+              /*"certification.html?version="+ver,*/
+              "mail_settings.html?version="+ver,
+              "warning_settings.html?version="+ver,
+              "scan_settings.html?version="+ver,
+              "event_settings.html?version="+ver,
+              "userManager.html?version="+ver,
+              "usergroupManager.html?version="+ver,
+              "monitorWizard.html?version="+ver,
+              <!--"ipManager.html?version="+ver,-->
+              <!--"mdnDeliver.html?version="+ver,-->
+              "template.html?version="+ver,
+              "datacollector.html?version="+ver
+          ]);
+			contentHeight();
+			window.onresize=contentHeight;
+			});   
+	</script>
+</head>
+ <body>
+   <div class="main">
+    <div id="left">
+			<div class="barLeft">导航栏</div>	
+		  <div class="menu_list">
+				<p class="menu_head"><!--img src="../images/arrow_menu.gif"/--><cite style="font-size:18px;">&#187</cite><cite>配置</cite></p>
+				<div class="menu_body">
+					<a href="javascript:void(0)" class="click_visited" style="color:#FFFFFF;"><cite style="background-position  : -64px -0px;"></cite>常规设置</a>
+					<!--a href="javascript:void(0)"><img src="../images/server_cert_icon.png"><cite>服务器认证</cite></a-->
+					<a href="javascript:void(0)"><cite style="background-position  : -98px  0px; "></cite>邮件设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -274px 0px; "></cite>报警设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -146px 0px;"></cite>扫描设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -322px 0px;"></cite>阈值设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -306px 0px;"></cite>用户设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -258px 0px;"></cite>用户组设置</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>服务器添加</a>
+					<!--<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>IP管理</a>-->
+					<!--<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>MADN管理</a>-->
+					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>模板</a>
+					<a href="javascript:void(0)"><cite style="background-position  : -338px 0px;"></cite>数据收集器</a>
+				</div>
+     </div>
+   </div>
+    <div id="right">
+		  <iframe id="rightIframe" width="100%" frameborder="no" style="overflow-x: hidden; overflow-y: scroll;"></iframe>
+		</div>
+ </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>monitor-configure-wizard</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="../assets/selectize.js/dist/css/selectize.css" />
+<link rel="stylesheet" type="text/css" href="../assets/selectize.js/dist/css/selectize.default.css" />
+
+
+
+  <!-- template
+    ================================================== -->
+    <script id="t_0" type="text/html">
+    <div id="set_form">
+
+    	<% var json = json || {};%>
+        <form class="form-horizontal" id="form" onsubmit="return false;">
+           <fieldset>
+            <!--<legend>创建主机</legend>-->
+            <!--<p class="help-block" style="padding:5px 0;">创建主机是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 主机名： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required] text-input" name="hostname" value="<%= json.hostname || '' %>" <%= json.hostname && 'readonly' %> >
+                                <p class="help-block">格式：不能为空</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 监控客户端： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="agent_interface" value="<%= json.agent_interface %>">
+                                <p class="help-block">格式：IP:port</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> SNMP： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="snmp_interface" value="<%= json.snmp_interface %>">
+                                <p class="help-block">格式：IP:port</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> JMX： </label>
+                            <div class="controls">
+                                <input type="text" class="text-input" name="jmx_interface" value="<%= json.jmx_interface %>">
+                                <p class="help-block">格式：IP:port</p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 对应的数据收集器： </label>
+                            <div class="controls">
+                                <select name="data_collector" id="data_collector">
+                                    <!--<option value="192.168.2.197:8090" selected="">192.168.2.197:8090</option>-->
+                                </select>
+                             <p class="help-block">数据收集器可存在多个,但一个客户端或SNMP服务器或JMX服务器只对应一个数据收集器</p>
+                            </div>
+                        </div>
+
+
+                     <div class="control-group">
+                         <label class="control-label" for="recover_notifiction">模板：</label>
+                         <div class="controls">
+                                <!--<input type="text" class="text-input" name="template" value="">-->
+<select id="select-state" name="state[]" multiple class="demo-default" style="width:70%" placeholder="选择模板...">
+  <option value="">选择模板...</option>
+</select>
+                         </div>
+                    </div>
+
+                     <div class="control-group">
+                         <label class="control-label" for="recover_notifiction">是否监控：</label>
+                         <div class="controls">
+                             <label class="checkbox inline">
+                                 <input type="checkbox" name="monitored" false="">&nbsp;
+                             </label>
+                             <p class="help-block">如果不监控将不触发事件、图表、告警和其他操作</p>
+                         </div>
+                    </div>
+
+           </fieldset>
+
+                <div class="form-actions">
+                    <button class="btn btn-info" name="submit">
+                          保存 
+                    </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn" name="reset">
+                          重置 
+                    </button>					
+          <input type="reset" style="display:none;">
+                </div>			
+      </form>
+
+    </div>
+    </script>
+
+ <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+        <ul>
+            <% for (var i in map) { var arr = map[i] || []; %>
+      <li>
+        <i class="icon40-<%= i %>"></i>
+            <div>
+                <h5>
+          <label class="checkbox inline">
+                            <input type="checkbox" name="monitorOption" value="<%= i %>" />&nbsp;<%= arr[0] %> 
+                    </label>
+          <button class='btn btn-info' name="next"> 下一步  </button>
+        </h5>
+        <p class="help-block"><%= arr[1] %></p>
+            </div>
+      </li>
+            <% } %>
+        </ul>
+
+     <div class="form-actions" style="display:none;">
+        <button class='btn' name="next"> 下一步  </button>
+        </div>
+    </script>
+
+<style>
+  #host_option li{margin-bottom:15px;padding-bottom:5px; border-bottom: 1px solid whiteSmoke;}
+  #host_option li:last-child{border:none;}
+  #host_option li i{float:left;margin-right:30px;}
+  #host_option h5{padding-bottom:7px;position:relative;}
+  #host_option h5 button{position:absolute;margin-left:10px;display:none;}
+</style>	
+</head>
+    <body>
+      <header>
+        <h1><span id="title">修改主机&nbsp;&nbsp;&gt;&gt;&nbsp;&nbsp;</span> <span id="userName"></span></h1>
+        <div class="row" id="toolbar">
+          <div class="box_1">
+            <button class="btn" id="info">
+              <i class="icon-info-sign"></i> 信息
+            </button>					
+          </div>
+        </div>
+      </header>	    	
+
+
+      <div id="mainbody" name="monitorWizard">
+        <header class="page-header">
+          <!--<h3>监控向导  &gt;&gt; 第一步 </h3>-->
+          <!--<h3>监控向导  &gt;&gt;  </h3>-->
+          <!--[><p class="help-block">监控向导可以对默认监控项目进行配置调整，选择以下类别进行明细设置,配置完成后允许选择不同类别对同一主机进行其他类别的配置调整</p><]-->
+          <!--<p class="help-block">监控向导是对一台主机进行监控组的分配，监控类型的指定，监控模板的选择，以及资产管理</p>-->
+          <!--</header>-->
+
+        <div id="host_option"></div>
+      </div>
+
+
+
+      <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>	
+<script src="../assets/js/library/jquery-ui-1.7.1.min.js"></script>
+<script src="../assets/js/library/highlight-7.3.min.js"></script>
+<script type="text/javascript" src="../assets/selectize.js/dist/js/standalone/selectize.min.js"></script>
+<script>
+$(function(){
+  var smartMad = window.smartMad = window.smartMad || {};
+  var domain = domainURI();
+    var version = urlParams('version');
+
+    var _url = 'http://' + domain + '/mmsapi' + version;
+
+  var hostName = urlParams('hostName') || '';
+	
+	////////////////////////////////////////////////////
+	//读取设置
+	////////////////////////////////////////////////////
+	var hostFormConf = {
+		url: smartMad._url + smartMad.api.getHost + hostName
+	};	
+	var hostFormCall = function(e,json){
+      var $th = $(this), data, html;
+      json.hostname = hostName;
+      smartMad.json = json;
+      data = {
+          json: json
+      };
+      html = template('t_0', data);
+      $th.html(html);
+      $('#form').validationEngine();
+	};
+
+
+
+  ////////////////////////////////////////////////////////
+  //提交保存
+  ////////////////////////////////////////////////////////
+    $('#mainbody')
+  .delegate('button[name="submit"]', 'click', function(){
+		//表单验证
+		if(!$('#form').validationEngine()){
+			return;
+		}
+    templateIdNums=$(".selectize-input")[0].childNodes.length-1
+    var templateArr=[]
+    for (i=0;i<templateIdNums;i++) {
+      templateId=$(".selectize-input")[0].childNodes[i].dataset.value
+      templateArr.push(templateId)
+    }
+
+      var conf = {
+          url: smartMad._url + smartMad.api.createHost
+          };
+      var data = {}; 
+      var hostJson = {hostname:null, agent_interface:null, snmp_interface:null, jmx_interface:null, data_collector:null, template:null, monitored:null};
+      for(var i in hostJson) {
+          //hostname
+          //agent_interface
+          //snmp_interface
+          //jmx_interface
+          //data_collector
+          //template
+          //monitored
+          if (i == 'data_collector') {
+              data[i]='192.168.2.197:8090';
+          }else{
+              data[i] = $('input[name="' + i + '"]').val();
+          }
+      }
+      data["template"]=templateArr.join("|");
+      conf.data = data;
+      $(this).postData(conf);
+  });
+    if (hostName) {
+        $('#hostName').text(hostName);
+        $('#host_option').bind('ajax.success', hostFormCall).getData(hostFormConf);
+    }else{
+		 $('#title').text('添加主机');
+		 $('#host_option').bind('ajax.success', hostFormCall).trigger('ajax.success',[{}]);
+    }
+
+  //init
+	 var url1 = smartMad._url + smartMad.api.getDataCollectorAll
+   $.get(url1, function(data, status){
+       for (d in data) {
+           datacolletor_name=data[d][0];
+           datacollector_interface=data[d][3];
+           $("#data_collector").append('<option value=' + d + '>' + datacolletor_name + '(' + datacollector_interface + ')' + '</option>');
+       }
+   });
+   var url2 = smartMad._url + smartMad.api.getTemplateAllSimple
+   $.get(url2, function(data, status){
+       for (d in data) {
+           template_name=data[d][0];
+           template_id=data[d][4];
+           $("#select-state").append('<option value=' + template_id + '>' + template_name + '</option>');
+       }
+       // selectize实现的模板选择
+       $('#select-state').selectize({ 
+           create: true, 
+           sortField: { 
+               field: 'text', 
+               direction: 'asc' 
+           }, 
+           dropdownParent: 'body' 
+       }); 
+   });
+});
+</script>
+
+</body>
+</html>

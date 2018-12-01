@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SmartMad Monitor</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+        <ul class="list_1">
+            <%
+            var map = {
+            host:'主机名',
+            desc:'描述',
+            group:'隶属组',
+            post_info:'信息',
+            addr:'IP地址',
+            status:'主机状态',
+            summary_uptime:'运行时间',
+            last_check:'上次更新',
+			last_upload:'上次上传',
+            client_ver:'客户端版本号'
+            };
+            for (var i in json) { %>
+            <li>
+                <strong><%= map[i] || i %>：</strong>
+                <span>
+                    <%= json[i] || '-' %>
+                </span>
+            </li>
+            <% } %>
+        </ul>
+    </script>
+	
+ <!-- template
+    ================================================== -->
+    <script id="t_b" type="text/html">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3><%= o.title %></h3>
+        </div>
+        <div class="modal-body">
+        	<%= o.content %>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal" id="back">返回上一页</a>
+            <a href="#" class="btn btn-info" id="return">返回服务器列表</a>
+        </div>
+    </script>
+	
+ <!-- template
+    ================================================== -->
+    <script id="t_c" type="text/html">
+		 <p class="alert alert-success"><i class="icon-info-sign icon-white"></i>删除服务器成功.</p>
+		 <div class="form-actions">
+            <button class='btn' name="prev3">
+                	上一步 
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;		 	
+			<button class='btn' name="submit"> 应用  </button>
+        </div>
+    </script>
+		
+<style>
+#mainbody header {
+    position: relative;
+	padding-left:50px;
+	background:url(../assets/img/server_1.png) no-repeat 0 5px;	
+    font-size: 14px;
+}
+
+#mainbody header h2 {
+    font-weight: 400;
+}
+
+h3 {
+    font-size:14px;
+}
+
+#serverName {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#sta {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    display: none;
+    padding: 10px 70px;
+}
+
+#container_loadAverage, #container_tcp {
+    width: 90%;
+    height: 260px;
+}
+
+.list_1 li {
+    padding: 5px 0;
+    border-bottom: solid 1px #eee;
+    line-height: 1.6;
+}
+
+.list_1 li strong {
+    display:inline-block;
+    width: 10em;
+    text-align: right;
+    font-weight: 400;
+}
+
+.list_1 li span {
+    margin-left: 1em;
+}
+</style>
+
+</head>
+<body>
+    <header>
+        <h1>服务器明细状态</h1>
+        <div class="row" id="toolbar">
+                <div class="box_1">
+                    <button class="btn" id="delete">
+                        <i class="icon-remove"></i> 删除
+                    </button>
+                    <button class="btn" id="reset">
+                      <i class="icon-cog"></i>  重新配置
+                    </button>
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group" style="display:none;">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="notification"></a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>	
+
+
+    <div id="mainbody">
+    	<header>
+    		<h2><span id="serverName"></span> &nbsp;&nbsp; <span id="desc"></span> </h2>
+			<p>隶属组：<span id="group"></span></p>
+            <div id="sta" class="alert">
+                <strong></strong>
+            </div>
+    	</header>
+		<br />
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#1" data-toggle="tab">明细状况</a>
+                </li>
+                <li style="display:none;">
+                    <a href="#2" data-toggle="tab" onclick="javascript:getLoad();">实时监控图表</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                    <div id="statusBox">
+                        <h3>基本状态：</h3>
+                        <div id="status">
+                        </div>
+                    </div>
+                    <br/>
+                    <div id="detailBox">
+                        <h3>明细状态：</h3>
+                        <div id="detail">
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="2">
+                    <h3>主机负载：</h4>
+                    <div id="container_loadAverage">
+                    <!--<iframe src="http://localhost:8004/grafana/d-solo/FEDkgTHmz/jian-kong-shu-ju-zhi-biao?orgId=1&panelId=2&from=1530521927710&to=1530525527710&var-group=apps&var-endpoint=backend&var-host=evoupzhanqi" width="80%" height="200" frameborder="0"></iframe>-->
+                    <!--<iframe id="iframe0" src="http://192.168.2.4:8004/grafana/d-solo/FEDkgTHmz/jian-kong-shu-ju-zhi-biao?orgId=1&panelId=2&from=1530524586030&to=1530528186031&var-group=apps&var-endpoint=backend&var-host=evoupInspiron3443" width="95%" height="250" frameborder="0"></iframe>-->
+<!--<iframe src="http://192.168.2.4:8004/grafana/d-solo/FEDkgTHmz/monitormetric_loadavg?orgId=1&panelId=2&from=1533557956638&to=1533561556638&var-group=apps&var-endpoint=backend&var-host=evoupzhanqi" width="95%" height="250" frameborder="0"></iframe>-->
+<iframe src="http://localhost:8004/grafana/d-solo/FEDkgTHmz/monitormetric_loadavg?orgId=1&var-group=apps&var-endpoint=backend&var-host=mhadweb01&from=1535192825204&to=1535193831301&panelId=2" width="95%" height="250" frameborder="0"></iframe>
+                    </div>
+					<br />
+                    <h3>内存状况：</h4>
+                    <div id="container_tcp">
+                    <!--<iframe src="http://192.168.2.4:8004/grafana/d-solo/FEDkgTHmz/monitormetric_loadavg?panelId=4&orgId=1&tab=legend&from=1533557956638&to=1533561556638&var-group=apps&var-endpoint=backend&var-host=evoupzhanqi" width="95%" height="250" frameborder="0"></iframe>-->
+<iframe src="http://localhost:8004/grafana/d-solo/FEDkgTHmz/monitormetric_loadavg?orgId=1&var-group=apps&var-endpoint=backend&var-host=mhadweb01&from=1535192825204&to=1535193831301&panelId=4" width="95%" height="250" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>	
+    </div>
+
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/highcharts.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<!--<script src="../assets/js/server/chart.js"></script>-->
+<script src="../assets/js/server/grafana.js"></script>
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var serverName = urlParams('name');
+    
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    var statusConf = {
+        url: _url + "/get/server/@self/" + serverName
+    };
+    var detailConf = {
+        url: _url + "/get/server/@self_detail/" + serverName
+    };
+	
+	var statusCall = function(e, json){
+    
+        var $th = $(this), data, html, map = {'0':['alert-error','宕机'],'1':['alert-success','在线'],'5':['alert-info','未监控'],'6':['alert-unscaling','Auto Scaling 未服务']};
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+		
+		$('#sta').find('strong').text(map[json.status][1]).end().addClass(map[json.status][0]).show();
+		$('#desc').text('( ' + json.desc + ' )');
+		$('#group').text(json.group || '无');
+		
+		if(json.status == 1){
+			$('.nav-tabs li:nth-child(2)').show();
+			//调用线性图表
+			<!--lineChart();-->
+      <!--graph(serverName);-->
+		}
+		
+		delete json.desc;
+		delete json.group;
+		delete json.status;
+		delete json.post_info;
+        ///////////////////////////////////////////
+        data = {
+            json: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+        
+    };
+	
+	var detailCall = function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        data = {
+            json: json
+        };
+        
+        ///////////////////////////////////////////
+        
+        html = template('t_a', data);
+        $th.html(html);
+        
+    };
+	
+    //////////////////////////////////////////////
+    //init
+	//////////////////////////////////////////////
+	
+    $('#status').bind('ajax.success', statusCall).getData(statusConf);
+    
+    $('#detail').bind('ajax.success', detailCall).getData(detailConf);
+	
+	$('#serverName').text(serverName);
+	
+	//////////////////////////////////////////////
+    //event bind
+	//////////////////////////////////////////////
+	
+	$(document.body)
+	.delegate('#delete','click',function(){
+        if (!confirm('确定删除？')) 
+            return;
+        var conf = {
+			type:'get',
+            url: _url + '/delete/server/@self/' + serverName,
+			success:function(){
+                var html = template('t_b', {
+                    o: {
+                        title: 'ok',
+                        content: '删除成功!'
+                    }
+                });
+				$('#modal').html(html).modal('show');
+			},
+			error:function(json, textStatus, jqXHR){
+				var tips = jqXHR.status == 403 ? '删除服务器失败，需要先退出服务器组!' : '删除失败!请关闭对话框再试!';
+                var html = template('t_b', {
+                    o: {
+                        title: 'error',
+                        content: tips
+                    }
+                });
+				$('#modal').html(html).modal('show');
+			}
+        };
+        $(this).delData(conf);
+	})
+	.delegate('#reset','click',function(){
+		location.href = 'editServer.html?version=' + version + '&name=' + serverName;
+	})		
+	.delegate('#back','click',function(){
+		history.back();
+	})
+	.delegate('#return','click',function(){
+		location.href = 'serverList.html?version=' + version;
+	});
+		
+	
+});
+</script>
+</body>
+</html>

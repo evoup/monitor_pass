@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+	<title>Monitor</title>
+	<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/about.css"/>
+	<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="../js/base.js"></script>
+  <!--script type="text/javascript" src="../js/monitor/Monitor.js"></script-->
+   <script type="text/javascript">
+    // bindClickMenu("#monitorIframe",["monitorEvent.html","logEvent.html"]);
+	 $(document).ready(function(){
+		  var ver=url_params("version");
+			$("#rightIframe").attr("src","monitorEvent.html?version="+ver);
+      bindClickMenu("#rightIframe",["monitorEvent.html?version="+ver,"eventLog.html?version="+ver]);
+      contentHeight();
+      window.onresize=contentHeight;
+     });
+   </script> 
+</head>
+ <body>
+  <div id="content" class="main">
+   <div id="left">
+		 <div class="barLeft">导航栏</div>
+		 <div class="menu_list">
+			 <p class="menu_head"><!--img src="../images/arrow_menu.gif"/--><cite style="font-size:18px;">&#187</cite><cite>监控事件</cite></p>
+      <div class="menu_body">
+				<a href="javascript:void(0)" class="click_visited" style="color:#FFFFFF;"><cite style="background-position  : -146px -0px;"></cite>监控事件</a>
+			  <a href="javascript:void(0)"><cite style="background-position  : -114px -0px;"></cite>事件日志</a>
+			</div>
+    </div>
+  </div>
+  <div id="right">
+   <iframe id="rightIframe" width="100%" frameborder="no" style="overflow-x: hidden; overflow-y: scroll;"></iframe>
+   </div>
+   </div>
+ </body>
+</html>

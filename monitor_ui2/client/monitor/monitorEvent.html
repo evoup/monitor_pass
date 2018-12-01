@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SmartMad Monitor</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+  <!-- filter template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+            <% for(var i= 0, l = list.length; i < l; i++){ var item = list[i]; %>
+				<% for(var j in item){ %>
+                	<option value = "<%= item[j] %>" >
+                    <%= j %>
+                	</option>
+				<% } %>
+            <% } %>
+    </script>
+  <!-- template
+    ================================================== -->
+<script id="t_c" type="text/html">
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        	主机
+                    </th>
+                    <th>
+                        	监控事件
+                    </th>
+                    <th>
+                        	状态
+                    </th>
+                    <th>
+                       		持续时间             
+                    </th>
+                    <th>
+                         	上次检查
+                    </th>
+                    <th>
+                       		 状态信息
+                    </th>					
+                </tr>
+            </thead>
+            <tbody>
+
+    <% var map = ['down','正常','注意','紧急'];
+		var map2 = ['icon32-danger','icon32-success','icon32-warning','icon32-danger'];
+	 for (var i = 0,len = records.length; i < len; i++) { var item = records[i]; %>
+
+		<tr>
+		<td><a href="<%= item[7] %>"><%= item[0] %></a></td>
+		<td><%= item[1] %><i class="" data-eventid="<%= item[2] %>" data-serverid="<%= item[0] %>" ></i></td>
+		<td><i class="<%= map2[item[3]] || '' %>" title="<%= map[item[3]] || '' %>"></i>&nbsp;&nbsp;&nbsp;</td>
+		<td><%= item[4] %></td>
+		<td><%= item[5] %></td>
+		<td><%= item[6] || '---' %></td>
+		</tr>
+
+    <% } %>
+            </tbody>
+     </table>
+
+<div class="form-horizontal" id="page_info">
+	<div class="btn-group" style="float:left;">
+	<button class="btn" id="first_page">第一页</button>
+	<button class="btn" id="prev_page">上一页</button> 
+	<button class="btn" id="next_page">下一页</button>
+	<button class="btn" id="last_page">最末页</button>		
+	</div>	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<select name='line_per_page'>
+		<option value='5' <%= page_info.line_per_page == 5 ? 'selected' : '' %> >5 Per Page</option>
+		<option value='10' <%= page_info.line_per_page == 10 ? 'selected' : '' %> >10 Per Page</option>
+		<option value='15' <%= page_info.line_per_page == 15 ? 'selected' : '' %> >15 Per Page</option>
+		<option value='20' <%= page_info.line_per_page == 20 ? 'selected' : '' %> >20 Per Page</option>
+		<option value='50' <%= page_info.line_per_page == 50 ? 'selected' : '' %> >50 Per Page</option>
+		<option value='1000' <%= page_info.line_per_page == 100 ? 'selected' : '' %> >100 Per Page</option>
+		<option value='1000' <%= page_info.line_per_page == 1000 ? 'selected' : '' %> >1000 Per Page</option>
+	</select> 
+	<button class="btn">共<em id="total_page"><%= page_info.total_pages %></em>页</button>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button class="btn">转到第</button>
+	<input type="text" style="width:4em;" value="<%= page_info.current_page %>" name="current_page">
+	<button class="btn">页 </button>
+	<button class="btn" id="go"><i class="icon-arrow-right"></i></button>
+	<div style="height:10px;clear:both;"></div>	
+</div>
+</script>
+
+<style>
+#event table tr td:nth-child(-n+5){
+	white-space:nowrap;
+	padding-right:15px;
+}
+#event table tr td:nth-child(6){
+	word-break:break-all;
+}
+#event table tr td:nth-child(2) i{
+	float:right;
+	position:relative;
+}
+table img{
+	position:absolute;
+	bottom:0;
+	width:511px;
+}
+</style>
+
+</head>
+<body>
+<header>
+    <h1>监控事件</h1>
+    <div id="toolbar">
+        <div class="btn-group box_3">
+        	<button class="btn" data-status="">全部</button>
+            <button class="btn" data-status="warning">严重</button>
+            <button class="btn" data-status="caution">注意</button>
+            <button class="btn" data-status="ok">正常</button>
+        </div>
+        <div class="box_2">
+            <div class="form-horizontal">
+                <button class="btn" id=""><i class="icon-filter"></i>筛选器:&nbsp;metrics = &nbsp;</button>
+                <select id="filter"></select>
+            </div>
+        </div>
+        <div class="box_1">
+            <div class="form-horizontal">
+                <input type="text" name="search" style="width:10em;">
+                <button class="btn" id="search"><i class="icon-search"></i>搜索</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<div id="mainbody">
+    <div id="event">
+    </div>
+</div>
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+	var domain = domainURI();
+    var version = urlParams('version');
+	
+    var eventStatus = urlParams('eventStatus') || '';
+    var selector = urlParams('selector') || '';
+	
+	var _url = "http://" + domain + "/mmsapi" + version;
+   
+    var $event = $('#event');
+
+    var eventConf = function(){
+        var conf = {
+            url: _url + "/get/event" + eventStatus + "/@all" + (selector ? '/' + selector : ''),
+        };
+		
+		return conf;
+    };
+	
+    var filterConf = {
+        url: "http://" + domain + "/mmsapi" + version + "/get/metric/@all",
+        noLoading: 1
+    };
+	
+    var filterCall = function(e, json){
+        var $th = $(this), html;
+        json.unshift({
+            'all monitor metrics': ''
+        });
+        html = template('t_a', {
+            list: json
+        });
+        $th.html(html);
+    };
+	
+	var eventCall = function(e, json){
+    
+        var $th = $(this), data, html;
+        
+        var _conf = function(){
+            var conf = {
+                type: 'post',
+                url: _url + "/get/event" + status + "/@all"
+            };
+			
+			conf.url = conf.url + (selector ? '/' + selector : '')
+			
+            return conf;
+        };
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        $.each(json.records, function(k, v){
+            v.push('../server/serverStatus.html?name=' + v[0] + '&version=' + version);
+        });
+        
+        ///////////////////////////////////////////
+        data = json;
+        
+        html = template('t_c', data);
+        $th.html(html);
+        
+        ///////////////////////////////////////////
+		
+		/*
+        $th.find('table').delegate('i', 'click', function(){
+			var $th = $(this);
+            var eventId = $th.attr('data-eventid');
+			var serverId = $th.attr('data-serverid');
+			
+            $('<img src="' + _url + '/get/graph/@' + eventId + '/' + serverId + '" />').appendTo($th);
+        });
+        */
+		
+		////////////////////////////////////////////
+		
+		//分页程序
+        if ($("#total_page").text() * 1 <= 1) {
+            $('#page_info').hide();
+            return;
+        }
+		
+		$("select[name='line_per_page'],input[name='current_page']").enterPress(function(){
+			$("#go").click();
+		});
+        
+        $("#next_page").click(function(){
+            var current = Number($("input[name='current_page']").val()), 
+			next = current + 1, 
+			line_per_page = $("select[name='line_per_page']").val(), 
+			total = $("#total_page").text();
+			
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": next
+            };
+            var conf = $.extend(true, {
+                data: info
+            }, _conf());
+            if (current != total) {
+                $event.getData(conf);
+            }
+        });
+        
+        
+        $("#prev_page").click(function(){
+            var current = Number($("input[name='current_page']").val());
+            var prev = current - 1, line_per_page = $("select[name='line_per_page']").val();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": prev
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf());
+            if (current != 1) {
+                $event.getData(conf);
+            }
+        });
+        
+        
+        $("#go").click(function(){
+            var current = Number($("input[name='current_page']").val()), line_per_page = $("select[name='line_per_page']").val(), total = $("#total_page").text();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": current
+            };
+            var conf = $.extend(true, {
+                data: info
+            }, _conf());
+            if (current >= 1 && current <= total) {
+                $event.getData(conf);
+            }
+        });
+        
+        
+        $("#first_page").click(function(){
+            var line_per_page = $("select[name='line_per_page']").val();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": 1
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf());
+            $event.getData(conf);
+        });
+        
+        
+        $("#last_page").click(function(){
+            var line_per_page = $("select[name='line_per_page']").val(), last_page = $("#total_page").text();
+            var info = {
+                "line_per_page": line_per_page,
+                "current_page": last_page
+            }
+            var conf = $.extend(true, {
+                data: info
+            }, _conf());
+            $event.getData(conf);
+        });
+        
+    };
+    
+	// init
+    ///////////////////////////////////////////////////////
+	 
+    $('#filter').bind('ajax.success', filterCall).getData(filterConf).change(function(){
+        var val = $(this).val();
+		
+        if (val) {
+            $('#event').getData({
+				url: "http://" + domain + "/mmsapi" + version + "/get/event/@self/" + val
+			});
+        }
+        else {
+            $('#event').getData(eventConf());
+        }
+    });
+	
+		
+	////////////////////////////////////////////////////
+	
+	if(eventStatus){
+		$('button[data-status="' + eventStatus +'"]').addClass('active').siblings().removeClass('active');
+	}
+	
+	$('header .btn-group button').click(function(){
+		var $th = $(this);
+		var status = $th.attr('data-status') || '';
+		$th.addClass('active').siblings().removeClass('active');
+		
+		$event.getData({url:_url + "/get/event" + status + "/@all" });
+		
+	});
+    
+    /////////////////////////////////////////////////////
+
+	
+	/////////////////////////////////////////////////////
+	
+    $('#search').click(function(){ 
+        var find = $("input[name='search']").val();
+		if(find){
+			selector = find;
+		}
+		$('#event').getData({url: _url + "/get/event" + eventStatus + "/@all" + (find ? '/' + find : ''),});
+    });
+	
+	$('input[name="search"]').enterPress(function(e){
+		$("#search").click();
+	});
+		
+	///////////////////////////////////////////////////////
+    
+    $event.bind('ajax.success', eventCall).getData(eventConf());
+    
+});
+
+</script>
+</body>
+</html>

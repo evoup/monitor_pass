@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name = "viewport" content = "width= device-width,initial-scale=1, user-scalable=no">
+<title>SmartMad Monitor</title>
+<script>
+var mobile = 'http://monitor.mdn2.net/mobile/main.html?version=1.0';
+var pc = 'http://monitor.mdn2.net/client/main.html?version=1.0';
+if (/iphone|android|ipad|windows phone/i.test(navigator.userAgent)) {
+    location.href = mobile;
+}
+else 
+    if (/nokia/i.test(navigator.userAgent) == true) {
+        location.href = mobile;
+    }
+    else {
+        location.href = pc;
+    }
+</script>
+
+
+
+<style type="text/css">
+<!--
+a:link {
+        font-size: 14px;
+        color: #FF6600;
+        text-decoration: none;
+}
+a:visited {
+        font-size: 14px;
+        color: #FF6600;
+        text-decoration: none;
+}
+a:hover {
+        font-size: 14px;
+        color: #FF0000;
+        text-decoration: underline;
+}
+.e01 {
+        font-size: 14px;
+        color: #333333;
+        text-decoration: none;
+}
+.e02 {
+        font-size: 14px;
+        color: #FF0000;
+        font-weight: bold;
+}
+-->
+</style>
+</head>
+
+
+<body class="e01">
+  <p>
+监控管理平台monitor.mdn2.net
+<http://monitor.mdn2.net/>
+是madhouse公司的服务器监控的管理界面.
+</p>
+    提供各类查询管理公司机房和AWS上的服务器的功能。
+    <noscript>
+        <p>
+            <span class="e01">使用</span>
+            <span class="e02">电脑</span>
+            <span class="e01">访问 </span>
+            <a href="http://monitor.mdn2.net/client/main.html?version=1.0">请点击这里</a>
+            <p/>
+            <p>
+            使用 <span class="e02">智能手机</span>
+            访问 <a href="http://monitor.mdn2.net/mobile/main.html?version=1.0">请点击这里</a>
+            <p/>
+            </noscript>
+
+</body>
+</html>

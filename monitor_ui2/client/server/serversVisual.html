@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SmartMad Monitor</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+
+  <!-- html template
+    ================================================== -->
+<script id="t_a" type="text/html">
+	<% var i, len, item; %>
+	 <ul class="list_1">
+	    <% for (i in list) { item = list[i]; %>
+		<li class="" data-label="<%= item[10]%>" title="<%= i %>"  data-content="<p><%= item[1] %></p><p><%= item[2] %></p><p><%= item[3] %></p><p><%= item[4] %></p>" >
+			<span class="btn <%= item[9] || '' %>"></span>
+			<a class="text_overflow" href="<%= item[11] || '#' %>"><%= i %></a>
+			<img src="../assets/img/server.png" width="36" />
+			<div class="details">
+				<p><%= item[1] %></p>
+				<p><%= item[2] %></p>
+				<p><%= item[3] %></p>
+				<p><%= item[4] %></p>
+			</div>
+		</li>
+    	<% } %>
+	</ul>
+</script>
+
+<style>
+h4{
+	line-height:28px;
+}
+h4 span{
+	display:none;
+}
+
+.list_1 li {
+    list-style: none;
+    background: rgba(19, 145, 145, 0.01);
+    padding: 5px 5px 5px 0;
+    margin: 0px 5px 10px 10px;
+    display: inline-block;
+    position: relative;
+}
+.list_1 li img{
+	
+}	
+.list_1 li span.btn{
+	width:10px;
+	height:10px;
+	border-radius:5px;
+	padding:0;
+	display:inline-block;
+	position:absolute;
+	top:18px;
+	left:26px;
+}
+.list_1 li a{
+	position:absolute;
+	top:34px;
+	left:4px;
+	width:3em;
+}
+.list_1 li a+span{
+	margin:3px 30px 0 5px;
+}
+.details {
+	display:none;
+	margin:25px 0 0 0;
+	line-height:1.8;
+}
+
+#serversGroup{
+	display:none;
+}
+#servers{
+	position:absolute;
+	left:1em;
+	right:1em;
+}
+#serversGroup .content, #serversUnGroup .content, #servers .content{
+	min-height:40px;
+	margin-left:210px;
+	padding:5px;
+	border:solid 1px #c2c5d8;
+	border-radius:4px;
+}
+
+#notMonitor,#up,#down,#warning,#danger,#serversUnGroup,#unscaling {
+	margin:0 10px 15px 0;
+	min-height:40px;
+	padding:0 0 0 70px;
+	background:url(../assets/img/server.png) no-repeat 20px 0;
+	background-size:40px 40px;
+}
+#up{
+	background-image:url(../assets/img/server-up.png);
+}
+#down, #danger{
+	background-image:url(../assets/img/server-danger.png);
+}
+#warning{
+	background-image:url(../assets/img/server-warning.png);	
+}
+#unscaling{
+	background-image:url(../assets/img/server-unscaling.png);	
+}
+#serversUnGroup{
+	display:none;
+	background-image:url(../assets/img/servers.png);
+}
+#notMonitor h4, #up h4, #down h4, #warning h4, #danger h4, #serversUnGroup h4,#unscaling h4 {
+	float:left;
+	width:200px;
+	padding:0 0 0 10px;
+	border-bottom:solid 1px #c2c5d8;
+}
+
+.box_2{
+	right:300px;
+}
+/*
+ * js控件样式
+ */
+.popover-inner{
+	background-color:rgba(19,75,145,0.8);
+}
+.popover.right .arrow {
+	border-right-color:rgba(19,75,145,1);
+}
+.popover.left .arrow {
+	border-left-color:rgba(19,75,145,1);
+}
+.popover-title{
+	color:#fff;
+	background-color:rgba(19,75,145,0.7);
+	border-bottom-color:#2E6BB6;
+}
+.popover-content{
+	color:#fff;
+	background-color:rgba(19,75,145,0.5);	
+}
+
+
+#setModal{
+	display:;
+}
+</style>
+</head>
+<body>
+    <header>
+        <h1>服务器状态列表</h1>
+        <div id="toolbar">
+                <div class="btn-group box_1">
+                    <button class="btn" id="refresh">
+                        <i class="icon-refresh"></i> 刷新
+                    </button>
+                    <button class="btn" id="set"  data-toggle="modal" data-target="#setModal"  data-keyboard="true" data-backdrop="true">
+                      <i class="icon-cog"></i>  设置
+                    </button>
+                    <button class="btn" id="info">
+                        <i class="icon-info-sign"></i> 信息
+                    </button>					
+                </div>
+				
+                <div class="btn-group box_2">
+                    <button class="btn">
+                        	操作
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="isGroup">取消分组</a></li>
+                    </ul>
+                </div>
+        </div>
+    </header>
+	
+  <!-- 主体
+    ================================================== -->
+    <div id="mainbody">
+    	
+        <div id="servers">
+        </div>
+		
+		<div id="serversUnGroup">
+   			<h4>服务器列表 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+            <div class="content">
+            </div>	
+		</div>
+		
+        <div id="serversGroup">
+            <div id="down">
+                <h4>宕机 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>
+            <div id="danger">
+                <h4>严重 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>
+            <div id="warning">
+                <h4>警告 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>
+            <div id="unscaling">
+                <h4>Auto Scaling 未服务 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>			
+            <div id="up">
+                <h4>正常 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>
+			
+            <div id="notMonitor">
+                <h4>未监控 &nbsp;&nbsp;<span class="label label-important"></span></h4>
+                <div class="content">
+                    <ul class="list_1">
+                    </ul>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+   
+
+  <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="setModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>视图调整</h3>
+  </div>
+  <div class="modal-body">
+    <form>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="x" value="1">隐藏服务器图标
+            </label>
+        </div>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="y" value="1">显示所有行
+            </label>
+        </div>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="y" value="1">取消分组
+            </label>
+        </div>		
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">关闭</a>
+    <a href="#" class="btn btn-info" id="saveSet">保存更改</a>
+  </div>
+</div>
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>	
+<script src="../assets/js/doc.js?t=20130516173114"></script>
+<script>
+$(function(){
+	var smartMad = window.smartMad = window.smartMad || {};
+    var version = urlParams('version');
+    var domain = domainURI();
+    
+    var _url = "http://" + domain + "/mmsapi" + version;
+    
+    var _app = JSON.parse(localStorage.getItem('_app')) ||
+    {
+        conf: {},
+        isGroup: 1
+    };
+    ///////////////////////////////////////////////////////////
+    
+    var serverCall = function(e, json){
+    
+        var $th = $(this), num = 0, count = 0, notMonitorNum = 0,noscal = 0, data, html, current, length;
+        
+        //$th.html(JSON.stringify(json));return;
+        ///////////////////////////////////////////////
+        
+        for (var i in json) {
+            current = json[i];
+            current[11] = '../server/serverStatus.html?name=' + i + '&version=' + version;
+            $.each(current, function(k, v){
+                if (k == 0) {
+                    switch (v) {
+                        case "0":
+                            num++;
+                            current[9] = 'btn-danger flicker';
+                            current[10] = 'down';
+                            break;
+                        case "1":
+                            count++;
+                            current[9] = 'btn-success';
+                            current[10] = 'up';
+                            break;
+                        case "2":
+                            count++;
+                            current[9] = 'btn-warning';
+                            current[10] = 'warning';
+                            break;
+                        case "3":
+                            count++;
+                            current[9] = 'btn-inverse';
+                            current[10] = 'danger';
+                            break;
+                        case "4":
+                            count++;
+                            current[9] = 'btn-inverse';
+                            current[10] = 'danger';
+                            break;
+                        case "5":
+                            notMonitorNum++;
+                            current[9] = 'btn-info';
+                            current[10] = 'notMonitor';
+                            break;
+                        case "6":
+                            noscal++;
+                            current[9] = 'btn-unscaling';
+                            current[10] = 'unscaling';							
+                            break;							
+                    }
+                }
+            });
+        }
+        
+        /////////////////////////////////////////////// 
+        data = {
+            list: json,
+            statistics: [{
+                className: '',
+                href: 'server/serverList.html?version=' + urlParams("version") + '&status=down',
+                name: '宕机',
+                coun: num
+            }, {
+                className: '',
+                href: 'server/serverList.html?version=' + urlParams("version") + '&status=up',
+                name: '在线',
+                coun: count
+            }, {
+                className: '',
+                href: 'server/serverList.html?version=' + urlParams("version") + '&status=unmonitored',
+                name: '未监控',
+                coun: notMonitorNum
+            }, {
+                className: '',
+                href: 'server/serverList.html?version=' + urlParams("version") + '&status=unscaling',
+                name: 'Auto Scaling 未服务',
+                coun: notMonitorNum
+            }]
+        
+        };
+        
+        ///////////////////////////////////////////
+        html = template('t_a', data);
+        $th.html(html);
+        
+        ///////////////////////////////////////////
+        $('.popover').remove();
+        //$('h1 span.label').text($th.find('li').size()).show();
+        $('#serversGroup .content ul, #serversUnGroup .content').empty();
+        
+        
+        $th.find('li').popover({
+            placement: 'left',
+            trigger: 'hover'
+        });
+        
+        /////////////////////////////////////////////
+        if (_app.isGroup) {
+            $th.find('li').each(function(i){
+                var $th = $(this);
+                var label = $th.attr('data-label');
+                $th.appendTo('#' + label + ' ul');
+            });
+            
+            $('#serversGroup .content ul').each(function(){
+                var $th = $(this);
+                var len = $th.find('li').size();
+                if (len) {
+                    $th.parent().parent().show();
+                    $th.parent().prev().find('span').text(len).show();
+                }
+                else {
+                    $th.parent().parent().hide();
+                }
+            });
+            
+            $('#servers').fadeOut(200);
+            $('#serversGroup').fadeIn(500);
+        }
+        else {
+			length = $th.find('ul li').length;
+            $th.find('ul').appendTo('#serversUnGroup .content');
+            $('#serversUnGroup').fadeIn(200).find('h4 span').text(length).show();
+        }
+        
+    };
+    
+    ////////////////////////////////////////////////////////
+    var serverConf = {
+        url: _url + "/get/server/@all",
+        interval: 180000,
+        isTips: 1
+    };
+    
+    
+    //init
+    $('#servers').bind('ajax.success', serverCall).getData(serverConf);
+    
+    /////////////////////////////////////////////////////////////
+    $('#setModal').delegate(':checkbox', 'change', function(){
+        var $th = $(this);
+        var name = $th.attr('name');
+        var val = $th.attr('value');
+        _app.conf[name] = val;
+        window.localStorage._app = JSON.stringify(_app);
+    });
+    
+    $('#saveSet').click(function(){
+        $('#setModal').modal('hide');
+    });
+    
+    $('#refresh').click(function(){
+        $('#serversGroup, #serversUnGroup').fadeOut(200);
+        setTimeout(function(){
+            $('#servers').fadeIn(200);
+            $('#servers').getData(serverConf);
+        }, 200);
+    });
+    
+    $('#isGroup').toggle(function(){
+        _app.isGroup = 0;
+        $('#refresh').click();
+        $(this).text('分组');
+    }, function(){
+        _app.isGroup = 1;
+        $('#refresh').click();
+        $(this).text('取消分组');
+    });
+    
+    
+    
+});
+</script>
+</body>
+</html>

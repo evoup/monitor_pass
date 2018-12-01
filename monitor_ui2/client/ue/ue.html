@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+	 <meta charset="utf-8"/>
+	 <title>about</title>
+	 <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+	 <script type="text/javascript" src="../js/jquery-1.4.2.js"></script> 
+   <script type="text/javascript" src="../js/base.js"></script>
+	 <style type="text/css">
+	   .tips{
+		   width:92%;
+			 height:300px;
+			 border:1px solid #D4D4D4;
+			 margin:80px 6px 10px 6px;
+			 background:#F6F9FE;
+			 border-radius:6px;
+		 }
+		 #menuTips{
+		   width: 90%;
+       height: 50px;
+       background: #C9F1FF;
+       border: 1px solid #A9D1DF;
+       margin-left: 10px;
+       margin-top: 2px; 
+		    
+		 }
+     #menuTips p{
+       display: inline-block;
+       -webkit-transform: translateY(-8px);
+       -moz-transform:translate(0px,-8px);
+       color: #C9F1FF;
+       margin-left: 4px;
+     }
+    #menuTips .contentTips{
+       width: 90%;
+       height: 40px;
+       color:#555555;
+       margin:0px;
+       padding:0px;
+       font-size:12px;
+       font-family:'微软雅黑';
+       -webkit-transform: translateY(-10px);
+       -moz-transform:translate(0px,-10px);
+       margin-left: 5px;
+     }
+	 </style>
+	 <script type="text/javascript">	
+		$(document).ready(function(){
+			var ver=url_params("version");
+			$("#rightIframe").attr("src","siteList.html?version="+ver);
+			bindClickMenu("#rightIframe",["siteList.html?version="+ver,"speedMonitor.html?version="+ver]);
+			//console.log($("#left").height());
+			contentHeight();
+			window.onresize=contentHeight;
+	 });
+   </script>
+</head>
+ <body>
+   <div id="content" class="main">
+		 <div id="left">
+      <div class="barLeft">导航栏</div>
+      <div class="menu_list">
+				<p class="menu_head"><!--img src="../images/arrow_menu.gif"/--><cite style="font-size:18px;">&#187</cite><cite>用户体验</cite></p>
+       <div class="menu_body">
+				 <a href="javascript:void(0)" class="click_visited" style="color:#FFFFFF;"><cite style="background-position  : -194px -0px;"></cite>站点列表</a>
+				 <a href="javascript:void(0)"><cite style="background-position  : -0px -0px;"></cite>平均访问速度</a>
+			 </div>
+    </div>
+	
+	</div>
+	<div id="right">
+		 <iframe id="rightIframe" width="100%" frameborder="no" style="overflow-x: hidden; overflow-y: scroll;"></iframe>
+	 </div>
+ </div>
+ </body>
+</html>

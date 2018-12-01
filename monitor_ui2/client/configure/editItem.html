@@ -1,0 +1,285 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Madhouse|monitor core</title>
+<link rel="stylesheet" href="../assets/css/bootstrap-spacelab.css" />
+<link rel="stylesheet" href="../assets/css/base.css?t=20130516173114" />
+<link rel="stylesheet" href="../assets/css/validationEngine.jquery.css" type="text/css"/>
+  <!-- template
+    ================================================== -->
+    <script id="t_a" type="text/html">
+        <form class="form-horizontal" id="form" onsubmit="return false;">
+           <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="watchdogUrl"> 名称： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[url]] text-input"  name="name" value="<%= json.name %>" style="width:540px;" >
+                                <p class="help-block">监控点的名字</p>
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 监控点类型： </label>
+                            <div class="controls">
+                                <select name="type" id="type">
+                                    <option value="0">监控客户端</option> 
+                                    <option value="1">SNMPv1代理</option> 
+                                    <option value="2">Zabbix trapper</option> 
+                                    <option value="3">简单检查</option>
+                                    <option value="4">SNMPv2代理</option> 
+                                    <option value="5">Zabbix internal</option> 
+                                    <option value="6">SNMPv3代理</option>
+                                    <option value="7">监控客户端（主动）</option>
+                                    <option value="8">聚合</option>
+                                    <option value="9">web</option> 
+                                    <option value="10">外部检查</option> 
+                                    <option value="11">数据库监控</option> 
+                                    <option value="12">IPMI代理</option>
+                                    <option value="13">SSH代理</option> 
+                                    <option value="14">TELNET代理</option> 
+                                    <option value="15">计算数据</option>
+                                    <option value="16">JMX代理</option>
+                                </select>
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> key： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="key" value="<%= json.key %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 信息类型： </label>
+                            <div class="controls">
+                                <select name="valuetype" id="valuetype">
+                                <option value="0">数字（浮点数）</option>
+                                <option value="1">字符</option>
+                                <option value="2">日志</option>
+                                <option value="3">数字（无符号）</option>
+                                <option value="4">文本</option>
+                                </select>
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 单位： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="unit" value="<%= json.unit %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 使用自定义乘子： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="multiply" value="<%= json.multiply %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 采集间隔： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="interval" value="<%= json.interval %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 保存天数： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="history" value="<%= json.history %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 保存数据方式： </label>
+                            <div class="controls">
+                                <select name="saveDataMode" id="saveDataMode">
+                                    <option value="0">不改变</option>
+                                    <option value="1">增量（每秒速度）</option>
+                                    <option value="2">增量（简单更改）</option>
+                                </select>
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 所属监控集： </label>
+                            <div class="controls">
+                                <select name="belongSet" id="belongSet">
+                                </select>
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 描述： </label>
+                            <div class="controls">
+                                <input type="text" class="validate[required,custom[integer1]] text-input" name="desc" value="<%= json.desc %>" >
+                            </div>
+                        </div>
+           </fieldset>
+           <fieldset>	
+                        <div class="control-group">
+                            <label class="control-label" for="sleepSecPerReq"> 启用： </label>
+                            <div class="controls">
+                                <select name="enable" id="enable">
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </div>
+                        </div>
+           </fieldset>
+          <div class="form-actions">
+                    <button class='btn btn-info' name="submit">
+                          保存
+                    </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class='btn' name="reset">
+                          重置
+                    </button>					
+          <input type="reset" style="display:none;">
+          </div>
+      </form>
+    </script>
+
+</head>
+<body>
+    <header>
+      <h1><span id="title">修改监控点</span></h1>
+      <div class="row" id="toolbar">
+        <div class="box_1">
+          <button class="btn" id="info" data-toggle="modal" data-target="#modal"  data-keyboard="true" data-backdrop="true">
+            <i class="icon-info-sign"></i> 信息
+          </button>					
+        </div>
+
+        <div class="btn-group" style="display:none;">
+          <button class="btn">
+            操作
+          </button>
+          <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#" id="notification"></a></li>
+          </ul>
+        </div>
+      </div>
+    </header>	
+
+    <div id="mainbody">
+      <div class="tab-pane active" id="set_form">
+      </div>
+    </div>
+
+
+    <!-- 弹出对话框
+    ================================================== -->
+<div class="modal fade" id="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>help</h3>
+  </div>
+  <div class="modal-body">
+    此页面用于修改监控系统的监控项.
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"  data-dismiss="modal">关闭</a>
+  </div>
+</div>
+
+
+  <!-- js part
+    ================================================== -->
+<script src="../assets/js/library/jquery-1.7.1.js"></script>
+<script src="../assets/js/library/bootstrap.min.js"></script>
+<script src="../assets/js/library/template.js"></script>
+<script src="../assets/js/library/jquery.validationEngine-en.js"></script>
+<script src="../assets/js/library/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+<script src="../assets/js/helper.js?t=20130516173114"></script>
+<script src="../assets/js/doc.js?t=20130516173114"></script>	
+<script>
+$(function(){
+
+  var smartMad = window.smartMad = window.smartMad || {};
+
+  ////////////////////////////////////////////////////
+  //监控项设置
+  ////////////////////////////////////////////////////
+  var itemid = urlParams('itemid');
+  var formConf = {
+      url: smartMad._url + smartMad.api.getItem + itemid
+  };
+  var formCall = function(e,json){
+    var $th = $(this), data, html;
+    data = {
+        json: json
+    };
+    html = template('t_a', data);
+    $th.html(html);
+    <!--console.log(json["value_type"]);-->
+    //是哪种监控点
+    $('#type option:eq(' + json["type"] + ')').prop('selected', true)
+    //是那种数值类型
+    $('#valuetype option:eq(' + json["value_type"] + ')').prop('selected', true)
+    //是不是增量
+    $('#saveDataMode option:eq(' + json["delta"] + ')').prop('selected', true)
+    $('#form').validationEngine();
+
+  };	
+
+
+  ////////////////////////////////////////////////////////
+  //提交保存
+  ////////////////////////////////////////////////////////
+    $('#mainbody')
+  .delegate('button[name="submit"]', 'click', function(){
+    //表单验证
+    if(!$('#form').validationEngine('validate')){
+      return;
+    }
+
+    var conf = {
+        url: smartMad._url + smartMad.api.updateGenericSet
+    };
+
+    <!--var watchdogUrl = $('input[name="watchdogUrl"]').val(),-->
+    <!--sleepSecRep = $('input[name="sleepSecPerReq"]').val() * 1,-->
+    <!--sendMail = $('input[name="sendMail"]').attr('checked') ? 1 : 0,-->
+    <!--sendHour = $('select[name="sendHour"]').val(),-->
+    <!--sendMin = $('select[name="sendMin"]').val(),-->
+    <!--sendSec = '00';-->
+
+    conf.data = {
+        'watchdogUrl': null,
+        'sleepSecPerReq': null,
+        'sendMail': null,
+        'sendHour': null,
+        'sendMin': null,
+        'sendSec': null
+    };	
+
+    $(this).postData(conf);
+    })
+  .delegate('button[name="reset"]', 'click', function(){
+  });
+
+  ////////////////////////////////////////////////////////
+  //init
+  ////////////////////////////////////////////////////////
+
+  $('#set_form').bind('ajax.success', formCall).getData(formConf);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Madhouse|monitor core</title>
+        <link rel="shortcut icon" href="images/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="css/main.css"/>
+        <script type="text/javascript" src="js/base.js">
+        </script>
+        <script type="text/javascript" src="js/jquery-1.4.2.js">
+        </script>
+        <script type="text/javascript" src="js/main.js">
+        </script>
+        <script type="text/javascript" src="js/ajax_post.js">
+        </script>
+		<script src="assets/js/helper.js?t=20130516173114"></script>	
+		<script>
+			//location.href="about/overview.html?version=" + urlParams("version");
+		</script>
+        <style type="text/css">
+            @-webkit-keyframes flicker {
+                0% {opacity:0;}
+                100% {opacity:1}
+            }
+            
+            .flicker {
+                -webkit-animation: flicker 2s infinite linear;
+            }
+            
+            #updateTime {
+                float: right;
+                font-size: 13px;
+                color: #050505;
+                margin: 20px 40px 0px 0px;
+            }
+            
+            .warning {
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body style="overflow-y: hidden">
+        <div class="container">
+            <div id="header">
+                <div class="text" style="margin:6px 0px 0px 15px;">
+                    Madhouse亿动广告传媒|monitor core<!--cite>monitor core</cite-->
+                    <sup id="version">
+                    </sup>
+                </div>
+                <div class="account">
+                    <cite>
+                    </cite>已登录<a href="javascript:void(0)">退出</a>
+                </div>
+            </div>
+            <div id="top_navigation">
+                <ul class="nav">
+                    <li id="about">
+                        <a href="javascript:void(0)" class="myClick">概览</a>
+                    </li>
+                    <li id="server">
+                        <a href="javascript:void(0)">服务器</a>
+                    </li>
+                    <li id="event">
+                        <a href="javascript:void(0)">监控事件</a>
+                    </li>
+                    <li id="ue">
+                        <a href="javascript:void(0)">用户体验</a>
+                    </li>
+                    <li id="configure">
+                        <a href="javascript:void(0)">配置</a>
+                    </li>
+                    <li id="download">
+                        <a href="javascript:void(0)">下载</a>
+                    </li>					
+                    <!--li id="manage"><a href="javascript:void(0)">管理</a></li-->
+                </ul>
+                <div id="updateTime">
+                	<label>上次更新：</label>
+                    <span>
+                    </span>
+                </div>
+            </div>
+            <iframe id="contentIframe" width="100%" name="monitorContent" style="margin:0px 0px 0px 15px;clear:both;" frameborder="no" scrolling="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes">
+            </iframe>
+            <script type="text/javascript">
+                var ver = url_params("version");
+                $("#contentIframe").attr("src", "about/about.html?version=" + ver);
+                $("#version").text(ver);
+                //systemDate(); //时钟显示
+				
+			     /////////////////////////////////////////////
+                 $(function(){
+                     var smartMad = window.smartMad = window.smartMad || {};
+                     var version = urlParams('version');
+                     var domain = domainURI();
+                     var _url = "http://" + domain + "/mmsapi" + version;
+					 
+                     var updateTimeConf = {
+                         url: _url + "/get/time/@scan",
+                         interval: 20000
+                     };
+					 var updateTimeCall = function(e, json){
+					 		var $th = $(this), data, html;
+							
+					 	   //$th.html(JSON.stringify(json));return;
+						   
+						   $th.text(json['last_update']).addClass(json['status'] == 0 ? 'warning flicker' : '');
+					 };
+					 
+                     $("#updateTime span").css({'display':'inline-block'}).bind('ajax.success',updateTimeCall).getData(updateTimeConf);
+                     
+                 });
+
+				 //////////////////////////////////////////////
+            </script>
+            <div id="footer">
+                <p>
+                    Copyright © 2006-
+                    <cite style="font-style:normal;">
+                    </cite>
+                    Madhouse Inc. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

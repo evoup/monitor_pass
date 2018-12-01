@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartMad Monitor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="css/global.css" />
+<script src="js/jquery-1.7.1.js"></script>
+<script src="js/template.js"></script>
+<script src="js/iscroll.js"></script>
+<script src="js/helper.js"></script>
+
+<style></style>
+</head>
+<body>
+	<div id="header">
+    	<h2 id="title"><a href="javascript:history.back();void (0);" id="back">返回</a><span>navigation</span></h2>
+	</div>
+    <div id="wrapper">
+        <div id="scroller">
+            <div id="mainbody">
+                <dl id="nav" class="list_4">
+                	<dt>操作</dt>
+					<dd><a href="login.html">重新登录</a></dd>
+					<dd><a href="javascript:void();" id="logout">退出登录</a></dd>
+                	<dt>概览</dt>
+               		<dd><a href="main.html">监控状态</a></dd>
+					<dt>服务器</dt>
+               		<dd><a href="server/serverList.html">服务器列表</a></dd>
+					<dd><a href="server/serverGroup.html">服务器组列表</a></dd>
+                	<dt>监控事件</dt>
+               		<dd><a href="monitor/monitorEvent.html">监控事件</a></dd>
+					<dd><a href="">事件日志</a></dd>
+					<dt>配置</dt>
+               		<dd><a href="">常规设置</a></dd>
+					<dd><a href="">邮件设置</a></dd>
+					<dd><a href="">报警设置</a></dd>
+					<dd><a href="">扫描设置</a></dd>	
+					<dd><a href="">事件设置</a></dd>
+					<dd><a href="">用户设置</a></dd>	
+					<dd><a href="">用户组设置</a></dd>
+					<dd><a href="">监控向导</a></dd>	
+					<dd><a href="">IP管理</a></dd>
+					<dd><a href="">MADN管理</a></dd>	
+					<dt></dt>											
+               </dl>
+            </div>
+        </div>
+    </div>
+	
+    <div id="footer">
+   		 <div id="control_bar">
+			<a href="javascript:void(0);" id="top">top</a>
+    	</div>
+    </div>
+<script>
+$(function(){
+	
+	//列表子项展开或收缩
+	$('#nav dt').toggle(function(){
+		$(this).nextUntil('dt').slideDown('fast');
+		
+	},function(){
+		$(this).nextUntil('dt').slideUp('fast');
+		
+	});
+	
+	//链接跳转
+	$('#nav').delegate('a','click',function(){
+		var url = $(this).attr('href');
+		location.href = url + '?version=' + urlParams('version');
+		return false;
+	});	
+	
+	//退出登录
+    var logout_conf = {
+        type: 'get',
+        url: 'http://'+domainURI()+'/mmsapi'+urlParams('version')+'/delete/login/@self',
+        async: true,
+        success: function(json, textStatus, jqXHR){
+			alert('已经退出.');
+            location.href = 'login.html?version=' + urlParams('version');           
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            if (jqXHR.status == 401) {
+                location.href = 'login.html?version=' + urlParams('version');
+            }
+        }
+    };
+    
+	$('#logout').click(function(){
+		$(this).postData(logout_conf);
+		return false;
+	});
+	
+	
+	
+});	
+</script>	
+</body>
+</html>

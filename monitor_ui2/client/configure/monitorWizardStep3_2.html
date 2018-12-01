@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/about.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/ajax_post.js"></script>
+    <script type="text/javascript" src="../js/configure/monitorWizard3_2.js"></script>
+  </head>
+  <body>
+    <div class="bar">监控面板</div>
+    <div class="title"><span id="wizard2Span"></span>Serving监控向导 -第三步</div>
+    <div class="form_container">
+      <div id="Tips"><div></div><cite></cite></div>	 
+      <hr/>
+      <form id="serving_form" onsubmit="return false">
+        <div class="tabs">
+          <div class="tabs_content_wizard">
+            <span class="monitorItem" id="serving_png"></span>
+          </div>
+        </div>
+        <div class="tabs">
+          <div id="tabs_content">
+            <div><b>Serving监控项目</b></div>
+          </div>
+        </div>
+        <hr/>
+        <h5><input type="checkbox" name="serving_request_number_monitored" />Request Number</h5>
+        <h5>监控请求数量</h5>
+        <ul id="request_number" style="width:95%;">
+          <li>
+            <label class="tag">黄色警报下限：</label><input type="text" value="" name="serving_request_number_caution" />
+          </li>
+          <li>
+            <label class="tag">红色警报下限：</label><input type="text" value="" name="serving_request_number_warning" />
+          </li>
+        </ul>
+        <hr/>
+        <h5><input type="checkbox" name="serving_advt_publish_monitored" />Advt publish</h5>
+        <h5>监控广告发布</h5>
+        <hr/>
+        <h5><input type="checkbox" name="serving_log_creation_monitored" />Log Creation</h5>
+        <h5>监控日志创建</h5>
+        <hr/>
+        <h5><input type="checkbox" name="serving_fillrate_monitored" />Advt fillrate</h5>
+        <h5>监控广告供应比率(低于下限百分比则生成报警)</h5>
+        <ul id="advt_fillrate" style="width:95%;">
+          <li><label class="tag">黄色警报下限：</label><input type="text" value="" name="serving_fillrate_caution" />%</li>
+        </ul>
+        <hr/>
+        <ul>
+          <li style="padding-top:40px">
+            <input type="button" value="上一步" id="prevStep" />
+            <input type="button" style="margin-left:40px" value="下一步" id="nextStep" />
+          </li>
+        </ul>
+      </div> 	
+    </form>
+  </body>
+</html>

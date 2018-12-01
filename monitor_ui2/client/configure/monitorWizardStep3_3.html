@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/about.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/ajax_post.js"></script>
+    <script type="text/javascript" src="../js/configure/monitorWizard3_3.js"></script>
+  </head>
+  <body>
+    <div class="bar">监控面板</div>
+    <div class="title"><span id="wizard2Span"></span>Daemon监控向导 -第三步</div>
+    <div class="form_container">
+      <div id="Tips"><div></div><cite></cite></div>	 
+      <hr/>
+      <form id="daemon_form" onsubmit="return false">
+        <div class="tabs">
+          <div class="tabs_content_wizard">
+            <span class="monitorItem" id="daemon_png"></span>
+          </div>
+        </div>
+        <div class="tabs">
+          <div id="tabs_content">
+            <div><b>Daemon监控项目</b></div>
+          </div>
+        </div>
+        <hr/>
+        <h5><input type="checkbox"  name="daemon_web_server_monitored" />Web Server</h5>
+        <h5>监控Web服务器状态</h5>
+        <hr/>
+        <h5><input type="checkbox" name="daemon_backend_daemon_monitored" />Backend Daemon</h5>
+        <h5>监控后台守护进程</h5>
+        <hr/>
+        <h5><input type="checkbox" name="daemon_login_monitored" />Login</h5>
+        <h5>监控Login</h5>
+        <hr/>
+        <h5><input type="checkbox" name="daemon_advt_deliver_monitored" />Advt deliver</h5>
+        <h5>监控广告投放</h5>
+        <hr/>
+        <h5><input type="checkbox" name="daemon_error_log_monitored" />Error Log</h5>
+        <h5>监控错误日志</h5>
+        <hr/>
+        <ul>
+          <li style="padding-top:40px">
+            <input type="button" value="上一步" id="prevStep" />
+            <input type="button" style="margin-left:40px" value="下一步" id="nextStep" />
+          </li>
+        </ul>
+      </div> 	
+    </form>
+  </body>
+</html>

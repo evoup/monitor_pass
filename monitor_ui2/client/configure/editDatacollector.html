@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/about.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/jqModal.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+		<script type="text/javascript" src="../js/jqModal.js"></script>
+		<script type="text/javascript" src="../js/base.js"></script>
+		<script type="text/javascript" src="../js/ajax_post.js"></script>
+    <script type="text/javascript" src="../js/server/action.js"></script>
+		<script type="text/javascript" src="../js/configure/datacollectorForm.js"></script>
+	  <style type="text/css">
+		 #add_usergroup_table{
+		   border:1px solid #c0c0c0;
+		 }
+		</style>
+	</head>
+  <body>
+   <div class="bar">监控面板</div>
+	 <div class="title">添加数据收集器</div>
+	 <div id="Tips"><div></div><cite></cite></div>
+	 <div class="form_container">
+		 <form id="addUserGroup_form" onsubmit="return false">
+		   <div class="tabs">
+				 <div class="tabs_menu">
+				 <ul>
+				   <li id="tabs1">名称和地址</li>
+					 <li id="tabs3">收集的服务器</li>
+				 </ul>
+				 </div>
+				 <div class="tabs_content">
+					 <div id="tabs1_content" style="display:block;">
+						 <ul>
+							 <li>
+							   <label class="tag">数据收集器名：</label>
+								 <input type="text" name="groupname" style="width:250px;"/><br/>
+							   <cite>格式：数字，字母，下划线或者中划线（数据收集器名不能含有中文）</cite>
+							 </li>
+							 <li style="margin-top:20px;">
+							   <label class="tag">服务器地址：</label>
+								 <input type="text" name="interface" style="width:250px;"/><br/>
+								 <cite>数据收集器的地址 IP:PORT</cite>
+							 </li>
+						 </ul>
+					 </div>
+					 <div id="tabs3_content" style="display:none;">
+			       <p>该收集器目前包含以下被监控的服务器：</p>		 
+						 <section id="userGroup_member_box" style="margin-left:10%;">
+						 </section>
+						 <p style="margin:80px 0px 20px 30px;"><a href="javascript:void(0)" class="jqModal"><img src="../images/adduserwindow.png" alt="修改数据收集对象" title="修改数据收集对象"/></a></p>
+					 </div>
+				</div>
+			</div>
+			<input type="submit" value="确定"/>
+			<input type="reset" id="return" value="返回"/>
+		 </form>	 
+	 </div>
+   <div class="window">
+     <div class="jqmWindow" id="dialog">
+		 <a href="#" class="jqmClose" style="float:right;"><img  src="../images/deleteTab.png" style="-webkit-transform:translate(36px,-36px);-moz-transform:translate(36px,-36px);-o-transform:translate(36px,-36px);-khtml-transform:translate(36px,-36px);"/></a>	 
+		 <p>添加服务器到数据收集器</p>
+     <ul class="usergroup_select">
+			 <li>
+			 <label>可选服务器</label><br/>
+        <select size="8" id="usergroup_optional"  multiple="multiple"></select>
+			 </li>
+			 <li>
+			 <a href="javascript:void(0)" id="add_option"><img src="../images/arrow.png" style="-webkit-transform:translate(20px,-80px);-moz-transform:translate(20px,-80px);-o-transform:translate(20px,-80px);-khtml-transform:translate(20px,-80px);"/></a>
+			 </li>
+			 <li>
+			 <a href="javascript:void(0)" id="del_option"><img src="../images/arrowLeft.png" style="-webkit-transform:translate(-20px,0px);-moz-transform:translate(-20px,0px);-khtml-transform:translate(-20px,0px);cursor:pointer;"/></a>
+			 </li>
+			 <li>
+			 <label>已加入的服务器</label><br/>
+				<select id="add_usergroup_old" size="8" multiple="multiple"></select>
+			 </li>
+			 <li>
+			   <div class="jqmClose">
+         <input type="button" id="add_user_submit" value="确定"/>
+         <input type="button" id="add_user_reset"  value="取消"/>
+				 </div>
+			</li>
+     </ul>
+	  </div>
+   </div>
+	 <script type="text/javascript">
+		 $(document).ready(function(){
+			 Tabs();
+       $("#dialog").jqm();
+			 });
+	 </script>
+  </body>
+</html>
