@@ -290,27 +290,11 @@ $(function($){
 				window.console && console.log('login ' + new Date);
             }
         });
-		
-        
-        ////////////////////////////////////////////////////////////////////////////////	
-        //退出登录
-        var logout_conf = {
-            type: 'get',
-            url: smartMad._url + '/delete/login/@self',
-            async: true,
-            success: function(json, textStatus, jqXHR){
-                alert('已经退出.');
-                location.href = smartMad.urlPath + 'login.html?version=' + smartMad.version;
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                if (jqXHR.status == 401) {
-                    location.href = smartMad.urlPath + 'login.html?version=' + smartMad.version;
-                }
-            }
-        };
+
         
         $('#logout').click(function(){
-            $(this).postData(logout_conf);
+            window.localStorage['mms_token']=null;
+            window.location.href="login.html?version="+vers;
         });
         
     }

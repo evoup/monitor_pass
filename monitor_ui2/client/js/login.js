@@ -74,7 +74,7 @@ $(document).ready(function(){
      async: false,
      data : {'token': window.localStorage['mms_token']},
      headers:{'Content-Type':'application/json;charset=utf8'},
-     success: function(json, textStatus, jqXHR){//如果调用php成功
+     success: function(json, textStatus, jqXHR){
         if(jqXHR.status==200){
            window.location.href="main.html?version="+version;
           }
@@ -86,11 +86,7 @@ $(document).ready(function(){
 		  }
    });
 
-/* $("#loginForm input[name='passwd']").blur(function(){
-    if($("#loginForm input[name='username']").val()=="" || this.val()==""){
-       ("请填写用户名或者密码").insertAfter($())
-    }
- });*/
+
   $(document).bind("keydown",function(e){  //回车键登录
 		if(e.keyCode==13){
 	    login(version,domain);

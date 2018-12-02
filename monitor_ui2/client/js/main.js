@@ -24,7 +24,6 @@ function get_status_logininfo_Callback(json, textStatus, jqXHR){
 
 
 function exitLogin(_url){
- //alert("1");
  var vers=url_params("version");
  $.ajax({
       type: "get",
@@ -32,16 +31,14 @@ function exitLogin(_url){
      async:  true,
   dataType: "json",
    success: function(json, textStatus, jqXHR){
-            //alert(jqXHR.status+"s");           
+            //alert(jqXHR.status+"s");
 	 },
   error: function(jqXHR, textStatus, errorThrown){
-    // alert(jqXHR.status);
 		 if(jqXHR.status==401){
-      // alert("2"); 
 			 window.location.href="login.html?version="+vers;
        }
       }
-   }); 
+   });
 }
 
 
@@ -65,8 +62,9 @@ $(document).ready(function(){
   
 	get_data_notLoad("http://"+domain+"/mmsapi"+version+"/get/status/@logininfo", get_status_logininfo_Callback);
   $("#header .account a").click(function(){
-	  //alert("ok");
-		exitLogin("http://"+domain+"/mmsapi"+version+"/delete/login/@self");
+  	// exitLogin("http://"+domain+"/mmsapi"+version+"/delete/login/@self");
+	  window.localStorage['mms_token']=null;
+	  window.location.href="login.html?version="+version;
   });
 	$("#contentIframe").load(function(){
 	   contentIframeHeight();	
