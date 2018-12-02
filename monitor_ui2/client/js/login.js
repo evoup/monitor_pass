@@ -69,10 +69,11 @@ $(document).ready(function(){
  $(".footer cite").text(lastYearVersion);
 
  $.ajax({
-     type: "get",
-     url : "http://"+domain+"/mmsapi"+version+"/get/login/@self",
-     async: true,
-     dataType:"json",
+     type: "post",
+     url : "http://"+domain+"/mmsapi"+version+"/login/status/",
+     async: false,
+     data : {'token': window.localStorage['mms_token']},
+     headers:{'Content-Type':'application/json;charset=utf8'},
      success: function(json, textStatus, jqXHR){//如果调用php成功
         if(jqXHR.status==200){
            window.location.href="main.html?version="+version;
