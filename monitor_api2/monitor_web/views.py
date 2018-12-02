@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
-from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web.models import Server, UserProfile
 # Create your views here.
@@ -33,6 +33,7 @@ class LoginStatus(APIView):
     """
 
     def post(self, *args, **kwargs):
+        refresh_jwt_token(self.request._request, *args, **kwargs)
         return verify_jwt_token(self.request._request, *args, **kwargs)
 
 
