@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
@@ -5,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 from monitor_web.models import Server, UserProfile
 # Create your views here.
@@ -23,14 +25,26 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
+
+@permission_classes((AllowAny,))
+class LoginStatus(APIView):
+    """
+    获取登录状态
+    """
+
+    def post(self, *args, **kwargs):
+        return verify_jwt_token(self.request._request, *args, **kwargs)
+
+
 @permission_classes((AllowAny,))
 class Login(APIView):
-
-    def get(self, *args, **kwargs):
-        return HttpResponse("ok")
+    """
+    进行登录
+    """
 
     def post(self, *args, **kwargs):
         return obtain_jwt_token(self.request._request, *args, **kwargs)
+
 
 @permission_classes((IsAuthenticated,))
 class ServerList(APIView):

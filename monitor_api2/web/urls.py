@@ -33,5 +33,7 @@ urlpatterns = [
         url(r'^servers/?$', views.ServerList.as_view()),
         # 登录时post获取token，delete注销
         url(r'^login/', views.Login.as_view()),
+        # 查询是否过期，过期
+        url(r'^login/status', views.Login.as_view()),
     ]))
 ]

@@ -5,8 +5,8 @@ function url_params(param){ //匹配url参数
  }
 
 function domainURI(str){
-  var durl=/http:\/\/([^\/]+)\//i;  
-  domain = str.match(durl);  
+  var durl=/http:\/\/([^\/]+)\//i;
+  domain = str.match(durl);
   //domain = domain[0].slice(0,-1);
   return domain[1];
 }
@@ -23,7 +23,7 @@ function login(version,domain){
     var keeplogin=$("#loginForm input[name='keeplogin']").val();
     var data={
         "username" : username,
-        "passwd" : passwd,
+        "password" : passwd,
         "keeplogin" : keeplogin
       };
    //console.log(data);
@@ -36,11 +36,12 @@ function login(version,domain){
    }else{
      $.ajax({
         type: "post",
-        url : "http://"+domain+"/mmsapi"+version+"/update/login/@self",
+        url : "http://"+domain+"/mmsapi"+version+"/login/",
         async : false,
         data : data,
-        success: function(json, textStatus, jqXHR){//如果调用php成功
+        success: function(json, textStatus, jqXHR){
           if(jqXHR.status==200){
+              window.localStorage['mms_token'] = json.token;
              window.location.href="main.html?version="+version;
           }
            },
@@ -55,7 +56,7 @@ function login(version,domain){
          }
      });
   }
- 
+
 
 }
 
@@ -75,30 +76,30 @@ $(document).ready(function(){
      success: function(json, textStatus, jqXHR){//如果调用php成功
         if(jqXHR.status==200){
            window.location.href="main.html?version="+version;
-          }      
+          }
            },
 		 error: function(jqXHR, textStatus, errorThrown){
 		     if(jqXHR.status==401){
           $("#loginForm").show();
-        } 
+        }
 		  }
    });
 
 /* $("#loginForm input[name='passwd']").blur(function(){
     if($("#loginForm input[name='username']").val()=="" || this.val()==""){
-       ("请填写用户名或者密码").insertAfter($()) 
-    }   
+       ("请填写用户名或者密码").insertAfter($())
+    }
  });*/
   $(document).bind("keydown",function(e){  //回车键登录
 		if(e.keyCode==13){
-	    login(version,domain);	
+	    login(version,domain);
      }
-	
+
 	});
 
 /***************提交登录表单数据****************************/
  $("#loginsubmit").click(function(){
-    login(version,domain); 
+    login(version,domain);
  });
- 
+
 });
