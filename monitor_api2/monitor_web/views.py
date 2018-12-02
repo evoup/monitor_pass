@@ -30,7 +30,7 @@ class Login(APIView):
         return HttpResponse("ok")
 
     def post(self, *args, **kwargs):
-        return obtain_jwt_token(self.request._request)
+        return obtain_jwt_token(self.request._request, *args, **kwargs)
 
 @permission_classes((IsAuthenticated,))
 class ServerList(APIView):
