@@ -31,6 +31,7 @@ urlpatterns = [
     # 有前缀和没有兼容
     url(r'(^mmsapi2.0/)|(^)', include([
         url(r'^servers/?$', views.ServerList.as_view()),
-        url(r'^api-token-auth/', obtain_jwt_token),
+        # 登录时post获取token，delete注销
+        url(r'^login/', views.Login.as_view()),
     ]))
 ]
