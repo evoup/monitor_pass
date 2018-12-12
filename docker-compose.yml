@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  api: # django App
+    container_name: monitor-api2
+    build: .
+	command: python ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
+    ports:
+      - "8000:8000" # Expose API port
+
+  frontend: # Nginx Server For Frontend App
+    container_name: monitor-ui2
+    image: nginx-monitor-ui2
+    volumes: # Serve local "public" dir
+      - ./monitor_ui2:/usr/share/nginx/html
+    ports:
+      - "8080:80" # Forward site to localhost:8080
+
+
+volumes:
+
