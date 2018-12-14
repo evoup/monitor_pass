@@ -1,13 +1,35 @@
 version: '3'
 
 services:
-  #api: # django App
-    #container_name: monitor-api2
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: dba
+      MYSQL_PASSWORD: 123456
+      MYSQL_DATABASE: monitor
+    volumes:
+      - ./files/init.sql:/data/application/init.sql
+
+  api: # django App
+    container_name: monitor-api2
     #image: python:3.5.6
-    #build: .
-    #command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
-    #ports:
-      #- "8000:8000" # Expose API port
+    build: .
+    command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000" # Expose API port
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   frontend: # Nginx Server For Frontend App
     container_name: monitor-ui2
