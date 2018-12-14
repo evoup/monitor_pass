@@ -12,11 +12,12 @@ services:
       MYSQL_DATABASE: monitor
     volumes:
       - ./files/init.sql:/data/application/init.sql
+    security_opt:
+      - seccomp:unconfined
 
   api: # django App
     container_name: monitor-api2
-    #image: python:3.5.6
-    build: .
+    build: ./files/images/
     command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
       - .:/code
@@ -34,9 +35,9 @@ services:
   frontend: # Nginx Server For Frontend App
     container_name: monitor-ui2
     image: nginx
-    volumes: # Serve local "public" dir
+    volumes:
       - ./monitor_ui2:/usr/share/nginx/html
-      - ./files/default.conf:/etc/nginx/conf.d/default.conf
+      - ./files/default.conf:/etc/nginx/conf.d/default.conf # proxy api 8000 to 80 port
     ports:
       - "80:80" # Forward site to localhost:80
 
