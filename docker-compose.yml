@@ -16,6 +16,8 @@ services:
       - monitor_db_data_volume:/var/lib/mysql
     security_opt:
       - seccomp:unconfined
+    ports:
+      - "3306:3306" # same for localhost dev
 
   api: # django App
     container_name: monitor-api2
