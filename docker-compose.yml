@@ -22,13 +22,14 @@ services:
   api: # django App
     container_name: monitor-api2
     build: ./files/images/
+    image: monitor-pass-api:2.0
     command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
       - .:/code
     ports:
       - "8000:8000" # Expose API port
     depends_on:
-      - db
+      - frontend
 
   adminer:
     container_name: monitor-pass-adminer
@@ -36,6 +37,8 @@ services:
     restart: always
     ports:
       - 8080:8080
+    depends_on:
+      - db
 
   frontend: # Nginx Server For Frontend App
     container_name: monitor-ui2
@@ -45,6 +48,8 @@ services:
       - ./files/default.conf:/etc/nginx/conf.d/default.conf # proxy api 8000 to 80 port
     ports:
       - "80:80" # Forward site to localhost:80
+    depends_on:
+      - adminer
 
 
 volumes:
