@@ -2,3 +2,5 @@ monitor_data_collector/target/
 madmonitor2/.idea
 madmonitor2/go/src/madmonitor2/madmonitor2
 monitor_data_collector/monitor_pass_data_collector.iml
+monitor_ui2/.idea
+.idea/
