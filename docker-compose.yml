@@ -21,7 +21,12 @@ services:
 
   api: # django App
     container_name: monitor-api2
-    build: ./files/images/
+    build:
+      context: ./files/images/
+      dockerfile: Dockerfile
+      #args:
+        #- http_proxy=http://192.168.2.197:8124
+        #- https_proxy=http://192.168.2.197:8124
     image: monitor-pass-api:2.0
     command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
