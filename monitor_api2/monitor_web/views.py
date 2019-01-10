@@ -44,7 +44,11 @@ class Login(APIView):
     """
 
     def post(self, *args, **kwargs):
-        return obtain_jwt_token(self.request._request, *args, **kwargs)
+        response =  obtain_jwt_token(self.request._request, *args, **kwargs)
+        response.data['code']=20000
+        response.data['data']={'token':response.data['token']}
+        # 返回格式{"code":20000,"data":{"token":"admin"}}
+        return response
 
 
 @permission_classes((IsAuthenticated,))
