@@ -70,3 +70,23 @@ class ServerList(APIView):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(ServerList, self).dispatch(*args, **kwargs)
+
+@permission_classes((IsAuthenticated,))
+class UserInfo(APIView):
+
+    def get(self, *args, **kwargs):
+        ret = {
+            "code": 20000,
+            "data": {
+                "roles": [
+                    "admin"
+                ],
+                "name": "admin",
+                "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(UserInfo, self).dispatch(*args, **kwargs)

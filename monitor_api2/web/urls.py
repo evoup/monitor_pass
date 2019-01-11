@@ -35,5 +35,6 @@ urlpatterns = [
         url(r'^login/$', views.Login.as_view()),
         # 查询是否过期，过期
         url(r'^login/status/$', views.LoginStatus.as_view()),
+        url(r'^user/info$', views.UserInfo.as_view()),
     ]))
 ]
