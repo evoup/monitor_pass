@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
@@ -44,11 +45,14 @@ class Login(APIView):
     """
 
     def post(self, *args, **kwargs):
-        response =  obtain_jwt_token(self.request._request, *args, **kwargs)
-        response.data['code']=20000
-        response.data['data']={'token':response.data['token']}
-        # 返回格式{"code":20000,"data":{"token":"admin"}}
-        return response
+        jwt_response =  obtain_jwt_token(self.request._request, *args, **kwargs)
+        if 'token' in jwt_response.data:
+            jwt_response.data['code']=20000
+            jwt_response.data['data']={'token':jwt_response.data['token']}
+            # 返回格式{"code":20000,"data":{"token":"admin"}}
+            return jwt_response
+        else:
+            return Response(data={'code':12, 'message':'登录失败，用户名或者密码错误！'})
 
 
 @permission_classes((IsAuthenticated,))
