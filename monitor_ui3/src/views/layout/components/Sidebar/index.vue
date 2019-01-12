@@ -1,5 +1,6 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
+    <div id="sys_name">{{ sysName }}</div>
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"
@@ -20,6 +21,11 @@ import SidebarItem from './SidebarItem'
 
 export default {
   components: { SidebarItem },
+  data() {
+    return {
+      sysName: '服务器监控系统2.0'
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar'
@@ -33,3 +39,12 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+  #sys_name {
+    font-size:18px;
+    padding:15px 10px 14px 10px;
+    background-color: white;
+    color: #409EFF;
+  }
+</style>

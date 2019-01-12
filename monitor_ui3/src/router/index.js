@@ -43,7 +43,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: '服务器', icon: 'example' },
     children: [
       {
         path: 'table',
