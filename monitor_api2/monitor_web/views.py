@@ -94,3 +94,18 @@ class UserInfo(APIView):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UserInfo, self).dispatch(*args, **kwargs)
+
+
+@csrf_exempt
+@permission_classes((AllowAny,))
+def logout(request):
+    """
+    登出
+    :return:
+    """
+    if request.method == 'POST':
+        ret = {
+            "code": 20000,
+            "data": None
+        }
+        return JsonResponse(ret, safe=False)

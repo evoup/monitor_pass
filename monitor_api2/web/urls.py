@@ -24,12 +24,14 @@ from monitor_web import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 
+url_prefix = 'mmsapi2.0'
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.index),
+    url(r'^%s/user/logout$' % url_prefix, views.logout), # fbv不能写前缀，目前直接这么写
     url(r'^', include(router.urls)),
     # 有前缀和没有兼容
-    url(r'(^mmsapi2.0/)|(^)', include([
+    url(r'(^%s/)|(^)' % url_prefix, include([
         url(r'^servers/?$', views.ServerList.as_view()),
         # 登录时post获取token，delete注销
         url(r'^login/$', views.Login.as_view()),
