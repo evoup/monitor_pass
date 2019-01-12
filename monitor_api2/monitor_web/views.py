@@ -97,11 +97,12 @@ class UserInfo(APIView):
 
 
 @csrf_exempt
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def logout(request):
     """
     登出
     :return:
+    TODO：JWT下更好的做法是对过期的token做redis标记
     """
     if request.method == 'POST':
         ret = {
