@@ -29,6 +29,7 @@ services:
         #- https_proxy=http://192.168.2.197:8124
     image: monitor-pass-api:2.0
     command: python3 ./monitor_api2/manage.py runserver 0.0.0.0:8000 --insecure
+    restart: always
     volumes:
       - .:/code
     ports:
@@ -48,6 +49,7 @@ services:
   frontend: # Nginx Server For Frontend App
     container_name: monitor-ui2
     image: nginx
+    restart: always
     volumes:
       - ./monitor_ui2:/usr/share/nginx/html
       - ./files/default.conf:/etc/nginx/conf.d/default.conf # proxy api 8000 to 80 port

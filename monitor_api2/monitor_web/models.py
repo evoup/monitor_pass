@@ -12,9 +12,11 @@ class UserProfile(models.Model):
     email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32)
     mobile = models.IntegerField(u'手机')
+    user_group = models.ManyToManyField('UserGroup', db_table='r_user_user_group')
 
     class Meta:
         verbose_name_plural = '用户信息表'
+        db_table = 'user'
 
     def __str__(self):
         return self.name
@@ -32,10 +34,12 @@ class Server(models.Model):
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     status = models.IntegerField(choices=status_choices, default=0)
+    server_group = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
 
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '服务器表'
+        db_table = 'server'
 
     def __str__(self):
         return self.name
@@ -56,6 +60,10 @@ class ServerGroup(models.Model):
     desc = models.CharField(u'描述', max_length=512, null=True)
     alarm_type = models.IntegerField(choices=alarm_type_choices, default=0)
 
+    class Meta:
+        verbose_name_plural = '服务器组名'
+        db_table = 'server_group'
+
 
 class DataCollector(models.Model):
     id = models.AutoField(primary_key=True)
@@ -67,6 +75,7 @@ class DataCollector(models.Model):
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '数据收集器表'
+        db_table = 'data_collector'
 
     def __str__(self):
         return self.name
@@ -80,6 +89,7 @@ class Event(models.Model):
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '监控事件表'
+        db_table = 'event'
 
     def __str__(self):
         return self.event
@@ -90,10 +100,11 @@ class UserGroup(models.Model):
     用户组
     """
     name = models.CharField(max_length=32, unique=True)
-    users = models.ManyToManyField('UserProfile')
+
 
     class Meta:
         verbose_name_plural = "用户组表"
+        db_table = 'user_group'
 
     def __str__(self):
         return self.name
@@ -109,6 +120,7 @@ class BusinessUnit(models.Model):
 
     class Meta:
         verbose_name_plural = "业务线表"
+        db_table = 'business_unit'
 
     def __str__(self):
         return self.name
@@ -123,6 +135,7 @@ class IDC(models.Model):
 
     class Meta:
         verbose_name_plural = "机房表"
+        db_table = 'idc'
 
     def __str__(self):
         return self.name
@@ -136,6 +149,7 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name_plural = "标签表"
+        db_table = 'tag'
 
     def __str__(self):
         return self.name
@@ -167,13 +181,14 @@ class Asset(models.Model):
     business_unit = models.ForeignKey('BusinessUnit', verbose_name='属于的业务线', null=True, blank=True,
                                       on_delete=models.CASCADE)
 
-    tag = models.ManyToManyField('Tag')
+    tag = models.ManyToManyField('Tag', db_table = 'r_asset_tag')
 
     latest_date = models.DateField(null=True)
     create_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "资产表"
+        db_table = 'asset'
 
     def __str__(self):
         return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
