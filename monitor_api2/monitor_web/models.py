@@ -67,6 +67,9 @@ class ServerGroup(models.Model):
 
 
 class DataCollector(models.Model):
+    """
+    数据收集器
+    """
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'数据收集器名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
@@ -83,6 +86,9 @@ class DataCollector(models.Model):
 
 
 class Event(models.Model):
+    """
+    监控事件
+    """
     id = models.AutoField(primary_key=True)
     event = models.CharField(max_length=200, null=False)
     date = models.DateTimeField()
