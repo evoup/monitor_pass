@@ -8,7 +8,6 @@ class UserProfile(models.Model):
     """
     用户信息
     """
-    user_name = models.CharField(u'登录名', max_length=32)
     name = models.CharField(u'姓名', max_length=32)
     email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32)
