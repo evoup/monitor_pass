@@ -8,6 +8,9 @@ from django.dispatch import receiver
 
 
 # ----------扩展django用户开始-----------------
+from web.common import TinyIntegerField
+
+
 class UserProfile(models.Model):
     """
     用户信息，扩展自django auth_user
@@ -33,7 +36,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.user_profile.save()
-# ----------扩展django用户组结束-----------------
+# ----------扩展django用户结束-----------------
 
 
 # ----------扩展django用户组开始-----------------
@@ -132,6 +135,85 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event
+
+
+class MonitorSet(models.Model):
+    """
+    监控集
+    """
+    name = models.CharField(u'监控集名', max_length=40, null=False)
+    class Meta:
+        # ordering = ('id',)
+        verbose_name_plural = '监控集表'
+        db_table = 'set'
+
+    def __str__(self):
+        return self.name
+
+
+class MonitorItem(models.Model):
+    """
+    监控项
+    """
+    # Zabbix
+    # agent
+    # checks
+    # SNMP
+    # agent
+    # checks
+    # SNMP
+    # traps
+    # IPMI
+    # checks
+    # Simple
+    # checks
+    # VMware
+    # monitoring
+    # Log
+    # file
+    # monitoring
+    # Calculated
+    # items
+    # Zabbix
+    # internal
+    # checks
+    # SSH
+    # checks
+    # Telnet
+    # checks
+    # External
+    # checks
+    # Aggregate
+    # checks
+    # Trapper
+    # items
+    # JMX
+    # monitoring
+    # ODBC
+    # checks
+    # Dependent
+    # items
+    data_type_choices = (
+        (0, 'agent'),
+        (1, 'SNMP'),
+        (2, 'JMX'),
+    )
+    name = models.CharField(u'监控项名', max_length=40, null=False)
+    data_type = TinyIntegerField(u'数据类型', choices=data_type_choices, default=0)
+    delay = models.IntegerField(u'轮询间隔秒数', default=1)
+    desc = models.CharField(u'描述', max_length=50, default='')
+    error = models.CharField(u'错误', max_length=50, default='')
+    key = models.CharField(u'opentsdb指标名', max_length=128, default='')
+    multiplier = models.FloatField(u'自定义乘子', default=1.0)
+    unit = models.CharField(u'单位', max_length=12, default='')
+    host_id = models.ForeignKey('Server', on_delete=models.CASCADE, default="", editable=False)
+
+    class Meta:
+        verbose_name_plural = '监控项表'
+        db_table = 'item'
+
+    def __str__(self):
+        return self.name
 
 
 class BusinessUnit(models.Model):
