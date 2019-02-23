@@ -21,9 +21,17 @@ class UserProfile(models.Model):
 
 
 class Server(models.Model):
+    """
+    服务器
+    """
+    status_choices = (
+        (0, '宕机'),
+        (1, '在线'),
+    )
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
+    status = models.IntegerField(choices=status_choices, default=0)
 
     class Meta:
         # ordering = ('id',)
@@ -31,6 +39,22 @@ class Server(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ServerGroup(models.Model):
+    """
+    服务器组
+    """
+    alarm_type_choices = (
+        (0, '不接收'),
+        (1, '普通报警'),
+        (2, '严重报警'),
+        (3, '素有报警')
+    )
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(u'服务器组名', max_length=40, null=False)
+    desc = models.CharField(u'描述', max_length=512, null=True)
+    alarm_type = models.IntegerField(choices=alarm_type_choices, default=0)
 
 
 class DataCollector(models.Model):
