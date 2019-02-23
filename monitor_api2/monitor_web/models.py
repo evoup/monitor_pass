@@ -59,7 +59,7 @@ class ServerGroup(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器组名', max_length=40, null=False)
     desc = models.CharField(u'描述', max_length=512, null=True)
-    alarm_type = models.IntegerField(choices=alarm_type_choices, default=0)
+    alarm_type = models.IntegerField(u'告警类型', choices=alarm_type_choices, default=0)
 
     class Meta:
         verbose_name_plural = '服务器组名'
@@ -90,8 +90,8 @@ class Event(models.Model):
     监控事件
     """
     id = models.AutoField(primary_key=True)
-    event = models.CharField(max_length=200, null=False)
-    date = models.DateTimeField()
+    event = models.CharField(u'监控事件', max_length=200, null=False)
+    date = models.DateTimeField(u'发生时间')
     host_id = models.ForeignKey('Server', on_delete=models.CASCADE)
     class Meta:
         # ordering = ('id',)
@@ -106,7 +106,7 @@ class UserGroup(models.Model):
     """
     用户组
     """
-    name = models.CharField(max_length=32, unique=True)
+    name = models.CharField(u'用户组名', max_length=32, unique=True)
 
 
     class Meta:
@@ -121,7 +121,7 @@ class BusinessUnit(models.Model):
     """
     业务线
     """
-    name = models.CharField('业务线', max_length=64, unique=True)
+    name = models.CharField(u'业务线', max_length=64, unique=True)
     contact = models.ForeignKey('UserGroup', verbose_name='业务联系人', related_name='c', on_delete=models.CASCADE)  # 多个人
     manager = models.ForeignKey('UserGroup', verbose_name='系统管理员', related_name='m', on_delete=models.CASCADE)  # 多个人
 
