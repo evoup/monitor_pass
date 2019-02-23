@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -9,14 +10,14 @@ class UserProfile(models.Model):
     用户信息
     """
     name = models.CharField(u'姓名', max_length=32)
-    email = models.EmailField(u'邮箱')
+    # email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32)
     mobile = models.IntegerField(u'手机')
-    user_group = models.ManyToManyField('UserGroup', db_table='r_user_user_group')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', default="", editable=False)
 
     class Meta:
         verbose_name_plural = '用户信息表'
-        db_table = 'user'
+        db_table = 'user_profile'
 
     def __str__(self):
         return self.name
