@@ -3,11 +3,14 @@ from django.db import models
 
 
 # Create your models here.
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
+# ----------扩展django用户开始-----------------
 class UserProfile(models.Model):
     """
-    用户信息
+    用户信息，扩展自django auth_user
     """
     name = models.CharField(u'姓名', max_length=32)
     # email = models.EmailField(u'邮箱')
@@ -21,6 +24,34 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.name
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.user_profile.save()
+# ----------扩展django用户组结束-----------------
+
+
+# ----------扩展django用户组开始-----------------
+class UserGroup(models.Model):
+    """
+    Overwrites original Django Group.
+    用户组表 扩展自django auth_group
+    """
+    group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE, default="", editable=False)
+    desc = models.CharField(max_length=512, blank=True, default="")
+
+    class Meta:
+        verbose_name_plural = "用户组表"
+        db_table = 'user_group'
+
+    def __str__(self):
+        return "{}".format(self.group.name)
+# ----------扩展django用户组结束-----------------
 
 
 class Server(models.Model):
@@ -101,21 +132,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event
-
-
-class UserGroup(models.Model):
-    """
-    用户组
-    """
-    name = models.CharField(u'用户组名', max_length=32, unique=True)
-
-
-    class Meta:
-        verbose_name_plural = "用户组表"
-        db_table = 'user_group'
-
-    def __str__(self):
-        return self.name
 
 
 class BusinessUnit(models.Model):
