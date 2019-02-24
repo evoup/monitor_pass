@@ -71,6 +71,7 @@ class Server(models.Model):
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     status = models.IntegerField(choices=status_choices, default=0)
     server_group = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
+    data_collector_id = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         # ordering = ('id',)
@@ -122,9 +123,9 @@ class DataCollector(models.Model):
 
 class Event(models.Model):
     """
-    监控事件
+    监控事件，类似zabix的history，这里记录所有事件，最终是一个大表，会用mysql进行分区
     """
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     event = models.CharField(u'监控事件', max_length=200, null=False)
     date = models.DateTimeField(u'发生时间')
     host_id = models.ForeignKey('Server', on_delete=models.CASCADE)
@@ -137,9 +138,25 @@ class Event(models.Model):
         return self.event
 
 
+class Template(models.Model):
+    """
+    模板  类似zabbix的template，模板是一组set的集合
+    """
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(u'模板名字', max_length=40, default='')
+    server_id = models.ManyToManyField('Server', db_table = 'r_template_server')
+    monitor_set_id = models.ManyToManyField('MonitorSet', db_table='r_template_set')
+    class Meta:
+        verbose_name_plural = "模板表"
+        db_table = 'template'
+
+    def __str__(self):
+        return self.name
+
+
 class MonitorSet(models.Model):
     """
-    监控集
+    监控集，类似zabbix的application
     """
     name = models.CharField(u'监控集名', max_length=40, null=False)
     class Meta:
@@ -153,46 +170,9 @@ class MonitorSet(models.Model):
 
 class MonitorItem(models.Model):
     """
-    监控项
+    监控项，agent可以直接下发，SNMP只是负责检查，JMX的任务数据收集器负责执行，
+    所有监控项都从数据收集器落地到TSD
     """
-    # Zabbix
-    # agent
-    # checks
-    # SNMP
-    # agent
-    # checks
-    # SNMP
-    # traps
-    # IPMI
-    # checks
-    # Simple
-    # checks
-    # VMware
-    # monitoring
-    # Log
-    # file
-    # monitoring
-    # Calculated
-    # items
-    # Zabbix
-    # internal
-    # checks
-    # SSH
-    # checks
-    # Telnet
-    # checks
-    # External
-    # checks
-    # Aggregate
-    # checks
-    # Trapper
-    # items
-    # JMX
-    # monitoring
-    # ODBC
-    # checks
-    # Dependent
-    # items
     data_type_choices = (
         (0, 'agent'),
         (1, 'SNMP'),
@@ -214,6 +194,22 @@ class MonitorItem(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Trigger(models.Model):
+    """
+    触发器
+    """
+    id = models.BigAutoField(primary_key=True)
+    expression = models.CharField(u'触发器表达式', max_length=256, default='')
+    template_id = models.IntegerField(u'模板', default=0)
+
+    class Meta:
+        verbose_name_plural = '触发器表'
+        db_table = 'trigger'
+
+    def __str__(self):
+        return self.expression
 
 
 class BusinessUnit(models.Model):
