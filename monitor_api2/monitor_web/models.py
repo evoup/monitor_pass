@@ -388,3 +388,36 @@ class Memory(models.Model):
 
     def __str__(self):
         return self.slot
+
+
+class AssetRecord(models.Model):
+    """
+    资产变更记录,creator为空时，表示是资产汇报的数据。
+    """
+    asset_obj = models.ForeignKey('Asset', related_name='ar',null=True, blank=True, on_delete=models.CASCADE)
+    content = models.TextField(null=True)
+    creator = models.ForeignKey('UserProfile', null=True, blank=True, on_delete=models.CASCADE)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name_plural = "资产记录表"
+
+    def __str__(self):
+        return "%s-%s-%s" % (self.asset_obj.idc.name, self.asset_obj.cabinet_num, self.asset_obj.cabinet_order)
+
+
+class AssetErrorLog(models.Model):
+    """
+    错误日志,如：agent采集数据错误 或 运行错误
+    """
+    asset_obj = models.ForeignKey('Asset', null=True, blank=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=16)
+    content = models.TextField()
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "错误日志表"
+
+    def __str__(self):
+        return self.title
