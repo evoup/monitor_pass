@@ -153,6 +153,7 @@ class Event(models.Model):
     time = models.DateTimeField(u'发生时间')
     host_id = models.ForeignKey('Server', on_delete=models.CASCADE)
     type = TinyIntegerField(u'事件类型', choices=event_type_choice, default=0)
+    acknowledge = models.CharField(u'确认文字', max_length=200, default='')
 
     class Meta:
         # ordering = ('id',)
