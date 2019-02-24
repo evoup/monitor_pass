@@ -89,7 +89,7 @@ class Server(models.Model):
 
     create_at = models.DateTimeField(auto_now_add=True, blank=True)
     server_group = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
-    data_collector_id = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
+    data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         # ordering = ('id',)
@@ -312,3 +312,21 @@ class Asset(models.Model):
 
     def __str__(self):
         return "%s-%s-%s" % (self.idc.name, self.cabinet_num, self.cabinet_order)
+
+
+class NetworkDevice(models.Model):
+    """
+    网络设备
+    """
+    asset = models.OneToOneField('Asset', on_delete=models.CASCADE, default="", editable=False)
+    management_ip = models.CharField('管理IP', max_length=64, blank=True, null=True)
+    vlan_ip = models.CharField('VlanIP', max_length=64, blank=True, null=True)
+    intranet_ip = models.CharField('内网IP', max_length=128, blank=True, null=True)
+    sn = models.CharField('SN号', max_length=64, unique=True)
+    manufacture = models.CharField(verbose_name=u'制造商', max_length=128, null=True, blank=True)
+    model = models.CharField('型号', max_length=128, null=True, blank=True)
+    port_num = models.SmallIntegerField('端口个数', null=True, blank=True)
+    device_detail = models.CharField('设置详细配置', max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "网络设备"
