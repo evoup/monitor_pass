@@ -330,6 +330,10 @@ class NetworkDevice(models.Model):
 
     class Meta:
         verbose_name_plural = "网络设备"
+        db_table = 'network_device'
+
+    def __str__(self):
+        return self.sn
 
 
 
@@ -345,6 +349,7 @@ class Disk(models.Model):
 
     class Meta:
         verbose_name_plural = "硬盘表"
+        db_table = 'disk'
 
     def __str__(self):
         return self.slot
@@ -364,6 +369,7 @@ class NIC(models.Model):
 
     class Meta:
         verbose_name_plural = "网卡表"
+        db_table = 'nic'
 
     def __str__(self):
         return self.name
@@ -385,6 +391,7 @@ class Memory(models.Model):
 
     class Meta:
         verbose_name_plural = "内存表"
+        db_table = 'memory'
 
     def __str__(self):
         return self.slot
@@ -402,6 +409,7 @@ class AssetRecord(models.Model):
 
     class Meta:
         verbose_name_plural = "资产记录表"
+        db_table = 'addset_record'
 
     def __str__(self):
         return "%s-%s-%s" % (self.asset_obj.idc.name, self.asset_obj.cabinet_num, self.asset_obj.cabinet_order)
@@ -418,6 +426,6 @@ class AssetErrorLog(models.Model):
 
     class Meta:
         verbose_name_plural = "错误日志表"
-
+        db_table = 'assert_error_log'
     def __str__(self):
         return self.title
