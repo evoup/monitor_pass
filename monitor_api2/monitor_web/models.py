@@ -330,3 +330,61 @@ class NetworkDevice(models.Model):
 
     class Meta:
         verbose_name_plural = "网络设备"
+
+
+
+class Disk(models.Model):
+    """
+    硬盘信息
+    """
+    slot = models.CharField('插槽位', max_length=8)
+    model = models.CharField('磁盘型号', max_length=32)
+    capacity = models.FloatField('磁盘容量GB')
+    pd_type = models.CharField('磁盘类型', max_length=32)
+    server_obj = models.ForeignKey('Server',related_name='disk', null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "硬盘表"
+
+    def __str__(self):
+        return self.slot
+
+
+class NIC(models.Model):
+    """
+    网卡信息
+    """
+    name = models.CharField('网卡名称', max_length=128)
+    hwaddr = models.CharField('网卡mac地址', max_length=64)
+    netmask = models.CharField(max_length=64)
+    ipaddrs = models.CharField('ip地址', max_length=256)
+    up = models.BooleanField(default=False)
+    server_obj = models.ForeignKey('Server',related_name='nic',null=True, blank=True, on_delete=models.CASCADE)
+
+
+    class Meta:
+        verbose_name_plural = "网卡表"
+
+    def __str__(self):
+        return self.name
+
+
+class Memory(models.Model):
+    """
+    内存信息
+    """
+    slot = models.CharField('插槽位', max_length=32)
+    manufacturer = models.CharField('制造商', max_length=32, null=True, blank=True)
+    model = models.CharField('型号', max_length=64)
+    capacity = models.FloatField('容量', null=True, blank=True)
+    sn = models.CharField('内存SN号', max_length=64, null=True, blank=True)
+    speed = models.CharField('速度', max_length=16, null=True, blank=True)
+
+    server_obj = models.ForeignKey('Server',related_name='memory',null=True, blank=True, on_delete=models.CASCADE)
+
+
+    class Meta:
+        verbose_name_plural = "内存表"
+
+    def __str__(self):
+        return self.slot
