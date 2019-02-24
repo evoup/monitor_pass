@@ -47,6 +47,7 @@ class UserGroup(models.Model):
     """
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE, default="", editable=False)
     desc = models.CharField(max_length=512, blank=True, default="")
+    server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group')
 
     class Meta:
         verbose_name_plural = "用户组表"
