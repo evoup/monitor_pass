@@ -143,10 +143,17 @@ class Event(models.Model):
     """
     监控事件，类似zabix的history，这里记录所有事件，最终是一个大表，会用mysql进行分区
     """
+    event_type_choice = (
+        (0, 'normal'),
+        (1, 'caution'),
+        (2, 'warning')
+    )
     id = models.BigAutoField(primary_key=True)
     event = models.CharField(u'监控事件', max_length=200, null=False)
-    date = models.DateTimeField(u'发生时间')
+    time = models.DateTimeField(u'发生时间')
     host_id = models.ForeignKey('Server', on_delete=models.CASCADE)
+    type = TinyIntegerField(u'事件类型', choices=event_type_choice, default=0)
+
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '监控事件表'
@@ -154,6 +161,22 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event
+
+
+class Alert(models.Model):
+    """
+    告警
+    """
+    id = models.BigAutoField(primary_key=True)
+    time = models.DateTimeField(auto_now_add=True)
+    send_to = models.ForeignKey('UserProfile', on_delete=models.CASCADE, default="", editable=False)
+    subject = models.CharField(u'告警正文', max_length=255, default='', null=False)
+    class Meta:
+        verbose_name_plural = '告警表'
+        db_table = 'alert'
+
+    def __str__(self):
+        return self.subject
 
 
 class Template(models.Model):
