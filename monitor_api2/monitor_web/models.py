@@ -71,6 +71,23 @@ class Server(models.Model):
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     status = models.IntegerField(choices=status_choices, default=0)
+    asset = models.OneToOneField('Asset', on_delete=models.CASCADE, default="", editable=False)
+
+    hostname = models.CharField(max_length=128, unique=True, default='')
+    sn = models.CharField('SN号', max_length=64, db_index=True, default='')
+    manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
+    model = models.CharField('型号', max_length=64, null=True, blank=True)
+
+    manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
+
+    os_platform = models.CharField('系统', max_length=16, null=True, blank=True)
+    os_version = models.CharField('系统版本', max_length=16, null=True, blank=True)
+
+    cpu_count = models.IntegerField('CPU个数', null=True, blank=True)
+    cpu_physical_count = models.IntegerField('CPU物理个数', null=True, blank=True)
+    cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
+
+    create_at = models.DateTimeField(auto_now_add=True, blank=True)
     server_group = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
     data_collector_id = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
 
