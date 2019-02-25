@@ -151,7 +151,7 @@ class Event(models.Model):
     id = models.BigAutoField(primary_key=True)
     event = models.CharField(u'监控事件', max_length=200, null=False)
     time = models.DateTimeField(u'发生时间')
-    host_id = models.ForeignKey('Server', on_delete=models.CASCADE)
+    monitor_item = models.ForeignKey('MonitorItem', on_delete=models.CASCADE, default='', editable=False)
     type = TinyIntegerField(u'事件类型', choices=event_type_choice, default=0)
     acknowledge = models.CharField(u'确认文字', max_length=200, default='')
 
@@ -172,6 +172,7 @@ class Alert(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     send_to = models.ForeignKey('UserProfile', on_delete=models.CASCADE, default="", editable=False)
     subject = models.CharField(u'告警正文', max_length=255, default='', null=False)
+    monitor_item = models.ForeignKey('MonitorItem', on_delete=models.CASCADE, default="", editable=False)
     class Meta:
         verbose_name_plural = '告警表'
         db_table = 'alert'
