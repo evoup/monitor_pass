@@ -11,14 +11,14 @@ from django.dispatch import receiver
 from web.common import TinyIntegerField
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     """
     用户信息，扩展自django auth_user
     """
     name = models.CharField(u'姓名', max_length=32)
     # email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32)
-    mobile = models.IntegerField(u'手机')
+    mobile = models.IntegerField(u'手机', null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', default="", editable=False)
 
     class Meta:
@@ -31,11 +31,11 @@ class UserProfile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        Profile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.user_profile.save()
+    instance.profile.save()
 # ----------扩展django用户结束-----------------
 
 
@@ -170,7 +170,7 @@ class Alert(models.Model):
     """
     id = models.BigAutoField(primary_key=True)
     time = models.DateTimeField(auto_now_add=True)
-    send_to = models.ForeignKey('UserProfile', on_delete=models.CASCADE, default="", editable=False)
+    send_to = models.ForeignKey('Profile', on_delete=models.CASCADE, default="", editable=False)
     subject = models.CharField(u'告警正文', max_length=255, default='', null=False)
     monitor_item = models.ForeignKey('MonitorItem', on_delete=models.CASCADE, default="", editable=False)
     class Meta:
@@ -428,7 +428,7 @@ class AssetRecord(models.Model):
     """
     asset_obj = models.ForeignKey('Asset', related_name='ar',null=True, blank=True, on_delete=models.CASCADE)
     content = models.TextField(null=True)
-    creator = models.ForeignKey('UserProfile', null=True, blank=True, on_delete=models.CASCADE)
+    creator = models.ForeignKey('Profile', null=True, blank=True, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
 
 

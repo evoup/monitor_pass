@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
-from monitor_web.models import Server, UserProfile
+from monitor_web.models import Server, Profile
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
 
@@ -23,7 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = UserProfile.objects.all()
+    queryset = Profile.objects.all()
     serializer_class = UserProfileSerializer
 
 

@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from monitor_web.models import Server, UserProfile
+from monitor_web.models import Server, Profile
 
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = UserProfile
+        model = Profile
         # fields = {'id', 'name', 'email', 'telephone', 'mobile'}
         fields = '__all__'  # all model fields will be included
 

@@ -7,7 +7,7 @@ from monitor_web import models
 from monitor_web.models import UserGroup
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 
-admin.site.register(models.UserProfile)
+admin.site.register(models.Profile)
 admin.site.register(models.Server)
 admin.site.register(models.DataCollector)
 admin.site.register(models.Event)
