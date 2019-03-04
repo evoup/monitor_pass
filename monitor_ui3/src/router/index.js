@@ -39,7 +39,7 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
+    path: '/dashboard',
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
@@ -56,6 +56,38 @@ export const constantRouterMap = [
         name: 'Tree',
         component: () => import('@/views/tree/index'),
         meta: { title: '监控服务器状态', icon: 'tree' }
+      }
+    ]
+  },  {
+    path: '/servers',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '服务器', icon: 'example' },
+    children: [
+      {
+        path: '/add_server',
+        name: 'Table',
+        component: () => import('@/views/form/index'),
+        meta: { title: '添加服务器', icon: 'form' }
+      },
+      {
+        path: '/server_manager',
+        name: 'Table',
+        component: () => import('@/views/form/index'),
+        meta: { title: '服务器詳情管理', icon: 'form' }
+      },
+      {
+        path: 'batch_file_upload',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '批量文件上传', icon: 'tree' }
+      },
+      {
+        path: 'batch_command_execute',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '批量命令执行', icon: 'tree' }
       }
     ]
   },
