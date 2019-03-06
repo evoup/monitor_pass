@@ -75,6 +75,7 @@ class ServerList(APIView):
     def dispatch(self, *args, **kwargs):
         return super(ServerList, self).dispatch(*args, **kwargs)
 
+
 @permission_classes((IsAuthenticated,))
 class UserInfo(APIView):
 
@@ -94,6 +95,29 @@ class UserInfo(APIView):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UserInfo, self).dispatch(*args, **kwargs)
+
+
+@permission_classes((IsAuthenticated,))
+class ServerInfo(APIView):
+
+    def get(self, *args, **kwargs):
+        ret = {
+            "code": 20000,
+            "data": {
+                "name": "server1"
+            }
+        }
+        return JsonResponse(ret, safe=False)
+    def post(self, *args, **kwargs):
+        data = JSONParser().parse(self.request)
+        # TODO 需要写入数据库
+        ret = {
+            "code": 20000
+        }
+        return JsonResponse(ret, safe=False)
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(ServerInfo, self).dispatch(*args, **kwargs)
 
 
 @csrf_exempt
