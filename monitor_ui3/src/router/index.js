@@ -68,25 +68,25 @@ export const constantRouterMap = [
     children: [
       {
         path: '/add_server',
-        name: 'Table',
+        name: 'Table1',
         component: () => import('@/views/server/add_server'),
         meta: { title: '添加服务器', icon: 'form' }
       },
       {
         path: '/server_manager',
-        name: 'Table',
+        name: 'Table2',
         component: () => import('@/views/form/index'),
         meta: { title: '服务器詳情管理', icon: 'form' }
       },
       {
         path: 'batch_file_upload',
-        name: 'Tree',
+        name: 'Tree1',
         component: () => import('@/views/tree/index'),
         meta: { title: '批量文件上传', icon: 'tree' }
       },
       {
         path: 'batch_command_execute',
-        name: 'Tree',
+        name: 'Tree2',
         component: () => import('@/views/tree/index'),
         meta: { title: '批量命令执行', icon: 'tree' }
       }
@@ -100,25 +100,25 @@ export const constantRouterMap = [
     children: [
       {
         path: '/general_conf',
-        name: 'Table',
+        name: 'Table3',
         component: () => import('@/views/form/index'),
         meta: { title: '常規設置', icon: 'form' }
       },
       {
         path: '/server_manager',
-        name: 'Table',
+        name: 'Table4',
         component: () => import('@/views/form/index'),
         meta: { title: '服务器詳情管理', icon: 'form' }
       },
       {
         path: 'batch_file_upload',
-        name: 'Tree',
+        name: 'Tree3',
         component: () => import('@/views/tree/index'),
         meta: { title: '批量文件上传', icon: 'tree' }
       },
       {
         path: 'batch_command_execute',
-        name: 'Tree',
+        name: 'Tree4',
         component: () => import('@/views/tree/index'),
         meta: { title: '批量命令执行', icon: 'tree' }
       }

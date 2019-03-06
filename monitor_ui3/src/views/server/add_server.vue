@@ -27,7 +27,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">创建</el-button>
+        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp)">创建</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -35,12 +35,15 @@
 </template>
 
 <script>
+import { add_server } from '@/api/server'
 export default {
   data() {
     return {
       form: {
         client: '',
         name: '',
+        jmx: '',
+        snmp: '',
         region: '',
         date1: '',
         date2: '',
@@ -53,6 +56,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      add_server('a', 'b', 'c', 'd')
       this.$message('submit!')
     },
     onCancel() {
@@ -60,6 +64,10 @@ export default {
         message: 'cancel!',
         type: 'warning'
       })
+    },
+    addServer(a, b, c, d) {
+      add_server(a, b, c, d)
+      this.$message('服务器已添加!')
     }
   }
 }
