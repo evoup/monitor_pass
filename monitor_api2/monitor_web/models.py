@@ -89,6 +89,9 @@ class Server(models.Model):
 
     create_at = models.DateTimeField(auto_now_add=True, blank=True)
     server_group = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
+    agent_address = models.CharField('监控代理地址', max_length=50, default='')
+    jmx_address = models.CharField('jmx地址', max_length=50, default='')
+    snmp_address = models.CharField('snmp地址', max_length=50, default='')
     data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:

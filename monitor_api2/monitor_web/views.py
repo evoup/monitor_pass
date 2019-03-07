@@ -9,7 +9,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
-
 from monitor_web.models import Server, Profile
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
@@ -108,13 +107,16 @@ class ServerInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         # TODO 需要写入数据库
         ret = {
             "code": 20000
         }
+        Server.objects.create(name='yinjia_server', agent_address='172.14.25.122:5080', jmx_address='', snmp_address='')
         return JsonResponse(ret, safe=False)
+
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(ServerInfo, self).dispatch(*args, **kwargs)
