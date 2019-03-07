@@ -110,7 +110,6 @@ class ServerInfo(APIView):
 
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
-        # TODO 需要写入数据库
         ret = {
             "code": 20000
         }
