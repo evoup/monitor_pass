@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +14,7 @@ from monitor_web.models import Server, Profile
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
 
+logger = logging.getLogger(__name__)
 
 def index(request):
     return HttpResponse("hello")
@@ -111,9 +113,18 @@ class ServerInfo(APIView):
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         ret = {
-            "code": 20000
+            "code": 20000,
+            'message': 'f '
         }
-        Server.objects.create(name='yinjia_server', agent_address='172.14.25.122:5080', jmx_address='', snmp_address='')
+        # logger.info(data)
+        try:
+            Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'])
+        except:
+            # logger.error("error")
+            ret = {
+                'code': 40000,
+                'message': '服务器创建失败'
+            }
         return JsonResponse(ret, safe=False)
 
     @csrf_exempt

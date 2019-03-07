@@ -71,9 +71,10 @@ class Server(models.Model):
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     status = models.IntegerField(choices=status_choices, default=0)
-    asset = models.OneToOneField('Asset', on_delete=models.CASCADE, default="", editable=False)
+    # asset = models.OneToOneField('Asset', on_delete=models.CASCADE, default="", editable=False)
+    asset = models.OneToOneField('Asset', on_delete=models.CASCADE, null=True, blank=True)
 
-    hostname = models.CharField(max_length=128, unique=True, default='')
+    hostname = models.CharField(max_length=128, unique=True, null=True)
     sn = models.CharField('SN号', max_length=64, db_index=True, default='')
     manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
