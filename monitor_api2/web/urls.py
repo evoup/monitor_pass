@@ -38,7 +38,9 @@ urlpatterns = [
         # 查询是否过期，过期
         url(r'^login/status/$', views.LoginStatus.as_view()),
         url(r'^user/info$', views.UserInfo.as_view()),
-        #添加服务器
+        # 添加服务器
         url(r'^server/info$', views.ServerInfo.as_view()),
+        # 服务器列表
+        url(r'^server/list$', views.ServerList.as_view()),
     ]))
 ]

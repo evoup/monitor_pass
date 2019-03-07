@@ -32,6 +32,7 @@ services:
     restart: always
     volumes:
       - .:/code
+      - /services/logs/monitor-api2:/services/logs/
     ports:
       - "8000:8000" # Expose API port
     depends_on:

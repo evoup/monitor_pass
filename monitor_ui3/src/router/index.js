@@ -76,7 +76,7 @@ export const constantRouterMap = [
         path: '/server_manager',
         name: 'Table2',
         component: () => import('@/views/form/index'),
-        meta: { title: '服务器詳情管理', icon: 'form' }
+        meta: { title: '服务器详情管理', icon: 'form' }
       },
       {
         path: 'batch_file_upload',

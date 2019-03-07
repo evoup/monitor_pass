@@ -98,8 +98,12 @@ class UserInfo(APIView):
         return super(UserInfo, self).dispatch(*args, **kwargs)
 
 
+
 @permission_classes((IsAuthenticated,))
 class ServerInfo(APIView):
+    """
+    单台服务器
+    """
 
     def get(self, *args, **kwargs):
         ret = {
@@ -130,6 +134,27 @@ class ServerInfo(APIView):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(ServerInfo, self).dispatch(*args, **kwargs)
+
+
+@permission_classes((IsAuthenticated,))
+class ServerList(APIView):
+
+    def get(self, *args, **kwargs):
+        ret = {
+            "code": 20000,
+            "data": {
+                "items": [
+      {
+        "id": "43000020070512924X",
+        "title": "server1",
+        "status": "正常",
+        "author": "name",
+        "display_time": "1987-08-19 15:06:32",
+        "pageviews": 2638
+      }]
+            }
+        }
+        return JsonResponse(ret, safe=False)
 
 
 @csrf_exempt
