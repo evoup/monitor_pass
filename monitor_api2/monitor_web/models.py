@@ -18,7 +18,7 @@ class Profile(models.Model):
     name = models.CharField(u'姓名', max_length=32)
     # email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32)
-    mobile = models.IntegerField(u'手机', null=True)
+    mobile = models.IntegerField(u'手机', blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', default="", editable=False)
 
     class Meta:
