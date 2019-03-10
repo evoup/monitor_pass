@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'monitor',
         'USER': 'dba',
         'PASSWORD': '123456',
-        'HOST': 'db',
+        'HOST': 'mydb',
         'PORT': '3306'
     }
 }
