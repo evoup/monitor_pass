@@ -1,3 +1,5 @@
+Monitoring System2.0 [![Build Status](https://travis-ci.org/evoup/monitor_pass.svg?branch=master)](https://travis-ci.org/evoup/monitor_pass)
+-----------------------------------------------------------------------------------------------------------------------------------
 ### 服务器监控系统2.0
 
 #部署方法：
