@@ -6,6 +6,7 @@ matrix:
       services:
         - mysql
       before_install:
+        - whoami
         - sudo mkdir -p /services/logs/
         - cd monitor_api2/
       env:
