@@ -1,15 +1,15 @@
-version: '3'
+version: '2.2'
 
 services:
   db:
     container_name: monitor-pass-db
-    image: mysql:8
-    command: --default-authentication-plugin=mysql_native_password --init-file /code/files/init.sql
+    image: mysql:5.7
+    #command: --default-authentication-plugin=mysql_native_password --init-file /code/files/init.sql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      #MYSQL_USER: dba
-      #MYSQL_PASSWORD: 123456
+      MYSQL_USER: dba
+      MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: monitor
     volumes:
       - .:/code
@@ -18,6 +18,11 @@ services:
       - seccomp:unconfined
     ports:
       - "3306:3306" # same for localhost dev
+    healthcheck:
+      test: "/usr/bin/mysql --user=dba --password=123456 --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
 
   api: # django App
     container_name: monitor-api2
@@ -36,7 +41,10 @@ services:
     ports:
       - "8000:8000" # Expose API port
     depends_on:
-      - frontend
+      db:
+        condition: service_healthy
+    links:
+    - db:mydb
 
   adminer:
     container_name: monitor-pass-adminer
@@ -45,7 +53,8 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend: # Nginx Server For Frontend App
     container_name: monitor-ui2
@@ -57,7 +66,7 @@ services:
     ports:
       - "80:80" # Forward site to localhost:80
     depends_on:
-      - adminer
+      - api
 
 
 volumes:

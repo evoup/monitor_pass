@@ -1,3 +1,6 @@
 CREATE DATABASE IF NOT EXISTS monitor;
-CREATE USER 'dba'@'%' IDENTIFIED BY '123456';
+--CREATE USER 'dba'@'%' IDENTIFIED BY '123456';
+ALTER USER 'dba'@'%' IDENTIFIED WITH mysql_native_password BY '123456';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123456'; 
 GRANT ALL PRIVILEGES ON monitor.* TO 'dba'@'%';
+FLUSH PRIVILEGES;
