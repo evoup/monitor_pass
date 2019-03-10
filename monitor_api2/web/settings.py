@@ -88,6 +88,14 @@ DATABASES = {
         'PASSWORD': '123456',
         'HOST': 'mydb',
         'PORT': '3306'
+    },
+    'travis': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'monitor',
+        'USER': 'dba',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 
