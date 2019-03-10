@@ -9,9 +9,9 @@ matrix:
         - sudo mkdir -p /services/logs/
         - sudo chown -R travis /services/logs/
         - cd monitor_api2/
-        - mysql -e 'CREATE DATABASE IF NOT EXISTS test_monitor;'
+        #- mysql -e 'CREATE DATABASE IF NOT EXISTS test_monitor;'
         - mysql -e "CREATE USER 'dba'@'localhost' IDENTIFIED BY '123456';"
-        - mysql -e "GRANT ALL PRIVILEGES ON test_monitor.* TO 'dba'@'localhost';"
+        - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'dba'@'localhost';"
         - mysql -e 'FLUSH PRIVILEGES;'
       env:
         -DJANGO=2.13 DB=mysql
