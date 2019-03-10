@@ -6,8 +6,8 @@ matrix:
       services:
         - mysql
       before_install:
-        - whoami
         - sudo mkdir -p /services/logs/
+        - sudo chown -R travis /services/logs/
         - cd monitor_api2/
       env:
         -DJANGO=2.13 DB=mysql
