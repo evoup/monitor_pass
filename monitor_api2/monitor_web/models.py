@@ -454,7 +454,7 @@ class AssetErrorLog(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = "错误日志表"
+        verbose_name_plural = '错误日志表'
         db_table = 'assert_error_log'
     def __str__(self):
         return self.title
