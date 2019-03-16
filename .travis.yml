@@ -24,3 +24,14 @@ matrix:
     - pip install -r requirements.txt
     script:
     - DJANGO_SETTINGS_MODULE='web.travis_settings' ./manage.py test
+
+  - language: node_js
+    node_js:
+    - "10.15.3"
+    before_install:
+    - cd monitor_ui3/
+    install:
+    - npm install
+    script:
+    - npm run build
+
