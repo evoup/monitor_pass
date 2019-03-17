@@ -11,6 +11,7 @@ services:
       MYSQL_USER: dba
       MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: monitor
+      DJANGO_SETTINGS_MODULE: web.travis_settings
     volumes:
       - .:/code
       - monitor_db_data_volume:/var/lib/mysql
