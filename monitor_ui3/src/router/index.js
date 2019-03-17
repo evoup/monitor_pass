@@ -73,9 +73,9 @@ export const constantRouterMap = [
         meta: { title: '添加服务器', icon: 'form' }
       },
       {
-        path: '/server_manager',
+        path: '/server_list',
         name: 'Table2',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/server/server_list'),
         meta: { title: '服务器详情管理', icon: 'form' }
       },
       {
