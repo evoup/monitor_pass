@@ -4,16 +4,27 @@
     stripe
     style="width: 100%">
     <el-table-column
-      label="日期"
-      prop="date"
-      width="180" />
-
-    <el-table-column
-      label="姓名"
+      label="主机名"
       prop="name"
       width="180" />
     <el-table-column
-      label="地址"
+      label="IP"
+      prop="ip"
+      width="180" />
+    <el-table-column
+      label="收集节点"
+      prop="data_collector"
+      width="180" />
+    <el-table-column
+      label="更新时间"
+      prop="date"
+      width="180" />
+    <el-table-column
+      label="状态"
+      prop="status"
+      width="180" />
+    <el-table-column
+      label="机房"
       prop="address" />
   </el-table>
 </template>
@@ -24,21 +35,33 @@ export default {
   data() {
     return {
       tableData: [{
+        name: 'server1',
+        ip: '222.73.254.111',
+        data_collector: 'data_collector0',
         date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        status: '在线',
+        address: '花木机房'
       }, {
+        name: 'server2',
+        ip: '222.73.254.111',
+        data_collector: 'data_collector0',
         date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
+        status: '在线',
+        address: '花木机房'
       }, {
+        name: 'server3',
+        ip: '222.73.254.111',
+        data_collector: 'data_collector0',
         date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
+        status: '在线',
+        address: '花木机房'
       }, {
+        name: 'server4',
+        ip: '222.73.254.111',
+        data_collector: 'data_collector0',
         date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
+        status: '在线',
+        address: '花木机房'
       }]
     }
   },
