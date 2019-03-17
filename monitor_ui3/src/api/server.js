@@ -12,3 +12,11 @@ export function add_server(name, agent_addr, jmx_addr, snmp_addr) {
     }
   })
 }
+
+export function server_list(param) {
+  return request({
+    url: '/server/list',
+    method: 'get',
+    param
+  })
+}
