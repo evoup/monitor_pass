@@ -3,6 +3,9 @@ matrix:
   - language: python
     python:
     - 3.5
+    branches:
+      only:
+        - master
     services:
     - mysql
     before_install:
@@ -28,6 +31,12 @@ matrix:
   - language: node_js
     node_js:
     - "10.15.3"
+    branches:
+      only:
+        - master
+    cache:
+      directories:
+        - node_modules
     before_install:
     - cd monitor_ui3/
     install:
