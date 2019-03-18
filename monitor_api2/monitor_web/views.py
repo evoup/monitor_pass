@@ -143,15 +143,33 @@ class ServerList(APIView):
         ret = {
             "code": 20000,
             "data": {
+                "count": 5,
                 "items": [
-      {
-        "id": "43000020070512924X",
-        "title": "server1",
-        "status": "正常",
-        "author": "name",
-        "display_time": "1987-08-19 15:06:32",
-        "pageviews": 2638
-      }]
+                    {
+                        'name': 'server1.madserving.com',
+                        'ip': '222.73.254.111',
+                        'data_collector': 'data_collector0',
+                        'date': '2016-05-01',
+                        'status': 0,
+                        'address': '花木机房'
+                    },
+                    {
+                        'name': 'adx.madserving.com',
+                        'ip': '222.73.254.111',
+                        'data_collector': 'data_collector0',
+                        'date': '2016-05-01',
+                        'status': 1,
+                        'address': '花木机房'
+                    },
+                    {
+                        'name': 'server3',
+                        'ip': '222.73.254.111',
+                        'data_collector': 'data_collector0',
+                        'date': '2016-05-01',
+                        'status': 1,
+                        'address': '花木机房'
+                    }
+                ]
             }
         }
         return JsonResponse(ret, safe=False)
