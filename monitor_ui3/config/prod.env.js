@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"http://192.168.2.197:81/mmsapi2.0"',
+  BASE_API: '"http://monitor.evoupsight.com/mmsapi2.0"',
 }
