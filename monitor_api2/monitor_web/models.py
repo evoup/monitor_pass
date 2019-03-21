@@ -8,7 +8,7 @@ from django.dispatch import receiver
 
 
 # ----------扩展django用户开始-----------------
-from web.common import TinyIntegerField
+from web.common.db_fields import TinyIntegerField
 
 
 class Profile(models.Model):

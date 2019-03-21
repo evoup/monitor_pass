@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import web.common
+import web.common.db_fields
 
 
 class Migration(migrations.Migration):
@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('event', models.CharField(max_length=200, verbose_name='监控事件')),
                 ('time', models.DateTimeField(verbose_name='发生时间')),
-                ('type', web.common.TinyIntegerField(choices=[(0, 'normal'), (1, 'caution'), (2, 'warning')], default=0, verbose_name='事件类型')),
+                ('type', web.common.db_fields.TinyIntegerField(choices=[(0, 'normal'), (1, 'caution'), (2, 'warning')], default=0, verbose_name='事件类型')),
                 ('acknowledge', models.CharField(default='', max_length=200, verbose_name='确认文字')),
             ],
             options={
@@ -157,7 +157,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=40, verbose_name='监控项名')),
-                ('data_type', web.common.TinyIntegerField(choices=[(0, 'agent'), (1, 'SNMP'), (2, 'JMX')], default=0, verbose_name='数据类型')),
+                ('data_type', web.common.db_fields.TinyIntegerField(choices=[(0, 'agent'), (1, 'SNMP'), (2, 'JMX')], default=0, verbose_name='数据类型')),
                 ('delay', models.IntegerField(default=1, verbose_name='轮询间隔秒数')),
                 ('desc', models.CharField(default='', max_length=50, verbose_name='描述')),
                 ('error', models.CharField(default='', max_length=50, verbose_name='错误')),

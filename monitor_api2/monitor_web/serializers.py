@@ -9,10 +9,12 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'  # all model fields will be included
 
 
-class ServerSerializer(serializers.HyperlinkedModelSerializer):
+class ServerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Server
-        fields = ('id', 'name', 'ip')
+        # fields = ('id', 'name', 'ip')
+        fields = '__all__'
+
 
 
 
