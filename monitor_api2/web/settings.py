@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'monitor_web.apps.MonitorWebConfig',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -253,4 +254,9 @@ LOGGING = {
             'propagate': False
         },
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2
 }

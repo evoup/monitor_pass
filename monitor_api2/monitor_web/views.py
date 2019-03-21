@@ -3,16 +3,20 @@ import logging
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.decorators import permission_classes
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
+
+from monitor_web import models
 from monitor_web.models import Server, Profile
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
+from web.common.paging import MyPageNumberPagination
 
 logger = logging.getLogger(__name__)
 
@@ -139,37 +143,20 @@ class ServerInfo(APIView):
 @permission_classes((IsAuthenticated,))
 class ServerList(APIView):
 
-    def get(self, *args, **kwargs):
+    def get(self, request, pk=None, format=None):
+        # 获取所有数据
+        records = models.Server.objects.all()
+        # 创建分页对象，这里是自定义的MyPageNumberPagination
+        pg = MyPageNumberPagination()
+        # 获取分页的数据
+        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        # 对数据进行序列化
+        ser = ServerSerializer(instance=page_roles, many=True)
         ret = {
             "code": 20000,
             "data": {
-                "count": 5,
-                "items": [
-                    {
-                        'name': 'server1.madserving.com',
-                        'ip': '222.73.254.111',
-                        'data_collector': 'data_collector0',
-                        'date': '2016-05-01',
-                        'status': 0,
-                        'address': '花木机房'
-                    },
-                    {
-                        'name': 'adx.madserving.com',
-                        'ip': '222.73.254.111',
-                        'data_collector': 'data_collector0',
-                        'date': '2016-05-01',
-                        'status': 1,
-                        'address': '花木机房'
-                    },
-                    {
-                        'name': 'server3',
-                        'ip': '222.73.254.111',
-                        'data_collector': 'data_collector0',
-                        'date': '2016-05-01',
-                        'status': 1,
-                        'address': '花木机房'
-                    }
-                ]
+                "count": len(records),
+                "items": ser.data
             }
         }
         return JsonResponse(ret, safe=False)
