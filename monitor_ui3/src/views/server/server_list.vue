@@ -22,10 +22,12 @@
     </el-col>
     <el-table
       :v-loading="listLoading"
-      :data="list"
-      :height="tableHeight"
+      :data="dataList"
       stripe
+      border
+      tooltip-effect="dark"
       style="width: 100%">
+      <el-table-column :index="indexMethod" label="序号" type="index" width="50" align="center" />
       <el-table-column
         label="主机名"
         prop="name"
@@ -33,7 +35,7 @@
       <el-table-column
         label="IP"
         prop="ip"
-        width="180" />
+        width="130" />
       <el-table-column
         label="收集节点"
         prop="data_collector"
@@ -45,7 +47,7 @@
       <el-table-column
         label="状态"
         prop="status"
-        width="180">
+        width="80">
         <template scope="scope">
           <el-tag v-if="scope.row.status === 1" type="success">在线</el-tag>
           <el-tag v-if="scope.row.status === 2" type="danger">宕机</el-tag>
@@ -66,9 +68,16 @@
      layout：分页显示的样式
      :page-size：每页显示的条数
      :total：总数
-     具体功能查看地址：http://element.eleme.io/#/zh-CN/component/pagination
+     具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
      -->
-      <el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />
+      <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
+      <el-pagination
+        :page-sizes="[5,10,15]"
+        :page-size="5"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-col>
   </div>
 </template>
@@ -81,19 +90,33 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        在线: 'success',
-        离线: 'gray'
+        '在线': 'success',
+        '离线': 'gray'
       }
       return statusMap[status]
     }
   },
   data() {
     return {
+      typeData: [],
+      dataList: [], // 列表数据
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1, // 和后端参数一样
+        size: 5, // 后端参数为size
+        order: 'asc'
+      },
       filters: {
         name: '',
         type: 1
       },
-      list: null,
       listLoading: true,
       total: 0,
       pageNum: 1
@@ -112,8 +135,10 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      server_list(this.listQuery).then(response => {
-        this.list = response.data.items
+      this.pageHelp.page = this.pageNum
+      server_list(this.pageHelp).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
         this.listLoading = false
         this.total = response.data.count
       })
@@ -127,6 +152,15 @@ export default {
         { value: 4, label: '手机号码' },
         { value: 5, label: '联系人' }]
     },
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
+    },
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
+      this.fetchData()
+    },
     // 点击分页
     handleCurrentChange(val) {
       this.pageNum = val
@@ -135,3 +169,4 @@ export default {
   }
 }
 </script>
+

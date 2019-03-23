@@ -17,6 +17,6 @@ export function server_list(param) {
   return request({
     url: '/server/list',
     method: 'get',
-    param
+    params: param
   })
 }
