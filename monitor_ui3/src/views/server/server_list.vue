@@ -23,6 +23,7 @@
     <el-table
       :v-loading="listLoading"
       :data="list"
+      :height="tableHeight"
       stripe
       style="width: 100%">
       <el-table-column
@@ -100,6 +101,13 @@ export default {
   },
   created() {
     this.fetchData()
+  },
+  // 根据屏幕大小动态设置height属性
+  mounted: function() {
+    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 50
+    // window.innerHeight:浏览器的可用高度
+    // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
+    // 后面的50：根据需求空出的高度，自行调整
   },
   methods: {
     fetchData() {
