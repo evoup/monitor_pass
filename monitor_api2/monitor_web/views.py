@@ -147,7 +147,7 @@ class ServerList(APIView):
         # 获取所有数据
         records = models.Server.objects.all()
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        pg = MyPageNumberPagination()
+        pg = MyPageNumberPagination(request.GET.get('size', 7))
         # 获取分页的数据
         page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
@@ -156,7 +156,11 @@ class ServerList(APIView):
             "code": 20000,
             "data": {
                 "count": len(records),
-                "items": ser.data
+                "items": ser.data,
+                "page": {
+                    "currPage": request.GET.get('page', 1),
+                    "pageSize": request.GET.get('size', 5)
+                }
             }
         }
         return JsonResponse(ret, safe=False)
