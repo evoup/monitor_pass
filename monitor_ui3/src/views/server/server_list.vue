@@ -26,10 +26,12 @@
       stripe
       border
       tooltip-effect="dark"
-      style="width: 100%">
-      <el-table-column :index="indexMethod" label="序号" type="index" width="50" align="center" />
+      style="width: 100%"
+      @sort-change="sortChange">
+      <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
         label="主机名"
+        sortable="custom"
         prop="name"
         width="180" />
       <el-table-column
@@ -42,10 +44,12 @@
         width="180" />
       <el-table-column
         label="更新时间"
+        sortable="custom"
         prop="date"
         width="180" />
       <el-table-column
         label="状态"
+        sortable="custom"
         prop="status"
         width="80">
         <template scope="scope">
@@ -113,6 +117,10 @@ export default {
         size: 5, // 后端参数为size
         order: 'asc'
       },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
       filters: {
         name: '',
         type: 1
@@ -125,18 +133,11 @@ export default {
   created() {
     this.fetchData()
   },
-  // 根据屏幕大小动态设置height属性
-  mounted: function() {
-    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 50
-    // window.innerHeight:浏览器的可用高度
-    // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-    // 后面的50：根据需求空出的高度，自行调整
-  },
   methods: {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      server_list(this.pageHelp).then(response => {
+      server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false
@@ -161,9 +162,15 @@ export default {
       this.pageHelp.page = this.pageList.currPage
       this.fetchData()
     },
-    // 点击分页
+    // 点击分页sort-change
     handleCurrentChange(val) {
       this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      // console.log(column.prop + '-' + column.order)
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
       this.fetchData()
     }
   }
