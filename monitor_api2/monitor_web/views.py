@@ -145,7 +145,7 @@ class ServerList(APIView):
 
     def get(self, request, pk=None, format=None):
         # 获取所有数据
-        records = models.Server.objects.all()
+        records = models.Server.objects.all().order_by('server')
         # 创建分页对象，这里是自定义的MyPageNumberPagination
         pg = MyPageNumberPagination(request.GET.get('size', 7))
         # 获取分页的数据
