@@ -1,11 +1,9 @@
-import json
 import logging
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
-from rest_framework.generics import ListCreateAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -17,6 +15,7 @@ from monitor_web.models import Server, Profile
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
 from web.common.paging import MyPageNumberPagination
+from web.common.order import getOrderList
 
 logger = logging.getLogger(__name__)
 
@@ -144,8 +143,9 @@ class ServerInfo(APIView):
 class ServerList(APIView):
 
     def get(self, request, pk=None, format=None):
+        orderList, prop = getOrderList(request)
         # 获取所有数据
-        records = models.Server.objects.all().order_by('server')
+        records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*orderList)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
         pg = MyPageNumberPagination(request.GET.get('size', 7))
         # 获取分页的数据
