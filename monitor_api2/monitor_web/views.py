@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web import models
-from monitor_web.models import Server, Profile
+from monitor_web.models import Server, Profile, Asset, IDC
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, UserProfileSerializer
 from web.common.paging import MyPageNumberPagination
@@ -123,11 +124,12 @@ class ServerInfo(APIView):
             "code": 20000,
             'message': 'f '
         }
-        # logger.info(data)
         try:
-            Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'])
+            i, created = IDC.objects.get_or_create(name=data['idc'])
+            a = Asset.objects.create(idc=i)
+            Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'], asset=a)
         except:
-            # logger.error("error")
+            print(traceback.format_exc())
             ret = {
                 'code': 40000,
                 'message': '服务器创建失败'
