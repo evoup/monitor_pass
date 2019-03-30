@@ -9,6 +9,7 @@ from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 
 admin.site.register(models.Profile)
 admin.site.register(models.Server)
+admin.site.register(models.ServerGroup)
 admin.site.register(models.DataCollector)
 admin.site.register(models.Event)
 admin.site.register(models.UserGroup)
@@ -16,6 +17,7 @@ admin.site.register(models.BusinessUnit)
 admin.site.register(models.IDC)
 admin.site.register(models.Tag)
 admin.site.register(models.Asset)
+admin.site.register(models.Alert)
 
 # ----------扩展django用户组开始-----------------
 class GroupInline(admin.StackedInline):

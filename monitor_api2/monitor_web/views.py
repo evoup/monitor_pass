@@ -126,13 +126,13 @@ class ServerInfo(APIView):
             'message': '服务器创建失败'
         }
         try:
-            ser = IDCSerializer(data=data)
+            ser = IDCSerializer(data={'name': data['idc']})
             if not ser.is_valid():
                 return JsonResponse({'code':40001, 'message':ser.errors}, safe=False)
             else:
                 i = ser.create(ser.validated_data)
                 i.save()
-                a = Asset.objects.create(idc=i)
+                a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
                 Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'], asset=a)
         except:
             print(traceback.format_exc())

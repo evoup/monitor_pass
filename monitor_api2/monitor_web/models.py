@@ -47,9 +47,10 @@ class UserGroup(models.Model):
     Overwrites original Django Group.
     用户组表 扩展自django auth_group
     """
+    name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE, default="", editable=False)
     desc = models.CharField(max_length=512, blank=True, default="")
-    server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group')
+    server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group', blank=True)
 
     class Meta:
         verbose_name_plural = "用户组表"
@@ -117,12 +118,15 @@ class ServerGroup(models.Model):
     )
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器组名', max_length=40, null=False)
-    desc = models.CharField(u'描述', max_length=512, null=True)
+    desc = models.CharField(u'描述', max_length=512, blank=True, null=True)
     alarm_type = models.IntegerField(u'告警类型', choices=alarm_type_choices, default=0)
 
     class Meta:
         verbose_name_plural = '服务器组名'
         db_table = 'server_group'
+
+    def __str__(self):
+        return self.name
 
 
 class DataCollector(models.Model):
@@ -133,7 +137,7 @@ class DataCollector(models.Model):
     name = models.CharField(u'数据收集器名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     port = models.IntegerField(u'端口号')
-    desc = models.CharField(u'描述', max_length=50, null=True)
+    desc = models.CharField(u'描述', max_length=50, blank=True, null=True)
 
     class Meta:
         # ordering = ('id',)
@@ -265,8 +269,8 @@ class BusinessUnit(models.Model):
     业务线
     """
     name = models.CharField(u'业务线', max_length=64, unique=True)
-    contact = models.ForeignKey('UserGroup', verbose_name='业务联系人', related_name='c', on_delete=models.CASCADE)  # 多个人
-    manager = models.ForeignKey('UserGroup', verbose_name='系统管理员', related_name='m', on_delete=models.CASCADE)  # 多个人
+    contact = models.ForeignKey('Profile', verbose_name='业务联系人', related_name='c', on_delete=models.CASCADE)  # 多个人
+    manager = models.ForeignKey('Profile', verbose_name='系统管理员', related_name='m', on_delete=models.CASCADE)  # 多个人
 
     class Meta:
         verbose_name_plural = "业务线表"
