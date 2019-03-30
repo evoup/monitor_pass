@@ -101,10 +101,6 @@ class Server(models.Model):
         verbose_name_plural = '服务器表'
         db_table = 'server'
 
-    def clean(self):
-        if self.name is None:
-            raise ValidationError("服务器名不能为空")
-
     def __str__(self):
         return self.name
 
@@ -284,16 +280,12 @@ class IDC(models.Model):
     """
     机房信息
     """
-    name = models.CharField('机房', max_length=32)
-    floor = models.IntegerField('楼层', default=1)
+    name = models.CharField('机房', max_length=32, blank=False)
+    floor = models.IntegerField('楼层', default=1, blank=True)
 
     class Meta:
         verbose_name_plural = "机房表"
         db_table = 'idc'
-
-    def clean(self):
-        if self.name is None:
-            raise ValidationError("机房名不能为空")
 
     def __str__(self):
         return self.name

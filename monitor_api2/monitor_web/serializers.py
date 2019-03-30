@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from monitor_web.models import Server, Profile
+from monitor_web.models import Server, Profile, IDC
+from monitor_web.validation import MyCustomValidators
 
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,5 +17,29 @@ class ServerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class IDCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IDC
+        fields = ('name', 'floor')
+        # validators = [MyCustomValidators(), ]
+
+    def create(self, attrs, instance=None):
+        assert instance is None, 'Cannot create idc with IDCSerializer'
+        a = {}
+        a['name'] = attrs.get('name')
+        if attrs.get('floor'):
+            a['floor'] = attrs.get('floor')
+        (idc_object, created) = IDC.objects.get_or_create(a)
+        return idc_object
+
+    def update(self, attrs, instance=None):
+        assert instance is None, 'Cannot update idc with IDCSerializer'
+        a = {}
+        a['name'] = attrs.get('name')
+        if attrs.get('floor'):
+            a['floor'] = attrs.get('floor')
+        (idc_object, created) = IDC.objects.get_or_create(a)
+
+        return idc_object
 
 

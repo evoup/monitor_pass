@@ -49,6 +49,7 @@ export default {
         name: '',
         jmx: '',
         snmp: '',
+        idc: '',
         region: '',
         date1: '',
         date2: '',
@@ -72,7 +73,6 @@ export default {
     },
     addServer(a, b, c, d, e) {
       add_server(a, b, c, d, e)
-      this.$message('服务器已添加!')
     }
   }
 }

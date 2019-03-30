@@ -1,5 +1,6 @@
 import logging
 import traceback
+from collections import namedtuple
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +15,7 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from monitor_web import models
 from monitor_web.models import Server, Profile, Asset, IDC
 # Create your views here.
-from monitor_web.serializers import ServerSerializer, UserProfileSerializer
+from monitor_web.serializers import ServerSerializer, UserProfileSerializer, IDCSerializer
 from web.common.paging import MyPageNumberPagination
 from web.common.order import getOrderList
 
@@ -121,19 +122,25 @@ class ServerInfo(APIView):
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         ret = {
-            "code": 20000,
-            'message': 'f '
+            'code': 40000,
+            'message': '服务器创建失败'
         }
         try:
-            i, created = IDC.objects.get_or_create(name=data['idc'])
-            a = Asset.objects.create(idc=i)
-            Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'], asset=a)
+            ser = IDCSerializer(data=data)
+            if not ser.is_valid():
+                return JsonResponse({'code':40001, 'message':ser.errors}, safe=False)
+            else:
+                i = ser.create(ser.validated_data)
+                i.save()
+                a = Asset.objects.create(idc=i)
+                Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'], asset=a)
         except:
             print(traceback.format_exc())
-            ret = {
-                'code': 40000,
-                'message': '服务器创建失败'
-            }
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': 20001,
+            'message': '服务器创建成功'
+        }
         return JsonResponse(ret, safe=False)
 
     @csrf_exempt
