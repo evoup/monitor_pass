@@ -8,6 +8,8 @@ from django.dispatch import receiver
 
 
 # ----------扩展django用户开始-----------------
+from rest_framework.exceptions import ValidationError
+
 from web.common.db_fields import TinyIntegerField
 
 
@@ -94,11 +96,14 @@ class Server(models.Model):
     jmx_address = models.CharField('jmx地址', max_length=50, default='')
     snmp_address = models.CharField('snmp地址', max_length=50, default='')
     data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
-
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '服务器表'
         db_table = 'server'
+
+    def clean(self):
+        if self.name is None:
+            raise ValidationError("服务器名不能为空")
 
     def __str__(self):
         return self.name
@@ -285,6 +290,10 @@ class IDC(models.Model):
     class Meta:
         verbose_name_plural = "机房表"
         db_table = 'idc'
+
+    def clean(self):
+        if self.name is None:
+            raise ValidationError("机房名不能为空")
 
     def __str__(self):
         return self.name

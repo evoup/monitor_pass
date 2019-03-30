@@ -26,8 +26,13 @@
           <el-input v-model="form.template" type="textarea" />
         </el-col>
       </el-form-item>
+      <el-form-item label="所在机房">
+        <el-col :span="14">
+          <el-input v-model="form.idc" type="textarea" />
+        </el-col>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp)">创建</el-button>
+        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -56,7 +61,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      add_server('a', 'b', 'c', 'd')
+      add_server('a', 'b', 'c', 'd', 'e')
       this.$message('submit!')
     },
     onCancel() {
@@ -65,8 +70,8 @@ export default {
         type: 'warning'
       })
     },
-    addServer(a, b, c, d) {
-      add_server(a, b, c, d)
+    addServer(a, b, c, d, e) {
+      add_server(a, b, c, d, e)
       this.$message('服务器已添加!')
     }
   }

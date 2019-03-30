@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function add_server(name, agent_addr, jmx_addr, snmp_addr) {
+export function add_server(name, agent_addr, jmx_addr, snmp_addr, idc) {
   return request({
     url: '/server/info',
     method: 'post',
@@ -8,7 +8,8 @@ export function add_server(name, agent_addr, jmx_addr, snmp_addr) {
       name,
       agent_addr,
       jmx_addr,
-      snmp_addr
+      snmp_addr,
+      idc
     }
   })
 }
