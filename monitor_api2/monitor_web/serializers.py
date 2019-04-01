@@ -1,5 +1,5 @@
-from rest_framework import serializers
-from monitor_web.models import Server, Profile, IDC
+from rest_framework import serializers, viewsets
+from monitor_web.models import Server, Profile, IDC, Asset, Tag
 from monitor_web.validation import MyCustomValidators
 
 
@@ -8,13 +8,6 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = Profile
         # fields = {'id', 'name', 'email', 'telephone', 'mobile'}
         fields = '__all__'  # all model fields will be included
-
-
-class ServerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Server
-        # fields = ('id', 'name', 'ip')
-        fields = '__all__'
 
 
 class IDCSerializer(serializers.ModelSerializer):
@@ -41,5 +34,30 @@ class IDCSerializer(serializers.ModelSerializer):
         (idc_object, created) = IDC.objects.get_or_create(a)
 
         return idc_object
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+class AssetSerializer(serializers.ModelSerializer):
+    tag = TagSerializer(required=True)
+    idc = IDCSerializer(required=True)
+    class Meta:
+        model = Asset
+        fields = '__all__'
+
+
+class ServerSerializer(serializers.ModelSerializer):
+    asset = AssetSerializer(required=True)
+    class Meta:
+        model = Server
+        # fields = ('id', 'name', 'ip')
+        fields = '__all__'
+
+
+
 
 
