@@ -60,7 +60,7 @@
       </el-table-column>
       <el-table-column
         label="机房"
-        prop="address" />
+        prop="asset.idc.name" />
       <el-table-column label="操作">
         <template scope="scope">
           <el-button size="small" type="primary" @click="lookUser(scope.$index,scope.row.u_uuid)">查看</el-button>
