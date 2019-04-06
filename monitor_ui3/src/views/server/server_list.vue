@@ -1,8 +1,17 @@
 <template>
   <div class="app-container">
+    <el-row type="flex" class="row-bg">
+      <el-col :span="24">
+        <el-col :span="3" :offset="21">
+          <div class="grid-content">
+            <el-button type="primary"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
+          </div>
+        </el-col>
+      </el-col>
+    </el-row>
     <el-col :span="24" class="warp-breadcrum">
       <!--搜索栏-->
-      <el-col :span="24" class="toolbar">
+      <el-col :span="21" class="toolbar">
         <el-form :inline="true" :model="filters">
           <el-form-item>
             <template>

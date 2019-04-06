@@ -102,7 +102,7 @@ export const constantRouterMap = [
         path: '/general_conf',
         name: 'GeneralConf',
         component: () => import('@/views/form/index'),
-        meta: { title: '常規設置', icon: 'form' }
+        meta: { title: '常规设置', icon: 'form' }
       },
       {
         path: '/server_group_list',

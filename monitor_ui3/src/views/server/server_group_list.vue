@@ -1,12 +1,21 @@
 <template>
   <div class="app-container">
+    <el-row type="flex" class="warp-breadcrum" >
+      <el-col :span="24">
+        <el-col :span="3" :offset="21">
+          <div class="grid-content">
+            <el-button type="primary"><i class="el-icon-plus el-icon--right" />添加服务器组</el-button>
+          </div>
+        </el-col>
+      </el-col>
+    </el-row>
     <el-table
       :v-loading="listLoading"
       :data="dataList"
       stripe
       border
       tooltip-effect="dark"
-      style="width: 100%"
+      style="width: 100%;margin-top:10px"
       @sort-change="sortChange">
       <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
