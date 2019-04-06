@@ -2,6 +2,7 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
+    <div class="user-container">{{ group }}: {{ name }}</div>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img :src="'static/' + avatar" class="user-avatar">
@@ -34,7 +35,9 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'group',
+      'name'
     ])
   },
   methods: {
@@ -66,6 +69,14 @@ export default {
     right: 90px;
     top: 16px;
     color: red;
+  }
+  .user-container {
+    height: 50px;
+    display: inline-block;
+    position: absolute;
+    right: 80px;
+    font-size: 14px;
+    color: #606266;
   }
   .avatar-container {
     height: 50px;
