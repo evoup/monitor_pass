@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
+            <el-button type="primary" @click="jumpAddServer()"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
           </div>
         </el-col>
       </el-col>
@@ -181,8 +181,11 @@ export default {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
+    },
+    // 跳转到服务器添加页面
+    jumpAddServer() {
+      this.$router.push({ path: '/add_server' })
     }
   }
 }
 </script>
-
