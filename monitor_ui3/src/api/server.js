@@ -21,3 +21,11 @@ export function server_list(param) {
     params: param
   })
 }
+
+export function server_group_list(param) {
+  return request({
+    url: 'server_group/list',
+    method: 'get',
+    param: param
+  })
+}

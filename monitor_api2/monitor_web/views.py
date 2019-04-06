@@ -93,7 +93,8 @@ class UserInfo(APIView):
                     "admin"
                 ],
                 "name": "admin",
-                "avatar": "user.png"
+                "avatar": "user.png",
+                "group": "super user"
             }
         }
         return JsonResponse(ret, safe=False)

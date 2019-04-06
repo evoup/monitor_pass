@@ -100,27 +100,15 @@ export const constantRouterMap = [
     children: [
       {
         path: '/general_conf',
-        name: 'Table3',
+        name: 'GeneralConf',
         component: () => import('@/views/form/index'),
         meta: { title: '常規設置', icon: 'form' }
       },
       {
-        path: '/server_manager',
-        name: 'Table4',
-        component: () => import('@/views/form/index'),
-        meta: { title: '服务器詳情管理', icon: 'form' }
-      },
-      {
-        path: 'batch_file_upload',
-        name: 'Tree3',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '批量文件上传', icon: 'tree' }
-      },
-      {
-        path: 'batch_command_execute',
-        name: 'Tree4',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '批量命令执行', icon: 'tree' }
+        path: '/server_group_list',
+        name: 'ServerGroupManager',
+        component: () => import('@/views/server/server_group_list'),
+        meta: { title: '服务器组管理', icon: 'form' }
       }
     ]
   }, {
