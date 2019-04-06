@@ -41,6 +41,9 @@ urlpatterns = [
         # 添加服务器
         url(r'^server/info$', views.ServerInfo.as_view()),
         # 服务器列表
-        url(r'^server/list$', views.ServerList.as_view())
+        url(r'^server/list$', views.ServerList.as_view()),
+        # 服务组列表
+        url(r'^server_group/list$', views.ServerGroupList.as_view()),
+
     ]))
 ]

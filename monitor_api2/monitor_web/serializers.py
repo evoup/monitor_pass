@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from monitor_web.models import Server, Profile, IDC, Asset, Tag
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup
 from monitor_web.validation import MyCustomValidators
 
 
@@ -51,10 +51,12 @@ class ServerSerializer(serializers.ModelSerializer):
     asset = AssetSerializer(required=True)
     class Meta:
         model = Server
-        # fields = ('id', 'name', 'ip')
         fields = '__all__'
 
-
+class ServerGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServerGroup
+        fields = '__all__'
 
 
 

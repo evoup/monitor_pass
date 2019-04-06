@@ -15,7 +15,7 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from monitor_web import models
 from monitor_web.models import Server, Profile, Asset, IDC
 # Create your views here.
-from monitor_web.serializers import ServerSerializer, UserProfileSerializer, IDCSerializer
+from monitor_web.serializers import ServerSerializer, UserProfileSerializer, IDCSerializer, ServerGroupSerializer
 from web.common.paging import MyPageNumberPagination
 from web.common.order import getOrderList
 
@@ -153,9 +153,9 @@ class ServerInfo(APIView):
 class ServerList(APIView):
 
     def get(self, request, pk=None, format=None):
-        orderList, prop = getOrderList(request)
+        order_list, prop = getOrderList(request)
         # 获取所有数据
-        records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*orderList)
+        records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
         pg = MyPageNumberPagination(request.GET.get('size', 7))
         # 获取分页的数据
@@ -175,6 +175,28 @@ class ServerList(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+
+@permission_classes((IsAuthenticated,))
+class ServerGroupList(APIView):
+
+    def get(self, request, pk=None, format=None):
+        order_list, prop = getOrderList(request)
+        records = models.ServerGroup.objects.all() if prop == '' else models.ServerGroup.objects.order_by(*order_list)
+        pg = MyPageNumberPagination(request.GET.get('size', 7))
+        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        ser = ServerGroupSerializer(instance=page_roles, many=True)
+        ret = {
+            "code": 20000,
+            "data": {
+                "count": len(records),
+                "items": ser.data,
+                "page": {
+                    "currPage": request.GET.get('page', 1),
+                    "pageSize": request.GET.get('size', 5)
+                }
+            }
+        }
+        return JsonResponse(ret, safe=False)
 
 @csrf_exempt
 @permission_classes((IsAuthenticated,))

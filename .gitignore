@@ -5,3 +5,4 @@ monitor_data_collector/monitor_pass_data_collector.iml
 monitor_ui2/.idea
 .idea/
 deploy_key
+__pycache__

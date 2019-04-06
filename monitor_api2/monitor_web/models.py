@@ -114,7 +114,7 @@ class ServerGroup(models.Model):
         (0, '不接收'),
         (1, '普通报警'),
         (2, '严重报警'),
-        (3, '素有报警')
+        (3, '所有报警')
     )
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器组名', max_length=40, null=False)
