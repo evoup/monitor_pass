@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary"><i class="el-icon-plus el-icon--right" />添加服务器组</el-button>
+            <el-button type="primary" @click="jumpAddServerGroup()"><i class="el-icon-plus el-icon--right" />添加服务器组</el-button>
           </div>
         </el-col>
       </el-col>
@@ -101,6 +101,10 @@ export default {
         this.listLoading = false
         this.total = response.data.count
       })
+    },
+    // 跳转到服务器添加页面
+    jumpAddServerGroup() {
+      this.$router.push({ path: '/add_server_group' })
     }
   }
 }
