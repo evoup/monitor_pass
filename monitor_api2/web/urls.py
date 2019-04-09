@@ -17,33 +17,34 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework_jwt.views import obtain_jwt_token
 
-from monitor_web import views
+from monitor_web.views import view
+from monitor_web.views import user_view
+from monitor_web.views import server_view
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
+router.register(r'users', user_view.UserViewSet)
 
 url_prefix = 'mmsapi2.0'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.index),
-    url(r'^%s/user/logout$' % url_prefix, views.logout), # fbv不能写前缀，目前直接这么写
+    url(r'^$', view.index),
+    url(r'^%s/user/logout$' % url_prefix, user_view.logout), # fbv不能写前缀，目前直接这么写
     url(r'^', include(router.urls)),
     # 有前缀和没有兼容
     url(r'(^%s/)|(^)' % url_prefix, include([
-        url(r'^servers/?$', views.ServerList.as_view()),
+        url(r'^servers/?$', server_view.ServerList.as_view()),
         # 登录时post获取token，delete注销
-        url(r'^login/$', views.Login.as_view()),
+        url(r'^login/$', user_view.Login.as_view()),
         # 查询是否过期，过期
-        url(r'^login/status/$', views.LoginStatus.as_view()),
-        url(r'^user/info$', views.UserInfo.as_view()),
+        url(r'^login/status/$', user_view.LoginStatus.as_view()),
+        url(r'^user/info$', user_view.UserInfo.as_view()),
         # 添加服务器
-        url(r'^server/info$', views.ServerInfo.as_view()),
+        url(r'^server/info$', server_view.ServerInfo.as_view()),
         # 服务器列表
-        url(r'^server/list$', views.ServerList.as_view()),
+        url(r'^server/list$', server_view.ServerList.as_view()),
         # 服务组列表
-        url(r'^server_group/list$', views.ServerGroupList.as_view()),
+        url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
 
     ]))
 ]
