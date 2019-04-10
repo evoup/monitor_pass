@@ -15,7 +15,7 @@
           </el-form-item>
           <el-form-item label="接收告警类型：">
             <el-col :span="8">
-              <el-select v-model="form.alertType" placeholder="请选择">
+              <el-select v-model="optionValue" placeholder="请选择">
                 <el-option
                   v-for="(item,index) in options"
                   :key="index"
@@ -26,8 +26,8 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addServerGroup(form.name, form.desc, form.alertType)">创建</el-button>
-            <el-button @click="onCancel">取消</el-button>
+            <el-button type="primary">创建</el-button>
+            <el-button>取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -54,6 +54,7 @@ export default {
         value: '4',
         label: '不接收'
       }],
+      optionValue: '1',
       form: {
         name: '',
         desc: ''
