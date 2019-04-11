@@ -48,7 +48,7 @@ class UserGroup(models.Model):
     用户组表 扩展自django auth_group
     """
     name = models.CharField(u'用户组名', max_length=40, null=False)
-    group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE, default="", editable=False)
+    group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
     desc = models.CharField(max_length=512, blank=True, default="")
     server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group', blank=True)
 
@@ -57,7 +57,7 @@ class UserGroup(models.Model):
         db_table = 'user_group'
 
     def __str__(self):
-        return "{}".format(self.group.name)
+        return "{}".format(self.name)
 # ----------扩展django用户组结束-----------------
 
 
