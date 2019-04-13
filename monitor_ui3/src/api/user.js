@@ -15,7 +15,7 @@ export function add_usergroup(name, desc, priv, members) {
 
 export function user_group_list(param) {
   return request({
-    url: 'user_group/list',
+    url: '/user_group/list',
     method: 'get',
     param: param
   })

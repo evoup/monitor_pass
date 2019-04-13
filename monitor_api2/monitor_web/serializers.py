@@ -1,12 +1,13 @@
-from rest_framework import serializers, viewsets
-from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup
-from monitor_web.validation import MyCustomValidators
+from django.contrib import auth
+from django.contrib.auth.models import Group, User
+from rest_framework import serializers
+
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup
 
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        # fields = {'id', 'name', 'email', 'telephone', 'mobile'}
         fields = '__all__'  # all model fields will be included
 
 
@@ -14,7 +15,6 @@ class IDCSerializer(serializers.ModelSerializer):
     class Meta:
         model = IDC
         fields = ('name', 'floor')
-        # validators = [MyCustomValidators(), ]
 
     def create(self, attrs, instance=None):
         assert instance is None, 'Cannot create idc with IDCSerializer'
@@ -59,4 +59,22 @@ class ServerGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'is_active')
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
+class UserGroupSerializer(serializers.ModelSerializer):
+    group = GroupSerializer(required=True)
+    user = UserSerializer(required=True)
+    class Meta:
+        model = UserGroup
+        fields = '__all__'
 

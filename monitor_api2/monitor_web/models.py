@@ -49,6 +49,7 @@ class UserGroup(models.Model):
     """
     name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
+    user = models.ManyToManyField('auth.User', db_table = 'r_usergroup_user',  blank=True)
     desc = models.CharField(max_length=512, blank=True, default="")
     server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group', blank=True)
 

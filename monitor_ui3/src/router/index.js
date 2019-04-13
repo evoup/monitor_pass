@@ -116,6 +116,12 @@ export const constantRouterMap = [
         component: () => import('@/views/server/add_server_group'),
         meta: { title: '添加服务器组', icon: 'form' },
         hidden: true
+      },
+      {
+        path: '/user_group_list',
+        name: 'UserGroupManager',
+        component: () => import('@/views/user/user_group_list'),
+        meta: { title: '用户组管理', icon: 'form' }
       }
     ]
   }, {

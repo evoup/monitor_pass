@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
-from monitor_web.models import Profile
+from monitor_web.models import Profile, UserGroup
 # Create your views here.
-from monitor_web.serializers import UserProfileSerializer
+from monitor_web.serializers import UserProfileSerializer, UserGroupSerializer
+from web.common.order import getOrderList
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -66,7 +67,9 @@ def logout(request):
 
 @permission_classes((IsAuthenticated,))
 class UserInfo(APIView):
-
+    """
+    返回用户角色数据
+    """
     def get(self, *args, **kwargs):
         ret = {
             "code": 20000,
@@ -84,3 +87,14 @@ class UserInfo(APIView):
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(UserInfo, self).dispatch(*args, **kwargs)
+
+
+@permission_classes((IsAuthenticated,))
+class UserGroupList(APIView):
+
+    def get(self, request, pk=None, format=None):
+        order_list, prop = getOrderList(request)
+        userGroups = UserGroup.objects.all()
+        serializer = UserGroupSerializer(userGroups, many=True)
+        return JsonResponse(serializer.data, safe=False)
+

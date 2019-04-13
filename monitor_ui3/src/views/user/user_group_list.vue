@@ -39,13 +39,17 @@
       @sort-change="sortChange">
       <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
-        label="主机名"
+        label="用户组名"
         sortable="custom"
         prop="name"
         width="180" />
       <el-table-column
-        label="IP"
-        prop="ip"
+        label="描述"
+        prop="desc"
+        width="130" />
+      <el-table-column
+        label="成员用户"
+        prop="members"
         width="130" />
       <el-table-column label="操作">
         <template scope="">
