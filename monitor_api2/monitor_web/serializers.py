@@ -59,21 +59,15 @@ class ServerGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('email', 'is_active')
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
+        model = Profile
         fields = '__all__'
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
-    group = GroupSerializer(required=True)
-    user = UserSerializer(required=True)
+    profile = ProfileSerializer(required=True, many=True)
+
     class Meta:
         model = UserGroup
         fields = '__all__'

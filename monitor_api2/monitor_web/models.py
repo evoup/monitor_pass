@@ -19,10 +19,9 @@ class Profile(models.Model):
     """
     name = models.CharField(u'姓名', max_length=32)
     # email = models.EmailField(u'邮箱')
-    telephone = models.CharField(u'座机', max_length=32)
+    telephone = models.CharField(u'座机', max_length=32, blank=True, null=True)
     mobile = models.IntegerField(u'手机', blank=True, null=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', default="", editable=False)
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'profile')
     class Meta:
         verbose_name_plural = '用户信息表'
         db_table = 'user_profile'
@@ -49,7 +48,7 @@ class UserGroup(models.Model):
     """
     name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
-    user = models.ManyToManyField('auth.User', db_table = 'r_usergroup_user',  blank=True)
+    profile = models.ManyToManyField('Profile', db_table = 'r_usergroup_profile',  blank=True)
     desc = models.CharField(max_length=512, blank=True, default="")
     server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group', blank=True)
 
