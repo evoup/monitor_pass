@@ -42,14 +42,14 @@
         label="用户组名"
         sortable="custom"
         prop="name"
-        width="180" />
+        width="120" />
       <el-table-column
         label="描述"
         prop="desc"
-        width="130" />
+        width="380" />
       <el-table-column
         label="成员用户"
-        prop="members"
+        prop="profile"
         width="130" />
       <el-table-column label="操作">
         <template scope="">
@@ -81,15 +81,6 @@ import { user_group_list } from '@/api/user'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 export default {
   components: { ElPager },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        '在线': 'success',
-        '离线': 'gray'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       typeData: [],
