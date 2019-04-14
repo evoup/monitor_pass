@@ -7,10 +7,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
+from monitor_web import models
 from monitor_web.models import Profile, UserGroup
 # Create your views here.
 from monitor_web.serializers import UserProfileSerializer, UserGroupSerializer
 from web.common.order import getOrderList
+from web.common.paging import MyPageNumberPagination
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -94,7 +96,24 @@ class UserGroupList(APIView):
 
     def get(self, request, pk=None, format=None):
         order_list, prop = getOrderList(request)
-        userGroups = UserGroup.objects.all()
-        serializer = UserGroupSerializer(userGroups, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        # 获取所有数据
+        records = models.UserGroup.objects.all() if prop == '' else models.UserGroup.objects.order_by(*order_list)
+        # 创建分页对象，这里是自定义的MyPageNumberPagination
+        pg = MyPageNumberPagination(request.GET.get('size', 7))
+        # 获取分页的数据
+        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        # 对数据进行序列化
+        ser = UserGroupSerializer(instance=page_roles, many=True)
+        ret = {
+            "code": 20000,
+            "data": {
+                "count": len(records),
+                "items": ser.data,
+                "page": {
+                    "currPage": request.GET.get('page', 1),
+                    "pageSize": request.GET.get('size', 5)
+                }
+            }
+        }
+        return JsonResponse(ret, safe=False)
 
