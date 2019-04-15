@@ -49,7 +49,7 @@
         width="380" />
       <el-table-column
         label="成员用户"
-        prop="profile"
+        prop="members"
         width="130" />
       <el-table-column label="操作">
         <template scope="">

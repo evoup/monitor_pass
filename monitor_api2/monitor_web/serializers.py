@@ -67,8 +67,19 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserGroupSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=True, many=True)
+    members = serializers.SerializerMethodField()
 
     class Meta:
         model = UserGroup
         fields = '__all__'
+
+    def get_members(self, obj):
+        # 归并UserGroup中的Profile的name
+        profiles = UserGroup.objects.filter(id=obj.id).all().values('profile')
+        x = []
+        if profiles is not None:
+            for p in profiles:
+                x.append(Profile.objects.filter(id=p['profile']).values('name')[0]['name'])
+        all_name = ','.join(x)
+        return all_name
 
