@@ -50,10 +50,11 @@
       <el-table-column
         label="成员用户"
         prop="members"
-        width="130" />
+        width="200" />
       <el-table-column label="操作">
-        <template scope="">
-          <el-button size="small" type="primary">查看</el-button>
+        <template scope="scope">
+          <el-button size="small" type="primary" @click="lookUser(scope.$index,scope.row.u_uuid)">编辑</el-button>
+          <el-button size="small" type="danger" @click="lookUser(scope.$index,scope.row.u_uuid)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
