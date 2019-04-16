@@ -128,6 +128,13 @@ export const constantRouterMap = [
         name: 'UserGroupManager',
         component: () => import('@/views/user/user_group_list'),
         meta: { title: '用户组管理', icon: 'form' }
+      },
+      {
+        path: '/add_user_group',
+        name: 'AddUserGroup',
+        component: () => import('@/views/user/add_user_group'),
+        meta: { title: '添加用户组', icon: 'form' },
+        hidden: true
       }
     ]
   }, {
