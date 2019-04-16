@@ -92,6 +92,33 @@ class UserInfo(APIView):
 
 
 @permission_classes((IsAuthenticated,))
+class UserList(APIView):
+
+    def get(self, request, pk=None, format=None):
+        order_list, prop = getOrderList(request)
+        # 获取所有数据
+        records = models.Profile.objects.all() if prop == '' else models.Profile.objects.order_by(*order_list)
+        # 创建分页对象，这里是自定义的MyPageNumberPagination
+        pg = MyPageNumberPagination(request.GET.get('size', 7))
+        # 获取分页的数据
+        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        # 对数据进行序列化
+        ser = UserGroupSerializer(instance=page_roles, many=True)
+        ret = {
+            "code": 20000,
+            "data": {
+                "count": len(records),
+                "items": ser.data,
+                "page": {
+                    "currPage": request.GET.get('page', 1),
+                    "pageSize": request.GET.get('size', 5)
+                }
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
 class UserGroupList(APIView):
 
     def get(self, request, pk=None, format=None):

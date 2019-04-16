@@ -20,3 +20,11 @@ export function user_group_list(param) {
     param: param
   })
 }
+
+export function user_list(param) {
+  return request({
+    url: '/user/list',
+    method: 'get',
+    param: param
+  })
+}

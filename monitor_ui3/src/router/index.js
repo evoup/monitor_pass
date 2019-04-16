@@ -118,6 +118,12 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/user_list',
+        name: 'UserManager',
+        component: () => import('@/views/user/user_list'),
+        meta: { title: '用户管理', icon: 'form' }
+      },
+      {
         path: '/user_group_list',
         name: 'UserGroupManager',
         component: () => import('@/views/user/user_group_list'),
