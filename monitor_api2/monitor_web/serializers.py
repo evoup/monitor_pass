@@ -5,12 +5,6 @@ from rest_framework import serializers
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup
 
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Profile
-        fields = '__all__'  # all model fields will be included
-
-
 class IDCSerializer(serializers.ModelSerializer):
     class Meta:
         model = IDC
@@ -60,9 +54,15 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
     class Meta:
         model = Profile
         fields = '__all__'
+
+    def get_user(self, obj):
+        # 查询Auth user表中的记录
+        user = User.objects.filter(id=obj.user_id).all()[0]
+        return {'username': user.username, 'email': user.email}
 
 
 class UserGroupSerializer(serializers.ModelSerializer):

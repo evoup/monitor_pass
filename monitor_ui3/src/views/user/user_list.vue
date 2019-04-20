@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary" @click="jumpAddUser()"><i class="el-icon-plus el-icon--right" />添加用户组</el-button>
+            <el-button type="primary" @click="jumpAddUser()"><i class="el-icon-plus el-icon--right" />添加用户</el-button>
           </div>
         </el-col>
       </el-col>
@@ -39,17 +39,22 @@
       @sort-change="sortChange">
       <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
-        label="用户组名"
+        label="登录账号"
+        sortable="custom"
+        prop="user.username"
+        width="120" />
+      <el-table-column
+        label="用户名"
         sortable="custom"
         prop="name"
         width="120" />
       <el-table-column
-        label="描述"
-        prop="desc"
+        label="邮箱"
+        prop="user.email"
         width="380" />
       <el-table-column
-        label="成员用户"
-        prop="members"
+        label="描述"
+        prop="desc"
         width="200" />
       <el-table-column label="操作">
         <template scope="scope">
