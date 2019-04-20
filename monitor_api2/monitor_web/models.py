@@ -20,8 +20,8 @@ class Profile(models.Model):
     name = models.CharField(u'姓名', max_length=32)
     # email = models.EmailField(u'邮箱')
     telephone = models.CharField(u'座机', max_length=32, blank=True, null=True)
-    mobile = models.IntegerField(u'手机', blank=True, null=True)
-    # desc = models.CharField(u'描述', max_length=255, blank=True, null=True)
+    mobile = models.CharField(u'手机', max_length=32, blank=True, null=True)
+    desc = models.CharField(u'描述', max_length=255, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'profile')
     class Meta:
         verbose_name_plural = '用户信息表'
