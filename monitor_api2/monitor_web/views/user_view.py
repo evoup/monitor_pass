@@ -80,16 +80,23 @@ class UserInfo(APIView):
     """
     返回用户角色数据
     """
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        l = []
+        for g in request.user.groups.all():
+            l.append(g.name)
+        user = User.objects.get(username=request.user.username)
+        username = user.profile.name
+        if not username:
+            username = user.username
         ret = {
             "code": 20000,
             "data": {
                 "roles": [
                     "admin"
                 ],
-                "name": "admin",
+                "name": username,
                 "avatar": "user.png",
-                "group": "super user"
+                "group": ",".join(l)
             }
         }
         return JsonResponse(ret, safe=False)

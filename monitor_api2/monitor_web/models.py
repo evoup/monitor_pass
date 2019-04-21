@@ -47,7 +47,7 @@ class UserGroup(models.Model):
     Overwrites original Django Group.
     用户组表 扩展自django auth_group
     """
-    name = models.CharField(u'用户组名', max_length=40, null=False)
+    # name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
     profile = models.ManyToManyField('Profile', db_table = 'r_usergroup_profile',  blank=True)
     desc = models.CharField(max_length=512, blank=True, default="")
@@ -58,7 +58,7 @@ class UserGroup(models.Model):
         db_table = 'user_group'
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}".format(self.group.name)
 # ----------扩展django用户组结束-----------------
 
 

@@ -18,7 +18,7 @@
       </el-form-item>
       <el-form-item label="登录密码">
         <el-col :span="8">
-          <el-input v-model="form.password" placeholder="请输入登录密码"/>
+          <el-input v-model="form.password" type="password" placeholder="请输入登录密码"/>
         </el-col>
       </el-form-item>
       <el-form-item label="描述">
