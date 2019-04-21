@@ -30,6 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', view.index),
     url(r'^%s/user/logout$' % url_prefix, user_view.logout), # fbv不能写前缀，目前直接这么写
+    # 这个加好后drf的api管理后台会出现登录按钮，但是现在写在jwt里没用了
+    # url('api-auth/', include('rest_framework.urls')),
     url(r'^', include(router.urls)),
     # 有前缀和没有兼容
     url(r'(^%s/)|(^)' % url_prefix, include([

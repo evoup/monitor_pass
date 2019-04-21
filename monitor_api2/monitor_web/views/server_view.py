@@ -1,7 +1,10 @@
 import logging
 import traceback
 
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
@@ -22,27 +25,6 @@ def index(request):
 
 
 @permission_classes((IsAuthenticated,))
-class ServerList(APIView):
-
-    def get(self, *args, **kwargs):
-        servers = Server.objects.all()
-        serializer = ServerSerializer(servers, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    def post(self, *args, **kwargs):
-        data = JSONParser().parse(self.request)
-        serializer = ServerSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-    @csrf_exempt
-    def dispatch(self, *args, **kwargs):
-        return super(ServerList, self).dispatch(*args, **kwargs)
-
-
-@permission_classes((IsAuthenticated,))
 class ServerInfo(APIView):
     """
     单台服务器
@@ -57,6 +39,7 @@ class ServerInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.add_server', raise_exception=True))
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         ret = {
@@ -88,8 +71,10 @@ class ServerInfo(APIView):
 
 @permission_classes((IsAuthenticated,))
 class ServerList(APIView):
-
+    @method_decorator(permission_required('monitor_web.view_server', raise_exception=True))
     def get(self, request, pk=None, format=None):
+        # user = User.objects.get(username=request.user.username)
+        # print(user.get_all_permissions())
         order_list, prop = getOrderList(request)
         # 获取所有数据
         records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*order_list)
@@ -115,7 +100,7 @@ class ServerList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class ServerGroupList(APIView):
-
+    @method_decorator(permission_required('monitor_web.view_servergroup', raise_exception=True))
     def get(self, request, pk=None, format=None):
         order_list, prop = getOrderList(request)
         records = models.ServerGroup.objects.all() if prop == '' else models.ServerGroup.objects.order_by(*order_list)
