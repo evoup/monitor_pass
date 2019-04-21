@@ -14,8 +14,8 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">创建</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, form.desc, form.desc)">创建</el-button>
+            <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { add_user_group } from '@/api/user'
 export default {
   data() {
     return {
@@ -45,8 +46,19 @@ export default {
       optionValue: '1',
       form: {
         name: '',
-        desc: ''
+        desc: '',
+        priv: '',
+        members: ''
       }
+    }
+  },
+  methods: {
+    addUserGroup(a, b, c, d) {
+      add_user_group(a, b, c, d)
+    },
+    // 跳转到用户组列表页面
+    jumpUserGroupList() {
+      this.$router.push({ path: '/user_group_list' })
     }
   }
 }

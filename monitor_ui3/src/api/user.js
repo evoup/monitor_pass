@@ -13,7 +13,7 @@ export function add_user(login_name, name, email, password, desc) {
   })
 }
 
-export function add_usergroup(name, desc, priv, members) {
+export function add_user_group(name, desc, priv, members) {
   return request({
     url: '/user_group/info',
     method: 'post',
