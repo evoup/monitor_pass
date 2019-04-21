@@ -1,4 +1,17 @@
 import request from '@/utils/request'
+export function add_user(login_name, name, email, password, desc) {
+  return request({
+    url: '/user/info',
+    method: 'post',
+    data: {
+      login_name,
+      name,
+      email,
+      password,
+      desc
+    }
+  })
+}
 
 export function add_usergroup(name, desc, priv, members) {
   return request({

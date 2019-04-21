@@ -1,14 +1,19 @@
+import traceback
+
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web import models
-from monitor_web.models import Profile, UserGroup
+from monitor_web.models import Profile
 # Create your views here.
 from monitor_web.serializers import UserGroupSerializer, ProfileSerializer
 from web.common.order import getOrderList
@@ -85,6 +90,30 @@ class UserInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+    """
+    创建用户
+    """
+    def post(self, *args, **kwargs):
+        from django.db import transaction
+        data = JSONParser().parse(self.request)
+        ret = {
+            'code': 40000,
+            'message': '创建用户失败'
+        }
+        try:
+            with transaction.atomic():
+                user = User.objects.create_user(data['login_name'], data['email'], data['password'])
+                Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
+        except IntegrityError:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': 20001,
+            'message': '创建用户成功'
+        }
+        return JsonResponse(ret, safe=False)
+
 
     @csrf_exempt
     def dispatch(self, *args, **kwargs):

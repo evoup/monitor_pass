@@ -51,11 +51,11 @@
       <el-table-column
         label="邮箱"
         prop="user.email"
-        width="380" />
+        width="200" />
       <el-table-column
         label="描述"
         prop="desc"
-        width="200" />
+        width="280" />
       <el-table-column label="操作">
         <template scope="scope">
           <el-button size="small" type="primary" @click="lookUser(scope.$index,scope.row.u_uuid)">编辑</el-button>
@@ -151,7 +151,7 @@ export default {
       this.fetchData()
     },
     // 跳转到用户组添加页面
-    jumpAddUserGroup() {
+    jumpAddUser() {
       this.$router.push({ path: '/add_user' })
     }
   }
