@@ -28,7 +28,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addUser(form.login_name, form.name, form.email, form.password, form.desc)">创建</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button @click="jumpUserList">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -55,14 +55,12 @@ export default {
       add_user('a', 'b', 'c', 'd', 'e')
       this.$message('submit!')
     },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    },
     addUser(a, b, c, d, e) {
       add_user(a, b, c, d, e)
+    },
+    // 跳转到用户列表页面
+    jumpUserList() {
+      this.$router.push({ path: '/user_list' })
     }
   }
 }

@@ -150,7 +150,7 @@ export default {
       this.sortHelp.prop = column.prop
       this.fetchData()
     },
-    // 跳转到用户组添加页面
+    // 跳转到用户添加页面
     jumpAddUser() {
       this.$router.push({ path: '/add_user' })
     }

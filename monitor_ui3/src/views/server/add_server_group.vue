@@ -27,7 +27,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary">创建</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -59,6 +59,12 @@ export default {
         name: '',
         desc: ''
       }
+    }
+  },
+  methods: {
+    // 跳转到用户组列表页面
+    jumpUserGroupList() {
+      this.$router.push({ path: '/user_group_list' })
     }
   }
 }
