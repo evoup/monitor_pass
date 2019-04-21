@@ -47,6 +47,8 @@ urlpatterns = [
         url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
         # 用户列表
         url(r'^user/list$', user_view.UserList.as_view()),
+        # 添加用户组
+        url(r'^user_group/info$', user_view.UserGroupInfo.as_view()),
         # 用户组列表
         url(r'^user_group/list$', user_view.UserGroupList.as_view()),
 

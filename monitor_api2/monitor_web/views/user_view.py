@@ -1,6 +1,7 @@
 import traceback
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web import models
-from monitor_web.models import Profile
+from monitor_web.models import Profile, Server
 # Create your views here.
 from monitor_web.serializers import UserGroupSerializer, ProfileSerializer
 from web.common.order import getOrderList
@@ -143,6 +144,41 @@ class UserList(APIView):
                     "pageSize": request.GET.get('size', 5)
                 }
             }
+        }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class UserGroupInfo(APIView):
+    """
+    单个用户组
+    """
+    def get(self, *args, **kwargs):
+        ret = {
+            "code": 20000,
+            "data": {
+                "name": "usergroup1"
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
+    def post(self, *args, **kwargs):
+        data = JSONParser().parse(self.request)
+        ret = {
+            'code': 40000,
+            'message': '创建用户组失败'
+        }
+        try:
+            new_group, created = Group.objects.get_or_create(name=data['name'])
+            MODELS = ['Server', 'ServerGroup', '']
+            pass
+            # Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': 20001,
+            'message': '创建用户组成功'
         }
         return JsonResponse(ret, safe=False)
 
