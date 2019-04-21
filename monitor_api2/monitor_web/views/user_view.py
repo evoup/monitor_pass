@@ -1,9 +1,11 @@
 import traceback
 
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
@@ -95,6 +97,7 @@ class UserInfo(APIView):
     """
     创建用户
     """
+    @method_decorator(permission_required('auth.add_user', raise_exception=True))
     def post(self, *args, **kwargs):
         from django.db import transaction
         data = JSONParser().parse(self.request)
@@ -116,14 +119,9 @@ class UserInfo(APIView):
         return JsonResponse(ret, safe=False)
 
 
-    @csrf_exempt
-    def dispatch(self, *args, **kwargs):
-        return super(UserInfo, self).dispatch(*args, **kwargs)
-
-
 @permission_classes((IsAuthenticated,))
 class UserList(APIView):
-
+    @method_decorator(permission_required('auth.view_user', raise_exception=True))
     def get(self, request, pk=None, format=None):
         order_list, prop = getOrderList(request)
         # 获取所有数据
@@ -153,6 +151,7 @@ class UserGroupInfo(APIView):
     """
     单个用户组
     """
+    @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, *args, **kwargs):
         ret = {
             "code": 20000,
@@ -162,6 +161,7 @@ class UserGroupInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('auth.add_group', raise_exception=True))
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         ret = {
@@ -185,7 +185,7 @@ class UserGroupInfo(APIView):
 
 @permission_classes((IsAuthenticated,))
 class UserGroupList(APIView):
-
+    @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, request, pk=None, format=None):
         order_list, prop = getOrderList(request)
         # 获取所有数据
