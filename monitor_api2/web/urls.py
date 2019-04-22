@@ -53,6 +53,8 @@ urlpatterns = [
         url(r'^user_group/info$', user_view.UserGroupInfo.as_view()),
         # 用户组列表
         url(r'^user_group/list$', user_view.UserGroupList.as_view()),
+        # 所有权限列表
+        url(r'^user_perm/list$', user_view.UserPerm.as_view()),
 
 
     ]))

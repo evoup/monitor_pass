@@ -1,7 +1,7 @@
 import traceback
 
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -212,6 +212,23 @@ class UserGroupList(APIView):
                     "currPage": request.GET.get('page', 1),
                     "pageSize": request.GET.get('size', 5)
                 }
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class UserPerm(APIView):
+    def get(self, request, pk=None, format=None):
+        # 获取所有数据
+        perm={}
+        for x in Permission.objects.all().order_by('id'):
+            perm[x.id]=x.name
+        ret = {
+            "code": 20000,
+            "data": {
+                "count": len(perm),
+                "items": perm
             }
         }
         return JsonResponse(ret, safe=False)
