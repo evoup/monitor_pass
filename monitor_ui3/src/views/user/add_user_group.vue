@@ -20,13 +20,39 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="权限">权限</el-tab-pane>
-      <el-tab-pane label="成员">成员</el-tab-pane>
+      <el-tab-pane label="成员">
+        <el-table
+          :v-loading="listLoading"
+          :data="dataList"
+          stripe
+          border
+          tooltip-effect="dark"
+          style="width: 100%"
+          @sort-change="sortChange">
+          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
+          <el-table-column
+            label="用户名"
+            sortable="custom"
+            prop="name"
+            width="120" />
+          <el-table-column
+            label="描述"
+            prop="desc"
+            width="380" />
+          <el-table-column label="操作">
+            <template slot-scope="props">
+              <el-switch v-model="input1[switch0]" :active-value="1" :inactive-value="2" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
 import { add_user_group } from '@/api/user'
+import { user_list } from '../../api/user'
 export default {
   data() {
     return {
@@ -49,10 +75,71 @@ export default {
         desc: '',
         priv: '',
         members: ''
-      }
+      },
+      dataList: [], // 列表数据
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1, // 和后端参数一样
+        size: 5, // 后端参数为size
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      filters: {
+        name: '',
+        type: 1
+      },
+      listLoading: true,
+      total: 0,
+      input1: [
+        {
+          switch0: '1',
+          switch1: '2'
+        }
+      ]
     }
   },
+  mounted() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      this.pageHelp.page = this.pageNum
+      user_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    },
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
+    },
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
+      this.fetchData()
+    },
+    // 点击分页sort-change
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
+      this.fetchData()
+    },
     addUserGroup(a, b, c, d) {
       add_user_group(a, b, c, d)
     },
