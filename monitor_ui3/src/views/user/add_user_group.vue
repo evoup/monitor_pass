@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs type="border-card">
+      <!-- 面板1 -->
       <el-tab-pane label="基本信息">
         <el-form ref="form" :model="form" label-width="120px">
           <el-form-item label="组名：">
@@ -19,7 +20,22 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="权限">权限</el-tab-pane>
+      <!-- 面板2 -->
+      <el-tab-pane label="权限">
+        <template slot-scope="scope">
+          <label>
+            <select v-model="userPermDataList" name="public-choice" multiple="multiple" size="15" style="height:400px;width:200px">
+              <option v-for="perm in userPermDataList" :value="perm.id">{{ perm.name }}</option>
+            </select>
+          </label>
+          <label>
+            <select v-model="userPermDataList1" name="public-choice1" multiple="multiple" size="15" style="margin-left:20px;height:400px;width:200px">
+              <option v-for="perm in userPermDataList1" :value="perm.id">{{ perm.name }}</option>
+            </select>
+          </label>
+        </template>
+      </el-tab-pane>
+      <!-- 面板3 -->
       <el-tab-pane label="成员">
         <el-table
           :v-loading="listLoading"
@@ -105,17 +121,10 @@ export default {
       listLoading: true,
       total: 0,
       // -------用户权限---------
-      userPermDataList: []
+      userPermDataList: [],
+      userPermDataList1: []
     }
   },
-  // created() {
-  //   const len = 4
-  //   for (var i = 0; i < len; i++) {
-  //     var item = { value1: '0' }
-  //     this.dataModel.push(item)
-  //   }
-  //   console.log(this.dataModel[0].value1)
-  // },
   mounted() {
     this.fetchUserListData()
     this.fetchUserPermListData()
