@@ -18,7 +18,7 @@ from monitor_web import models
 from monitor_web.models import Profile, Server
 # Create your views here.
 from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer
-from web.common.constant import Constant
+from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import MyPageNumberPagination
 
@@ -51,7 +51,7 @@ class Login(APIView):
     def post(self, *args, **kwargs):
         jwt_response =  obtain_jwt_token(self.request._request, *args, **kwargs)
         if 'token' in jwt_response.data:
-            jwt_response.data['code']=Constant.BACKEND_CODE_OK
+            jwt_response.data['code']=constant.BACKEND_CODE_OK
             jwt_response.data['data']={'token':jwt_response.data['token']}
             # 返回格式{"code":20000,"data":{"token":"admin"}}
             return jwt_response
@@ -69,7 +69,7 @@ def logout(request):
     """
     if request.method == 'POST':
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": None
         }
         return JsonResponse(ret, safe=False)
@@ -89,7 +89,7 @@ class UserInfo(APIView):
         if not username:
             username = user.username
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "roles": [
                     "admin"
@@ -101,15 +101,16 @@ class UserInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
-    """
-    创建用户
-    """
+
     @method_decorator(permission_required('auth.add_user', raise_exception=True))
     def post(self, *args, **kwargs):
+        """
+        创建用户
+        """
         from django.db import transaction
         data = JSONParser().parse(self.request)
         ret = {
-            'code': Constant.BACKEND_CODE_OPT_FAIL,
+            'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '创建用户失败'
         }
         try:
@@ -121,7 +122,7 @@ class UserInfo(APIView):
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
         ret = {
-            'code': Constant.BACKEND_CODE_CREATED,
+            'code': constant.BACKEND_CODE_CREATED,
             'message': '创建用户成功'
         }
         return JsonResponse(ret, safe=False)
@@ -131,24 +132,27 @@ class UserInfo(APIView):
 class UserList(APIView):
     @method_decorator(permission_required('auth.view_user', raise_exception=True))
     def get(self, request, pk=None, format=None):
+        """
+        获取用户列表
+        """
         order_list, prop = getOrderList(request)
         # 获取所有数据
         records = models.Profile.objects.all() if prop == '' else models.Profile.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        page_handler = MyPageNumberPagination(request.GET.get('size', 7))
+        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_CURRENT_PAGE))
         # 获取分页的数据
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
         # ser = ProfileSerializer(instance=page_roles, many=True)
         serializer = ProfileBelongUserGroupSerializer(instance=page_data, many=True)
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
                 "items": serializer.data,
                 "page": {
-                    "currPage": request.GET.get('page', 1),
-                    "pageSize": request.GET.get('size', 5)
+                    "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
+                    "pageSize": request.GET.get('size', constant.DEFAULT_CURRENT_PAGE)
                 }
             }
         }
@@ -158,12 +162,12 @@ class UserList(APIView):
 @permission_classes((IsAuthenticated,))
 class UserGroupInfo(APIView):
     """
-    单个用户组
+    获取单个用户组
     """
     @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, *args, **kwargs):
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "name": "usergroup1"
             }
@@ -172,9 +176,12 @@ class UserGroupInfo(APIView):
 
     @method_decorator(permission_required('auth.add_group', raise_exception=True))
     def post(self, *args, **kwargs):
+        """
+        创建用户组
+        """
         data = JSONParser().parse(self.request)
         ret = {
-            'code': Constant.BACKEND_CODE_OPT_FAIL,
+            'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '创建用户组失败'
         }
         try:
@@ -186,7 +193,7 @@ class UserGroupInfo(APIView):
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
         ret = {
-            'code': Constant.BACKEND_CODE_CREATED,
+            'code': constant.BACKEND_CODE_CREATED,
             'message': '创建用户组成功'
         }
         return JsonResponse(ret, safe=False)
@@ -196,23 +203,26 @@ class UserGroupInfo(APIView):
 class UserGroupList(APIView):
     @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, request, pk=None, format=None):
+        """
+        获取用户组
+        """
         order_list, prop = getOrderList(request)
         # 获取所有数据
         records = models.UserGroup.objects.all() if prop == '' else models.UserGroup.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        pg = MyPageNumberPagination(request.GET.get('size', 7))
+        pg = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
         page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
         ser = UserGroupSerializer(instance=page_roles, many=True)
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
                 "items": ser.data,
                 "page": {
-                    "currPage": request.GET.get('page', 1),
-                    "pageSize": request.GET.get('size', 5)
+                    "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
+                    "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
                 }
             }
         }
@@ -227,7 +237,7 @@ class UserPerm(APIView):
         for x in Permission.objects.all().order_by('id'):
             perm[x.id]=x.name
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(perm),
                 "items": perm

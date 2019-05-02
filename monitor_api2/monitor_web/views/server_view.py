@@ -15,7 +15,7 @@ from monitor_web import models
 from monitor_web.models import Server, Asset
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
-from web.common.constant import Constant
+from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import MyPageNumberPagination
 
@@ -27,13 +27,13 @@ def index(request):
 
 @permission_classes((IsAuthenticated,))
 class ServerInfo(APIView):
-    """
-    单台服务器
-    """
 
     def get(self, *args, **kwargs):
+        """
+        获取单台服务器
+        """
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "name": "server1"
             }
@@ -42,9 +42,12 @@ class ServerInfo(APIView):
 
     @method_decorator(permission_required('monitor_web.add_server', raise_exception=True))
     def post(self, *args, **kwargs):
+        """
+        创建单台服务器
+        """
         data = JSONParser().parse(self.request)
         ret = {
-            'code': Constant.BACKEND_CODE_OPT_FAIL,
+            'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '服务器创建失败'
         }
         try:
@@ -60,7 +63,7 @@ class ServerInfo(APIView):
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
         ret = {
-            'code': Constant.BACKEND_CODE_CREATED,
+            'code': constant.BACKEND_CODE_CREATED,
             'message': '服务器创建成功'
         }
         return JsonResponse(ret, safe=False)
@@ -74,25 +77,28 @@ class ServerInfo(APIView):
 class ServerList(APIView):
     @method_decorator(permission_required('monitor_web.view_server', raise_exception=True))
     def get(self, request, pk=None, format=None):
+        """
+        获取服务器列表
+        """
         # user = User.objects.get(username=request.user.username)
         # print(user.get_all_permissions())
         order_list, prop = getOrderList(request)
         # 获取所有数据
         records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        pg = MyPageNumberPagination(request.GET.get('size', 7))
+        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
-        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
-        ser = ServerSerializer(instance=page_roles, many=True)
+        serializer = ServerSerializer(instance=page_data, many=True)
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
-                "items": ser.data,
+                "items": serializer.data,
                 "page": {
-                    "currPage": request.GET.get('page', 1),
-                    "pageSize": request.GET.get('size', 5)
+                    "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
+                    "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
                 }
             }
         }
@@ -103,19 +109,22 @@ class ServerList(APIView):
 class ServerGroupList(APIView):
     @method_decorator(permission_required('monitor_web.view_servergroup', raise_exception=True))
     def get(self, request, pk=None, format=None):
+        """
+        获取服务器组列表
+        """
         order_list, prop = getOrderList(request)
         records = models.ServerGroup.objects.all() if prop == '' else models.ServerGroup.objects.order_by(*order_list)
-        pg = MyPageNumberPagination(request.GET.get('size', 7))
-        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
-        ser = ServerGroupSerializer(instance=page_roles, many=True)
+        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
+        serializer = ServerGroupSerializer(instance=page_data, many=True)
         ret = {
-            "code": Constant.BACKEND_CODE_OK,
+            "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
-                "items": ser.data,
+                "items": serializer.data,
                 "page": {
-                    "currPage": request.GET.get('page', 1),
-                    "pageSize": request.GET.get('size', 5)
+                    "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
+                    "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
                 }
             }
         }
