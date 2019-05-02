@@ -39,9 +39,13 @@
             label="描述"
             prop="desc"
             width="380" />
-          <el-table-column label="操作">
-            <template slot-scope="props">
-              <el-switch v-model="input1[switch0]" :active-value="1" :inactive-value="2" />
+          <el-table-column label="是否用户组成员">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.belong_group"
+                active-value="1"
+                inactive-value="0"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -99,15 +103,17 @@ export default {
         type: 1
       },
       listLoading: true,
-      total: 0,
-      input1: [
-        {
-          switch0: '1',
-          switch1: '2'
-        }
-      ]
+      total: 0
     }
   },
+  // created() {
+  //   const len = 4
+  //   for (var i = 0; i < len; i++) {
+  //     var item = { value1: '0' }
+  //     this.dataModel.push(item)
+  //   }
+  //   console.log(this.dataModel[0].value1)
+  // },
   mounted() {
     this.fetchData()
   },

@@ -18,7 +18,7 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from monitor_web import models
 from monitor_web.models import Profile, Server
 # Create your views here.
-from monitor_web.serializers import UserGroupSerializer, ProfileSerializer
+from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer
 from web.common.order import getOrderList
 from web.common.paging import MyPageNumberPagination
 
@@ -138,7 +138,8 @@ class UserList(APIView):
         # 获取分页的数据
         page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
-        ser = ProfileSerializer(instance=page_roles, many=True)
+        # ser = ProfileSerializer(instance=page_roles, many=True)
+        ser = ProfileBelongUserGroupSerializer(instance=page_roles, many=True)
         ret = {
             "code": 20000,
             "data": {

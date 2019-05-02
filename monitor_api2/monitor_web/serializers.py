@@ -64,6 +64,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         user = User.objects.filter(id=obj.user_id).all()[0]
         return {'username': user.username, 'email': user.email}
 
+class ProfileBelongUserGroupSerializer(ProfileSerializer):
+    belong_group = serializers.SerializerMethodField()
+    def get_belong_group(self, obj):
+        # 要手动加入该组
+        return "0"
+
 
 class UserGroupSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
