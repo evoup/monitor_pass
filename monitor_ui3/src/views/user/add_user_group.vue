@@ -33,11 +33,11 @@
           <el-table-column
             label="用户名"
             sortable="custom"
-            prop="name"
+            prop="first_name"
             width="120" />
           <el-table-column
             label="描述"
-            prop="desc"
+            prop="profile.desc"
             width="380" />
           <el-table-column label="是否用户组成员">
             <template slot-scope="scope">
