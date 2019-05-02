@@ -152,7 +152,7 @@ class UserList(APIView):
                 "items": serializer.data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
-                    "pageSize": request.GET.get('size', constant.DEFAULT_CURRENT_PAGE)
+                    "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
                 }
             }
         }
