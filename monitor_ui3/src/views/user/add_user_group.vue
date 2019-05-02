@@ -23,16 +23,30 @@
       <!-- 面板2 -->
       <el-tab-pane label="权限">
         <template slot-scope="scope">
-          <label>
-            <select v-model="userPermDataList" name="public-choice" multiple="multiple" size="15" style="height:400px;width:200px">
-              <option v-for="perm in userPermDataList" :value="perm.id">{{ perm.name }}</option>
-            </select>
-          </label>
-          <label>
-            <select v-model="userPermDataList1" name="public-choice1" multiple="multiple" size="15" style="margin-left:20px;height:400px;width:200px">
-              <option v-for="perm in userPermDataList1" :value="perm.id">{{ perm.name }}</option>
-            </select>
-          </label>
+          <table>
+            <tr>
+              <td>
+                <label>
+                  <select v-model="userPermDataList" name="public-choice" multiple="multiple" size="15" style="height:400px;width:150px">
+                    <option v-for="perm in userPermDataList" :value="perm.id">{{ perm.name }}</option>
+                  </select>
+                </label>
+              </td>
+              <td>
+                <el-button-group style="margin-left:10px">
+                  <el-button type="primary" icon="el-icon-arrow-left">删除</el-button>
+                  <el-button type="primary">加入<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+                </el-button-group>
+              </td>
+              <td>
+                <label>
+                  <select v-model="userPermDataList1" name="public-choice1" multiple="multiple" size="15" style="margin-left:10px;height:400px;width:150px">
+                    <option v-for="perm in userPermDataList1" :value="perm.id">{{ perm.name }}</option>
+                  </select>
+                </label>
+              </td>
+            </tr>
+          </table>
         </template>
       </el-tab-pane>
       <!-- 面板3 -->
