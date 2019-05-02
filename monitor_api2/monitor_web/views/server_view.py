@@ -17,7 +17,7 @@ from monitor_web.models import Server, Asset
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.order import getOrderList
-from web.common.paging import MyPageNumberPagination
+from web.common.paging import CustomPageNumberPagination
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ class ServerList(APIView):
         # 获取所有数据
         records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
@@ -114,7 +114,7 @@ class ServerGroupList(APIView):
         """
         order_list, prop = getOrderList(request)
         records = models.ServerGroup.objects.all() if prop == '' else models.ServerGroup.objects.order_by(*order_list)
-        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         serializer = ServerGroupSerializer(instance=page_data, many=True)
         ret = {

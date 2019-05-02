@@ -1,8 +1,10 @@
 from rest_framework.pagination import PageNumberPagination
 
 
-class MyPageNumberPagination(PageNumberPagination):
-
+class CustomPageNumberPagination(PageNumberPagination):
+    """
+    自定义分页类
+    """
     #每页显示多少个
     page_size = 8
     #默认每页显示3个，可以通过传入pager1/?page=2&size=4,改变默认每页显示的个数

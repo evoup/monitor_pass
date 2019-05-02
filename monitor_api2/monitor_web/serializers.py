@@ -66,6 +66,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class ProfileBelongUserGroupSerializer(ProfileSerializer):
     belong_group = serializers.SerializerMethodField()
+
     def get_belong_group(self, obj):
         # 要手动加入该组
         return "0"

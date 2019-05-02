@@ -20,7 +20,7 @@ from monitor_web.models import Profile, Server
 from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer
 from web.common import constant
 from web.common.order import getOrderList
-from web.common.paging import MyPageNumberPagination
+from web.common.paging import CustomPageNumberPagination
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -139,7 +139,7 @@ class UserList(APIView):
         # 获取所有数据
         records = models.Profile.objects.all() if prop == '' else models.Profile.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        page_handler = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_CURRENT_PAGE))
+        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
@@ -210,7 +210,7 @@ class UserGroupList(APIView):
         # 获取所有数据
         records = models.UserGroup.objects.all() if prop == '' else models.UserGroup.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        pg = MyPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        pg = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
         page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
