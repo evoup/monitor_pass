@@ -26,18 +26,18 @@ export function add_user_group(name, desc, priv, members) {
   })
 }
 
-export function user_group_list(param) {
-  return request({
-    url: '/user_group/list',
-    method: 'get',
-    param: param
-  })
-}
-
 export function user_list(param) {
   return request({
     url: '/user/list',
     method: 'get',
-    param: param
+    params: param
+  })
+}
+
+export function user_group_list(param) {
+  return request({
+    url: '/user_group/list',
+    method: 'get',
+    params: param
   })
 }

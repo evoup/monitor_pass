@@ -24,8 +24,8 @@ export function server_list(param) {
 
 export function server_group_list(param) {
   return request({
-    url: 'server_group/list',
+    url: '/server_group/list',
     method: 'get',
-    param: param
+    params: param
   })
 }
