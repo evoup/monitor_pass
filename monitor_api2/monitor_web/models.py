@@ -15,10 +15,9 @@ from web.common.db_fields import TinyIntegerField
 
 class Profile(models.Model):
     """
-    用户信息，扩展自django auth_user
+    用户附加信息，扩展自django auth_user
     """
-    name = models.CharField(u'姓名', max_length=32)
-    # email = models.EmailField(u'邮箱')
+    # 姓名和email放在User表的first_name里，因为分页排序字段要在嵌套Serializer外层，不然drf会不认识字段，坑!
     telephone = models.CharField(u'座机', max_length=32, blank=True, null=True)
     mobile = models.CharField(u'手机', max_length=32, blank=True, null=True)
     desc = models.CharField(u'描述', max_length=255, blank=True, null=True)
@@ -28,7 +27,7 @@ class Profile(models.Model):
         db_table = 'user_profile'
 
     def __str__(self):
-        return self.name
+        return self.user.username if self.user.first_name is None else self.user.first_name
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

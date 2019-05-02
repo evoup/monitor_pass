@@ -64,6 +64,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         user = User.objects.filter(id=obj.user_id).all()[0]
         return {'username': user.username, 'email': user.email}
 
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(required=True)
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
 class ProfileBelongUserGroupSerializer(ProfileSerializer):
     belong_group = serializers.SerializerMethodField()
 

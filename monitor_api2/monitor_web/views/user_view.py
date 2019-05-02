@@ -17,7 +17,8 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from monitor_web import models
 from monitor_web.models import Profile, Server
 # Create your views here.
-from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer
+from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer, \
+    UserSerializer
 from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import CustomPageNumberPagination
@@ -85,7 +86,7 @@ class UserInfo(APIView):
         for g in request.user.groups.all():
             l.append(g.name)
         user = User.objects.get(username=request.user.username)
-        username = user.profile.name
+        username = user.first_name
         if not username:
             username = user.username
         ret = {
@@ -114,10 +115,12 @@ class UserInfo(APIView):
             'message': '创建用户失败'
         }
         try:
-            # 创建用户要写2个表auth_user扩展表user_rofile表，要用事务的原子性,失败django自动回滚
+            # 创建用户要写2个表auth_user和用户扩展表user_rofile表，要用事务的原子性,失败django自动回滚
             with transaction.atomic():
-                user = User.objects.create_user(data['login_name'], data['email'], data['password'])
-                Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
+                user = User.objects.create_user(username=data['login_name'], email=data['email'], password=data['password'])
+                user.first_name = data['name']
+                user.save()
+                Profile.objects.filter(pk=user.id).update(desc=data['desc'])
         except IntegrityError:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
@@ -137,14 +140,13 @@ class UserList(APIView):
         """
         order_list, prop = getOrderList(request)
         # 获取所有数据
-        records = models.Profile.objects.all() if prop == '' else models.Profile.objects.order_by(*order_list)
+        records = models.User.objects.all() if prop == '' else models.User.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
         page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
-        # ser = ProfileSerializer(instance=page_roles, many=True)
-        serializer = ProfileBelongUserGroupSerializer(instance=page_data, many=True)
+        serializer = UserSerializer(instance=page_data, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

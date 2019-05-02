@@ -40,13 +40,8 @@ urlpatterns = [
         url(r'^login/$', user_view.Login.as_view()),
         # 查询是否过期，过期
         url(r'^login/status/$', user_view.LoginStatus.as_view()),
+        # 返回用户角色数据/创建用户
         url(r'^user/info$', user_view.UserInfo.as_view()),
-        # 添加服务器
-        url(r'^server/info$', server_view.ServerInfo.as_view()),
-        # 服务器列表
-        url(r'^server/list$', server_view.ServerList.as_view()),
-        # 服务组列表
-        url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
         # 用户列表
         url(r'^user/list$', user_view.UserList.as_view()),
         # 添加用户组
@@ -55,6 +50,12 @@ urlpatterns = [
         url(r'^user_group/list$', user_view.UserGroupList.as_view()),
         # 所有权限列表
         url(r'^user_perm/list$', user_view.UserPerm.as_view()),
+        # 添加服务器
+        url(r'^server/info$', server_view.ServerInfo.as_view()),
+        # 服务器列表
+        url(r'^server/list$', server_view.ServerList.as_view()),
+        # 服务组列表
+        url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
 
 
     ]))
