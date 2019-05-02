@@ -41,3 +41,12 @@ export function user_group_list(param) {
     params: param
   })
 }
+
+export function user_perm_list(param) {
+  return request({
+    url: '/user_perm/list',
+    method: 'get',
+    params: param
+  })
+}
+

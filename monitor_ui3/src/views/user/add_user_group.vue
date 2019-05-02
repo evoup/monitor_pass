@@ -56,7 +56,7 @@
 
 <script>
 import { add_user_group } from '@/api/user'
-import { user_list } from '../../api/user'
+import { user_list, user_perm_list } from '../../api/user'
 export default {
   data() {
     return {
@@ -103,7 +103,9 @@ export default {
         type: 1
       },
       listLoading: true,
-      total: 0
+      total: 0,
+      // -------用户权限---------
+      userPermDataList: []
     }
   },
   // created() {
@@ -115,10 +117,11 @@ export default {
   //   console.log(this.dataModel[0].value1)
   // },
   mounted() {
-    this.fetchData()
+    this.fetchUserListData()
+    this.fetchUserPermListData()
   },
   methods: {
-    fetchData() {
+    fetchUserListData() {
       this.pageHelp.page = this.pageNum
       user_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
@@ -134,18 +137,27 @@ export default {
       this.pageList.pageSize = val
       this.pageHelp.size = this.pageList.pageSize
       this.pageHelp.page = this.pageList.currPage
-      this.fetchData()
+      this.fetchUserListData()
     },
     // 点击分页sort-change
     handleCurrentChange(val) {
       this.pageNum = val
-      this.fetchData()
+      this.fetchUserListData()
     },
     sortChange(column, prop, order) {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
     },
+    // -----------------获取用户权限列表 Start--------------------------------
+    fetchUserPermListData() {
+      this.pageHelp.page = this.pageNum
+      user_perm_list().then(response => {
+        this.userPermDataList = response.data.items
+      })
+    },
+    // -----------------获取用户权限列表 End----------------------------------
+
     addUserGroup(a, b, c, d) {
       add_user_group(a, b, c, d)
     },

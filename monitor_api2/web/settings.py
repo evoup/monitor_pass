@@ -257,6 +257,8 @@ LOGGING = {
     }
 }
 
+# 这些权限不需要，其中包含用户和用户组的，用默认的
+ABADONED_PERMISSIONS = ['add_logentry', 'change_logentry', 'delete_logentry', 'view_logentry', 'add_permission', 'change_permission', 'delete_permission', 'view_permission', 'add_contenttype', 'change_contenttype', 'delete_contenttype', 'view_contenttype', 'add_session', 'change_session', 'delete_session', 'view_session', 'add_profile', 'change_profile', 'delete_profile', 'view_profile', 'add_usergroup', 'change_usergroup', 'delete_usergroup', 'view_usergroup']
 
 # 权限管理(两个app的view函数不能重复)
 PERMISSIONS = {
