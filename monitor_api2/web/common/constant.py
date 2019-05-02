@@ -1,0 +1,4 @@
+class Constant(object):
+    BACKEND_CODE_OK = 20000,
+    BACKEND_CODE_CREATED = 20001,
+    BACKEND_CODE_OPT_FAIL = 40000

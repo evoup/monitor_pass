@@ -15,6 +15,7 @@ from monitor_web import models
 from monitor_web.models import Server, Asset
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
+from web.common.constant import Constant
 from web.common.order import getOrderList
 from web.common.paging import MyPageNumberPagination
 
@@ -32,7 +33,7 @@ class ServerInfo(APIView):
 
     def get(self, *args, **kwargs):
         ret = {
-            "code": 20000,
+            "code": Constant.BACKEND_CODE_OK,
             "data": {
                 "name": "server1"
             }
@@ -43,7 +44,7 @@ class ServerInfo(APIView):
     def post(self, *args, **kwargs):
         data = JSONParser().parse(self.request)
         ret = {
-            'code': 40000,
+            'code': Constant.BACKEND_CODE_OPT_FAIL,
             'message': '服务器创建失败'
         }
         try:
@@ -59,7 +60,7 @@ class ServerInfo(APIView):
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
         ret = {
-            'code': 20001,
+            'code': Constant.BACKEND_CODE_CREATED,
             'message': '服务器创建成功'
         }
         return JsonResponse(ret, safe=False)
@@ -85,7 +86,7 @@ class ServerList(APIView):
         # 对数据进行序列化
         ser = ServerSerializer(instance=page_roles, many=True)
         ret = {
-            "code": 20000,
+            "code": Constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
                 "items": ser.data,
@@ -108,7 +109,7 @@ class ServerGroupList(APIView):
         page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
         ser = ServerGroupSerializer(instance=page_roles, many=True)
         ret = {
-            "code": 20000,
+            "code": Constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
                 "items": ser.data,
