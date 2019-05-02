@@ -238,7 +238,7 @@ class UserPerm(APIView):
         # 获取所有数据
         perm={}
         for x in Permission.objects.all().order_by('id'):
-            perm[x.id]=x.name
+            perm[x.id]=x.codename
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

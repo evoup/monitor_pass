@@ -55,7 +55,7 @@
         width="200" />
       <el-table-column
         label="描述"
-        prop="desc"
+        prop="profile.desc"
         width="280" />
       <el-table-column label="操作">
         <template scope="scope">

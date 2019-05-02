@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 import datetime
 import os
-# from corsheaders.defaults import default_headers
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -141,6 +140,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5
 }
 
 JWT_AUTH = {
@@ -203,43 +204,43 @@ LOGGING = {
             'include_html': True,
         },
         'default': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/','all.log'),
-            'maxBytes': 1024*1024*5, # 5 MB
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(STATIC_ROOT+'/logs/', 'all.log'),
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter': 'standard',
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
         'request_handler': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/','script.log'),
-            'maxBytes': 1024*1024*5, # 5 MB
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(STATIC_ROOT+'/logs/', 'script.log'),
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter': 'standard',
         },
         'scprits_handler': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/','script.log'),
-            'maxBytes': 1024*1024*5, # 5 MB
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(STATIC_ROOT+'/logs/', 'script.log'),
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter': 'standard',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['default','console'],
+            'handlers': ['default', 'console'],
             'level': 'DEBUG',
             'propagate': False
         },
-        'monitor_web.app':{
-            'handlers': ['default','console'],
+        'monitor_web.app': {
+            'handlers': ['default', 'console'],
             'level': 'DEBUG',
             'propagate': True
         },
@@ -248,7 +249,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False
         },
-        'scripts': { # 脚本专用日志
+        'scripts': {  # 脚本专用日志
             'handlers': ['scprits_handler'],
             'level': 'INFO',
             'propagate': False
@@ -256,7 +257,133 @@ LOGGING = {
     }
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+
+# 权限管理(两个app的view函数不能重复)
+PERMISSIONS = {
+    # 用户组
+    "add_group": "用户组添加",
+    "change_group": "用户组更新",
+    "delete_group": "用户组删除",
+    "view_group": "用户组查看",
+
+    # 用户组
+    "add_user": "用户添加",
+    "change_user": "用户更新",
+    "delete_user": "用户删除",
+    "view_user": "用户查看",
+
+    # 监控项
+    "add_monitoritem": "监控项添加",
+    "change_monitoritem": "监控项更新",
+    "delete_monitoritem": "监控项删除",
+    "view_monitoritem": "监控项查看",
+
+    # 机房
+    "add_idc": "机房添加",
+    "change_idc": "机房更新",
+    "delete_idc": "机房删除",
+    "view_idc": "机房查看",
+
+    # 服务器
+    "add_server": "服务器添加",
+    "change_server": "服务器修改",
+    "delete_server": "服务器删除",
+    "view_server": "服务器删除",
+
+    # 标签
+    "add_tag": "标签添加",
+    "change_tag": "标签修改",
+    "delete_tag": "标签删除",
+    "view_tag": "标签查看",
+
+    # 监控事件
+    "add_event": "监控事件添加",
+    "change_event": "监控事件修改",
+    "delete_event": "监控事件删除",
+    "view_event": "监控事件查看",
+
+    # 业务线
+    "add_businessunit": "业务线添加",
+    "change_businessunit": "业务线修改",
+    "delete_businessunit": "业务线删除",
+    "view_businessunit": "业务线查看",
+
+    # 资产错误记录
+    "add_asseterrorlog": "资产错误记录添加",
+    "change_asseterrorlog": "资产错误记录修改",
+    "delete_asseterrorlog": "资产错误记录删除",
+    "view_asseterrorlog": "资产错误记录删除",
+
+    # 内存
+    "add_memory": "内存添加",
+    "change_memory": "内存修改",
+    "delete_memory": "内存删除",
+    "view_memory": "内存查看",
+
+    # 网络接口
+    "add_nic": "网络接口添加",
+    "change_nic": "网络接口修改",
+    "delete_nic": "网络接口删除",
+    "view_nic": "网络接口查看",
+
+    # 数据收集器
+    "add_datacollector": "数据收集器添加",
+    "change_datacollector": "数据收集器修改",
+    "delete_datacollector": "数据收集器删除",
+    "view_datacollector": "数据收集器查看",
+
+    # 网络设备
+    "add_networkdevice": "网络设备添加",
+    "change_networkdevice": "网络设备修改",
+    "delete_networkdevice": "网路设备删除",
+    "view_networkdevice": "网络设备查看",
+
+    # 资产记录
+    "add_assetrecord": "资产记录添加",
+    "change_assetrecord": "资产记录修改",
+    "delete_assetrecord": "资产记录删除",
+    "view_assetrecord": "资产记录查看",
+
+    # 资产
+    "add_asset": "资产添加",
+    "change_asset": "资产修改",
+    "delete_asset": "资产删除",
+    "view_asset": "资产查看",
+
+    # 监控集
+    "add_monitorset": "监控集添加",
+    "change_monitorset": "监控集修改",
+    "delete_monitorset": "监控集删除",
+    "view_monitorset": "监控集查看",
+
+    # 磁盘
+    "add_disk": "磁盘添加",
+    "change_disk": "磁盘修改",
+    "delete_disk": "磁盘删除",
+    "view_disk": "磁盘查看",
+
+    # 模板
+    "add_template": "模板添加",
+    "change_template": "模板修改",
+    "delete_template": "模板删除",
+    "view_template": "模板删除",
+
+    # 告警
+    "add_alert": "告警添加",
+    "change_alert": "告警修改",
+    "delete_alert": "告警删除",
+    "view_alert": "告警查看",
+
+    # 触发器
+    "add_trigger": "触发器添加",
+    "change_trigger": "触发器修改",
+    "delete_trigger": "触发器删除",
+    "view_trigger": "触发器查看",
+
+    # 服务器组
+    "add_servergroup": "服务器组添加",
+    "change_servergroup": "服务器组修改",
+    "delete_servergroup": "服务器组删除",
+    "view_servergroup": "服务器组查看",
+
 }
