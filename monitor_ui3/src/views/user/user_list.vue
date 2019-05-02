@@ -41,16 +41,17 @@
       <el-table-column
         label="登录账号"
         sortable="custom"
-        prop="user.username"
+        prop="username"
         width="120" />
       <el-table-column
         label="用户名"
         sortable="custom"
-        prop="name"
+        prop="first_name"
         width="120" />
       <el-table-column
         label="邮箱"
-        prop="user.email"
+        sortable="custom"
+        prop="email"
         width="200" />
       <el-table-column
         label="描述"

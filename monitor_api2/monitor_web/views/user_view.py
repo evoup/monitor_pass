@@ -1,7 +1,8 @@
 import traceback
 
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -15,10 +16,9 @@ from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web import models
-from monitor_web.models import Profile, Server
+from monitor_web.models import Profile
 # Create your views here.
-from monitor_web.serializers import UserGroupSerializer, ProfileSerializer, ProfileBelongUserGroupSerializer, \
-    UserSerializer
+from monitor_web.serializers import ProfileSerializer, UserSerializer, GroupSerializer
 from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import CustomPageNumberPagination
@@ -210,18 +210,19 @@ class UserGroupList(APIView):
         """
         order_list, prop = getOrderList(request)
         # 获取所有数据
-        records = models.UserGroup.objects.all() if prop == '' else models.UserGroup.objects.order_by(*order_list)
+        records = Group.objects.all() if prop == '' else Group.objects.order_by(*order_list)
         # 创建分页对象，这里是自定义的MyPageNumberPagination
-        pg = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
         # 获取分页的数据
-        page_roles = pg.paginate_queryset(queryset=records, request=request, view=self)
+        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
-        ser = UserGroupSerializer(instance=page_roles, many=True)
+        serializer = GroupSerializer(instance=page_data, many=True)
+        # ser = UserGroupSerializer(instance=page_roles, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": len(records),
-                "items": ser.data,
+                "items": serializer.data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
                     "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)

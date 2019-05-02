@@ -80,18 +80,12 @@ class ProfileBelongUserGroupSerializer(ProfileSerializer):
         return "0"
 
 
-class UserGroupSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
-    profile = ProfileSerializer(required=True, many=True)
+class GroupSerializer(serializers.ModelSerializer):
     members = serializers.SerializerMethodField()
-
+    desc = serializers.SerializerMethodField()
     class Meta:
-        model = UserGroup
-        fields = '__all__'
-
-    def get_name(self, obj):
-        return obj.group.name
-
+        model = Group
+        fields = ['id', 'name', 'members', 'desc']
     def get_members(self, obj):
         # 归并UserGroup中的Profile的name
         profiles = UserGroup.objects.filter(id=obj.id).all().values('profile')
@@ -99,7 +93,11 @@ class UserGroupSerializer(serializers.ModelSerializer):
         if profiles is not None:
             for p in profiles:
                 if p['profile'] is not None:
-                    x.append(Profile.objects.filter(id=p['profile']).values('name')[0]['name'])
-        all_name = ','.join(x)
+                    uid = Profile.objects.filter(id=p['profile']).values()[0]['user_id']
+                    user = User.objects.filter(id=uid).all()[0]
+                    x.append(user.first_name)
+        all_name = ', '.join(x)
         return all_name
+    def get_desc(self, obj):
+        return UserGroup.objects.filter(id=obj.id).all()[0].desc
 
