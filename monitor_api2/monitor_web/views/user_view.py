@@ -237,12 +237,12 @@ class UserGroupList(APIView):
 class UserPerm(APIView):
     def get(self, request, pk=None, format=None):
         # 获取所有数据
-        perm={}
-        for x in Permission.objects.all().order_by('id'):
+        perm = []
+        for p in Permission.objects.all().order_by('id'):
 
-            if x.codename in ABADONED_PERMISSIONS:
+            if p.codename in ABADONED_PERMISSIONS:
                 continue
-            perm[x.id]={"codename": x.codename, "name": PERMISSIONS[x.codename]}
+            perm.append({"codename": p.codename, "name": PERMISSIONS[p.codename]})
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
