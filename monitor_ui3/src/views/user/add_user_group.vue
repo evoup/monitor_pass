@@ -125,7 +125,6 @@ export default {
   mounted() {
     this.fetchUserListData()
     this.fetchUserPermListData()
-    this.setDefaultUserPerm()
   },
   methods: {
     fetchUserListData() {
@@ -161,13 +160,16 @@ export default {
       this.pageHelp.page = this.pageNum
       user_perm_list().then(response => {
         this.userPermDataList = response.data.items
+        this.setDefaultUserPerm()
       })
     },
     // -----------------获取用户权限列表 End----------------------------------
 
     // -----------------设置默认用户权限列表 Start--------------------------------
     setDefaultUserPerm() {
-      this.userPermOption = ['add_group']
+      for (var item of this.userPermDataList) {
+        this.userPermOption.push(item.codename)
+      }
     },
     // -----------------设置默认用户权限列表 End----------------------------------
 

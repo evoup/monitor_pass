@@ -290,7 +290,7 @@ PERMISSIONS = {
     "add_server": "服务器添加",
     "change_server": "服务器修改",
     "delete_server": "服务器删除",
-    "view_server": "服务器删除",
+    "view_server": "服务器查看",
 
     # 标签
     "add_tag": "标签添加",
@@ -314,7 +314,7 @@ PERMISSIONS = {
     "add_asseterrorlog": "资产错误记录添加",
     "change_asseterrorlog": "资产错误记录修改",
     "delete_asseterrorlog": "资产错误记录删除",
-    "view_asseterrorlog": "资产错误记录删除",
+    "view_asseterrorlog": "资产错误记录查看",
 
     # 内存
     "add_memory": "内存添加",
@@ -368,7 +368,7 @@ PERMISSIONS = {
     "add_template": "模板添加",
     "change_template": "模板修改",
     "delete_template": "模板删除",
-    "view_template": "模板删除",
+    "view_template": "模板查看",
 
     # 告警
     "add_alert": "告警添加",
