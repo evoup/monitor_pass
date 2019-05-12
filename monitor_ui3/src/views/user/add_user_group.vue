@@ -22,31 +22,14 @@
       </el-tab-pane>
       <!-- 面板2 -->
       <el-tab-pane label="权限">
-        <template slot-scope="scope">
-          <table>
-            <tr>
-              <td>
-                <label>
-                  <select v-model="userPermDataList" name="public-choice" multiple="multiple" size="15" style="height:400px;width:150px">
-                    <option v-for="perm in userPermDataList" :value="perm.id">{{ perm.name }}</option>
-                  </select>
-                </label>
-              </td>
-              <td>
-                <el-button-group style="margin-left:10px">
-                  <el-button type="primary" icon="el-icon-arrow-left">删除</el-button>
-                  <el-button type="primary">加入<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-                </el-button-group>
-              </td>
-              <td>
-                <label>
-                  <select v-model="userPermDataList1" name="public-choice1" multiple="multiple" size="15" style="margin-left:10px;height:400px;width:150px">
-                    <option v-for="perm in userPermDataList1" :value="perm.id">{{ perm.name }}</option>
-                  </select>
-                </label>
-              </td>
-            </tr>
-          </table>
+        <template>
+          <el-select v-model="userPermOption" multiple placeholder="请选择" style="width: 80%">
+            <el-option
+              v-for="item in userPermDataList"
+              :key="item.codename"
+              :label="item.name"
+              :value="item.codename"/>
+          </el-select>
         </template>
       </el-tab-pane>
       <!-- 面板3 -->
@@ -136,12 +119,13 @@ export default {
       total: 0,
       // -------用户权限---------
       userPermDataList: [],
-      userPermDataList1: []
+      userPermOption: []
     }
   },
   mounted() {
     this.fetchUserListData()
     this.fetchUserPermListData()
+    this.setDefaultUserPerm()
   },
   methods: {
     fetchUserListData() {
@@ -180,6 +164,12 @@ export default {
       })
     },
     // -----------------获取用户权限列表 End----------------------------------
+
+    // -----------------设置默认用户权限列表 Start--------------------------------
+    setDefaultUserPerm() {
+      this.userPermOption = ['add_group']
+    },
+    // -----------------设置默认用户权限列表 End----------------------------------
 
     addUserGroup(a, b, c, d) {
       add_user_group(a, b, c, d)
