@@ -99,5 +99,6 @@ class GroupSerializer(serializers.ModelSerializer):
         all_name = ', '.join(x)
         return all_name
     def get_desc(self, obj):
-        return UserGroup.objects.filter(id=obj.id).all()[0].desc
+        if len(UserGroup.objects.filter(id=obj.id).all()) > 0:
+            return UserGroup.objects.filter(id=obj.id).all()[0].desc
 
