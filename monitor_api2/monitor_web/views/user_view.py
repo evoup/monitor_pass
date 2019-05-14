@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 from monitor_web import models
-from monitor_web.models import Profile
+from monitor_web.models import Profile, UserGroup
 # Create your views here.
 from monitor_web.serializers import ProfileSerializer, UserSerializer, GroupSerializer
 from web.common import constant
@@ -189,6 +189,7 @@ class UserGroupInfo(APIView):
         }
         try:
             new_group, created = Group.objects.get_or_create(name=data['name'])
+            UserGroup.objects.create(group_id=new_group.id, desc=data['desc'])
             MODELS = ['Server', 'ServerGroup', '']
             pass
             # Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
