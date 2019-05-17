@@ -181,6 +181,7 @@ class UserGroupInfo(APIView):
     def post(self, *args, **kwargs):
         """
         创建用户组
+        https://stackoverflow.com/questions/18797593/how-to-create-a-group-permission-in-django/18797715
         """
         data = JSONParser().parse(self.request)
         ret = {
@@ -189,9 +190,16 @@ class UserGroupInfo(APIView):
         }
         try:
             new_group, created = Group.objects.get_or_create(name=data['name'])
-            UserGroup.objects.create(group_id=new_group.id, desc=data['desc'])
-            MODELS = ['Server', 'ServerGroup', '']
-            pass
+            new_group_id = new_group.id
+            # 创建组
+            UserGroup.objects.create(group_id=new_group_id, desc=data['desc'])
+            # 分配组权限
+            if data['priv'] is not None and len(data['priv']) > 0:
+                privilege_list = list(Permission.objects.filter(codename__in = data['priv']).all().values_list('id', flat=True).distinct().order_by())
+                for i in privilege_list:
+                    new_group.permissions.add(i)
+            # user = User.objects.get(username='duke_nukem')
+            # user.groups.add(new_group)
             # Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
         except:
             print(traceback.format_exc())

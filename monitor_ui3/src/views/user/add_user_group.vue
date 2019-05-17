@@ -15,7 +15,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addUserGroup(form.name, form.desc, form.desc, form.desc)">创建</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermOption, form.desc)">创建</el-button>
             <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
