@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs type="border-card">
+      <!-- tab-pane1 -->
       <el-tab-pane label="基本信息">
         <el-form ref="form" :model="form" label-width="120px">
           <el-form-item label="服务器组名：">
@@ -10,7 +11,7 @@
           </el-form-item>
           <el-form-item label="备注：">
             <el-col :span="8">
-              <el-input v-model="form.desc" placeholder="请输入备注" type="textarea" />
+              <el-input v-model="form.desc" class="note" placeholder="请输入备注" type="textarea" />
             </el-col>
           </el-form-item>
           <el-form-item label="接收告警类型：">
@@ -31,7 +32,34 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="成员用户组">成员用户组</el-tab-pane>
+      <!-- tab-pane2 -->
+      <el-tab-pane label="成员用户组">
+        <el-table
+          :v-loading="listLoading"
+          :data="dataList"
+          stripe
+          border
+          tooltip-effect="dark"
+          style="width: 100%">
+          <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
+          <el-table-column
+            label="用户组名"
+            sortable="custom"
+            prop="name"
+            width="120" />
+          <el-table-column label="操作">
+            <template slot-scope="prop">
+              <el-switch
+                v-model="prop.row.belong_group"
+                active-value="1"
+                inactive-value="0"
+                @change="change_member($event, prop.row)"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <!-- tab-pane3 -->
       <el-tab-pane label="模板">模板</el-tab-pane>
     </el-tabs>
   </div>
@@ -39,6 +67,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
+import { user_group_list } from '../../api/user'
 export default {
   data() {
     return {
@@ -59,12 +88,28 @@ export default {
       form: {
         name: '',
         desc: ''
-      }
+      },
+      dataList: [], // 列表数据
+      listLoading: true
+    }
+  },
+  mounted() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      user_group_list().then(response => {
+        this.dataList = response.data.items
+        this.listLoading = false
+      })
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style>
+.note textarea {
+  height: 100px !important;
+}
 </style>

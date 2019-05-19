@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="描述">
         <el-col :span="14">
-          <el-input v-model="form.desc" type="textarea" placeholder="可输入描述"/>
+          <el-input v-model="form.desc" class="note" type="textarea" placeholder="可输入描述"/>
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -68,5 +68,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .note textarea {
+    height: 100px !important;
+  }
 </style>
