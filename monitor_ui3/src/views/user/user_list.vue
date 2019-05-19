@@ -14,13 +14,6 @@
       <el-col :span="21" class="toolbar">
         <el-form :inline="true" :model="filters">
           <el-form-item>
-            <template>
-              <el-select v-model="filters.type" placeholder="请选择">
-                <el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value"/>
-              </el-select>
-            </template>
-          </el-form-item>
-          <el-form-item>
             <el-input v-model="filters.name" placeholder="请输入关键字"/>
           </el-form-item>
           <el-form-item>
