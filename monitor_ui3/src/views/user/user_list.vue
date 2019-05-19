@@ -85,7 +85,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { user_list } from '@/api/user'
+import { user_list } from '../../api/user'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 export default {
   components: { ElPager },

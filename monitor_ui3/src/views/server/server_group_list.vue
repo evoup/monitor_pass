@@ -57,8 +57,9 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_group_list } from '@/api/server'
+import { server_group_list } from '../../api/server'
 export default {
   data() {
     return {

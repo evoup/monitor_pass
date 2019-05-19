@@ -10,8 +10,9 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { add_trigger } from '@/api/trigger'
+import { add_trigger } from '../../api/trigger'
 export default {
   data() {
     return {

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { add_server } from '@/api/server'
+import { add_server } from '../../api/server'
 export default {
   data() {
     return {

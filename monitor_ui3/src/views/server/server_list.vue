@@ -95,8 +95,9 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_list } from '@/api/server'
+import { server_list } from '../../api/server'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 export default {
   components: { ElPager },

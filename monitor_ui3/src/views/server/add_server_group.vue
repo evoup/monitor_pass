@@ -37,6 +37,7 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
 export default {
   data() {
