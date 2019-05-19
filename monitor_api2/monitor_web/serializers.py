@@ -87,17 +87,14 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name', 'members', 'desc']
     def get_members(self, obj):
-        # 归并UserGroup中的Profile的name
-        profiles = UserGroup.objects.filter(id=obj.id).all().values('profile')
-        x = []
-        if profiles is not None:
-            for p in profiles:
-                if p['profile'] is not None:
-                    uid = Profile.objects.filter(id=p['profile']).values()[0]['user_id']
-                    user = User.objects.filter(id=uid).all()[0]
-                    x.append(user.first_name)
-        all_name = ', '.join(x)
-        return all_name
+        members = []
+        users = User.objects.all()
+        if users is not None:
+            for user in users:
+                group = Group.objects.get(id=obj.id)
+                if group in user.groups.all():
+                    members.append(user.first_name+user.last_name)
+        return ', '.join(members)
     def get_desc(self, obj):
         if len(UserGroup.objects.filter(group_id=obj.id).all()) > 0:
             return UserGroup.objects.filter(group_id=obj.id).all()[0].desc
