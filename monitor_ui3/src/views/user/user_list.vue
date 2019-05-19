@@ -83,6 +83,7 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
 import { user_list } from '@/api/user'
 import ElPager from 'element-ui/packages/pagination/src/pager'

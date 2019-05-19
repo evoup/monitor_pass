@@ -15,7 +15,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, form.desc)">创建</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, dataList)">创建</el-button>
             <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
@@ -67,9 +67,9 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { add_user_group } from '@/api/user'
-import { user_list, user_perm_list } from '../../api/user'
+import { add_user_group, user_list, user_perm_list } from '../../api/user'
 export default {
   data() {
     return {

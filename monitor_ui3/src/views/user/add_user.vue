@@ -34,8 +34,9 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { add_user } from '@/api/user'
+import { add_user } from '../../api/user'
 export default {
   data() {
     return {

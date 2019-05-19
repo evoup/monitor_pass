@@ -77,6 +77,7 @@
   </div>
 </template>
 
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
 import { user_group_list } from '@/api/user'
 import ElPager from 'element-ui/packages/pagination/src/pager'
