@@ -15,7 +15,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, dataList)">创建</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, memberUserProfileIds)">创建</el-button>
             <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
@@ -58,6 +58,7 @@
                 v-model="prop.row.belong_group"
                 active-value="1"
                 inactive-value="0"
+                @change="change_member($event, prop.row)"
               />
             </template>
           </el-table-column>
@@ -91,7 +92,7 @@ export default {
         name: '',
         desc: '',
         priv: '',
-        members: ''
+        members: []
       },
       dataList: [], // 列表数据
       // 列表前端分页
@@ -121,7 +122,9 @@ export default {
       // v-model传递的是django权限的codename字符串数值，e.g. add_group
       userPermSelect: [],
       // 接收后端权限数据用
-      userPermData: []
+      userPermData: [],
+      // 加入改组的用户id
+      memberUserProfileIds: new Set([])
     }
   },
   mounted() {
@@ -173,9 +176,19 @@ export default {
         this.userPermSelect.push(item.codename)
       }
     },
+    change_member(a, b) {
+      if (a === '1') {
+        console.log('hit')
+        var member = b.profile.id
+        console.log(member)
+        this.memberUserProfileIds.add(member)
+        console.log(this.memberUserProfileIds)
+      }
+    },
     // -----------------设置默认用户权限列表 End-------------------------------
-
     addUserGroup(a, b, c, d) {
+      // set 转换为[]
+      d = Array.from(d)
       add_user_group(a, b, c, d)
     },
     // 跳转到用户组列表页面
