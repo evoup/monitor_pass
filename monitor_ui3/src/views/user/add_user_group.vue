@@ -176,16 +176,15 @@ export default {
         this.userPermSelect.push(item.codename)
       }
     },
+    // -----------------设置默认用户权限列表 End-------------------------------
+    // -----------------点击el-switch时传递选中的成员用户 Start-----------------
     change_member(a, b) {
       if (a === '1') {
-        console.log('hit')
         var member = b.profile.id
-        console.log(member)
         this.memberUserProfileIds.add(member)
-        console.log(this.memberUserProfileIds)
       }
     },
-    // -----------------设置默认用户权限列表 End-------------------------------
+    // -----------------点击el-switch时传递选中的成员用户 End-------------------
     addUserGroup(a, b, c, d) {
       // set 转换为[]
       d = Array.from(d)
