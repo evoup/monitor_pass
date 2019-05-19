@@ -53,9 +53,9 @@
             prop="profile.desc"
             width="380" />
           <el-table-column label="是否用户组成员">
-            <template slot-scope="scope">
+            <template slot-scope="prop">
               <el-switch
-                v-model="scope.row.belong_group"
+                v-model="prop.row.belong_group"
                 active-value="1"
                 inactive-value="0"
               />
@@ -120,6 +120,7 @@ export default {
       // -------用户权限---------
       // v-model传递的是django权限的codename字符串数值，e.g. add_group
       userPermSelect: [],
+      // 接收后端权限数据用
       userPermData: []
     }
   },
@@ -166,13 +167,13 @@ export default {
     },
     // -----------------获取用户权限列表 End----------------------------------
 
-    // -----------------设置默认用户权限列表 Start--------------------------------
+    // -----------------设置默认用户权限列表 Start-----------------------------
     setDefaultUserPerm() {
       for (var item of this.userPermData) {
         this.userPermSelect.push(item.codename)
       }
     },
-    // -----------------设置默认用户权限列表 End----------------------------------
+    // -----------------设置默认用户权限列表 End-------------------------------
 
     addUserGroup(a, b, c, d) {
       add_user_group(a, b, c, d)

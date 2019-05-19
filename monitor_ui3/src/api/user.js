@@ -26,6 +26,7 @@ export function add_user_group(name, desc, priv, members) {
   })
 }
 
+// 获取所有用户
 export function user_list(param) {
   return request({
     url: '/user/list',
@@ -42,6 +43,7 @@ export function user_group_list(param) {
   })
 }
 
+// 获取所有权限
 export function user_perm_list(param) {
   return request({
     url: '/user_perm/list',

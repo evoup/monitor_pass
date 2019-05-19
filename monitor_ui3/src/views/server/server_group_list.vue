@@ -49,8 +49,8 @@
         prop="date"
         width="130" />
       <el-table-column label="操作">
-        <template scope="scope">
-          <el-button size="small" type="primary" @click="lookUser(scope.$index,scope.row.u_uuid)">查看</el-button>
+        <template slot-scope="prop">
+          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
