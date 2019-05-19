@@ -15,7 +15,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermOption, form.desc)">创建</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, form.desc)">创建</el-button>
             <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
@@ -23,9 +23,9 @@
       <!-- 面板2 -->
       <el-tab-pane label="权限">
         <template>
-          <el-select v-model="userPermOption" multiple placeholder="请选择" style="width: 80%">
+          <el-select v-model="userPermSelect" multiple placeholder="请选择" style="width: 80%">
             <el-option
-              v-for="item in userPermDataList"
+              v-for="item in userPermData"
               :key="item.codename"
               :label="item.name"
               :value="item.codename"/>
@@ -118,8 +118,9 @@ export default {
       listLoading: true,
       total: 0,
       // -------用户权限---------
-      userPermDataList: [],
-      userPermOption: []
+      // v-model传递的是django权限的codename字符串数值，e.g. add_group
+      userPermSelect: [],
+      userPermData: []
     }
   },
   mounted() {
@@ -159,7 +160,7 @@ export default {
     fetchUserPermListData() {
       this.pageHelp.page = this.pageNum
       user_perm_list().then(response => {
-        this.userPermDataList = response.data.items
+        this.userPermData = response.data.items
         this.setDefaultUserPerm()
       })
     },
@@ -167,8 +168,8 @@ export default {
 
     // -----------------设置默认用户权限列表 Start--------------------------------
     setDefaultUserPerm() {
-      for (var item of this.userPermDataList) {
-        this.userPermOption.push(item.codename)
+      for (var item of this.userPermData) {
+        this.userPermSelect.push(item.codename)
       }
     },
     // -----------------设置默认用户权限列表 End----------------------------------
