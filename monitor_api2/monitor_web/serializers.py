@@ -12,14 +12,13 @@ class IDCSerializer(serializers.ModelSerializer):
 
     def create(self, attrs, instance=None):
         assert instance is None, 'Cannot create idc with IDCSerializer'
-        (idc_object, created) = IDC.objects\
+        (idc_object, created) = IDC.objects \
             .get_or_create(name=attrs.get('name'), floor=attrs.get('floor') if attrs.get('floor') else 0)
         return idc_object
 
     def update(self, attrs, instance=None):
         assert instance is None, 'Cannot update idc with IDCSerializer'
-        a = {}
-        a['name'] = attrs.get('name')
+        a = {'name': attrs.get('name')}
         if attrs.get('floor'):
             a['floor'] = attrs.get('floor')
         (idc_object, created) = IDC.objects.get_or_create(a)
@@ -36,6 +35,7 @@ class TagSerializer(serializers.ModelSerializer):
 class AssetSerializer(serializers.ModelSerializer):
     tag = TagSerializer(required=True)
     idc = IDCSerializer(required=True)
+
     class Meta:
         model = Asset
         fields = '__all__'
@@ -43,9 +43,11 @@ class AssetSerializer(serializers.ModelSerializer):
 
 class ServerSerializer(serializers.ModelSerializer):
     asset = AssetSerializer(required=True)
+
     class Meta:
         model = Server
         fields = '__all__'
+
 
 class ServerGroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,6 +57,7 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
+
     class Meta:
         model = Profile
         fields = '__all__'
@@ -67,6 +70,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=True)
+
     class Meta:
         model = User
         fields = '__all__'
@@ -83,9 +87,11 @@ class ProfileBelongUserGroupSerializer(ProfileSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     members = serializers.SerializerMethodField()
     desc = serializers.SerializerMethodField()
+
     class Meta:
         model = Group
         fields = ['id', 'name', 'members', 'desc']
+
     def get_members(self, obj):
         members = []
         users = User.objects.all()
@@ -93,9 +99,9 @@ class GroupSerializer(serializers.ModelSerializer):
             for user in users:
                 group = Group.objects.get(id=obj.id)
                 if group in user.groups.all():
-                    members.append(user.first_name+user.last_name)
+                    members.append(user.first_name + user.last_name)
         return ', '.join(members)
+
     def get_desc(self, obj):
         if len(UserGroup.objects.filter(group_id=obj.id).all()) > 0:
             return UserGroup.objects.filter(group_id=obj.id).all()[0].desc
-
