@@ -82,6 +82,8 @@ class UserInfo(APIView):
     """
     返回用户角色数据
     """
+
+    @method_decorator(permission_required('auth.view_user', raise_exception=True))
     def get(self, request, *args, **kwargs):
         l = []
         for g in request.user.groups.all():
