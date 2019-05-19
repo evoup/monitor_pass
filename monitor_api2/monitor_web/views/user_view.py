@@ -198,9 +198,11 @@ class UserGroupInfo(APIView):
                 privilege_list = list(Permission.objects.filter(codename__in = data['priv']).all().values_list('id', flat=True).distinct().order_by())
                 for i in privilege_list:
                     new_group.permissions.add(i)
-            # user = User.objects.get(username='duke_nukem')
-            # user.groups.add(new_group)
-            # Profile.objects.filter(pk=user.id).update(name=data['name'], desc=data['desc'])
+                if data['members'] is not None:
+                    for user_id in data['members']:
+                        user = User.objects.get(id=user_id)
+                        if user is not None:
+                            user.groups.add(new_group)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
