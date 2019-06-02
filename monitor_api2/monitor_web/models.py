@@ -238,7 +238,10 @@ class MonitorItem(models.Model):
     key = models.CharField(u'opentsdb指标名', max_length=128, default='')
     multiplier = models.FloatField(u'自定义乘子', default=1.0)
     unit = models.CharField(u'单位', max_length=12, default='')
-    host_id = models.ForeignKey('Server', on_delete=models.CASCADE, default="", editable=False)
+    #0代表不属于任何
+    host_id = models.IntegerField(u'对应主机id', 0)
+    #0代表不属于任何
+    template_id = models.IntegerField(u'对应模板id', 0)
 
     class Meta:
         verbose_name_plural = '监控项表'
