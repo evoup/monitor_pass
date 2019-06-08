@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view
+from monitor_web.views import view, template_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -56,7 +56,8 @@ urlpatterns = [
         url(r'^server/list$', server_view.ServerList.as_view()),
         # 服务组列表
         url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
-
+        # 模板
+        url(r'^template/list$', template_view.TemplateList.as_view()),
 
     ]))
 ]
