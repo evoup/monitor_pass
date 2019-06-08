@@ -43,7 +43,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '概览', icon: 'example' },
+    meta: { title: '概览', icon: 'dashboard2' },
     children: [
       {
         path: 'table',
@@ -64,7 +64,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Servers',
-    meta: { title: '服务器', icon: 'example' },
+    meta: { title: '服务器', icon: 'server2' },
     children: [
       {
         path: '/add_server',
@@ -76,19 +76,19 @@ export const constantRouterMap = [
         path: '/server_list',
         name: 'Table2',
         component: () => import('@/views/server/server_list'),
-        meta: { title: '服务器详情管理', icon: 'form' }
+        meta: { title: '服务器详情管理', icon: 'server3' }
       },
       {
         path: 'batch_file_upload',
         name: 'Tree1',
         component: () => import('@/views/tree/index'),
-        meta: { title: '批量文件上传', icon: 'tree' }
+        meta: { title: '批量文件上传', icon: 'file_upload' }
       },
       {
         path: 'batch_command_execute',
         name: 'Tree2',
         component: () => import('@/views/tree/index'),
-        meta: { title: '批量命令执行', icon: 'tree' }
+        meta: { title: '批量命令执行', icon: 'command_exec' }
       }
     ]
   }, {
@@ -96,7 +96,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Config',
-    meta: { title: '配置', icon: 'example' },
+    meta: { title: '配置', icon: 'system_config' },
     children: [
       {
         path: '/general_conf',
@@ -108,7 +108,7 @@ export const constantRouterMap = [
         path: '/server_group_list',
         name: 'ServerGroupManager',
         component: () => import('@/views/server/server_group_list'),
-        meta: { title: '服务器组管理', icon: 'form' }
+        meta: { title: '服务器组管理', icon: 'server_group' }
       },
       {
         path: '/add_server_group',
@@ -128,13 +128,13 @@ export const constantRouterMap = [
         path: '/user_list',
         name: 'UserManager',
         component: () => import('@/views/user/user_list'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户管理', icon: 'user_manager' }
       },
       {
         path: '/user_group_list',
         name: 'UserGroupManager',
         component: () => import('@/views/user/user_group_list'),
-        meta: { title: '用户组管理', icon: 'form' }
+        meta: { title: '用户组管理', icon: 'user_group_manager' }
       },
       {
         path: '/add_user_group',
