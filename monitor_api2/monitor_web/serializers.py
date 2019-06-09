@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template
 
 
 class IDCSerializer(serializers.ModelSerializer):
@@ -52,6 +52,13 @@ class ServerSerializer(serializers.ModelSerializer):
 class ServerGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServerGroup
+        fields = '__all__'
+
+
+class TemplateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Template
         fields = '__all__'
 
 

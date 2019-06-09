@@ -5,21 +5,34 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
+from monitor_web import models
+from monitor_web.serializers import ServerSerializer, TemplateSerializer
 from web.common import constant
+from web.common.order import getOrderList
+from web.common.paging import CustomPageNumberPagination
 
 
 @permission_classes((IsAuthenticated,))
 class TemplateList(APIView):
-    # @method_decorator(permission_required('monitor_web.view_template', raise_exception=True))
+    @method_decorator(permission_required('monitor_web.view_template', raise_exception=True))
     def get(self, request, *args, **kwargs):
         """
         获取全部模板
         """
+        order_list, prop = getOrderList(request)
+        # 获取所有数据
+        records = models.Template.objects.all() if prop == '' else models.Template.objects.order_by(*order_list)
+        # 创建分页对象，这里是自定义的MyPageNumberPagination
+        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
+        # 获取分页的数据
+        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
+        # 对数据进行序列化
+        serializer = TemplateSerializer(instance=page_data, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": 1,
-                "items": [{"id":2, "name": "x", "triggers": 3}],
+                "items": serializer.data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
                     "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
