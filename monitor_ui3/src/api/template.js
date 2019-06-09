@@ -8,13 +8,14 @@ export function template_list(param) {
   })
 }
 
-export function add_template(param) {
+export function add_template(name, server_groups, templates) {
   return request({
     url: '/template/info',
     method: 'post',
-    params: param,
     data: {
-      param
+      name,
+      server_groups,
+      templates
     }
   })
 }

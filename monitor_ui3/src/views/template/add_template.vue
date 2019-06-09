@@ -18,14 +18,14 @@
       <el-form-item label="关联的模板">
         <el-select v-model="templateSelectModel" multiple placeholder="请选择模板（可选）" style="width: 80%">
           <el-option
-            v-for="item in serverGroupData"
+            v-for="item in templateData"
             :key="item.id"
             :label="item.name"
             :value="item.id"/>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addTemplate(form.name)">创建</el-button>
+        <el-button type="primary" @click="addTemplate(form.name, serverGroupSelectModel, templateSelectModel)">创建</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { add_template } from '../../api/template'
+import { add_template, template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 
 export default {
@@ -65,23 +65,28 @@ export default {
       total: 0,
       serverGroupSelectModel: [],
       serverGroupData: [],
-      templateSelectModel: []
+      templateSelectModel: [],
+      templateData: []
     }
   },
   mounted() {
     this.fetchServerGroupListData()
+    this.fetchTemplateListData()
   },
   methods: {
-    // -----------------获取用户权限列表 Start--------------------------------
+    // 获取服务器组列表
     fetchServerGroupListData() {
       this.pageHelp.page = this.pageNum
       server_group_list().then(response => {
         this.serverGroupData = response.data.items
       })
     },
-    onSubmit() {
-      add_template('a')
-      this.$message('submit!')
+    // 获取所有模板列表
+    fetchTemplateListData() {
+      this.pageHelp.page = this.pageNum
+      template_list().then(response => {
+        this.templateData = response.data.items
+      })
     },
     onCancel() {
       this.$message({
@@ -89,8 +94,8 @@ export default {
         type: 'warning'
       })
     },
-    addTemplate(a) {
-      add_template(a)
+    addTemplate(a, b, c) {
+      add_template(a, b, c)
     }
   }
 }
