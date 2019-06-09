@@ -9,6 +9,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '../views/layout/Layout'
 
+// noinspection NpmUsedModulesInstalled
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -23,8 +24,8 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
+  { path: '/login', component: () => import('../views/login/index'), hidden: true },
+  { path: '/404', component: () => import('../views/404'), hidden: true },
 
   {
     path: '/',
@@ -34,7 +35,7 @@ export const constantRouterMap = [
     hidden: true,
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      component: () => import('../views/dashboard/index')
     }]
   },
 
@@ -48,13 +49,13 @@ export const constantRouterMap = [
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
+        component: () => import('../views/table/index'),
         meta: { title: '一览', icon: 'table' }
       },
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        component: () => import('../views/tree/index'),
         meta: { title: '监控服务器状态', icon: 'tree' }
       }
     ]
@@ -69,25 +70,25 @@ export const constantRouterMap = [
       {
         path: '/add_server',
         name: 'Table1',
-        component: () => import('@/views/server/add_server'),
+        component: () => import('../views/server/add_server'),
         meta: { title: '添加服务器', icon: 'form' }
       },
       {
         path: '/server_list',
         name: 'ServerList',
-        component: () => import('@/views/server/server_list'),
+        component: () => import('../views/server/server_list'),
         meta: { title: '服务器详情管理', icon: 'server3' }
       },
       {
         path: 'batch_file_upload',
         name: 'Tree1',
-        component: () => import('@/views/tree/index'),
+        component: () => import('../views/tree/index'),
         meta: { title: '批量文件上传', icon: 'file_upload' }
       },
       {
         path: 'batch_command_execute',
         name: 'Tree2',
-        component: () => import('@/views/tree/index'),
+        component: () => import('../views/tree/index'),
         meta: { title: '批量命令执行', icon: 'command_exec' }
       }
     ]
@@ -101,58 +102,58 @@ export const constantRouterMap = [
       {
         path: '/template_list',
         name: 'TemplateList',
-        component: () => import('@/views/template/template_list'),
+        component: () => import('../views/template/template_list'),
         meta: { title: '模板', icon: 'template' }
       },
       {
         path: '/add_template',
         name: 'AddTemplate',
-        component: () => import('@/views/template/add_template'),
+        component: () => import('../views/template/add_template'),
         meta: { title: '添加模板', icon: 'template' },
         hidden: true
       },
       {
         path: '/general_conf',
         name: 'GeneralConf',
-        component: () => import('@/views/form/index'),
+        component: () => import('../views/form/index'),
         meta: { title: '常规设置', icon: 'form' }
       },
       {
         path: '/server_group_list',
         name: 'ServerGroupManager',
-        component: () => import('@/views/server/server_group_list'),
+        component: () => import('../views/server/server_group_list'),
         meta: { title: '服务器组管理', icon: 'server_group' }
       },
       {
         path: '/add_server_group',
         name: 'AddServerGroup',
-        component: () => import('@/views/server/add_server_group'),
+        component: () => import('../views/server/add_server_group'),
         meta: { title: '添加服务器组', icon: 'form' },
         hidden: true
       },
       {
         path: '/add_user',
         name: 'AddUser',
-        component: () => import('@/views/user/add_user'),
+        component: () => import('../views/user/add_user'),
         meta: { title: '添加用户', icon: 'form' },
         hidden: true
       },
       {
         path: '/user_list',
         name: 'UserManager',
-        component: () => import('@/views/user/user_list'),
+        component: () => import('../views/user/user_list'),
         meta: { title: '用户管理', icon: 'user_manager' }
       },
       {
         path: '/user_group_list',
         name: 'UserGroupManager',
-        component: () => import('@/views/user/user_group_list'),
+        component: () => import('../views/user/user_group_list'),
         meta: { title: '用户组管理', icon: 'user_group_manager' }
       },
       {
         path: '/add_user_group',
         name: 'AddUserGroup',
-        component: () => import('@/views/user/add_user_group'),
+        component: () => import('../views/user/add_user_group'),
         meta: { title: '添加用户组', icon: 'form' },
         hidden: true
       }
