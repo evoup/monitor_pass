@@ -1,14 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-
 # Create your models here.
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-
-# ----------扩展django用户开始-----------------
-from rest_framework.exceptions import ValidationError
 
 from web.common.db_fields import TinyIntegerField
 
@@ -21,7 +15,8 @@ class Profile(models.Model):
     telephone = models.CharField(u'座机', max_length=32, blank=True, null=True)
     mobile = models.CharField(u'手机', max_length=32, blank=True, null=True)
     desc = models.CharField(u'描述', max_length=255, blank=True, null=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
     class Meta:
         verbose_name_plural = '用户信息表'
         db_table = 'user_profile'
@@ -29,14 +24,18 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username if self.user.first_name is None else self.user.first_name
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
 # ----------扩展django用户结束-----------------
 
 
@@ -48,7 +47,7 @@ class UserGroup(models.Model):
     """
     # name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
-    profile = models.ManyToManyField('Profile', db_table = 'r_usergroup_profile',  blank=True)
+    profile = models.ManyToManyField('Profile', db_table='r_usergroup_profile', blank=True)
     desc = models.CharField(max_length=512, blank=True, default="")
     server_group = models.ManyToManyField('ServerGroup', db_table='r_user_group_server_group', blank=True)
 
@@ -58,6 +57,8 @@ class UserGroup(models.Model):
 
     def __str__(self):
         return "{}".format(self.group.name)
+
+
 # ----------扩展django用户组结束-----------------
 
 
@@ -96,7 +97,9 @@ class Server(models.Model):
     agent_address = models.CharField('监控代理地址', max_length=50, default='')
     jmx_address = models.CharField('jmx地址', max_length=50, default='')
     snmp_address = models.CharField('snmp地址', max_length=50, default='')
-    data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True, on_delete=models.CASCADE)
+    data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True,
+                                       on_delete=models.CASCADE)
+
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '服务器表'
@@ -182,6 +185,7 @@ class Alert(models.Model):
     send_to = models.ForeignKey('Profile', on_delete=models.CASCADE, default="", editable=False)
     subject = models.CharField(u'告警正文', max_length=255, default='', null=False)
     monitor_item = models.ForeignKey('MonitorItem', on_delete=models.CASCADE, default="", editable=False)
+
     class Meta:
         verbose_name_plural = '告警表'
         db_table = 'alert'
@@ -196,8 +200,9 @@ class Template(models.Model):
     """
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(u'模板名字', max_length=40, default='')
-    server_id = models.ManyToManyField('Server', db_table = 'r_template_server')
+    server_id = models.ManyToManyField('Server', db_table='r_template_server')
     monitor_set_id = models.ManyToManyField('MonitorSet', db_table='r_template_set')
+
     class Meta:
         verbose_name_plural = "模板表"
         db_table = 'template'
@@ -211,6 +216,7 @@ class MonitorSet(models.Model):
     监控集，类似zabbix的application
     """
     name = models.CharField(u'监控集名', max_length=40, null=False)
+
     class Meta:
         # ordering = ('id',)
         verbose_name_plural = '监控集表'
@@ -238,9 +244,9 @@ class MonitorItem(models.Model):
     key = models.CharField(u'opentsdb指标名', max_length=128, default='')
     multiplier = models.FloatField(u'自定义乘子', default=1.0)
     unit = models.CharField(u'单位', max_length=12, default='')
-    #0代表不属于任何
+    # 0代表不属于任何
     host_id = models.IntegerField(u'对应主机id', 0)
-    #0代表不属于任何
+    # 0代表不属于任何
     template_id = models.IntegerField(u'对应模板id', 0)
 
     class Meta:
@@ -338,7 +344,7 @@ class Asset(models.Model):
     business_unit = models.ForeignKey('BusinessUnit', verbose_name='属于的业务线', null=True, blank=True,
                                       on_delete=models.CASCADE)
 
-    tag = models.ManyToManyField('Tag', db_table = 'r_asset_tag')
+    tag = models.ManyToManyField('Tag', db_table='r_asset_tag')
 
     latest_date = models.DateField(null=True)
     create_at = models.DateTimeField(auto_now_add=True)
@@ -373,7 +379,6 @@ class NetworkDevice(models.Model):
         return self.sn
 
 
-
 class Disk(models.Model):
     """
     硬盘信息
@@ -382,7 +387,7 @@ class Disk(models.Model):
     model = models.CharField('磁盘型号', max_length=32)
     capacity = models.FloatField('磁盘容量GB')
     pd_type = models.CharField('磁盘类型', max_length=32)
-    server_obj = models.ForeignKey('Server',related_name='disk', null=True, blank=True, on_delete=models.CASCADE)
+    server_obj = models.ForeignKey('Server', related_name='disk', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "硬盘表"
@@ -401,8 +406,7 @@ class NIC(models.Model):
     netmask = models.CharField(max_length=64)
     ipaddrs = models.CharField('ip地址', max_length=256)
     up = models.BooleanField(default=False)
-    server_obj = models.ForeignKey('Server',related_name='nic',null=True, blank=True, on_delete=models.CASCADE)
-
+    server_obj = models.ForeignKey('Server', related_name='nic', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "网卡表"
@@ -423,8 +427,7 @@ class Memory(models.Model):
     sn = models.CharField('内存SN号', max_length=64, null=True, blank=True)
     speed = models.CharField('速度', max_length=16, null=True, blank=True)
 
-    server_obj = models.ForeignKey('Server',related_name='memory',null=True, blank=True, on_delete=models.CASCADE)
-
+    server_obj = models.ForeignKey('Server', related_name='memory', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "内存表"
@@ -438,11 +441,10 @@ class AssetRecord(models.Model):
     """
     资产变更记录,creator为空时，表示是资产汇报的数据。
     """
-    asset_obj = models.ForeignKey('Asset', related_name='ar',null=True, blank=True, on_delete=models.CASCADE)
+    asset_obj = models.ForeignKey('Asset', related_name='ar', null=True, blank=True, on_delete=models.CASCADE)
     content = models.TextField(null=True)
     creator = models.ForeignKey('Profile', null=True, blank=True, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name_plural = "资产记录表"
@@ -464,5 +466,6 @@ class AssetErrorLog(models.Model):
     class Meta:
         verbose_name_plural = '错误日志表'
         db_table = 'assert_error_log'
+
     def __str__(self):
         return self.title

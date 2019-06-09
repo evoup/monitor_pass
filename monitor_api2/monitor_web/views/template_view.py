@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
-from monitor_web.serializers import ServerSerializer, TemplateSerializer
+from monitor_web.serializers import TemplateSerializer
 from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import CustomPageNumberPagination

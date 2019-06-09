@@ -2,7 +2,6 @@ import logging
 import traceback
 
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -20,6 +19,7 @@ from web.common.order import getOrderList
 from web.common.paging import CustomPageNumberPagination
 
 logger = logging.getLogger(__name__)
+
 
 def index(request):
     return HttpResponse("hello")
@@ -53,12 +53,13 @@ class ServerInfo(APIView):
         try:
             ser = IDCSerializer(data={'name': data['idc']})
             if not ser.is_valid():
-                return JsonResponse({'code':40001, 'message':ser.errors}, safe=False)
+                return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
             else:
                 i = ser.create(ser.validated_data)
                 i.save()
                 a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
-                Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'], snmp_address=data['snmp_addr'], asset=a)
+                Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'],
+                                      snmp_address=data['snmp_addr'], asset=a)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
@@ -129,4 +130,3 @@ class ServerGroupList(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
-
