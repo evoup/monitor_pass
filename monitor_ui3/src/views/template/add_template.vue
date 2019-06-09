@@ -7,12 +7,21 @@
         </el-col>
       </el-form-item>
       <el-form-item label="所属服务器组">
-        <el-select v-model="serverGroupSelect" multiple placeholder="请选择服务器组" style="width: 80%">
+        <el-select v-model="serverGroupSelectModel" multiple placeholder="请选择服务器组" style="width: 80%">
           <el-option
             v-for="item in serverGroupData"
-            :key="item.group_id"
-            :label="item.group_name"
-            :value="item.group_name"/>
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="关联的模板">
+        <el-select v-model="templateSelectModel" multiple placeholder="请选择模板（可选）" style="width: 80%">
+          <el-option
+            v-for="item in serverGroupData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -54,8 +63,9 @@ export default {
       },
       listLoading: true,
       total: 0,
-      serverGroupSelect: [],
-      serverGroupData: []
+      serverGroupSelectModel: [],
+      serverGroupData: [],
+      templateSelectModel: []
     }
   },
   mounted() {
