@@ -15,8 +15,7 @@ from monitor_web.models import Server, Asset
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
-from web.common.order import getOrderList
-from web.common.paging import CustomPageNumberPagination, paging_request
+from web.common.paging import paging_request
 
 logger = logging.getLogger(__name__)
 
