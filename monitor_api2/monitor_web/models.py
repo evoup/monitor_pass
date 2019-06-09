@@ -202,7 +202,7 @@ class Template(models.Model):
     name = models.CharField(u'模板名字', max_length=40, default='')
     server_id = models.ManyToManyField('Server', db_table='r_template_server')
     monitor_set_id = models.ManyToManyField('MonitorSet', db_table='r_template_set')
-    server_group = models.ForeignKey('ServerGroup', on_delete=models.CASCADE, default="", editable=False)
+    server_group = models.ManyToManyField('ServerGroup', db_table='r_template_server_group')
 
     class Meta:
         verbose_name_plural = "模板表"
