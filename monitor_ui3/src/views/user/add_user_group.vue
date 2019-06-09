@@ -180,7 +180,7 @@ export default {
     // -----------------点击el-switch时传递选中的成员用户 Start-----------------
     change_member(a, b) {
       if (a === '1') {
-        var member = b.profile.id
+        const member = b.profile.id
         this.memberUserProfileIds.add(member)
       }
     },
