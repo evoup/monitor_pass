@@ -16,7 +16,7 @@ from monitor_web.models import Server, Asset
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.order import getOrderList
-from web.common.paging import CustomPageNumberPagination
+from web.common.paging import CustomPageNumberPagination, paging_request
 
 logger = logging.getLogger(__name__)
 
@@ -81,21 +81,13 @@ class ServerList(APIView):
         """
         获取服务器列表
         """
-        # user = User.objects.get(username=request.user.username)
-        # print(user.get_all_permissions())
-        order_list, prop = getOrderList(request)
-        # 获取所有数据
-        records = models.Server.objects.all() if prop == '' else models.Server.objects.order_by(*order_list)
-        # 创建分页对象，这里是自定义的MyPageNumberPagination
-        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
-        # 获取分页的数据
-        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
+        page_data, count = paging_request(request, models.Server, self)
         # 对数据进行序列化
         serializer = ServerSerializer(instance=page_data, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-                "count": len(records),
+                "count": count,
                 "items": serializer.data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
@@ -113,15 +105,12 @@ class ServerGroupList(APIView):
         """
         获取服务器组列表
         """
-        order_list, prop = getOrderList(request)
-        records = models.ServerGroup.objects.all() if prop == '' else models.ServerGroup.objects.order_by(*order_list)
-        page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
-        page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
+        page_data, count = paging_request(request, models.ServerGroup, self)
         serializer = ServerGroupSerializer(instance=page_data, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-                "count": len(records),
+                "count": count,
                 "items": serializer.data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
