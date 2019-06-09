@@ -41,7 +41,7 @@ export const constantRouterMap = [
   {
     path: '/dashboard',
     component: Layout,
-    redirect: '/example/table',
+    redirect: null,
     name: 'Example',
     meta: { title: '概览', icon: 'dashboard2' },
     children: [
@@ -62,7 +62,7 @@ export const constantRouterMap = [
   {
     path: '/servers',
     component: Layout,
-    redirect: '/example/table',
+    redirect: null,
     name: 'Servers',
     meta: { title: '服务器', icon: 'server2' },
     children: [
@@ -94,7 +94,7 @@ export const constantRouterMap = [
   }, {
     path: '/config',
     component: Layout,
-    redirect: '/example/table',
+    redirect: null,
     name: 'Config',
     meta: { title: '配置', icon: 'system_config' },
     children: [
