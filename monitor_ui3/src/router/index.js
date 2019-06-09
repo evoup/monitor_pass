@@ -105,6 +105,13 @@ export const constantRouterMap = [
         meta: { title: '模板', icon: 'template' }
       },
       {
+        path: '/add_template',
+        name: 'AddTemplate',
+        component: () => import('@/views/template/add_template'),
+        meta: { title: '添加模板', icon: 'template' },
+        hidden: true
+      },
+      {
         path: '/general_conf',
         name: 'GeneralConf',
         component: () => import('@/views/form/index'),

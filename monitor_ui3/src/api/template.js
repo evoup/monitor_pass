@@ -7,3 +7,14 @@ export function template_list(param) {
     params: param
   })
 }
+
+export function add_template(param) {
+  return request({
+    url: '/template/info',
+    method: 'post',
+    params: param,
+    data: {
+      param
+    }
+  })
+}
