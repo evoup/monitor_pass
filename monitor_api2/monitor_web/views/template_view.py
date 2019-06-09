@@ -36,8 +36,10 @@ class TemplateList(APIView):
         return JsonResponse(ret, safe=False)
 
 
-    @method_decorator(permission_required('monitor_web.view_template', raise_exception=True))
-    def post(self, request):
+@permission_classes((IsAuthenticated,))
+class TemplateInfo(APIView):
+    @method_decorator(permission_required('monitor_web.add_template', raise_exception=True))
+    def post(self, *args, **kwargs):
         """
         更新模板
         """
