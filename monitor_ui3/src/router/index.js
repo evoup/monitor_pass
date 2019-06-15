@@ -113,6 +113,13 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/change_template',
+        name: 'ChangeTemplate',
+        component: () => import('../views/template/change_template'),
+        meta: { title: '修改模板', icon: 'template' },
+        hidden: true
+      },
+      {
         path: '/general_conf',
         name: 'GeneralConf',
         component: () => import('../views/form/index'),

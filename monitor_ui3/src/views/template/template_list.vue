@@ -30,7 +30,7 @@
         width="130"/>
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary">编辑</el-button>
+          <el-button size="small" type="primary" @click="jumpChangeTemplate(prop.row.id)">编辑</el-button>
           <el-button size="small" type="primary">删除</el-button>
         </template>
       </el-table-column>
@@ -126,6 +126,11 @@ export default {
     // 跳转到模板添加页面
     jumpAddTemplate() {
       this.$router.push({ path: '/add_template' })
+    },
+    // 跳转到模板修改页面
+    jumpChangeTemplate(id) {
+      this.$router.push({ path: '/change_template', query: { id: id }
+      })
     }
   }
 }

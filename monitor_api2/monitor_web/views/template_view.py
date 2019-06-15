@@ -45,7 +45,7 @@ class TemplateInfo(APIView):
     @method_decorator(permission_required('monitor_web.add_template', raise_exception=True))
     def post(self, *args, **kwargs):
         """
-        更新模板
+        创建模板
         """
         ret = {
             'code': constant.BACKEND_CODE_OPT_FAIL,
@@ -56,6 +56,32 @@ class TemplateInfo(APIView):
                 data = JSONParser().parse(self.request)
                 server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
                 template = Template.objects.create(name=data['name'])
+                template.server_group.add(server_groups[0])
+        except IntegrityError:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '创建模板成功'
+        }
+        return JsonResponse(ret, safe=False)
+
+@permission_classes((IsAuthenticated,))
+class TemplateInfo(APIView):
+    @method_decorator(permission_required('monitor_web.change_template', raise_exception=True))
+    def put(self, *args, **kwargs):
+        """
+        更新模板
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '更新模板失败'
+        }
+        try:
+            with transaction.atomic():
+                data = JSONParser().parse(self.request)
+                server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
+                template = Template.objects.update(name=data['name'])
                 template.server_group.add(server_groups[0])
         except IntegrityError:
             print(traceback.format_exc())
