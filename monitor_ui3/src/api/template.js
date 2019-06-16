@@ -31,3 +31,10 @@ export function change_template(name, server_groups, templates) {
     }
   })
 }
+export function read_template(param) {
+  return request({
+    url: '/template/info',
+    method: 'get',
+    params: param
+  })
+}

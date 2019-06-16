@@ -40,7 +40,7 @@ urlpatterns = [
         url(r'^login/$', user_view.Login.as_view()),
         # 查询是否过期，过期
         url(r'^login/status/$', user_view.LoginStatus.as_view()),
-        # 返回用户角色数据/创建用户
+        # 返回单个用户角色数据/创建用户
         url(r'^user/info$', user_view.UserInfo.as_view()),
         # 用户列表
         url(r'^user/list$', user_view.UserList.as_view()),
@@ -58,8 +58,7 @@ urlpatterns = [
         url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
         # 模板列表
         url(r'^template/list$', template_view.TemplateList.as_view()),
-        # 添加模板
+        # 返回单个模板/修改/添加模板
         url(r'^template/info', template_view.TemplateInfo.as_view()),
-
     ]))
 ]

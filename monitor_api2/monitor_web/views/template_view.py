@@ -1,12 +1,14 @@
 import traceback
 
 from django.contrib.auth.decorators import permission_required
+from django.core import serializers
 from django.db import transaction, IntegrityError
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from monitor_web import models
@@ -42,6 +44,19 @@ class TemplateList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class TemplateInfo(APIView):
+
+    @method_decorator(permission_required('monitor_web.view_template', raise_exception=True))
+    def get(self, request, *args, **kwargs):
+        template = models.Template.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        serializer = TemplateSerializer(instance=template, many=False)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "item": serializer.data
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
     @method_decorator(permission_required('monitor_web.add_template', raise_exception=True))
     def post(self, *args, **kwargs):
         """
@@ -66,8 +81,6 @@ class TemplateInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
-@permission_classes((IsAuthenticated,))
-class TemplateInfo(APIView):
     @method_decorator(permission_required('monitor_web.change_template', raise_exception=True))
     def put(self, *args, **kwargs):
         """

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { change_template, template_list } from '../../api/template'
+import { read_template, change_template, template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 
 export default {
@@ -70,6 +70,7 @@ export default {
     }
   },
   mounted() {
+    this.fetchTemplateData({ 'id': this.$route.query.id })
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
   },
@@ -86,6 +87,12 @@ export default {
       this.pageHelp.page = this.pageNum
       template_list().then(response => {
         this.templateData = response.data.items
+      })
+    },
+    // 获取单个模板
+    fetchTemplateData(id) {
+      read_template(id).then(response => {
+        this.form.name = response.data.item.name
       })
     },
     onCancel() {
