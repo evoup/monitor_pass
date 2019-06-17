@@ -100,7 +100,12 @@ export default {
           a.push(e)
         })
         this.serverGroupSelectModel = a
-        // const templates = response.data.item.template
+        const templateIds = response.data.item.template_id
+        const b = []
+        templateIds.forEach(function(e) {
+          b.push(e)
+        })
+        this.templateSelectModel = b
       })
     },
     onCancel() {

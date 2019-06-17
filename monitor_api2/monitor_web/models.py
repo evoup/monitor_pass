@@ -203,6 +203,7 @@ class Template(models.Model):
     server_id = models.ManyToManyField('Server', db_table='r_template_server')
     monitor_set_id = models.ManyToManyField('MonitorSet', db_table='r_template_set')
     server_group = models.ManyToManyField('ServerGroup', db_table='r_template_server_group')
+    template_id = models.ManyToManyField('Template', db_table='r_template_template')
 
     class Meta:
         verbose_name_plural = "模板表"
