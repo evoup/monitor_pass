@@ -73,6 +73,7 @@ export default {
   mounted() {
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
+    this.fetchTemplateData({ 'id': this.$route.query.id })
   },
   methods: {
     // 获取服务器组列表
@@ -80,7 +81,6 @@ export default {
       this.pageHelp.page = this.pageNum
       server_group_list().then(response => {
         this.serverGroupData = response.data.items
-        this.fetchTemplateData({ 'id': this.$route.query.id })
       })
     },
     // 获取所有模板列表
@@ -100,6 +100,7 @@ export default {
           a.push(e)
         })
         this.serverGroupSelectModel = a
+        // const templates = response.data.item.template
       })
     },
     onCancel() {
