@@ -21,11 +21,12 @@
             v-for="item in templateData"
             :key="item.id"
             :label="item.name"
+            :aria-selected="true"
             :value="item.id"/>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="changeTemplate(form.name, serverGroupSelectModel, templateSelectModel)">创建</el-button>
+        <el-button type="primary" @click="changeTemplate(form.name, serverGroupSelectModel, templateSelectModel)">修改</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -70,7 +71,6 @@ export default {
     }
   },
   mounted() {
-    this.fetchTemplateData({ 'id': this.$route.query.id })
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
   },
@@ -80,6 +80,7 @@ export default {
       this.pageHelp.page = this.pageNum
       server_group_list().then(response => {
         this.serverGroupData = response.data.items
+        this.fetchTemplateData({ 'id': this.$route.query.id })
       })
     },
     // 获取所有模板列表
@@ -93,6 +94,12 @@ export default {
     fetchTemplateData(id) {
       read_template(id).then(response => {
         this.form.name = response.data.item.name
+        const serverGroupIds = response.data.item.server_group
+        const a = []
+        serverGroupIds.forEach(function(e) {
+          a.push(e)
+        })
+        this.serverGroupSelectModel = a
       })
     },
     onCancel() {

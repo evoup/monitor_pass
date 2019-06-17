@@ -220,7 +220,7 @@ class UserGroupList(APIView):
     @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, request, pk=None, format=None):
         """
-        获取用户组
+        获取用户组列表
         """
         order_list, prop = getOrderList(request)
         # 获取所有数据
