@@ -1,14 +1,12 @@
 import traceback
 
 from django.contrib.auth.decorators import permission_required
-from django.core import serializers
 from django.db import transaction, IntegrityError
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from monitor_web import models
@@ -71,7 +69,10 @@ class TemplateInfo(APIView):
                 data = JSONParser().parse(self.request)
                 server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
                 template = Template.objects.create(name=data['name'])
-                template.server_group.add(server_groups[0])
+                for x in server_groups:
+                    template.server_group.add(x)
+                for x in data['templates']:
+                    template.template_id.add(x)
         except IntegrityError:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
