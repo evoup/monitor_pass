@@ -2,6 +2,7 @@ import traceback
 
 from django.contrib.auth.decorators import permission_required
 from django.db import transaction, IntegrityError
+from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
@@ -94,9 +95,14 @@ class TemplateInfo(APIView):
         try:
             with transaction.atomic():
                 data = JSONParser().parse(self.request)
-                server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
-                template = Template.objects.update(name=data['name'])
-                template.server_group.add(server_groups[0])
+                # server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
+                template = Template.objects.get(id=data['id'])
+                template.name = data['name']
+                for x in data['templates']:
+                    template.template_id.add(x)
+                for x in data['server_groups']:
+                    template.server_group.add(x)
+                template.save()
         except IntegrityError:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
