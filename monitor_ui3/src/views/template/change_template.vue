@@ -115,7 +115,7 @@ export default {
       })
     },
     changeTemplate(a, b, c) {
-      change_template(a, b, c)
+      change_template(this.$route.query.id, a, b, c)
     }
   }
 }
