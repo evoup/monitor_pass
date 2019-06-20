@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addTemplate(form.name, serverGroupSelectModel, templateSelectModel)">创建</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button @click="jumpTemplateList">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -96,6 +96,9 @@ export default {
     },
     addTemplate(a, b, c) {
       add_template(a, b, c)
+    },
+    jumpTemplateList() {
+      this.$router.push({ path: '/template_list' })
     }
   }
 }

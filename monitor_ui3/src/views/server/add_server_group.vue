@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary">创建</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="jumpServerGroupList">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -103,6 +103,9 @@ export default {
         this.dataList = response.data.items
         this.listLoading = false
       })
+    },
+    jumpServerGroupList() {
+      this.$router.push({ path: '/server_group_list' })
     }
   }
 }
