@@ -2,7 +2,6 @@ import traceback
 
 from django.contrib.auth.decorators import permission_required
 from django.db import transaction, IntegrityError
-from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
@@ -95,7 +94,6 @@ class TemplateInfo(APIView):
         try:
             with transaction.atomic():
                 data = JSONParser().parse(self.request)
-                # server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
                 template = Template.objects.get(id=data['id'])
                 template.name = data['name']
                 for x in data['templates']:
@@ -110,4 +108,17 @@ class TemplateInfo(APIView):
             'code': constant.BACKEND_CODE_CREATED,
             'message': '更新模板成功'
         }
+        return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('monitor_web.delete_template', raise_exception=True))
+    def delete(self, *args, **kwargs):
+        """
+        更新模板
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '删除模板成功'
+        }
+        template = models.Template.objects.get(id=self.request.query_params['id'])
+        template.delete()
         return JsonResponse(ret, safe=False)

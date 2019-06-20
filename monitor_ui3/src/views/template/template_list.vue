@@ -31,7 +31,7 @@
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeTemplate(prop.row.id)">编辑</el-button>
-          <el-button size="small" type="primary">删除</el-button>
+          <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +55,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { template_list } from '../../api/template'
+import { template_list, delete_template } from '../../api/template'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 
 export default {
@@ -129,7 +129,12 @@ export default {
     },
     // 跳转到模板修改页面
     jumpChangeTemplate(id) {
-      this.$router.push({ path: '/change_template', query: { id: id }
+      this.$router.push({
+        path: '/change_template', query: { id: id }
+      })
+    },
+    deleteTemplate(id) {
+      delete_template({ id: id }).then(response => {
       })
     }
   }

@@ -39,3 +39,10 @@ export function read_template(param) {
     params: param
   })
 }
+export function delete_template(param) {
+  return request({
+    url: '/template/info',
+    method: 'delete',
+    params: param
+  })
+}
