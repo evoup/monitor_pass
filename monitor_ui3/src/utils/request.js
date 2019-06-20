@@ -32,7 +32,7 @@ service.interceptors.response.use(
      */
     const res = response.data
     if (res.code !== 20000) {
-      if (res.code === 20001) {
+      if (res.code === 20001 || res.code === 20002) {
         Message({
           message: res.message,
           type: 'success',
