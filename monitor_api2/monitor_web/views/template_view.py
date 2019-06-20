@@ -116,7 +116,7 @@ class TemplateInfo(APIView):
         更新模板
         """
         ret = {
-            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'code': constant.BACKEND_CODE_DELETED,
             'message': '删除模板成功'
         }
         template = models.Template.objects.get(id=self.request.query_params['id'])
