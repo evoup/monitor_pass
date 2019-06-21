@@ -15,7 +15,7 @@
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addUserGroup(form.name, form.desc, userPermSelect, memberUserProfileIds)">创建</el-button>
+            <el-button type="primary" @click="addUserGroup(form.name, form.desc, transferModel, memberUserProfileIds)">创建</el-button>
             <el-button @click="jumpUserGroupList">取消</el-button>
           </el-form-item>
         </el-form>
@@ -23,13 +23,9 @@
       <!-- 面板2 -->
       <el-tab-pane label="权限">
         <template>
-          <el-select v-model="userPermSelect" multiple placeholder="请选择" style="width: 80%">
-            <el-option
-              v-for="item in userPermData"
-              :key="item.codename"
-              :label="item.name"
-              :value="item.codename"/>
-          </el-select>
+          <template>
+            <el-transfer v-model="transferModel" :data="transferData" :titles="['未指派权限', '已指派权限']" :button-texts="['到左边', '到右边']" />
+          </template>
         </template>
       </el-tab-pane>
       <!-- 面板3 -->
@@ -120,9 +116,9 @@ export default {
       total: 0,
       // -------用户权限---------
       // v-model传递的是django权限的codename字符串数值，e.g. add_group
-      userPermSelect: [],
+      transferModel: [],
       // 接收后端权限数据用
-      userPermData: [],
+      transferData: [],
       // 加入改组的用户id
       memberUserProfileIds: new Set([])
     }
@@ -160,23 +156,25 @@ export default {
       this.sortHelp.prop = column.prop
       this.fetchData()
     },
+    //
+    generateTransferData(items) {
+      const data = []
+      for (let i = 0; i < (items).length; i++) {
+        data.push({
+          key: items[i].codename,
+          label: items[i].name
+        })
+      }
+      this.transferData = data
+    },
     // -----------------获取用户权限列表 Start--------------------------------
     fetchUserPermListData() {
-      this.pageHelp.page = this.pageNum
       user_perm_list().then(response => {
-        this.userPermData = response.data.items
-        this.setDefaultUserPerm()
+        this.generateTransferData(response.data.items)
       })
     },
     // -----------------获取用户权限列表 End----------------------------------
 
-    // -----------------设置默认用户权限列表 Start-----------------------------
-    setDefaultUserPerm() {
-      for (var item of this.userPermData) {
-        this.userPermSelect.push(item.codename)
-      }
-    },
-    // -----------------设置默认用户权限列表 End-------------------------------
     // -----------------点击el-switch时传递选中的成员用户 Start-----------------
     change_member(a, b) {
       if (a === '1') {
