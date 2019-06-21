@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="changeTemplate(form.name, serverGroupSelectModel, templateSelectModel)">修改</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button @click="jumpTemplateList">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -54,8 +54,10 @@ export default {
       },
       // 列表分页辅助类(传参)
       pageHelp: {
-        page: 1, // 和后端参数一样
-        size: 5, // 后端参数为size
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
         order: 'asc'
       },
       sortHelp: {
@@ -108,14 +110,11 @@ export default {
         this.templateSelectModel = b
       })
     },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    },
     changeTemplate(a, b, c) {
       change_template(this.$route.query.id, a, b, c)
+    },
+    jumpTemplateList() {
+      this.$router.push({ path: '/template_list' })
     }
   }
 }

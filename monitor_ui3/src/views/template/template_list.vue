@@ -31,7 +31,7 @@
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeTemplate(prop.row.id)">编辑</el-button>
-          <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id)">删除</el-button>
+          <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,7 +63,8 @@ export default {
   data() {
     return {
       typeData: [],
-      dataList: [], // 列表数据
+      // 列表数据
+      dataList: [],
       // 列表前端分页
       pageList: {
         totalCount: '',
@@ -73,8 +74,10 @@ export default {
       },
       // 列表分页辅助类(传参)
       pageHelp: {
-        page: 1, // 和后端参数一样
-        size: 5, // 后端参数为size
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
         order: 'asc'
       },
       sortHelp: {
@@ -133,8 +136,13 @@ export default {
         path: '/change_template', query: { id: id }
       })
     },
-    deleteTemplate(id) {
+    // 删除当前行
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
+    },
+    deleteTemplate(id, rowIdx) {
       delete_template({ id: id }).then(response => {
+        this.deleteRow(rowIdx, this.dataList)
       })
     }
   }
