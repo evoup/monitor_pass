@@ -51,7 +51,7 @@
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
-          <el-button size="small" type="danger" @click="lookUser(prop.$index,prop.row.u_uuid)">删除</el-button>
+          <el-button size="small" type="danger" @click="deleteTemplate(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,7 +60,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_group_list } from '../../api/server'
+import { server_group_list, delete_server_group } from '../../api/server'
 export default {
   data() {
     return {
@@ -107,6 +107,16 @@ export default {
     // 跳转到服务器添加页面
     jumpAddServerGroup() {
       this.$router.push({ path: '/add_server_group' })
+    },
+    // 删除当前行
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
+    },
+    // 删除服务器组
+    deleteServerGroup(id, rowIdx) {
+      delete_server_group({ id: id }).then(response => {
+        this.deleteRow(rowIdx, this.dataList)
+      })
     }
   }
 }

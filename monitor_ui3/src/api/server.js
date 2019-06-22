@@ -29,3 +29,11 @@ export function server_group_list(param) {
     params: param
   })
 }
+
+export function delete_server_group(param) {
+  return request({
+    url: '/server_group/info',
+    method: 'delete',
+    params: param
+  })
+}
