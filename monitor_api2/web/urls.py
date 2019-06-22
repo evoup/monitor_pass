@@ -56,6 +56,8 @@ urlpatterns = [
         url(r'^server/list$', server_view.ServerList.as_view()),
         # 服务组列表
         url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
+        # 服务器组删除
+        url(r'^server_group/info$', server_view.ServerGroupInfo.as_view()),
         # 模板列表
         url(r'^template/list$', template_view.TemplateList.as_view()),
         # 返回单个模板/修改/添加/删除模板

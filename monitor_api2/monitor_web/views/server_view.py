@@ -118,3 +118,18 @@ class ServerGroupList(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+@permission_classes((IsAuthenticated,))
+class ServerGroupInfo(APIView):
+    @method_decorator(permission_required('monitor_web.delete_server_group', raise_exception=True))
+    def delete(self, *args, **kwargs):
+        """
+        删除服务组
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除服务组成功'
+        }
+        serverGroup = models.ServerGroup.objects.get(id=self.request.query_params['id'])
+        serverGroup.delete()
+        return JsonResponse(ret, safe=False)
