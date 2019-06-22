@@ -214,6 +214,18 @@ class UserGroupInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.delete_group', raise_exception=True))
+    def delete(self, *args, **kwargs):
+        """
+        删除用户组
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除用户组成功'
+        }
+        userGroup = Group.objects.get(id=self.request.query_params['id'])
+        userGroup.delete()
+        return JsonResponse(ret, safe=False)
 
 @permission_classes((IsAuthenticated,))
 class UserGroupList(APIView):

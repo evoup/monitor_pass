@@ -140,6 +140,7 @@ export default {
     deleteRow(index, rows) {
       rows.splice(index, 1)
     },
+    // 删除模板
     deleteTemplate(id, rowIdx) {
       delete_template({ id: id }).then(response => {
         this.deleteRow(rowIdx, this.dataList)

@@ -35,10 +35,20 @@ export function user_list(param) {
   })
 }
 
+// 用户组列表
 export function user_group_list(param) {
   return request({
     url: '/user_group/list',
     method: 'get',
+    params: param
+  })
+}
+
+// 删除用户组
+export function delete_user_group(param) {
+  return request({
+    url: '/user_group/info',
+    method: 'delete',
     params: param
   })
 }
