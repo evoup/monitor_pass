@@ -1,32 +1,59 @@
 <template>
   <div class="app-container">
+    <el-row :gutter="20">
+      <el-col :span="2"><div class="grid-content el-form-item__label">监控项(0)</div></el-col>
+      <el-col :span="2"><div class="grid-content el-form-item__label">触发器(0)</div></el-col>
+      <el-col :span="16"><div class="grid-content"/></el-col>
+    </el-row>
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="模板名">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入模板名"/>
+          <el-input v-model="form.name" placeholder="请输入模板名" />
         </el-col>
       </el-form-item>
       <el-form-item label="所属服务器组">
-        <el-select v-model="serverGroupSelectModel" multiple placeholder="请选择服务器组" style="width: 80%">
+        <el-select
+          v-model="serverGroupSelectModel"
+          multiple
+          placeholder="请选择服务器组"
+          style="width: 80%"
+        >
           <el-option
             v-for="item in serverGroupData"
             :key="item.id"
             :label="item.name"
-            :value="item.id"/>
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="关联的模板">
-        <el-select v-model="templateSelectModel" multiple placeholder="请选择模板（可选）" style="width: 80%">
+        <el-select
+          v-model="templateSelectModel"
+          multiple
+          placeholder="请选择模板（可选）"
+          style="width: 80%"
+        >
           <el-option
             v-for="item in templateData"
             :key="item.id"
             :label="item.name"
             :aria-selected="true"
-            :value="item.id"/>
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="changeTemplate(form.name, serverGroupSelectModel, templateSelectModel)">修改</el-button>
+        <el-button
+          type="primary"
+          @click="
+            changeTemplate(
+              form.name,
+              serverGroupSelectModel,
+              templateSelectModel
+            )
+          "
+        >修改</el-button
+        >
         <el-button @click="jumpTemplateList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -34,7 +61,11 @@
 </template>
 
 <script>
-import { read_template, change_template, template_list } from '../../api/template'
+import {
+  read_template,
+  change_template,
+  template_list
+} from '../../api/template'
 import { server_group_list } from '../../api/server'
 
 export default {
@@ -75,7 +106,7 @@ export default {
   mounted() {
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
-    this.fetchTemplateData({ 'id': this.$route.query.id })
+    this.fetchTemplateData({ id: this.$route.query.id })
   },
   methods: {
     // 获取服务器组列表
@@ -121,5 +152,11 @@ export default {
 </script>
 
 <style scoped>
-
+:last-child {
+  margin-bottom: 0;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
 </style>
