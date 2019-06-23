@@ -100,6 +100,13 @@ export const constantRouterMap = [
     meta: { title: '配置', icon: 'system_config' },
     children: [
       {
+        path: '/item_list',
+        name: 'ItemList',
+        component: () => import('../views/item/item_list'),
+        meta: { title: '监控项', icon: 'template' },
+        hidden: true
+      },
+      {
         path: '/template_list',
         name: 'TemplateList',
         component: () => import('../views/template/template_list'),

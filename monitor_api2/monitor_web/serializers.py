@@ -55,9 +55,17 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 
 class TemplateSerializer(serializers.ModelSerializer):
+    items = serializers.SerializerMethodField()
+    triggers = serializers.SerializerMethodField()
     class Meta:
         model = Template
         fields = '__all__'
+
+    def get_items(self, obj):
+        return 2
+
+    def get_triggers(self, obj):
+        return 3
 
 
 class ProfileSerializer(serializers.ModelSerializer):

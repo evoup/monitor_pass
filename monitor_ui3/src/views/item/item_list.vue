@@ -4,10 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button
-              type="primary"
-              @click="jumpAddTemplate()"
-            ><i class="el-icon-plus el-icon--right" />添加模板
+            <el-button type="primary" @click="jumpAddTemplate()"><i class="el-icon-plus el-icon--right"/>添加监控项
             </el-button>
           </div>
         </el-col>
@@ -20,54 +17,21 @@
       border
       tooltip-effect="dark"
       style="width: 100%"
-      @sort-change="sortChange"
-    >
+      @sort-change="sortChange">
+      <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center"/>
       <el-table-column
-        :index="indexMethod"
-        prop="id"
-        label="序号"
-        type="index"
-        width="80"
-        align="center"
-      />
-      <el-table-column
-        label="模板名"
+        label="监控项名"
         sortable="custom"
         prop="name"
-        width="220"
-      />
-      <el-table-column label="监控项数" prop="items" width="130">
-        <template slot-scope="prop">
-          <div align="center">
-            <el-link type="primary" @click="jumpItemList(prop.row.id)">{{
-              prop.row.items
-            }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="触发器数" prop="triggers" width="130">
-        <template slot-scope="prop">
-          <div align="center">
-            <el-link type="primary" @click="jumpChangeTemplate(prop.row.id)">{{
-              prop.row.triggers
-            }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
+        width="220"/>
+      <el-table-column
+        label="触发器数"
+        prop="triggers"
+        width="130"/>
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button
-            size="small"
-            type="primary"
-            @click="jumpChangeTemplate(prop.row.id)"
-          >编辑</el-button
-          >
-          <el-button
-            size="small"
-            type="primary"
-            @click="deleteTemplate(prop.row.id, prop.$index)"
-          >删除</el-button
-          >
+          <el-button size="small" type="primary" @click="jumpChangeTemplate(prop.row.id)">编辑</el-button>
+          <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,13 +43,12 @@
      具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
      -->
       <el-pagination
-        :page-sizes="[5, 10, 15]"
+        :page-sizes="[5,10,15]"
         :page-size="5"
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+        @current-change="handleCurrentChange"/>
     </el-col>
   </div>
 </template>
@@ -137,14 +100,12 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      template_list(Object.assign(this.pageHelp, this.sortHelp)).then(
-        response => {
-          this.dataList = response.data.items
-          this.pageList = response.data.page
-          this.listLoading = false
-          this.total = response.data.count
-        }
-      )
+      template_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
     },
     indexMethod(index) {
       return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
@@ -172,14 +133,7 @@ export default {
     // 跳转到模板修改页面
     jumpChangeTemplate(id) {
       this.$router.push({
-        path: '/change_template',
-        query: { id: id }
-      })
-    },
-    jumpItemList(id) {
-      this.$router.push({
-        path: '/item_list',
-        query: { id: id }
+        path: '/change_template', query: { id: id }
       })
     },
     // 删除当前行
