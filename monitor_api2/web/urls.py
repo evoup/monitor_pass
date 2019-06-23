@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view, template_view
+from monitor_web.views import view, template_view, item_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -62,5 +62,7 @@ urlpatterns = [
         url(r'^template/list$', template_view.TemplateList.as_view()),
         # 返回单个模板/修改/添加/删除模板
         url(r'^template/info', template_view.TemplateInfo.as_view()),
+        # 监控项列表
+        url(r'^item/list$', item_view.ItemList.as_view()),
     ]))
 ]
