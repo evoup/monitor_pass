@@ -27,6 +27,24 @@
       <el-table-column
         label="触发器数"
         prop="triggers"
+        width="130">
+        <template slot-scope="prop">
+          <div align="center">
+            <el-link type="primary" @click="jumpChangeTemplate(prop.row.id)">{{ prop.row.triggers }}</el-link>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="key"
+        prop="key"
+        width="130"/>
+      <el-table-column
+        label="收集间隔"
+        prop="interval"
+        width="130"/>
+      <el-table-column
+        label="状态"
+        prop="status"
         width="130"/>
       <el-table-column label="操作">
         <template slot-scope="prop">
