@@ -7,5 +7,3 @@ export function item_list(param) {
     params: param
   })
 }
-
-

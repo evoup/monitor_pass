@@ -55,7 +55,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { template_list, delete_template } from '../../api/template'
+import { item_list, delete_template } from '../../api/item'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 
 export default {
@@ -100,7 +100,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      template_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+      item_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false

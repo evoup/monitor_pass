@@ -2,7 +2,7 @@ import logging
 import traceback
 
 from django.contrib.auth.decorators import permission_required
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes
@@ -18,10 +18,6 @@ from web.common import constant
 from web.common.paging import paging_request
 
 logger = logging.getLogger(__name__)
-
-
-def index(request):
-    return HttpResponse("hello")
 
 
 @permission_classes((IsAuthenticated,))
@@ -118,6 +114,7 @@ class ServerGroupList(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
 
 @permission_classes((IsAuthenticated,))
 class ServerGroupInfo(APIView):

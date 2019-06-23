@@ -64,7 +64,7 @@
           >
           <el-button
             size="small"
-            type="primary"
+            type="danger"
             @click="deleteTemplate(prop.row.id, prop.$index)"
           >删除</el-button
           >

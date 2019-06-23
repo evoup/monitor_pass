@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem
 
 
 class IDCSerializer(serializers.ModelSerializer):
@@ -54,9 +54,16 @@ class ServerGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MonitorItem
+        fields = '__all__'
+
+
 class TemplateSerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
     triggers = serializers.SerializerMethodField()
+
     class Meta:
         model = Template
         fields = '__all__'
