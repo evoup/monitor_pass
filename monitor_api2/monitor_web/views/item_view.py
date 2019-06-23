@@ -16,9 +16,10 @@ class ItemList(APIView):
     @method_decorator(permission_required('monitor_web.view_monitoritem', raise_exception=True))
     def get(self, request, pk=None, format=None):
         """
-        获取监控项列表
+        获取指定模板下的监控项列表
         """
-        page_data, count = paging_request(request, models.MonitorItem, self)
+        page_data, count = paging_request(request, models.MonitorItem, self,
+                                          filter={'template_id': request.GET['template_id']})
         # 对数据进行序列化
         serializer = ItemSerializer(instance=page_data, many=True)
         ret = {

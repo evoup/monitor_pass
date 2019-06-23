@@ -21,7 +21,7 @@ class CustomPageNumberPagination(PageNumberPagination):
         self.page_size = foo
 
 
-def paging_request(request, model, obj):
+def paging_request(request, model, obj, filter=None):
     """
     获取经过分页的请求数据
     :param request: request
@@ -31,7 +31,12 @@ def paging_request(request, model, obj):
     """
     order_list, prop = getOrderList(request)
     # 获取所有数据
-    records = model.objects.all() if prop == '' else model.objects.order_by(*order_list)
+    if filter is None:
+        records = model.objects.all() if prop == '' else model.objects.order_by(*order_list)
+    else:
+        # https://stackoverflow.com/questions/2932648/how-do-i-use-a-string-as-a-keyword-argument
+        records = model.objects.filter(**filter) if prop == '' else model.objects.filter(**filter).order_by(*order_list)
+
     # 创建分页对象，这里是自定义的MyPageNumberPagination
     page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
     # 获取分页的数据
