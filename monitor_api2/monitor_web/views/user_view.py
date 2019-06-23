@@ -22,7 +22,7 @@ from monitor_web.serializers import ProfileSerializer, UserSerializer, GroupSeri
 from web.common import constant
 from web.common.order import getOrderList
 from web.common.paging import CustomPageNumberPagination
-from web.settings import PERMISSIONS, ABADONED_PERMISSIONS
+from web.settings import PERMISSIONS, ABANDONED_PERMISSIONS
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -265,7 +265,7 @@ class UserPerm(APIView):
         perm = []
         for p in Permission.objects.all().order_by('id'):
 
-            if p.codename in ABADONED_PERMISSIONS:
+            if p.codename in ABANDONED_PERMISSIONS:
                 continue
             perm.append({"codename": p.codename, "name": PERMISSIONS[p.codename]})
         ret = {

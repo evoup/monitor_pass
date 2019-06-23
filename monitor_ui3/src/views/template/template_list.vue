@@ -179,7 +179,7 @@ export default {
     jumpItemList(id) {
       this.$router.push({
         path: '/item_list',
-        query: { id: id }
+        query: { template_id: id }
       })
     },
     // 删除当前行

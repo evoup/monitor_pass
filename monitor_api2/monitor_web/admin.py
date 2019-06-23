@@ -18,6 +18,13 @@ admin.site.register(models.IDC)
 admin.site.register(models.Tag)
 admin.site.register(models.Asset)
 admin.site.register(models.Alert)
+admin.site.register(models.Template)
+admin.site.register(models.MonitorItem)
+admin.site.register(models.MonitorSet)
+admin.site.register(models.Memory)
+admin.site.register(models.Disk)
+admin.site.register(models.NetworkDevice)
+admin.site.register(models.NIC)
 
 # ----------扩展django用户组开始-----------------
 class GroupInline(admin.StackedInline):
