@@ -60,7 +60,22 @@
         </el-table>
       </el-tab-pane>
       <!-- tab-pane3 -->
-      <el-tab-pane label="模板">模板</el-tab-pane>
+      <el-tab-pane label="模板">
+        <el-select
+          v-model="templateSelectModel"
+          multiple
+          placeholder="请选择模板（可选）"
+          style="width: 80%"
+        >
+          <el-option
+            v-for="item in templateData"
+            :key="item.id"
+            :label="item.name"
+            :aria-selected="true"
+            :value="item.id"
+          />
+        </el-select>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -68,6 +83,8 @@
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
 import { user_group_list } from '../../api/user'
+import { template_list } from '../../api/template'
+
 export default {
   data() {
     return {
@@ -90,18 +107,27 @@ export default {
         desc: ''
       },
       dataList: [], // 列表数据
-      listLoading: true
+      listLoading: true,
+      templateSelectModel: [],
+      templateData: []
     }
   },
   mounted() {
     this.fetchData()
   },
   methods: {
+    // 获取所有模板列表
+    fetchTemplateListData() {
+      template_list().then(response => {
+        this.templateData = response.data.items
+      })
+    },
     fetchData() {
       this.listLoading = true
       user_group_list().then(response => {
         this.dataList = response.data.items
         this.listLoading = false
+        this.fetchTemplateListData()
       })
     },
     jumpServerGroupList() {
