@@ -325,7 +325,7 @@ class UserGroupList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class UserPerm(APIView):
-    def get(self, pk=None, format=None):
+    def get(self, *args, **kwargs):
         # 获取所有数据
         perm = []
         for p in Permission.objects.all().order_by('id'):
