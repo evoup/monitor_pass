@@ -30,6 +30,20 @@ export function server_group_list(param) {
   })
 }
 
+export function add_server_group(name, desc, alarm_type, user_groups, templates) {
+  return request({
+    url: '/server_group/info',
+    method: 'post',
+    data: {
+      name,
+      desc,
+      alarm_type,
+      user_groups,
+      templates
+    }
+  })
+}
+
 export function delete_server_group(param) {
   return request({
     url: '/server_group/info',

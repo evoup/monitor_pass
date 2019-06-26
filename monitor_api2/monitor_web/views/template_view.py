@@ -56,7 +56,7 @@ class TemplateInfo(APIView):
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('monitor_web.add_template', raise_exception=True))
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
         创建模板
         """
@@ -66,7 +66,7 @@ class TemplateInfo(APIView):
         }
         try:
             with transaction.atomic():
-                data = JSONParser().parse(self.request)
+                data = JSONParser().parse(request)
                 server_groups = ServerGroup.objects.filter(id__in=data['server_groups']).all()
                 template = Template.objects.create(name=data['name'])
                 for x in server_groups:

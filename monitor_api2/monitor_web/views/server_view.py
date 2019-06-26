@@ -130,3 +130,18 @@ class ServerGroupInfo(APIView):
         serverGroup = models.ServerGroup.objects.get(id=self.request.query_params['id'])
         serverGroup.delete()
         return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('monitor_web.add_server_group', raise_exception=True))
+    def post(self, request, *args, **kwargs):
+        """
+        创建服务器组
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建服务器组失败'
+        }
+        data = JSONParser().parse(request)
+        server_group = models.ServerGroup.objects.create(name=data['name'], desc=data['desc'], alarm_type=data['alarm_type'])
+        # 维护服务器组用户组关系
+        # 维护服务器组模板关系
+        pass
