@@ -1,6 +1,7 @@
 import traceback
 
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
@@ -125,12 +126,12 @@ class UserInfo(APIView):
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('auth.add_user', raise_exception=True))
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
         创建用户
         """
         from django.db import transaction
-        data = JSONParser().parse(self.request)
+        data = JSONParser().parse(request)
         ret = {
             'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '创建用户失败'
@@ -162,12 +163,23 @@ class UserInfo(APIView):
             'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '更新用户失败'
         }
-        user = User.objects.filter(id=data['id']).update(first_name=data['name'], email=data['email'])
-        if user is not None:
-            ret = {
-                'code': constant.BACKEND_CODE_CREATED,
-                'message': '更新用户成功'
-            }
+        user = User.objects.get(id=data['id'])
+        if data['new_password'] is None:
+            ret['message'] = '必须输入密码'
+        elif check_password(data['old_password'], user.password):
+            user.set_password(data['new_password'])
+            user.__setattr__('first_name', data['name'])
+            user.__setattr__('email', data['email'])
+            user.save()
+            Profile.objects.filter(pk=user.id).update(desc=data['desc'])
+            if user is not None:
+                ret = {
+                    'code': constant.BACKEND_CODE_CREATED,
+                    'message': '更新用户成功'
+                }
+        else:
+            ret['message'] = '旧的密码不对'
+
         return JsonResponse(ret, safe=False)
 
 
@@ -218,12 +230,12 @@ class UserGroupInfo(APIView):
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('auth.add_group', raise_exception=True))
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
         创建用户组
         https://stackoverflow.com/questions/18797593/how-to-create-a-group-permission-in-django/18797715
         """
-        data = JSONParser().parse(self.request)
+        data = JSONParser().parse(request)
         ret = {
             'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '创建用户组失败'
@@ -254,7 +266,7 @@ class UserGroupInfo(APIView):
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('monitor_web.delete_group', raise_exception=True))
-    def delete(self, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         """
         删除用户组
         """
@@ -262,7 +274,7 @@ class UserGroupInfo(APIView):
             'code': constant.BACKEND_CODE_DELETED,
             'message': '删除用户组成功'
         }
-        userGroup = Group.objects.get(id=self.request.query_params['id'])
+        userGroup = Group.objects.get(id=request.query_params['id'])
         userGroup.delete()
         return JsonResponse(ret, safe=False)
 
@@ -300,7 +312,7 @@ class UserGroupList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class UserPerm(APIView):
-    def get(self, request, pk=None, format=None):
+    def get(self, pk=None, format=None):
         # 获取所有数据
         perm = []
         for p in Permission.objects.all().order_by('id'):

@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="登录名">
         <el-col :span="8">
-          <el-input v-model="form.login_name" placeholder="请输入用户的登录名"/>
+          <el-input v-model="form.login_name" placeholder="请输入用户的登录名" :disabled="true"/>
         </el-col>
       </el-form-item>
       <el-form-item label="真实姓名">
