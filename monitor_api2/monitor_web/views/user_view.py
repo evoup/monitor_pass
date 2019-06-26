@@ -182,6 +182,19 @@ class UserInfo(APIView):
 
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.delete_user', raise_exception=True))
+    def delete(self, *args, **kwargs):
+        """
+        删除用户
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除用户成功'
+        }
+        user = models.User.objects.get(id=self.request.query_params['id'])
+        user.delete()
+        return JsonResponse(ret, safe=False)
+
 
 @permission_classes((IsAuthenticated,))
 class UserList(APIView):

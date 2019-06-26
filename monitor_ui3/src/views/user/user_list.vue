@@ -53,7 +53,7 @@
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeUser(prop.row.id)">编辑</el-button>
-          <el-button size="small" type="danger" @click="lookUser(prop.$index,prop.row.u_uuid)">删除</el-button>
+          <el-button size="small" type="danger" @click="deleteUser(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,7 +78,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { user_list } from '../../api/user'
+import { user_list, delete_user } from '../../api/user'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 export default {
   components: { ElPager },
@@ -155,6 +155,16 @@ export default {
     // 跳转到用户添加页面
     jumpAddUser() {
       this.$router.push({ path: '/add_user' })
+    },
+    // 删除当前行
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
+    },
+    // 删除用户
+    deleteUser(id, rowIdx) {
+      delete_user({ id: id }).then(response => {
+        this.deleteRow(rowIdx, this.dataList)
+      })
     }
   }
 }

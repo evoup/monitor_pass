@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="登录名">
         <el-col :span="8">
-          <el-input v-model="form.login_name" placeholder="请输入用户的登录名" :disabled="true"/>
+          <el-input v-model="form.login_name" :disabled="true" placeholder="请输入用户的登录名"/>
         </el-col>
       </el-form-item>
       <el-form-item label="真实姓名">
@@ -63,6 +63,7 @@ export default {
     this.getUser({ id: this.$route.query.id })
   },
   methods: {
+    // 获取用户
     getUser(a) {
       read_user(a).then(response => {
         this.form.login_name = response.data.item.username
@@ -71,6 +72,7 @@ export default {
         this.form.desc = response.data.item.profile.desc
       })
     },
+    // 更新用户
     changeUser(b, c, d, e, f) {
       const a = this.$route.query.id
       change_user(a, b, c, d, e, f)

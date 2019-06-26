@@ -89,3 +89,11 @@ export function user_perm_list(param) {
     params: param
   })
 }
+
+export function delete_user(param) {
+  return request({
+    url: '/user/info',
+    method: 'delete',
+    params: param
+  })
+}
