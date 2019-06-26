@@ -153,16 +153,16 @@ class UserInfo(APIView):
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('auth.change_user', raise_exception=True))
-    def put(self, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         """
         更新用户
         """
-        data = JSONParser().parse(self.request)
+        data = JSONParser().parse(request)
         ret = {
             'code': constant.BACKEND_CODE_OPT_FAIL,
             'message': '更新用户失败'
         }
-        user = User.objects.filter(id=data['id'])
+        user = User.objects.filter(id=data['id']).update(first_name=data['name'], email=data['email'])
         if user is not None:
             ret = {
                 'code': constant.BACKEND_CODE_CREATED,

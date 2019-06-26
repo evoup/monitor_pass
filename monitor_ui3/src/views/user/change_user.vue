@@ -32,7 +32,9 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addUser(form.login_name, form.name, form.email, form.password, form.desc)">创建</el-button>
+        <el-button
+          type="primary"
+          @click="changeUser(form.name, form.email, form.old_password, form.new_password, form.desc)">更新</el-button>
         <el-button @click="jumpUserList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -66,10 +68,12 @@ export default {
         this.form.login_name = response.data.item.username
         this.form.email = response.data.item.email
         this.form.name = response.data.item.first_name
+        this.form.desc = response.data.item.profile.desc
       })
     },
-    changeUser(a, b, c, d, e) {
-      change_user(a, b, c, d, e)
+    changeUser(b, c, d, e, f) {
+      const a = this.$route.query.id
+      change_user(a, b, c, d, e, f)
     },
     // 跳转到用户列表页面
     jumpUserList() {

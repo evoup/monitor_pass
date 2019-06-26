@@ -24,16 +24,17 @@ export function add_user(login_name, name, email, password, desc) {
   })
 }
 
-// 更新用户
-export function change_user(id, name, email, password, desc) {
+// 更新用户,不能更新登录名
+export function change_user(id, name, email, old_password, new_password, desc) {
   return request({
     url: '/user/info',
-    method: 'post',
+    method: 'put',
     data: {
       id,
       name,
       email,
-      password,
+      old_password,
+      new_password,
       desc
     }
   })
