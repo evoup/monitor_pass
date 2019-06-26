@@ -16,9 +16,14 @@
           <el-input v-model="form.email" placeholder="请输入正确的邮箱格式"/>
         </el-col>
       </el-form-item>
-      <el-form-item label="登录密码">
+      <el-form-item label="旧的登录密码">
         <el-col :span="8">
-          <el-input v-model="form.password" type="password" placeholder="请输入登录密码"/>
+          <el-input v-model="form.old_password" type="password" placeholder="请输入旧的登录密码"/>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="新的登录密码">
+        <el-col :span="8">
+          <el-input v-model="form.new_password" type="password" placeholder="请输入新的登录密码"/>
         </el-col>
       </el-form-item>
       <el-form-item label="描述">
@@ -44,7 +49,8 @@ export default {
         login_name: '',
         name: '',
         email: '',
-        password: '',
+        old_password: '',
+        new_password: '',
         desc: '',
         type: [],
         resource: ''
@@ -57,7 +63,9 @@ export default {
   methods: {
     getUser(a) {
       read_user(a).then(response => {
-        this.form.login_name = response.data.item.name
+        this.form.login_name = response.data.item.username
+        this.form.email = response.data.item.email
+        this.form.name = response.data.item.first_name
       })
     },
     changeUser(a, b, c, d, e) {
