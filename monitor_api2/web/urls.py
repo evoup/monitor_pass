@@ -40,8 +40,10 @@ urlpatterns = [
         url(r'^login/$', user_view.Login.as_view()),
         # 查询是否过期，过期
         url(r'^login/status/$', user_view.LoginStatus.as_view()),
-        # 返回单个用户角色数据/创建用户
+        # 读取/创建/修改用户
         url(r'^user/info$', user_view.UserInfo.as_view()),
+        # 返回单个用户角色数据
+        url(r'^user_role/info$', user_view.UserRoleInfo.as_view()),
         # 用户列表
         url(r'^user/list$', user_view.UserList.as_view()),
         # 添加/删除用户组

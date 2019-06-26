@@ -36,7 +36,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { add_user } from '../../api/user'
+import { read_user, change_user } from '../../api/user'
 export default {
   data() {
     return {
@@ -51,9 +51,17 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getUser({ id: this.$route.query.id })
+  },
   methods: {
-    addUser(a, b, c, d, e) {
-      add_user(a, b, c, d, e)
+    getUser(a) {
+      read_user(a).then(response => {
+        this.form.login_name = response.data.item.name
+      })
+    },
+    changeUser(a, b, c, d, e) {
+      change_user(a, b, c, d, e)
     },
     // 跳转到用户列表页面
     jumpUserList() {

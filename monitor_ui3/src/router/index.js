@@ -153,6 +153,13 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/change_user',
+        name: 'ChangeUser',
+        component: () => import('../views/user/change_user'),
+        meta: { title: '更新用户', icon: 'form' },
+        hidden: true
+      },
+      {
         path: '/user_list',
         name: 'UserManager',
         component: () => import('../views/user/user_list'),

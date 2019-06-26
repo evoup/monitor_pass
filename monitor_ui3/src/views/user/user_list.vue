@@ -52,7 +52,7 @@
         width="280" />
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">编辑</el-button>
+          <el-button size="small" type="primary" @click="jumpChangeUser(prop.row.id)">编辑</el-button>
           <el-button size="small" type="danger" @click="lookUser(prop.$index,prop.row.u_uuid)">删除</el-button>
         </template>
       </el-table-column>
@@ -144,6 +144,13 @@ export default {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
+    },
+    // 跳转到修改用户页面
+    jumpChangeUser(id) {
+      this.$router.push({
+        path: '/change_user',
+        query: { id: id }
+      })
     },
     // 跳转到用户添加页面
     jumpAddUser() {

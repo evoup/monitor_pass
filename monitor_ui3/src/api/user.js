@@ -1,10 +1,36 @@
 import request from '@/utils/request'
+
+// 读取用户
+export function read_user(param) {
+  return request({
+    url: '/user/info',
+    method: 'get',
+    params: param
+  })
+}
+
+// 添加用户
 export function add_user(login_name, name, email, password, desc) {
   return request({
     url: '/user/info',
     method: 'post',
     data: {
       login_name,
+      name,
+      email,
+      password,
+      desc
+    }
+  })
+}
+
+// 更新用户
+export function change_user(id, name, email, password, desc) {
+  return request({
+    url: '/user/info',
+    method: 'post',
+    data: {
+      id,
       name,
       email,
       password,
@@ -61,4 +87,3 @@ export function user_perm_list(param) {
     params: param
   })
 }
-

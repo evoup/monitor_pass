@@ -51,14 +51,14 @@ class Login(APIView):
     """
 
     def post(self, *args, **kwargs):
-        jwt_response =  obtain_jwt_token(self.request._request, *args, **kwargs)
+        jwt_response = obtain_jwt_token(self.request._request, *args, **kwargs)
         if 'token' in jwt_response.data:
-            jwt_response.data['code']=constant.BACKEND_CODE_OK
-            jwt_response.data['data']={'token':jwt_response.data['token']}
+            jwt_response.data['code'] = constant.BACKEND_CODE_OK
+            jwt_response.data['data'] = {'token': jwt_response.data['token']}
             # 返回格式{"code":20000,"data":{"token":"admin"}}
             return jwt_response
         else:
-            return Response(data={'code':12, 'message':'登录失败，用户名或者密码错误！'})
+            return Response(data={'code': 12, 'message': '登录失败，用户名或者密码错误！'})
 
 
 @csrf_exempt
@@ -76,13 +76,11 @@ def logout(request):
         }
         return JsonResponse(ret, safe=False)
 
-
 @permission_classes((IsAuthenticated,))
-class UserInfo(APIView):
+class UserRoleInfo(APIView):
     """
     返回用户角色数据
     """
-
     @method_decorator(permission_required('auth.view_user', raise_exception=True))
     def get(self, request, *args, **kwargs):
         l = []
@@ -106,6 +104,24 @@ class UserInfo(APIView):
         return JsonResponse(ret, safe=False)
 
 
+@permission_classes((IsAuthenticated,))
+class UserInfo(APIView):
+
+    @method_decorator(permission_required('auth.get_user', raise_exception=True))
+    def get(self, *args, **kwargs):
+        """
+        读取用户
+        """
+        user = models.User.objects.filter(id=self.request.GET['id'])
+        serializer = UserSerializer(instance=user, many=False)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "item": serializer.data
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
     @method_decorator(permission_required('auth.add_user', raise_exception=True))
     def post(self, *args, **kwargs):
         """
@@ -120,7 +136,8 @@ class UserInfo(APIView):
         try:
             # 创建用户要写2个表auth_user和用户扩展表user_rofile表，要用事务的原子性,失败django自动回滚
             with transaction.atomic():
-                user = User.objects.create_user(username=data['login_name'], email=data['email'], password=data['password'])
+                user = User.objects.create_user(username=data['login_name'], email=data['email'],
+                                                password=data['password'])
                 user.first_name = data['name']
                 user.save()
                 Profile.objects.filter(pk=user.id).update(desc=data['desc'])
@@ -131,6 +148,24 @@ class UserInfo(APIView):
             'code': constant.BACKEND_CODE_CREATED,
             'message': '创建用户成功'
         }
+        return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('auth.change_user', raise_exception=True))
+    def put(self, *args, **kwargs):
+        """
+        更新用户
+        """
+        data = JSONParser().parse(self.request)
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '更新用户失败'
+        }
+        user = User.objects.filter(id=data['id'])
+        if user is not None:
+            ret = {
+                'code': constant.BACKEND_CODE_CREATED,
+                'message': '更新用户成功'
+            }
         return JsonResponse(ret, safe=False)
 
 
@@ -169,6 +204,7 @@ class UserGroupInfo(APIView):
     """
     获取单个用户组
     """
+
     @method_decorator(permission_required('auth.view_group', raise_exception=True))
     def get(self, *args, **kwargs):
         ret = {
@@ -197,7 +233,8 @@ class UserGroupInfo(APIView):
             UserGroup.objects.create(group_id=new_group_id, desc=data['desc'])
             # 分配组权限
             if data['priv'] is not None and len(data['priv']) > 0:
-                privilege_list = list(Permission.objects.filter(codename__in = data['priv']).all().values_list('id', flat=True).distinct().order_by())
+                privilege_list = list(Permission.objects.filter(codename__in=data['priv']).all().values_list('id',
+                                                                                                             flat=True).distinct().order_by())
                 for i in privilege_list:
                     new_group.permissions.add(i)
                 if data['members'] is not None:
@@ -226,6 +263,7 @@ class UserGroupInfo(APIView):
         userGroup = Group.objects.get(id=self.request.query_params['id'])
         userGroup.delete()
         return JsonResponse(ret, safe=False)
+
 
 @permission_classes((IsAuthenticated,))
 class UserGroupList(APIView):
@@ -276,4 +314,3 @@ class UserPerm(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
-
