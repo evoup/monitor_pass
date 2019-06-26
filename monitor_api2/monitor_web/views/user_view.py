@@ -76,11 +76,13 @@ def logout(request):
         }
         return JsonResponse(ret, safe=False)
 
+
 @permission_classes((IsAuthenticated,))
 class UserRoleInfo(APIView):
     """
     返回用户角色数据
     """
+
     @method_decorator(permission_required('auth.view_user', raise_exception=True))
     def get(self, request, *args, **kwargs):
         l = []
@@ -108,12 +110,12 @@ class UserRoleInfo(APIView):
 class UserInfo(APIView):
 
     @method_decorator(permission_required('auth.get_user', raise_exception=True))
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """
         读取用户
         """
-        user = models.User.objects.filter(id=self.request.GET['id'])
-        serializer = UserSerializer(instance=user, many=False)
+        records = models.User.objects.get(id=request.GET['id'])
+        serializer = UserSerializer(instance=records, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

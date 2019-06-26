@@ -39,6 +39,7 @@ export function change_user(id, name, email, password, desc) {
   })
 }
 
+// 添加用户组
 export function add_user_group(name, desc, priv, members) {
   return request({
     url: '/user_group/info',

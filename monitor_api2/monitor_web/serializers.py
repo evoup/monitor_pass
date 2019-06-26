@@ -93,7 +93,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        # 不下发密码
+        fields = ('date_joined', 'email', 'first_name', 'groups', 'id', 'is_active', 'is_staff',
+                  'is_superuser', 'last_login', 'last_name', 'profile', 'user_permissions', 'username')
 
 
 class ProfileBelongUserGroupSerializer(ProfileSerializer):
