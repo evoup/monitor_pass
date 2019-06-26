@@ -141,7 +141,18 @@ class ServerGroupInfo(APIView):
             'message': '创建服务器组失败'
         }
         data = JSONParser().parse(request)
-        server_group = models.ServerGroup.objects.create(name=data['name'], desc=data['desc'], alarm_type=data['alarm_type'])
+        new_group, created = models.ServerGroup.objects.get_or_create(name=data['name'], desc=data['desc'], alarm_type=data['alarm_type'])
+        new_group_id = new_group.id
         # 维护服务器组用户组关系
+        user_groups = models.UserGroup.objects.filter(id__in=data['user_groups']).all()
+        for user_group in user_groups:
+            user_group.server_group.add(new_group_id)
         # 维护服务器组模板关系
-        pass
+        templates = models.Template.objects.filter(id__in=data['templates']).all()
+        for template in templates:
+            template.server_group.add(new_group_id)
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '创建服务组成功'
+        }
+        return JsonResponse(ret, safe=False)
