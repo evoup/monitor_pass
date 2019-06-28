@@ -40,7 +40,7 @@
         width="130"/>
       <el-table-column
         label="收集间隔"
-        prop="interval"
+        prop="delay"
         width="130"/>
       <el-table-column
         label="状态"
