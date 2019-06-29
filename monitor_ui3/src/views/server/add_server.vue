@@ -61,16 +61,6 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      add_server('a', 'b', 'c', 'd', 'e')
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    },
     addServer(a, b, c, d, e) {
       add_server(a, b, c, d, e)
     },

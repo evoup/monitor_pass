@@ -30,7 +30,7 @@
         width="130">
         <template slot-scope="prop">
           <div align="center">
-            <el-link type="primary" @click="jumpChangeTemplate(prop.row.id)">{{ prop.row.triggers }}</el-link>
+            <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{ prop.row.triggers }}</el-link>
           </div>
         </template>
       </el-table-column>
@@ -48,7 +48,7 @@
         width="130"/>
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="jumpChangeTemplate(prop.row.id)">编辑</el-button>
+          <el-button size="small" type="primary" @click="jumpChangeItem(prop.row.id)">编辑</el-button>
           <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
@@ -148,10 +148,10 @@ export default {
     jumpAddTemplate() {
       this.$router.push({ path: '/add_template' })
     },
-    // 跳转到模板修改页面
-    jumpChangeTemplate(id) {
+    // 跳转到监控项修改页面
+    jumpChangeItem(id) {
       this.$router.push({
-        path: '/change_template', query: { id: id }
+        path: '/change_item', query: { id: id }
       })
     },
     // 删除当前行
