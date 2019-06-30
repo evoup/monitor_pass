@@ -14,13 +14,6 @@
       <el-col :span="21" class="toolbar">
         <el-form :inline="true" :model="filters">
           <el-form-item>
-            <template>
-              <el-select v-model="filters.type" placeholder="请选择">
-                <el-option v-for="item in typeData" :key="item.value" :label="item.label" :value="item.value"/>
-              </el-select>
-            </template>
-          </el-form-item>
-          <el-form-item>
             <el-input v-model="filters.name" placeholder="请输入关键字"/>
           </el-form-item>
           <el-form-item>
@@ -112,8 +105,8 @@ export default {
   },
   data() {
     return {
-      typeData: [],
-      dataList: [], // 列表数据
+      // 列表数据
+      dataList: [],
       // 列表前端分页
       pageList: {
         totalCount: '',
@@ -123,8 +116,8 @@ export default {
       },
       // 列表分页辅助类(传参)
       pageHelp: {
-        page: 1, // 和后端参数一样
-        size: 5, // 后端参数为size
+        page: 1,
+        size: 5,
         order: 'asc'
       },
       sortHelp: {
@@ -154,15 +147,6 @@ export default {
         this.total = response.data.count
       })
     },
-    // 下拉框初始化
-    typeInfo() {
-      this.typeData = [
-        { value: 1, label: '全部' },
-        { value: 2, label: '账户名' },
-        { value: 3, label: '机构名称' },
-        { value: 4, label: '手机号码' },
-        { value: 5, label: '联系人' }]
-    },
     indexMethod(index) {
       return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
     },
@@ -178,7 +162,6 @@ export default {
       this.fetchData()
     },
     sortChange(column, prop, order) {
-      // console.log(column.prop + '-' + column.order)
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
