@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
@@ -52,3 +53,25 @@ class ItemInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class ItemStatus(APIView):
+    @method_decorator(permission_required('monitor_web.change_monitoritem', raise_exception=True))
+    def put(self, request, pk=None, format=None):
+        """
+        修改指定监控项状态，开始或者关闭
+        """
+        user = User.objects.get(id = request.user.id)
+        item = models.MonitorItem.objects.get(id = request.data['id'])
+        qs = models.RelationUserItem.objects.filter(user=user, item=item)
+        if qs.count() is 0:
+            qs.create(user=user, item=item, status=request.data['status'])
+        else:
+            qs.update(user=user, item=item, status=request.data['status'])
+        ret = {
+            'code': constant.BACKEND_CODE_OK,
+            'message': '更新监控项状态成功'
+        }
+        return JsonResponse(ret, safe=False)
+

@@ -259,6 +259,21 @@ class MonitorItem(models.Model):
         return self.name
 
 
+class RelationUserItem(models.Model):
+    """
+    用户监控项关系表
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(MonitorItem, on_delete=models.CASCADE)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = '用户监控项关系表'
+        unique_together = ('user', 'item')
+        db_table = 'r_user_item'
+    def __str__(self):
+        return self.user_id + ":" + self.item_id
+
 class Trigger(models.Model):
     """
     触发器

@@ -7,3 +7,11 @@ export function item_list(param) {
     params: param
   })
 }
+
+export function change_item_status(id, status) {
+  return request({
+    url: '/item/status',
+    method: 'put',
+    data: { id, status }
+  })
+}

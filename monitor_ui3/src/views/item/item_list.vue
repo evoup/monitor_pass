@@ -51,14 +51,14 @@
             v-model="prop.row.status"
             active-value="1"
             inactive-value="0"
-            @change="change_member($event, prop.row)"
+            @change="changeItemStatus(prop.row.id, $event)"
           />
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeItem(prop.row.id)">编辑</el-button>
-          <el-button size="small" type="primary" @click="deleteTemplate(prop.row.id, prop.$index)">删除</el-button>
+          <el-button size="small" type="primary">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -82,7 +82,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { item_list, delete_template } from '../../api/item'
+import { item_list, change_item_status } from '../../api/item'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 
 export default {
@@ -163,15 +163,9 @@ export default {
         path: '/change_item', query: { id: id }
       })
     },
-    // 删除当前行
-    deleteRow(index, rows) {
-      rows.splice(index, 1)
-    },
-    // 删除模板
-    deleteTemplate(id, rowIdx) {
-      delete_template({ id: id }).then(response => {
-        this.deleteRow(rowIdx, this.dataList)
-      })
+    // 修改监控项状态
+    changeItemStatus(a, b) {
+      change_item_status(a, b)
     }
   }
 }
