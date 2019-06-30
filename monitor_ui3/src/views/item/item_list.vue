@@ -45,7 +45,16 @@
       <el-table-column
         label="状态"
         prop="status"
-        width="130"/>
+        width="130">
+        <template slot-scope="prop">
+          <el-switch
+            v-model="prop.row.status"
+            active-value="1"
+            inactive-value="0"
+            @change="change_member($event, prop.row)"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeItem(prop.row.id)">编辑</el-button>

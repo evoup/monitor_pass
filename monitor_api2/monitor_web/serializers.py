@@ -55,9 +55,12 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
     class Meta:
         model = MonitorItem
         fields = '__all__'
+    def get_status(self, obj):
+        return "1"
 
 
 class TemplateSerializer(serializers.ModelSerializer):
