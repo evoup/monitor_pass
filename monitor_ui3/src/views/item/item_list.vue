@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary" @click="jumpAddTemplate()"><i class="el-icon-plus el-icon--right"/>添加监控项
+            <el-button type="primary" @click="jumpAddItem()"><i class="el-icon-plus el-icon--right"/>添加监控项
             </el-button>
           </div>
         </el-col>
@@ -144,9 +144,9 @@ export default {
       this.sortHelp.prop = column.prop
       this.fetchData()
     },
-    // 跳转到模板添加页面
-    jumpAddTemplate() {
-      this.$router.push({ path: '/add_template' })
+    // 跳转到监控项添加页面
+    jumpAddItem() {
+      this.$router.push({ path: '/add_item' })
     },
     // 跳转到监控项修改页面
     jumpChangeItem(id) {

@@ -64,7 +64,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
-        <el-button @click="jumpServerList">取消</el-button>
+        <el-button @click="$router.back(-1)">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -139,9 +139,6 @@ export default {
   methods: {
     addServer(a, b, c, d, e) {
       add_server(a, b, c, d, e)
-    },
-    jumpServerList() {
-      this.$router.push({ path: '/server_list' })
     }
   }
 }
