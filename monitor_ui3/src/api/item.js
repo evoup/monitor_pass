@@ -8,10 +8,10 @@ export function item_list(param) {
   })
 }
 
-export function change_item_status(id, status) {
+export function change_item_status(id, template_id, status) {
   return request({
     url: '/item/status',
     method: 'put',
-    data: { id, status }
+    data: { id, template_id, status }
   })
 }

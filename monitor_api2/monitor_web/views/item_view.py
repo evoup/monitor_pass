@@ -22,7 +22,7 @@ class ItemList(APIView):
         page_data, count = paging_request(request, models.MonitorItem, self,
                                           filter={'template_id': request.GET['template_id']})
         # 对数据进行序列化
-        serializer = ItemSerializer(instance=page_data, many=True)
+        serializer = ItemSerializer(instance=page_data, many=True, context={'user_id': request.user.id})
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
@@ -64,11 +64,12 @@ class ItemStatus(APIView):
         """
         user = User.objects.get(id = request.user.id)
         item = models.MonitorItem.objects.get(id = request.data['id'])
-        qs = models.RelationUserItem.objects.filter(user=user, item=item)
+        template = models.Template.objects.get(id = request.data['template_id'])
+        qs = models.RelationUserItem.objects.filter(user=user, item=item, template=template)
         if qs.count() is 0:
-            qs.create(user=user, item=item, status=request.data['status'])
+            qs.create(user=user, item=item, template=template, status=request.data['status'])
         else:
-            qs.update(user=user, item=item, status=request.data['status'])
+            qs.update(user=user, item=item, template=template, status=request.data['status'])
         ret = {
             'code': constant.BACKEND_CODE_OK,
             'message': '更新监控项状态成功'

@@ -165,7 +165,7 @@ export default {
     },
     // 修改监控项状态
     changeItemStatus(a, b) {
-      change_item_status(a, b)
+      change_item_status(a, this.$route.query.template_id, b)
     }
   }
 }

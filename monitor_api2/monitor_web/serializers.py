@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
+from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem
 
 
@@ -56,11 +57,19 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
+
     class Meta:
         model = MonitorItem
         fields = '__all__'
+
     def get_status(self, obj):
-        return "1"
+        # 查询用户监控项
+        uid = self.context.get("user_id")
+        record = models.RelationUserItem.objects.filter(template_id=obj.template_id, item_id=obj.id, user_id=uid).all()
+        if len(record) > 0:
+            return "1" if record[0].status else "0"
+        else:
+            return "1"
 
 
 class TemplateSerializer(serializers.ModelSerializer):
