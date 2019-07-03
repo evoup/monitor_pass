@@ -27,7 +27,7 @@
       <el-table-column
         label="触发器数"
         prop="triggers"
-        width="130">
+        width="100">
         <template slot-scope="prop">
           <div align="center">
             <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{ prop.row.triggers }}</el-link>
@@ -37,15 +37,15 @@
       <el-table-column
         label="key"
         prop="key"
-        width="130"/>
+        width="300"/>
       <el-table-column
         label="收集间隔"
         prop="delay"
-        width="130"/>
+        width="100"/>
       <el-table-column
         label="状态"
         prop="status"
-        width="130">
+        width="100">
         <template slot-scope="prop">
           <el-switch
             v-model="prop.row.status"
@@ -58,7 +58,7 @@
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeItem(prop.row.id)">编辑</el-button>
-          <el-button size="small" type="primary">删除</el-button>
+          <el-button size="small" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -160,7 +160,7 @@ export default {
     // 跳转到监控项修改页面
     jumpChangeItem(id) {
       this.$router.push({
-        path: '/change_item', query: { id: id }
+        path: '/change_item', query: { id: id, template_id: this.$route.query.template_id }
       })
     },
     // 修改监控项状态
