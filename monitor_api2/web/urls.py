@@ -68,5 +68,7 @@ urlpatterns = [
         url(r'^item/list$', item_view.ItemList.as_view()),
         # 修改监控项状态
         url(r'^item/status$', item_view.ItemStatus.as_view()),
+        # 读取监控项
+        url(r'^item/info$', item_view.ItemInfo.as_view()),
     ]))
 ]

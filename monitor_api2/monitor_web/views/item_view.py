@@ -44,7 +44,7 @@ class ItemInfo(APIView):
         """
         获取指定监控项
         """
-        item = models.Item.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        item = models.MonitorItem.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
         serializer = ItemSerializer(instance=item, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,

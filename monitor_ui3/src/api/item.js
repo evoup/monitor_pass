@@ -15,3 +15,11 @@ export function change_item_status(id, template_id, status) {
     data: { id, template_id, status }
   })
 }
+
+export function read_item(param) {
+  return request({
+    url: '/item/info',
+    method: 'get',
+    params: param
+  })
+}

@@ -63,7 +63,8 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
+        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建
+        </el-button>
         <el-button @click="jumpServerList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +72,8 @@
 </template>
 
 <script>
-import { add_server } from '../../api/server'
+import { read_item } from '../../api/item'
+
 export default {
   data() {
     return {
@@ -136,9 +138,18 @@ export default {
       }
     }
   },
+  mounted() {
+    this.readItem({ id: this.$route.query.id })
+  },
   methods: {
-    addServer(a, b, c, d, e) {
-      add_server(a, b, c, d, e)
+    readItem(id) {
+      read_item(id).then(response => {
+        this.form.name = response.data.item.name
+        this.form.key = response.data.item.key
+        this.form.multiplier = response.data.item.multiplier
+        this.form.unit = response.data.item.unit
+        this.form.desc = response.data.item.desc
+      })
     },
     jumpServerList() {
       this.$router.push({ path: '/server_list' })
