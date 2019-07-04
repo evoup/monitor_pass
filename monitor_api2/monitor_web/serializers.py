@@ -81,7 +81,8 @@ class TemplateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_items(self, obj):
-        return 2
+        template_id = obj.id
+        return len(models.MonitorItem.objects.filter(template_id=template_id).all())
 
     def get_triggers(self, obj):
         return 3
