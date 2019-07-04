@@ -1,4 +1,13 @@
 INSERT INTO `monitor`.`template` (`name`) VALUES ('Template OS Linux');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Interfaces');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Generic');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Device');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP OS Windows');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Disks');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP OS Linux');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Processors');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template App MySQL');
+
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('Number of processes', '0', '60', 'Total number of processes in any state.', '', 'proc.num[]', '0', '', '0','1');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('Processor load (1 min average per core)', '0', '60', 'The processor load is calculated as system CPU load divided by number of CPU cores.', '', 'system.cpu.load[percpu,avg1]', '0', '', '0','1');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('Number of running processes', '0', '60', 'Number of processes in running state.', '', 'proc.num[,,run]', '0', '', '0','1');
@@ -22,3 +31,13 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('CPU system time', '0', '60', 'The time the CPU has spent running the kernel and its processes.', '', 'system.cpu.util[,system]', '0', '%', '0','1');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('CPU iowait time', '0', '60', 'Amount of time the CPU has been waiting for I/O to complete.', '', 'system.cpu.util[,iowait]', '0', '%', '0','1');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('Available memory', '0', '60', 'Available memory is defined as free+cached+buffers memory.', '', 'vm.memory.size[available]', '0', 'B', '0','1');
+
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('MySQL status', '0', '60', 'It requires user parameter mysql.ping, which is defined in userparameter_mysql.conf.
+
+0 - MySQL server is down
+1 - MySQL server is up', '', 'mysql.ping', '0', '', '0','9');
+
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`) VALUES ('MySQL bytes received per second', '0', '60', 'It requires user parameter mysql.ping, which is defined in userparameter_mysql.conf.
+
+0 - MySQL server is down
+1 - MySQL server is up', '', 'mysql.status[Bytes_received]', '0', 'Bps', '0','9');
