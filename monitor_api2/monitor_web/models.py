@@ -250,6 +250,7 @@ class MonitorItem(models.Model):
     host_id = models.IntegerField(u'对应主机id', 0)
     # 0代表不属于任何
     template_id = models.IntegerField(u'对应模板id', 0)
+    delta = models.IntegerField(u'增量类型', default='0', editable=False)
 
     class Meta:
         verbose_name_plural = '监控项表'
