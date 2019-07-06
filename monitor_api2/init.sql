@@ -41,3 +41,7 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 
 0 - MySQL server is down
 1 - MySQL server is up', '', 'mysql.status[Bytes_received]', '0', 'Bps', '0','9', '1');
+
+
+
+INSERT INTO `monitor`.`trigger` (`expression`, `template_id`) VALUES ('{1}>5', '1');
