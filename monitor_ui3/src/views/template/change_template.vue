@@ -1,9 +1,25 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20">
-      <el-col :span="2"><div class="grid-content el-form-item__label">监控项(0)</div></el-col>
-      <el-col :span="2"><div class="grid-content el-form-item__label">触发器(0)</div></el-col>
-      <el-col :span="16"><div class="grid-content"/></el-col>
+      <el-col
+        :span="4"
+      ><div class="grid-content el-form-item__label">
+        监控项(<el-link
+          type="primary"
+          @click="jumpItemList(items)"
+        >{{ items }}</el-link
+        >)
+      </div></el-col>
+      <el-col
+        :span="4"
+      ><div class="grid-content el-form-item__label">
+        触发器(<el-link
+          type="primary"
+          @click="jumpItemList(triggers)"
+        >{{ triggers }}</el-link
+        >)
+      </div></el-col>
+      <el-col :span="12"><div class="grid-content"/></el-col>
     </el-row>
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="模板名">
@@ -71,6 +87,8 @@ import { server_group_list } from '../../api/server'
 export default {
   data() {
     return {
+      items: 0,
+      triggers: 0,
       form: {
         name: '',
         type: [],
@@ -126,6 +144,7 @@ export default {
     // 获取单个模板
     fetchTemplateData(id) {
       read_template(id).then(response => {
+        this.items = response.data.item.items
         this.form.name = response.data.item.name
         const serverGroupIds = response.data.item.server_group
         const a = []
@@ -146,7 +165,13 @@ export default {
     },
     jumpTemplateList() {
       this.$router.push({ path: '/template_list' })
-    }
+    },
+    jumpItemList(id) {
+      this.$router.push({
+        path: '/item_list',
+        query: { template_id: this.$route.query.id }
+      })
+    },
   }
 }
 </script>
