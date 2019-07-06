@@ -1,4 +1,17 @@
 # monitor api2.0 SPEC
+
+# install
+```bash
+python3 manage.py makemigrations monitor_web
+python3 manage.py migrate
+python3 manage.py createsuperuserwithpassword \
+        --username admin \
+        --password admin \
+        --email admin@example.org \
+        --preserve
+```
+or run shell install.sh
+
 ###nginx conf
 add default to /etc/nginx/sites-available
 

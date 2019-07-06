@@ -57,6 +57,7 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
+    triggers = serializers.SerializerMethodField()
 
     class Meta:
         model = MonitorItem
@@ -70,6 +71,12 @@ class ItemSerializer(serializers.ModelSerializer):
             return "1" if record[0].status else "0"
         else:
             return "1"
+
+    def get_triggers(self, obj):
+        # 返回其下触发器数
+        uid = self.context.get("user_id")
+        record = models.RelationUserItem.objects.filter(template_id=obj.template_id, user_id=uid).all()
+        return len(record)
 
 
 class TemplateSerializer(serializers.ModelSerializer):

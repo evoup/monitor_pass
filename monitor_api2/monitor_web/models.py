@@ -294,6 +294,20 @@ class Trigger(models.Model):
         return self.expression
 
 
+class Function(models.Model):
+    """
+    函数
+    """
+    id = models.BigAutoField(primary_key=True)
+    item = models.ForeignKey(MonitorItem, on_delete=models.CASCADE)
+    trigger = models.ForeignKey(Trigger, on_delete=models.CASCADE)
+    name = models.CharField(u'函数', max_length=10, default='', null=False)
+
+    class Meta:
+        verbose_name_plural = '函数表'
+        db_table = 'function'
+
+
 class BusinessUnit(models.Model):
     """
     业务线
