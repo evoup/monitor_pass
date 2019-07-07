@@ -45,3 +45,7 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 
 
 INSERT INTO `monitor`.`trigger` (`expression`, `template_id`) VALUES ('{1}>5', '1');
+
+
+INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) VALUES ('avg', 'parameter', '1', '1');
+
