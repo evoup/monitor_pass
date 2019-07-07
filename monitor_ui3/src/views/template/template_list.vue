@@ -48,7 +48,7 @@
       <el-table-column label="触发器数" prop="triggers" width="130">
         <template slot-scope="prop">
           <div align="center">
-            <el-link type="primary" @click="jumpChangeTemplate(prop.row.id)">{{
+            <el-link type="primary" @click="jumpTriggerList(prop.row.id)">{{
               prop.row.triggers
             }}</el-link>
           </div>
@@ -179,6 +179,12 @@ export default {
     jumpItemList(id) {
       this.$router.push({
         path: '/item_list',
+        query: { template_id: id }
+      })
+    },
+    jumpTriggerList(id) {
+      this.$router.push({
+        path: '/trigger_list',
         query: { template_id: id }
       })
     },

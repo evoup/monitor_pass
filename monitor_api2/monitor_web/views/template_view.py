@@ -45,7 +45,8 @@ class TemplateInfo(APIView):
 
     @method_decorator(permission_required('monitor_web.view_template', raise_exception=True))
     def get(self, request, *args, **kwargs):
-        template = models.Template.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        template = models.Template.objects.get(
+            id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
         serializer = TemplateSerializer(instance=template, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,
