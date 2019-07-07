@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
 from monitor_web import models
-from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger
 
 
 class IDCSerializer(serializers.ModelSerializer):
@@ -74,8 +74,8 @@ class ItemSerializer(serializers.ModelSerializer):
 
     def get_triggers(self, obj):
         # 返回其下触发器数
-        uid = self.context.get("user_id")
-        record = models.RelationUserItem.objects.filter(template_id=obj.template_id, user_id=uid).all()
+        # 再找function表中对应item的trigger
+        record = models.Function.objects.filter(item=obj.id).all()
         return len(record)
 
 
@@ -93,6 +93,12 @@ class TemplateSerializer(serializers.ModelSerializer):
 
     def get_triggers(self, obj):
         return 3
+
+
+class TriggerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trigger
+        fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
