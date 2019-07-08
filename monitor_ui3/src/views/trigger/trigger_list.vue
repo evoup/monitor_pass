@@ -4,7 +4,10 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary" @click="jumpAddItem()"><i class="el-icon-plus el-icon--right"/>添加触发器
+            <el-button
+              type="primary"
+              @click="jumpAddItem()"
+            ><i class="el-icon-plus el-icon--right" />添加触发器
             </el-button>
           </div>
         </el-col>
@@ -17,31 +20,33 @@
       border
       tooltip-effect="dark"
       style="width: 100%"
-      @sort-change="sortChange">
-      <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center"/>
+      @sort-change="sortChange"
+    >
+      <el-table-column
+        :index="indexMethod"
+        prop="id"
+        label="序号"
+        type="index"
+        width="80"
+        align="center"
+      />
       <el-table-column
         label="触发器名称"
         sortable="custom"
         prop="name"
-        width="220"/>
-      <el-table-column
-        label="表达式"
-        prop="triggers"
-        width="100">
+        width="220"
+      />
+      <el-table-column label="表达式" prop="triggers" width="100">
         <template slot-scope="prop">
           <div align="center">
-            <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{ prop.row.triggers }}</el-link>
+            <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{
+              prop.row.triggers
+            }}</el-link>
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="告警等级"
-        prop="key"
-        width="300"/>
-      <el-table-column
-        label="状态"
-        prop="status"
-        width="100">
+      <el-table-column label="告警等级" prop="key" width="300" />
+      <el-table-column label="状态" prop="status" width="100">
         <template slot-scope="prop">
           <el-switch
             v-model="prop.row.status"
@@ -53,7 +58,12 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="jumpChangeItem(prop.row.id)">编辑</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="jumpChangeItem(prop.row.id)"
+          >编辑</el-button
+          >
           <el-button size="small" type="danger">删除</el-button>
         </template>
       </el-table-column>
@@ -66,22 +76,70 @@
      具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
      -->
       <el-pagination
-        :page-sizes="[5,10,15]"
+        :page-sizes="[5, 10, 15]"
         :page-size="5"
         :total="total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        @current-change="handleCurrentChange"
+      />
     </el-col>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TriggerList'
+  name: 'TriggerList',
+  data() {
+    return {
+      listLoading: true,
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      total: 0,
+      pageNum: 1
+    }
+  },
+  methods: {
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
+    },
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
+      this.fetchData()
+    },
+    // 点击分页sort-change
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
+      this.fetchData()
+    }
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -171,7 +171,7 @@ export default {
         path: '/item_list',
         query: { template_id: this.$route.query.id }
       })
-    },
+    }
   }
 }
 </script>
