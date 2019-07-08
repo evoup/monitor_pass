@@ -13,3 +13,11 @@ export function add_trigger(name, expression, desc, enable, level) {
     }
   })
 }
+
+export function trigger_list(param) {
+  return request({
+    url: '/trigger/list',
+    method: 'get',
+    params: param
+  })
+}

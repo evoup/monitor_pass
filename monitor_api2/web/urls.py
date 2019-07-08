@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view, template_view, item_view
+from monitor_web.views import view, template_view, item_view, trigger_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -70,5 +70,7 @@ urlpatterns = [
         url(r'^item/status$', item_view.ItemStatus.as_view()),
         # 读取监控项
         url(r'^item/info$', item_view.ItemInfo.as_view()),
+        # 触发器列表
+        url(r'^trigger/list$', trigger_view.TriggerList.as_view()),
     ]))
 ]

@@ -2,7 +2,8 @@ from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
 from monitor_web import models
-from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger
+from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
+    Function
 
 
 class IDCSerializer(serializers.ModelSerializer):
@@ -103,6 +104,12 @@ class TemplateSerializer(serializers.ModelSerializer):
 class TriggerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trigger
+        fields = '__all__'
+
+
+class FunctionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Function
         fields = '__all__'
 
 

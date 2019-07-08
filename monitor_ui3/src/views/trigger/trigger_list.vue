@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import { trigger_list } from '../../api/trigger'
 export default {
   name: 'TriggerList',
   data() {
@@ -118,7 +119,22 @@ export default {
       pageNum: 1
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
+      trigger_list(Object.assign(this.pageHelp, this.sortHelp, { template_id: this.$route.query.template_id })).then(
+        response => {
+          this.dataList = response.data.items
+          this.pageList = response.data.page
+          this.listLoading = false
+          this.total = response.data.count
+        }
+      )
+    },
     indexMethod(index) {
       return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
     },
