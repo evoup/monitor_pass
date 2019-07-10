@@ -107,10 +107,22 @@ class TriggerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FunctionSerializer(serializers.ModelSerializer):
+class TriggerFunctionSerializer(serializers.ModelSerializer):
+    trigger_name = serializers.SerializerMethodField()
+    expression = serializers.SerializerMethodField()
+    level = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
     class Meta:
         model = Function
         fields = '__all__'
+    def get_trigger_name(self, obj):
+        return 1
+    def get_expression(self, obj):
+        return "expression"
+    def get_level(self, obj):
+        return "警告"
+    def get_status(self, obj):
+        return "1"
 
 
 class ProfileSerializer(serializers.ModelSerializer):
