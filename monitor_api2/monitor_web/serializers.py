@@ -116,8 +116,12 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
         model = Function
         fields = '__all__'
     def get_trigger_name(self, obj):
-        # obj.name是avg,
-        return obj.name
+        # obj.name是avg,通过function表查trigger表
+        record = models.Trigger.objects.filter(id=obj.trigger.id).all()
+        if len(record) > 0:
+            trigger = record[0]
+            return trigger.desc
+        return None
     def get_expression(self, obj):
         return "expression"
     def get_level(self, obj):

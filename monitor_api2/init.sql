@@ -44,8 +44,8 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 
 
 
-INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('', '{1}>300', '1');
-INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('', '{3}>5', '1');
+INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('Too many processes on {HOST.NAME}', '{1}>300', '1');
+INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('Processor load is too high on {HOST.NAME}', '{3}>5', '1');
 
 
 INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) VALUES ('avg', '5m', '1', '1');
