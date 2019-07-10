@@ -36,7 +36,7 @@
         prop="trigger_name"
         width="220"
       />
-      <el-table-column label="表达式" prop="triggers" width="100">
+      <el-table-column label="表达式" prop="triggers" width="350">
         <template slot-scope="prop">
           <div align="center">
             <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{
@@ -45,7 +45,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="告警等级" prop="key" width="300">
+      <el-table-column label="告警等级" prop="key" width="100">
         <template slot-scope="prop">
           <div align="center">
             {{ prop.row.level }}

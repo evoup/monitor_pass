@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
@@ -112,9 +114,11 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
     expression = serializers.SerializerMethodField()
     level = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
+
     class Meta:
         model = Function
         fields = '__all__'
+
     def get_trigger_name(self, obj):
         # obj.name是avg,通过function表查trigger表
         record = models.Trigger.objects.filter(id=obj.trigger.id).all()
@@ -122,10 +126,22 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
             trigger = record[0]
             return trigger.desc
         return None
+
     def get_expression(self, obj):
-        return "expression"
+        record = models.Trigger.objects.filter(id=obj.trigger.id).all()
+        if len(record) > 0:
+            trigger = record[0]
+            m = re.match(r"{(\d+)}", trigger.expression)
+            function_ids = m.groups()
+            for function_id in function_ids:
+                function = models.Function.objects.filter(id=function_id).all()[0]
+                item = models.MonitorItem.objects.filter(id=function.item_id).all()[0]
+                item_function = "{%s.%s(%s)}" % (item.key, function.name, function.parameter)
+                return re.sub(r"{(\d+)}", item_function, trigger.expression, count=1)
+
     def get_level(self, obj):
         return "警告"
+
     def get_status(self, obj):
         return "1"
 
