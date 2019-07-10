@@ -285,6 +285,7 @@ class Trigger(models.Model):
     id = models.BigAutoField(primary_key=True)
     expression = models.CharField(u'触发器表达式', max_length=256, default='')
     template = models.ForeignKey('Template', verbose_name='所属模板', related_name='t', on_delete=models.CASCADE)
+    desc = models.CharField(u'描述', max_length=256, default='', null=False)
 
     class Meta:
         verbose_name_plural = '触发器表'

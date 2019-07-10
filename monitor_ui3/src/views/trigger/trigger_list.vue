@@ -33,7 +33,7 @@
       <el-table-column
         label="触发器名称"
         sortable="custom"
-        prop="name"
+        prop="trigger_name"
         width="220"
       />
       <el-table-column label="表达式" prop="triggers" width="100">

@@ -11,7 +11,7 @@ INSERT INTO `monitor`.`template` (`name`) VALUES ('Template App MySQL');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Number of processes', '0', '60', 'Total number of processes in any state.', '', 'proc.num[]', '0', '', '0', '1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Processor load (1 min average per core)', '0', '60', 'The processor load is calculated as system CPU load divided by number of CPU cores.', '', 'system.cpu.load[percpu,avg1]', '0', '', '0','1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Number of running processes', '0', '60', 'Number of processes in running state.', '', 'proc.num[,,run]', '0', '', '0','1','0');
-INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Free swap space', '0', '60', 'Number of processes in running state.', '', 'system.swap.size[,free]', '0', 'B', '0','1','0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Free swap space', '0', '60', '', '', 'system.swap.size[,free]', '0', 'B', '0','1','0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Number of logged in users', '0', '60', 'Number of users who are currently logged in.', '', 'system.users.num', '0', '', '0','1','0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Checksum of /etc/passwd', '0', '3600', 'Number of users who are currently logged in.', '', 'vfs.file.cksum[/etc/passwd]', '0', '', '0','1','0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Agent ping', '0', '60', 'The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.', '', 'agent.ping', '0', '', '0','1','0');
@@ -44,8 +44,8 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 
 
 
-INSERT INTO `monitor`.`trigger` (`expression`, `template_id`) VALUES ('{1}>300', '1');
-INSERT INTO `monitor`.`trigger` (`expression`, `template_id`) VALUES ('{2}>5', '1');
+INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('', '{1}>300', '1');
+INSERT INTO `monitor`.`trigger` (`desc`, `expression`, `template_id`) VALUES ('', '{3}>5', '2');
 
 
 INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) VALUES ('avg', '5m', '1', '1');

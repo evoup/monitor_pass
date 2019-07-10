@@ -116,7 +116,8 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
         model = Function
         fields = '__all__'
     def get_trigger_name(self, obj):
-        return 1
+        # obj.name是avg,
+        return obj.name
     def get_expression(self, obj):
         return "expression"
     def get_level(self, obj):
