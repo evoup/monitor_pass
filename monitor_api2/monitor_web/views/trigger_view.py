@@ -11,7 +11,8 @@ from rest_framework.views import APIView
 from monitor_web import models
 from monitor_web.serializers import TriggerFunctionSerializer
 from web.common import constant
-from web.common.paging import paging_request, param_to_order
+from web.common.order import param_to_order
+from web.common.paging import paging_request
 
 
 @permission_classes((IsAuthenticated,))

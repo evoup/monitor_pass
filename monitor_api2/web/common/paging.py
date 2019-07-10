@@ -50,16 +50,5 @@ def paging_request(request, model, obj, filter=None):
     return page_data, len(records)
 
 
-def param_to_order(request):
-    """
-    根据请求参数返回是否是升序
-    :param request:
-    :return:
-    """
-    if 'order' in request.GET:
-        if request.GET['order'] == 'descending':
-            return False
-        if request.GET['order'] == 'ascending':
-            return True
-    return None
+
 
