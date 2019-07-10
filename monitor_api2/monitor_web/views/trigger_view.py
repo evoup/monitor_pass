@@ -1,3 +1,6 @@
+import operator
+from collections import OrderedDict
+
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -8,7 +11,7 @@ from rest_framework.views import APIView
 from monitor_web import models
 from monitor_web.serializers import TriggerFunctionSerializer
 from web.common import constant
-from web.common.paging import paging_request
+from web.common.paging import paging_request, param_to_order
 
 
 @permission_classes((IsAuthenticated,))
@@ -25,11 +28,14 @@ class TriggerList(APIView):
         # 对数据进行序列化
 
         serializer = TriggerFunctionSerializer(instance=page_data, many=True)
+
+        # 字段在Function表外，手动再对trigger_name排序
+        data = sorted(serializer.data, key=lambda kv: kv['trigger_name'], reverse=param_to_order(request)) if param_to_order(request) is not None else serializer.data
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
                 "count": count,
-                "items": serializer.data,
+                "items": data,
                 "page": {
                     "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
                     "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)

@@ -32,13 +32,34 @@ def paging_request(request, model, obj, filter=None):
     order_list, prop = getOrderList(request)
     # 获取所有数据
     if filter is None:
-        records = model.objects.all() if prop == '' else model.objects.order_by(*order_list)
+        records = model.objects.all() if (prop == '' and getattr(model, prop, False)) else model.objects.order_by(*order_list)
     else:
         # https://stackoverflow.com/questions/2932648/how-do-i-use-a-string-as-a-keyword-argument
-        records = model.objects.filter(**filter) if prop == '' else model.objects.filter(**filter).order_by(*order_list)
+        if prop == '':
+            records = model.objects.filter(**filter)
+        else:
+            if getattr(model, prop, False):
+                records = model.objects.filter(**filter).order_by(*order_list)
+            else:
+                records = model.objects.filter(**filter)
 
     # 创建分页对象，这里是自定义的MyPageNumberPagination
     page_handler = CustomPageNumberPagination(request.GET.get('size', constant.DEFAULT_PAGE_SIZE))
     # 获取分页的数据
     page_data = page_handler.paginate_queryset(queryset=records, request=request, view=obj)
     return page_data, len(records)
+
+
+def param_to_order(request):
+    """
+    根据请求参数返回是否是升序
+    :param request:
+    :return:
+    """
+    if 'order' in request.GET:
+        if request.GET['order'] == 'descending':
+            return False
+        if request.GET['order'] == 'ascending':
+            return True
+    return None
+
