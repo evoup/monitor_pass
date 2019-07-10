@@ -34,11 +34,11 @@
         label="触发器名称"
         sortable="custom"
         prop="trigger_name"
-        width="220"
+        width="320"
       />
-      <el-table-column label="表达式" prop="triggers" width="350">
+      <el-table-column label="表达式" prop="triggers" width="320">
         <template slot-scope="prop">
-          <div align="center">
+          <div>
             <el-link type="primary" @click="jumpChangeItem(prop.row.id)">{{
               prop.row.expression
             }}</el-link>
@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status" width="100">
+      <el-table-column label="状态" prop="status" width="80">
         <template slot-scope="prop">
           <el-switch
             v-model="prop.row.status"
