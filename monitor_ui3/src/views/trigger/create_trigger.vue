@@ -8,19 +8,19 @@
       </el-form-item>
       <el-form-item label="表达式">
         <el-col :span="24">
-          <el-row gutter="20">
+          <el-row :gutter="20">
             <el-col :span="10">
               <el-input v-model="form.expression" placeholder="请输入表达式" type="textarea"/>
             </el-col>
             <el-col :span="10">
-              <el-button type="primary" @click="onSubmit">添加条件</el-button>
+              <el-button type="primary" @click="addCondition">添加条件</el-button>
             </el-col>
           </el-row>
         </el-col>
       </el-form-item>
       <el-form-item label="描述">
         <el-col :span="24">
-          <el-row gutter="20">
+          <el-row :gutter="20">
             <el-col :span="10">
               <el-input v-model="form.desc" placeholder="请输入描述" type="textarea"/>
             </el-col>
@@ -41,7 +41,7 @@
       </el-form-item>
       <el-form-item label="只告警一次">
         <el-col :span="24">
-          <el-row gutter="20">
+          <el-row :gutter="20">
             <el-col :span="10">
               <el-switch
                 v-model="switchValue"
@@ -54,7 +54,7 @@
       </el-form-item>
       <el-form-item label="启用">
         <el-col :span="24">
-          <el-row gutter="20">
+          <el-row :gutter="20">
             <el-col :span="10">
               <el-switch
                 v-model="switchValue1"
@@ -67,8 +67,25 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
-        <el-button @click="jumpServerList">取消</el-button>
+        <el-button @click="jumpTriggerList">取消</el-button>
       </el-form-item>
+      <el-dialog :visible.sync="dialogFormVisible" title="收货地址">
+        <el-form :model="form">
+          <el-form-item :label-width="formLabelWidth" label="活动名称">
+            <el-input v-model="form.name" autocomplete="off"/>
+          </el-form-item>
+          <el-form-item :label-width="formLabelWidth" label="活动区域">
+            <el-select v-model="form.region" placeholder="请选择活动区域">
+              <el-option label="区域一" value="shanghai"/>
+              <el-option label="区域二" value="beijing"/>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-form>
   </div>
 </template>
@@ -104,11 +121,16 @@ export default {
       ],
       optionValue: '2',
       switchValue: '1',
-      switchValue1: '1'
+      switchValue1: '1',
+      dialogFormVisible: false,
+      formLabelWidth: '120px'
     }
   },
   methods: {
-    jumpServerList() {
+    addCondition() {
+      this.dialogFormVisible = true
+    },
+    jumpTriggerList() {
       this.$router.go(-1)
     }
   }
