@@ -6,7 +6,7 @@
           <div class="grid-content">
             <el-button
               type="primary"
-              @click="jumpAddItem()"
+              @click="jumpAddTrigger()"
             ><i class="el-icon-plus el-icon--right" />添加触发器
             </el-button>
           </div>
@@ -45,7 +45,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="告警等级" prop="key" width="100">
+      <el-table-column label="严重等级" prop="key" width="100">
         <template slot-scope="prop">
           <div align="center">
             {{ prop.row.level }}
@@ -159,6 +159,10 @@ export default {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
+    },
+    // 跳转到添加触发器页面
+    jumpAddTrigger() {
+      this.$router.push({ path: '/add_trigger' })
     }
   }
 }
