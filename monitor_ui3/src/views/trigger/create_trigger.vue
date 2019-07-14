@@ -133,6 +133,7 @@
 
 <script>
 import { template_list } from '../../api/template'
+import { server_group_list } from '../../api/server'
 export default {
   name: 'CreateTrigger',
   data() {
@@ -165,6 +166,7 @@ export default {
       switchValue: '1',
       switchValue1: '1',
       dialogFormVisible: false,
+      templateSelectVisible: true,
       formLabelWidth: '150px',
       templateSelectModel: [],
       templateData: [],
@@ -185,14 +187,23 @@ export default {
         this.templateSelectModel = 1
       })
     },
+    // 获取服务器组列表
+    fetchServerGroupListData() {
+      server_group_list().then(response => {
+        this.templateData = response.data.items
+      })
+    },
     fetchData() {
       this.fetchTemplateListData()
+      this.fetchServerGroupListData()
     },
     selectType(value) {
       if (value === 'template') {
         this.selectTemplateOrServerGroup = '模板'
+        this.fetchTemplateListData()
       } else {
         this.selectTemplateOrServerGroup = '服务器组'
+        this.fetchServerGroupListData()
       }
     },
     jumpTriggerList() {
