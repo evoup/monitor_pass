@@ -3,17 +3,25 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="触发器名称">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入触发器名称"/>
+          <el-input v-model="form.name" placeholder="请输入触发器名称" />
         </el-col>
       </el-form-item>
       <el-form-item label="表达式">
         <el-col :span="24">
           <el-row :gutter="20">
             <el-col :span="10">
-              <el-input v-model="form.expression" placeholder="请输入表达式" type="textarea"/>
+              <el-input
+                v-model="form.expression"
+                placeholder="请输入表达式"
+                type="textarea"
+              />
             </el-col>
             <el-col :span="10">
-              <el-button type="primary" @click="addCondition">添加条件</el-button>
+              <el-button
+                type="primary"
+                @click="addCondition"
+              >添加条件</el-button
+              >
             </el-col>
           </el-row>
         </el-col>
@@ -22,7 +30,11 @@
         <el-col :span="24">
           <el-row :gutter="20">
             <el-col :span="10">
-              <el-input v-model="form.desc" placeholder="请输入描述" type="textarea"/>
+              <el-input
+                v-model="form.desc"
+                placeholder="请输入描述"
+                type="textarea"
+              />
             </el-col>
           </el-row>
         </el-col>
@@ -66,24 +78,46 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
+        <el-button
+          type="primary"
+          @click="
+            addServer(form.name, form.client, form.jmx, form.snmp, form.idc)
+          "
+        >创建</el-button
+        >
         <el-button @click="jumpTriggerList">取消</el-button>
       </el-form-item>
-      <el-dialog :visible.sync="dialogFormVisible" title="收货地址">
+      <el-dialog :visible.sync="dialogFormVisible" title="添加触发器表达式条件">
         <el-form :model="form">
-          <el-form-item :label-width="formLabelWidth" label="活动名称">
-            <el-input v-model="form.name" autocomplete="off"/>
+          <el-form-item :label-width="formLabelWidth" label="选择模板或主机">
+            <el-select
+              v-model="templateSelectModel"
+              placeholder="请选择模板（可选）"
+              style="width: 80%"
+            >
+              <el-option
+                v-for="item in templateData"
+                :key="item.id"
+                :label="item.name"
+                :aria-selected="true"
+                :value="item.id"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item :label-width="formLabelWidth" label="活动区域">
             <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"/>
-              <el-option label="区域二" value="beijing"/>
+              <el-option label="区域一" value="shanghai" />
+              <el-option label="区域二" value="beijing" />
             </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="dialogFormVisible = false"
+          >确 定</el-button
+          >
         </div>
       </el-dialog>
     </el-form>
@@ -91,6 +125,7 @@
 </template>
 
 <script>
+import { template_list } from '../../api/template'
 export default {
   name: 'CreateTrigger',
   data() {
@@ -123,12 +158,25 @@ export default {
       switchValue: '1',
       switchValue1: '1',
       dialogFormVisible: false,
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      templateSelectModel: [],
+      templateData: []
     }
   },
   methods: {
     addCondition() {
+      // 打开对话框
       this.dialogFormVisible = true
+      this.fetchData()
+    },
+    // 获取所有模板列表
+    fetchTemplateListData() {
+      template_list().then(response => {
+        this.templateData = response.data.items
+      })
+    },
+    fetchData() {
+      this.fetchTemplateListData()
     },
     jumpTriggerList() {
       this.$router.go(-1)
@@ -138,7 +186,7 @@ export default {
 </script>
 
 <style scoped>
-  .el-col {
-    border-radius: 4px;
-  }
+.el-col {
+  border-radius: 4px;
+}
 </style>
