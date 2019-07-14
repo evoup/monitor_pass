@@ -87,9 +87,22 @@
         >
         <el-button @click="jumpTriggerList">取消</el-button>
       </el-form-item>
+      <!--浮层对话框-->
       <el-dialog :visible.sync="dialogFormVisible" title="添加触发器表达式条件">
         <el-form :model="form">
-          <el-form-item :label-width="formLabelWidth" label="选择模板或主机">
+          <el-form-item
+            :label-width="formLabelWidth"
+            label="选择模板或服务器组"
+          >
+            <el-radio-group v-model="radio" @change="selectType">
+              <el-radio-button label="template">模板</el-radio-button>
+              <el-radio-button label="server_group">服务器组</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            :label-width="formLabelWidth"
+            :label="selectTemplateOrServerGroup"
+          >
             <el-select
               v-model="templateSelectModel"
               placeholder="请选择模板（可选）"
@@ -102,12 +115,6 @@
                 :aria-selected="true"
                 :value="item.id"
               />
-            </el-select>
-          </el-form-item>
-          <el-form-item :label-width="formLabelWidth" label="活动区域">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai" />
-              <el-option label="区域二" value="beijing" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -158,9 +165,11 @@ export default {
       switchValue: '1',
       switchValue1: '1',
       dialogFormVisible: false,
-      formLabelWidth: '120px',
+      formLabelWidth: '150px',
       templateSelectModel: [],
-      templateData: []
+      templateData: [],
+      radio: 'template',
+      selectTemplateOrServerGroup: '模板'
     }
   },
   methods: {
@@ -173,10 +182,18 @@ export default {
     fetchTemplateListData() {
       template_list().then(response => {
         this.templateData = response.data.items
+        this.templateSelectModel = 1
       })
     },
     fetchData() {
       this.fetchTemplateListData()
+    },
+    selectType(value) {
+      if (value === 'template') {
+        this.selectTemplateOrServerGroup = '模板'
+      } else {
+        this.selectTemplateOrServerGroup = '服务器组'
+      }
     },
     jumpTriggerList() {
       this.$router.go(-1)
