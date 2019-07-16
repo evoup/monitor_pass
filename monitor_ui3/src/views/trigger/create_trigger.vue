@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="触发器名称">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入触发器名称" />
+          <el-input v-model="form.name" placeholder="请输入触发器名称"/>
         </el-col>
       </el-form-item>
       <el-form-item label="表达式">
@@ -20,7 +20,8 @@
               <el-button
                 type="primary"
                 @click="addCondition"
-              >添加条件</el-button
+              >添加条件
+              </el-button
               >
             </el-col>
           </el-row>
@@ -83,7 +84,8 @@
           @click="
             addServer(form.name, form.client, form.jmx, form.snmp, form.idc)
           "
-        >创建</el-button
+        >创建
+        </el-button
         >
         <el-button @click="jumpTriggerList">取消</el-button>
       </el-form-item>
@@ -104,12 +106,30 @@
             :label="selectTemplateOrServerGroup"
           >
             <el-select
-              v-model="templateSelectModel"
-              placeholder="请选择模板（可选）"
+              v-model="templateOrServerGroupSelectModel"
+              placeholder=""
               style="width: 80%"
             >
               <el-option
-                v-for="item in templateData"
+                v-for="item in templateOrServerGroupData"
+                :key="item.id"
+                :label="item.name"
+                :aria-selected="true"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            :label-width="formLabelWidth"
+            label="请选择监控项"
+          >
+            <el-select
+              v-model="ItemSelectModel"
+              placeholder="请选择监控项"
+              style="width: 80%"
+            >
+              <el-option
+                v-for="item in monitorItemListData"
                 :key="item.id"
                 :label="item.name"
                 :aria-selected="true"
@@ -123,7 +143,8 @@
           <el-button
             type="primary"
             @click="dialogFormVisible = false"
-          >确 定</el-button
+          >确 定
+          </el-button
           >
         </div>
       </el-dialog>
@@ -134,6 +155,8 @@
 <script>
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
+import { item_list } from '../../api/item'
+
 export default {
   name: 'CreateTrigger',
   data() {
@@ -168,10 +191,12 @@ export default {
       dialogFormVisible: false,
       templateSelectVisible: true,
       formLabelWidth: '150px',
-      templateSelectModel: [],
-      templateData: [],
+      templateOrServerGroupSelectModel: [],
+      ItemSelectModel: [],
+      templateOrServerGroupData: [],
+      monitorItemListData: [],
       radio: 'template',
-      selectTemplateOrServerGroup: '模板'
+      selectTemplateOrServerGroup: '请选择模板'
     }
   },
   methods: {
@@ -183,14 +208,23 @@ export default {
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list().then(response => {
-        this.templateData = response.data.items
-        this.templateSelectModel = 1
+        this.templateOrServerGroupData = response.data.items
+        this.templateOrServerGroupSelectModel = 1
+        // 获取完了刷新监控项
+        this.fetchMonitorItemListData()
       })
     },
     // 获取服务器组列表
     fetchServerGroupListData() {
       server_group_list().then(response => {
-        this.templateData = response.data.items
+        this.templateOrServerGroupData = response.data.items
+      })
+    },
+    // 获取监控项
+    fetchMonitorItemListData() {
+      item_list(Object.assign({ size: 10000, template_id: this.templateOrServerGroupSelectModel })).then(response => {
+        this.monitorItemListData = response.data.items
+        this.ItemSelectModel = 1
       })
     },
     fetchData() {
@@ -199,10 +233,10 @@ export default {
     },
     selectType(value) {
       if (value === 'template') {
-        this.selectTemplateOrServerGroup = '模板'
+        this.selectTemplateOrServerGroup = '请选择模板'
         this.fetchTemplateListData()
       } else {
-        this.selectTemplateOrServerGroup = '服务器组'
+        this.selectTemplateOrServerGroup = '请选择服务器组'
         this.fetchServerGroupListData()
       }
     },
@@ -214,7 +248,7 @@ export default {
 </script>
 
 <style scoped>
-.el-col {
-  border-radius: 4px;
-}
+  .el-col {
+    border-radius: 4px;
+  }
 </style>
