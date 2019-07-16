@@ -141,6 +141,23 @@
             </el-select>
           </el-form-item>
         </el-form>
+        <el-form-item
+          :label-width="formLabelWidth"
+          label="请选择函数"
+        >
+          <el-select
+            v-model="functionSelectModel"
+            placeholder=""
+            style="width: 80%"
+          >
+            <el-option
+              v-for="(item, index) in functionOptions"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
@@ -188,6 +205,10 @@ export default {
           label: '灾难警告'
         }
       ],
+      functionOptions: [{
+        value: 'last[=]',
+        label: '最末(最近) T值是 = N'
+      }],
       optionValue: '2',
       switchValue: '1',
       switchValue1: '1',
@@ -196,8 +217,10 @@ export default {
       formLabelWidth: '150px',
       templateOrServerGroupSelectModel: [],
       ItemSelectModel: [],
+      functionSelectModel: 'last[=]',
       templateOrServerGroupData: [],
       monitorItemListData: [],
+      functionListData: [],
       radio: 'template',
       selectTemplateOrServerGroup: '请选择模板'
     }
