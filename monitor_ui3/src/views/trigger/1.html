@@ -1,0 +1,88 @@
+<select class="input select" id="expr_type" name="expr_type" size="1" onchange="submit()">
+  <option value="avg[#]">一个期间T的平均值不是 N</option>
+  <option value="avg[<]">一个期间T的平均值是 &lt; N</option>
+  <option value="avg[=]">一个期间T的平均值是 = N</option>
+  <option value="avg[>]">一个期间T的平均值是 &gt; N</option>
+  <option value="strlen[#]">于多字元中最末(最近) T值的长度不是 N</option>
+  <option value="strlen[<]">于多字元中最末(最近) T值的长度是 &lt; N</option>
+  <option value="strlen[=]">于多字元中最末(最近) T值的长度是 = N</option>
+  <option value="strlen[>]">于多字元中最末(最近) T值的长度是 &gt; N</option>
+  <option value="prev[#]">前值不是 N</option>
+  <option value="prev[<]">前值是 &lt; N</option>
+  <option value="prev[=]">前值是 = N</option>
+  <option value="prev[>]">前值是 &gt; N</option>
+  <option value="max[#]">周期T的最大值不是N</option>
+  <option value="max[<]">周期T的最大值是 &lt; N</option>
+  <option value="max[=]">周期T的最大值是 = N</option>
+  <option value="max[>]">周期T的最大值是 &gt; N</option>
+  <option value="min[#]">周期T的最小值不是N</option>
+  <option value="min[<]">周期T的最小值是 &lt; N</option>
+  <option value="min[=]">周期T的最小值是 = N</option>
+  <option value="min[>]">周期T的最小值是 &gt; N</option>
+  <option value="fuzzytime[=]">和Zabbix伺服器的时间戳记差异不超过T秒, 则 N = 1, 0 - 除外</option>
+  <option value="fuzzytime[#]">和Zabbix伺服器的时间戳记差异不超过T秒, 则 N 非 1, 0 - 除外</option>
+  <option value="nodata[=]">在周期T期间没有接受到数据，然后N = 1，0 - 其他</option>
+  <option value="nodata[#]">在周期T期间没有接受到数据，然后N 不是 1，0 - 其他</option>
+  <option value="date[#]">当前日期不是 N</option>
+  <option value="date[<]">当前日期是 &lt; N</option>
+  <option value="date[=]">当前日期是 = N</option>
+  <option value="date[>]">当前日期是 &gt; N</option>
+  <option value="time[#]">当前时间不是 N</option>
+  <option value="time[<]">当前时间是 &lt; N</option>
+  <option value="time[=]">当前时间是 = N</option>
+  <option value="time[>]">当前时间是 &gt; N</option>
+  <option value="count[#]">成功检索到的值V的数量 (满足操作者O)对于周期T不是N</option>
+  <option value="count[<]">成功检索到的值V的数量 (满足操作者O)对于周期T是 &lt; N</option>
+  <option value="count[=]">成功检索到的值V的数量 (满足操作者O) 对于周期T是 = N</option>
+  <option value="count[>]">成功检索到的值V的数量 (满足操作者O) 对于周期T是 &gt; N</option>
+  <option value="band[#]">按位与最后一个(最近的) T值和掩码不是 N</option>
+  <option value="band[=]">按位与最后一个(最近的) T值和掩码是 = N</option>
+  <option value="dayofweek[#]">星期中第几日不是 N</option>
+  <option value="dayofweek[<]">星期中第几日是 &lt; N</option>
+  <option value="dayofweek[=]">星期中第几日是 = N</option>
+  <option value="dayofweek[>]">星期中第几日是 &gt; N</option>
+  <option value="last[#]">最末(最近) T值不是 N</option>
+  <option value="last[<]">最末(最近) T值是 &lt; N</option>
+  <option value="last[=]" selected="selected">最末(最近) T值是 = N</option>
+  <option value="last[>]">最末(最近) T值是 &gt; N</option>
+  <option value="diff[=]">最末和之前的值的差, 则 N = 1, 0 - 除外</option>
+  <option value="diff[#]">最末和之前的值的差, 则 N 非 1, 0 - 除外</option>
+  <option value="change[#]">最末和前一个值之前的差异不是 N</option>
+  <option value="change[<]">最末和前一个值之前的差异是 &lt; N</option>
+  <option value="change[=]">最末和前一个值之前的差异是 = N</option>
+  <option value="change[>]">最末和前一个值之前的差异是 &gt; N</option>
+  <option value="abschange[#]">最末和前一个值之前的绝对差异不是 N</option>
+  <option value="abschange[<]">最末和前一个值之前的绝对差异是 &lt; N</option>
+  <option value="abschange[=]">最末和前一个值之前的绝对差异是 = N</option>
+  <option value="abschange[>]">最末和前一个值之前的绝对差异是 &gt; N</option>
+  <option value="logseverity[#]">最末日志项的日志严重性不是 N</option>
+  <option value="logseverity[<]">最末日志项的日志严重性是 &lt; N</option>
+  <option value="logseverity[=]">最末日志项的日志严重性是 = N</option>
+  <option value="logseverity[>]">最末日志项的日志严重性是 &gt; N</option>
+  <option value="logsource[=]">最末符合参数T的日志项的日志来源, 则 N = 1, 0 - 除外</option>
+  <option value="logsource[#]">最末符合参数T的日志项的日志来源, 则 N 非 1, 0 - 除外</option>
+  <option value="dayofmonth[#]">月中第几日不是 N</option>
+  <option value="dayofmonth[<]">月中第几日是 &lt; N</option>
+  <option value="dayofmonth[=]">月中第几日是 = N</option>
+  <option value="dayofmonth[>]">月中第几日是 &gt; N</option>
+  <option value="sum[#]">期间 T 的值总数不是 N</option>
+  <option value="sum[<]">期间 T 的值总数是 &lt; N</option>
+  <option value="delta[#]">期间T的最大与最小值的差不是 N</option>
+  <option value="delta[<]">期间T的最大与最小值的差是 &lt; N</option>
+  <option value="delta[=]">期间T的最大与最小值的差是 = N</option>
+  <option value="delta[>]">期间T的最大与最小值的差是 &gt; N</option>
+  <option value="sum[=]">期间的总时间是 T = N</option>
+  <option value="sum[>]">期间的总时间是 T &gt; N</option>
+  <option value="str[#]">查找字符串V的最后 (最近的) 值. N = 1 - 如果发现，0 - 其他</option>
+  <option value="str[=]">查找字符串V的最后 (最近的) 值. N = 1 - 如果发现，0 - 其他</option>
+  <option value="regexp[=]">正则表示式V符合期间T的最末值, 则 N = 1, 0 - 除外</option>
+  <option value="iregexp[=]">正则表示式V符合期间T的最末值, 则 N = 1, 0 - 除外 (大小写不分)</option>
+  <option value="regexp[#]">正则表示式V符合期间T的最末值, 则 N 非 1, 0 - 除外</option>
+  <option value="iregexp[#]">正则表示式V符合期间T的最末值, 则 N 非 1, 0 - 除外 (大小写不分)</option>
+  <option value="logeventid[=]">符合正则表示式T的最末纪录项的事件 ID, 则 N = 1, 0 - 除外</option>
+  <option value="logeventid[#]">符合正则表示式T的最末纪录项的事件 ID, 则 N 非 1, 0 - 除外</option>
+  <option value="now[#]">自Epoch起的秒数不是 N</option>
+  <option value="now[<]">自Epoch起的秒数是 &lt; N</option>
+  <option value="now[=]">自Epoch起的秒数是 = N</option>
+  <option value="now[>]">自Epoch起的秒数是 &gt; N</option>
+</select>

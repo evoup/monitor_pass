@@ -134,7 +134,10 @@
                 :label="item.name"
                 :aria-selected="true"
                 :value="item.id"
-              />
+              >
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px;padding-left: 20px">键：{{ item.key }}</span>
+              </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -222,7 +225,7 @@ export default {
     },
     // 获取监控项
     fetchMonitorItemListData() {
-      item_list(Object.assign({ size: 10000, template_id: this.templateOrServerGroupSelectModel })).then(response => {
+      item_list({ size: 10000, template_id: this.templateOrServerGroupSelectModel }).then(response => {
         this.monitorItemListData = response.data.items
         this.ItemSelectModel = 1
       })

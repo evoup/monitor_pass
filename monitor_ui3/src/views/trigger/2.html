@@ -1,0 +1,103 @@
+<select class="input select" id="expr_type" name="expr_type" size="1" onchange="submit()">
+  <option value="abschange[<]">Absolute difference between last and previous value is &lt; N</option>
+  <option value="abschange[=]">Absolute difference between last and previous value is = N</option>
+  <option value="abschange[>]">Absolute difference between last and previous value is &gt; N</option>
+  <option value="abschange[#]">Absolute difference between last and previous value is NOT N</option>
+  <option value="avg[<]">Average value of a period T is &lt; N</option>
+  <option value="avg[=]">Average value of a period T is = N</option>
+  <option value="avg[>]">Average value of a period T is &gt; N</option>
+  <option value="avg[#]">Average value of a period T is NOT N</option>
+  <option value="band[=]">Bitwise AND of last (most recent) T value and mask is = N</option>
+  <option value="band[#]">Bitwise AND of last (most recent) T value and mask is NOT N</option>
+  <option value="date[<]">Current date is &lt; N</option>
+  <option value="date[=]">Current date is = N</option>
+  <option value="date[>]">Current date is &gt; N</option>
+  <option value="date[#]">Current date is NOT N</option>
+  <option value="time[<]">Current time is &lt; N</option>
+  <option value="time[=]">Current time is = N</option>
+  <option value="time[>]">Current time is &gt; N</option>
+  <option value="time[#]">Current time is NOT N</option>
+  <option value="dayofmonth[<]">Day of month is &lt; N</option>
+  <option value="dayofmonth[=]">Day of month is = N</option>
+  <option value="dayofmonth[>]">Day of month is &gt; N</option>
+  <option value="dayofmonth[#]">Day of month is NOT N</option>
+  <option value="dayofweek[<]">Day of week is &lt; N</option>
+  <option value="dayofweek[=]">Day of week is = N</option>
+  <option value="dayofweek[>]">Day of week is &gt; N</option>
+  <option value="dayofweek[#]">Day of week is NOT N</option>
+  <option value="diff[=]">Difference between last and preceding values, then N = 1, 0 - otherwise</option>
+  <option value="diff[#]">Difference between last and preceding values, then N NOT 1, 0 - otherwise</option>
+  <option value="change[<]">Difference between last and previous value is &lt; N</option>
+  <option value="change[=]">Difference between last and previous value is = N</option>
+  <option value="change[>]">Difference between last and previous value is &gt; N</option>
+  <option value="change[#]">Difference between last and previous value is NOT N</option>
+  <option value="delta[<]">Difference between MAX and MIN value of a period T is &lt; N</option>
+  <option value="delta[=]">Difference between MAX and MIN value of a period T is = N</option>
+  <option value="delta[>]">Difference between MAX and MIN value of a period T is &gt; N</option>
+  <option value="delta[#]">Difference between MAX and MIN value of a period T is NOT N</option>
+  <option value="logeventid[=]">Event ID of last log entry matching regular expression T, then N = 1, 0 - otherwise
+  </option>
+  <option value="logeventid[#]">Event ID of last log entry matching regular expression T, then N NOT 1, 0 - otherwise
+  </option>
+  <option value="str[=]">Find string V in last (most recent) value. N = 1 - if found, 0 - otherwise</option>
+  <option value="str[#]">Find string V in last (most recent) value. N NOT 1 - if found, 0 - otherwise</option>
+  <option value="last[<]">Last (most recent) T value is &lt; N</option>
+  <option value="last[=]" selected="selected">Last (most recent) T value is = N</option>
+  <option value="last[>]">Last (most recent) T value is &gt; N</option>
+  <option value="last[#]">Last (most recent) T value is NOT N</option>
+  <option value="strlen[<]">Length of last (most recent) T value in characters is &lt; N</option>
+  <option value="strlen[=]">Length of last (most recent) T value in characters is = N</option>
+  <option value="strlen[>]">Length of last (most recent) T value in characters is &gt; N</option>
+  <option value="strlen[#]">Length of last (most recent) T value in characters is NOT N</option>
+  <option value="logseverity[<]">Log severity of the last log entry is &lt; N</option>
+  <option value="logseverity[=]">Log severity of the last log entry is = N</option>
+  <option value="logseverity[>]">Log severity of the last log entry is &gt; N</option>
+  <option value="logseverity[#]">Log severity of the last log entry is NOT N</option>
+  <option value="logsource[=]">Log source of the last log entry matching parameter T, then N = 1, 0 - otherwise</option>
+  <option value="logsource[#]">Log source of the last log entry matching parameter T, then N NOT 1, 0 - otherwise
+  </option>
+  <option value="max[<]">Maximum value for period T is &lt; N</option>
+  <option value="max[=]">Maximum value for period T is = N</option>
+  <option value="max[>]">Maximum value for period T is &gt; N</option>
+  <option value="max[#]">Maximum value for period T is NOT N</option>
+  <option value="min[<]">Minimum value for period T is &lt; N</option>
+  <option value="min[=]">Minimum value for period T is = N</option>
+  <option value="min[>]">Minimum value for period T is &gt; N</option>
+  <option value="min[#]">Minimum value for period T is NOT N</option>
+  <option value="nodata[=]">No data received during period of time T, then N = 1, 0 - otherwise</option>
+  <option value="nodata[#]">No data received during period of time T, then N NOT 1, 0 - otherwise</option>
+  <option value="now[<]">Number of seconds since the Epoch is &lt; N</option>
+  <option value="now[=]">Number of seconds since the Epoch is = N</option>
+  <option value="now[>]">Number of seconds since the Epoch is &gt; N</option>
+  <option value="now[#]">Number of seconds since the Epoch is NOT N</option>
+  <option value="count[<]">Number of successfully retrieved values V (which fulfill operator O) for period T is &lt; N
+  </option>
+  <option value="count[=]">Number of successfully retrieved values V (which fulfill operator O) for period T is = N
+  </option>
+  <option value="count[>]">Number of successfully retrieved values V (which fulfill operator O) for period T is &gt; N
+  </option>
+  <option value="count[#]">Number of successfully retrieved values V (which fulfill operator O) for period T is NOT N
+  </option>
+  <option value="prev[<]">Previous value is &lt; N</option>
+  <option value="prev[=]">Previous value is = N</option>
+  <option value="prev[>]">Previous value is &gt; N</option>
+  <option value="prev[#]">Previous value is NOT N</option>
+  <option value="regexp[=]">Regular expression V matching last value in period T, then N = 1, 0 - otherwise</option>
+  <option value="iregexp[=]">Regular expression V matching last value in period T, then N = 1, 0 - otherwise (non
+    case-sensitive)
+  </option>
+  <option value="regexp[#]">Regular expression V matching last value in period T, then N NOT 1, 0 - otherwise</option>
+  <option value="iregexp[#]">Regular expression V matching last value in period T, then N NOT 1, 0 - otherwise (non
+    case-sensitive)
+  </option>
+  <option value="sum[<]">Sum of values of a period T is &lt; N</option>
+  <option value="sum[=]">Sum of values of a period T is = N</option>
+  <option value="sum[>]">Sum of values of a period T is &gt; N</option>
+  <option value="sum[#]">Sum of values of a period T is NOT N</option>
+  <option value="fuzzytime[=]">Timestamp not different from Zabbix server time for more than T seconds, then N = 1, 0 -
+    otherwise
+  </option>
+  <option value="fuzzytime[#]">Timestamp not different from Zabbix server time for more than T seconds, then N NOT 1, 0
+    - otherwise
+  </option>
+</select>
