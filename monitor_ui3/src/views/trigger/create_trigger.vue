@@ -158,6 +158,7 @@
             />
           </el-select>
         </el-form-item>
+        <person-form ref="personFormComp"/>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
@@ -176,9 +177,13 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
+import PersonForm from './components/last_eq'
 
 export default {
   name: 'CreateTrigger',
+  components: {
+    'person-form': PersonForm
+  },
   data() {
     return {
       form: {
