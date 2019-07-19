@@ -1,42 +1,32 @@
 <template>
-  <div class="person-form">
+  <div class="param-form">
 
-    <el-form ref="personForm" :model="personForm" :rules="personFormRules">
-      <!-- 姓名 -->
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="personForm.name"/>
+    <el-form ref="personForm" :model="paramForm" :rules="paramFormRules">
+      <!-- 参数1 -->
+      <el-form-item label="最近的(T)连续次数" prop="param1" label-width="150px">
+        <el-input v-model="paramForm.param1" />
       </el-form-item>
-      <!-- 年龄 -->
-      <el-form-item label="年龄" prop="age">
-        <el-input v-model="personForm.age"/>
-      </el-form-item>
-      <!-- 性别 -->
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="personForm.sex">
-          <el-radio label="0">男</el-radio>
-          <el-radio label="1">女</el-radio>
-        </el-radio-group>
+      <!-- 参数2 -->
+      <el-form-item label="多少时间前的" prop="param2" label-width="150px">
+        <el-input v-model="paramForm.param2" />
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { validateName, validateAge, validateSex } from '../../../lib/validator.js'
+import { validateName } from '../../../lib/validator.js'
 
-
-class PersonForm {
+class ParamForm {
   constructor() {
+    this.param1 = '1'
+    this.param2 = '0'
     this.name = ''
-    this.age = null
-    this.sex = null
   }
 
   static getRule() {
     return {
-      name: [{ validator: validateName, trigger: 'blur' }],
-      age: [{ validator: validateAge, trigger: 'blur' }],
-      sex: [{ validator: validateSex, trigger: 'blur' }]
+      name: [{ validator: validateName, trigger: 'blur' }]
     }
   }
 }
@@ -44,18 +34,16 @@ class PersonForm {
 export default {
   data() {
     return {
-      personForm: new PersonForm(),
-      personFormRules: PersonForm.getRule()
+      paramForm: new ParamForm(),
+      paramFormRules: ParamForm.getRule()
     }
   }
 }
 </script>
 
 <style>
-  .person-form {
-    width: 400px;
-    height: 350px;
-    padding: 20px;
-    border: 1px solid #ccc;
+  .param-form {}
+  .param-form input {
+    width: 50px;
   }
 </style>
