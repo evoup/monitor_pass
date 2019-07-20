@@ -147,10 +147,10 @@
             >
               <el-option
                 v-for="item in monitorItemListData"
-                :key="item.id"
+                :key="item.key"
                 :label="item.name"
                 :aria-selected="true"
-                :value="item.id"
+                :value="item"
               >
                 <span style="float: left">{{ item.name }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px;padding-left: 20px">键：{{ item.key }}</span>
@@ -180,7 +180,7 @@
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="dialogFormVisible = false"
+            @click="addExpression(ItemSelectModel.key)"
           >确 定
           </el-button
           >
@@ -231,14 +231,18 @@ export default {
         value: 'last[=]',
         label: '最末(最近) T值是 = N'
       }],
+      // 默认严重等级
       optionValue: '2',
+      // 默认只告警一次
       switchValue: '1',
+      // 默认启用
       switchValue1: '1',
       dialogFormVisible: false,
       templateSelectVisible: true,
       formLabelWidth: '150px',
       templateOrServerGroupSelectModel: [],
       ItemSelectModel: [],
+      // 默认函数
       functionSelectModel: 'last[=]',
       templateOrServerGroupData: [],
       monitorItemListData: [],
@@ -272,7 +276,8 @@ export default {
     fetchMonitorItemListData() {
       item_list({ size: 10000, template_id: this.templateOrServerGroupSelectModel }).then(response => {
         this.monitorItemListData = response.data.items
-        this.ItemSelectModel = 1
+        // this.ItemSelectModel = 1
+        this.ItemSelectModel = this.monitorItemListData[0]
       })
     },
     fetchData() {
@@ -290,6 +295,10 @@ export default {
     },
     jumpTriggerList() {
       this.$router.go(-1)
+    },
+    addExpression(expression) {
+      this.dialogFormVisible = false
+      this.form.expression = expression
     }
   }
 }
