@@ -18,9 +18,26 @@
             </el-col>
             <el-col :span="10">
               <el-button
+                v-if="form.expression.length<=0"
                 type="primary"
                 @click="addCondition"
               >添加条件
+              </el-button
+              >
+            </el-col>
+            <el-col :span="10">
+              <el-button
+                v-if="form.expression.length>0"
+                type="primary"
+                @click="addCondition"
+              >添加AND条件
+              </el-button
+              >
+              <el-button
+                v-if="form.expression.length>0"
+                type="primary"
+                @click="addCondition"
+              >添加OR条件
               </el-button
               >
             </el-col>
