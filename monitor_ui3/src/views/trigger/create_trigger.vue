@@ -282,12 +282,11 @@ export default {
     // 获取监控项
     fetchMonitorItemListData() {
       item_list({ size: 10000, template_id: this.templateOrServerGroupSelectModel }).then(response => {
-        // 大坑，不能有id列
+        // 大坑，必须有value，且上面key不能等于item.id，而是要等于item.value
         // 只有一个参数的函数，箭头函数
         const arr = []
         response.data.items.forEach((value) => {
           value.value = value.id
-          delete (value.id)
           arr.push(value)
         })
         // arr = arr.slice(0, 2)
