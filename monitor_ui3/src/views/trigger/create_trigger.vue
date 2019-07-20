@@ -140,25 +140,11 @@
             :label-width="formLabelWidth"
             label="请选择监控项"
           >
-            <el-select
-              v-model="ItemSelectModel"
-              value-key="ItemSelectModel"
-              placeholder="请选择监控项"
-              style="width: 80%"
-            >
-              <el-option
-                v-for="item in monitorItemListData"
-                :key="item.value"
-                :label="item.name"
-                :value="item"
-              >
+            <!--坑点：要么不设置value-key，设置了就要设置为value，原因不明-->
+            <el-select v-model="ItemSelectModel" value-key="value" placeholder="请选择监控项" style="width: 80%">
+              <el-option v-for="item in monitorItemListData" :key="item.value" :label="item.name" :value="item">
                 <span style="float: left">{{ item.name }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px;padding-left: 20px">键：{{ item.key }}</span>
-              </el-option>
-            </el-select>
-            <el-select v-model="ItemSelectModel" value-key="value" placeholder="Select">
-              <el-option v-for="item in monitorItemListData" :key="item.value" :label="item.name" :value="item">
-                {{ item.name }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -287,7 +273,6 @@ export default {
           value.value = value.id
           arr.push(value)
         })
-        // arr = arr.slice(0, 2)
         this.monitorItemListData = arr
         this.ItemSelectModel = arr[0]
       })
