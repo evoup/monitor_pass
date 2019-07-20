@@ -156,7 +156,7 @@
                 <span style="float: right; color: #8492a6; font-size: 13px;padding-left: 20px">键：{{ item.key }}</span>
               </el-option>
             </el-select>
-            <el-select v-model="value" value-key="value" placeholder="Select">
+            <el-select v-model="ItemSelectModel" value-key="value" placeholder="Select">
               <el-option v-for="item in monitorItemListData" :key="item.value" :label="item.name" :value="item">
                 {{ item.name }}
               </el-option>
@@ -253,9 +253,7 @@ export default {
       monitorItemListData: [],
       functionListData: [],
       radio: 'template',
-      selectTemplateOrServerGroup: '请选择模板',
-      outlet: null,
-      value: null
+      selectTemplateOrServerGroup: '请选择模板'
     }
   },
   methods: {
