@@ -157,7 +157,7 @@
               </el-option>
             </el-select>
             <el-select v-model="value" value-key="value" placeholder="Select">
-              <el-option v-for="item in outlet" :key="item.value" :label="item.name" :value="item">
+              <el-option v-for="item in monitorItemListData" :key="item.value" :label="item.name" :value="item">
                 {{ item.name }}
               </el-option>
             </el-select>
@@ -291,7 +291,7 @@ export default {
           arr.push(value)
         })
         // arr = arr.slice(0, 2)
-        this.outlet = arr
+        this.monitorItemListData = arr
         this.ItemSelectModel = arr[0]
       })
     },
