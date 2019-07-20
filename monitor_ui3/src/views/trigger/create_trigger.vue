@@ -258,22 +258,6 @@ export default {
       value: null
     }
   },
-  created() {
-    this.outlet = [{
-      value: 'mcd',
-      name: 'McDonald',
-      photo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/McDonald%27s_SVG_logo.svg'
-    }, {
-      value: 'kfc',
-      name: 'KFC',
-      photo: 'http://www.kfcku.com/themes/kfc_indonesia/images/kfc-indonesia-logo.png'
-    }, {
-      value: 'pizzahut',
-      name: 'Pizza Hut',
-      photo: 'https://vignette.wikia.nocookie.net/logopedia/images/b/b3/Pizza_Hut_Logo_2.png/revision/latest?cb=20161129133747'
-    }],
-    this.value = this.outlet[0]
-  },
   methods: {
     addCondition() {
       // 打开对话框
@@ -300,14 +284,14 @@ export default {
       item_list({ size: 10000, template_id: this.templateOrServerGroupSelectModel }).then(response => {
         // 大坑，不能有id列
         // 只有一个参数的函数，箭头函数
-        let arr = []
+        const arr = []
         response.data.items.forEach((value) => {
           value.value = value.id
           delete (value.id)
           arr.push(value)
         })
-        arr = arr.slice(0, 2)
-        console.log(arr)
+        // arr = arr.slice(0, 2)
+        this.outlet = arr
         this.ItemSelectModel = arr[0]
       })
     },
