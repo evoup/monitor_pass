@@ -142,18 +142,23 @@
           >
             <el-select
               v-model="ItemSelectModel"
+              value-key="ItemSelectModel"
               placeholder="请选择监控项"
               style="width: 80%"
             >
               <el-option
                 v-for="item in monitorItemListData"
-                :key="item.key"
+                :key="item.value"
                 :label="item.name"
-                :aria-selected="true"
                 :value="item"
               >
                 <span style="float: left">{{ item.name }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px;padding-left: 20px">键：{{ item.key }}</span>
+              </el-option>
+            </el-select>
+            <el-select v-model="value" value-key="value" placeholder="Select">
+              <el-option v-for="item in outlet" :key="item.value" :label="item.name" :value="item">
+                {{ item.name }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -241,15 +246,33 @@ export default {
       templateSelectVisible: true,
       formLabelWidth: '150px',
       templateOrServerGroupSelectModel: [],
-      ItemSelectModel: [],
+      ItemSelectModel: null,
       // 默认函数
       functionSelectModel: 'last[=]',
       templateOrServerGroupData: [],
       monitorItemListData: [],
       functionListData: [],
       radio: 'template',
-      selectTemplateOrServerGroup: '请选择模板'
+      selectTemplateOrServerGroup: '请选择模板',
+      outlet: null,
+      value: null
     }
+  },
+  created() {
+    this.outlet = [{
+      value: 'mcd',
+      name: 'McDonald',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/McDonald%27s_SVG_logo.svg'
+    }, {
+      value: 'kfc',
+      name: 'KFC',
+      photo: 'http://www.kfcku.com/themes/kfc_indonesia/images/kfc-indonesia-logo.png'
+    }, {
+      value: 'pizzahut',
+      name: 'Pizza Hut',
+      photo: 'https://vignette.wikia.nocookie.net/logopedia/images/b/b3/Pizza_Hut_Logo_2.png/revision/latest?cb=20161129133747'
+    }],
+    this.value = this.outlet[0]
   },
   methods: {
     addCondition() {
@@ -275,9 +298,17 @@ export default {
     // 获取监控项
     fetchMonitorItemListData() {
       item_list({ size: 10000, template_id: this.templateOrServerGroupSelectModel }).then(response => {
-        this.monitorItemListData = response.data.items
-        // this.ItemSelectModel = 1
-        this.ItemSelectModel = this.monitorItemListData[0]
+        // 大坑，不能有id列
+        // 只有一个参数的函数，箭头函数
+        let arr = []
+        response.data.items.forEach((value) => {
+          value.value = value.id
+          delete (value.id)
+          arr.push(value)
+        })
+        arr = arr.slice(0, 2)
+        console.log(arr)
+        this.ItemSelectModel = arr[0]
       })
     },
     fetchData() {
@@ -307,5 +338,9 @@ export default {
 <style scoped>
   .el-col {
     border-radius: 4px;
+  }
+  img {
+    width: 20px;
+    height: 20px;
   }
 </style>
