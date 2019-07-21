@@ -157,21 +157,22 @@
             v-model="functionSelectModel"
             placeholder=""
             style="width: 80%"
+            @change="changeData(functionSelectModel.component)"
           >
             <el-option
-              v-for="(item, index) in functionOptions"
-              :key="index"
+              v-for="item in functionOptions"
+              :key="item.value"
               :label="item.label"
-              :value="item.value"
-            />
+              :value="item"/>
           </el-select>
         </el-form-item>
-        <person-form ref="personFormComp"/>
+        <!--参数子组件-->
+        <component ref="paramFormComp" :is="componentFile" />
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="addExpressionCondition(ItemSelectModel.key, specificLogicType)"
+            @click="() => {addExpressionCondition(ItemSelectModel.key, specificLogicType)}"
           >确 定
           </el-button
           >
@@ -185,12 +186,15 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
-import PersonForm from './components/last_eq'
 
 export default {
   name: 'CreateTrigger',
-  components: {
-    'person-form': PersonForm
+  props: {
+    componentName: {
+      type: String,
+      default: 'last_eq',
+      useDefaultForNull: true
+    }
   },
   data() {
     return {
@@ -225,8 +229,18 @@ export default {
       ],
       functionOptions: [{
         value: 'last[=]',
-        label: '最末(最近) T值是 = N'
-      }],
+        label: '最末(最近) T值是 = N',
+        component: 'last_eq'
+      }, {
+        value: 'last[>]',
+        label: '最末(最近) T值是 > N',
+        component: 'last_gt'
+      }, {
+        value: 'last[<]',
+        label: '最末(最近) T值是 < N',
+        component: 'last_lt'
+      }
+      ],
       // 默认严重等级
       optionValue: '2',
       // 默认只告警一次
@@ -245,10 +259,21 @@ export default {
       functionListData: [],
       radio: 'template',
       selectTemplateOrServerGroup: '请选择模板',
+      // 多个条件之间的逻辑
       specificLogicType: null
     }
   },
+  // 动态加载组件
+  computed: {
+    componentFile() {
+      const componentName = this.$store.state.triggerParamComponentName
+      return () => import(`./components/${componentName}.vue`)
+    }
+  },
   methods: {
+    changeData(d) {
+      this.$store.state.triggerParamComponentName = d
+    },
     addCondition(logic) {
       // 打开对话框
       this.dialogFormVisible = true
@@ -283,6 +308,7 @@ export default {
         this.monitorItemListData = arr
         // 默认选中第一项
         this.ItemSelectModel = arr[0]
+        this.functionSelectModel = this.functionOptions[0]
       })
     },
     fetchData() {
@@ -302,10 +328,13 @@ export default {
       this.$router.go(-1)
     },
     addExpressionCondition(expression, prefixLogic) {
+      console.log(this.$store.state.triggerParamComponentName)
       this.dialogFormVisible = false
-      const functionName = this.$refs.personFormComp.$refs.personForm.model.name
-      const param1 = this.$refs.personFormComp.$refs.personForm.model.param1
-      const param2 = this.$refs.personFormComp.$refs.personForm.model.param2
+      const functionName = this.$refs.paramFormComp.$refs.paramForm.model.name
+      const param1 = this.$refs.paramFormComp.$refs.paramForm.model.param1
+      const param2 = this.$refs.paramFormComp.$refs.paramForm.model.param2
+      const operator = this.$refs.paramFormComp.$refs.paramForm.model.operator
+      const n = this.$refs.paramFormComp.$refs.paramForm.model.n
       let func = ''
       if (!param1 && !param2) {
         func = functionName + '()'
@@ -314,13 +343,13 @@ export default {
       }
       switch (prefixLogic) {
         case this.logicType.AND:
-          this.form.expression = this.form.expression + ' & ' + expression + '.' + func
+          this.form.expression = this.form.expression + ' & ' + expression + '.' + func + operator + n
           break
         case this.logicType.OR:
-          this.form.expression = this.form.expression + ' | ' + expression + '.' + func
+          this.form.expression = this.form.expression + ' | ' + expression + '.' + func + operator + n
           break
         default:
-          this.form.expression = this.form.expression + expression + '.' + func
+          this.form.expression = this.form.expression + expression + '.' + func + operator + n
       }
     }
   }
@@ -329,11 +358,7 @@ export default {
 </script>
 
 <style scoped>
-  .el-col {
-    border-radius: 4px;
-  }
-  img {
-    width: 20px;
-    height: 20px;
+  [v-cloak] {
+     display:none;
   }
 </style>

@@ -25,7 +25,7 @@ class ParamForm {
     this.param1 = ''
     this.param2 = ''
     this.name = 'last'
-    this.operator = '='
+    this.operator = '>'
     this.n = '0'
   }
 
