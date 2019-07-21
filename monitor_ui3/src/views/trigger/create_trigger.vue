@@ -166,7 +166,7 @@
             />
           </el-select>
         </el-form-item>
-        <person-form ref="personFormComp"/>
+        <param-form ref="paramFormComp"/>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
@@ -185,12 +185,12 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
-import PersonForm from './components/last_eq'
+import ParamForm from './components/last_eq'
 
 export default {
   name: 'CreateTrigger',
   components: {
-    'person-form': PersonForm
+    'param-form': ParamForm
   },
   data() {
     return {
@@ -245,6 +245,7 @@ export default {
       functionListData: [],
       radio: 'template',
       selectTemplateOrServerGroup: '请选择模板',
+      // 多个条件之间的逻辑
       specificLogicType: null
     }
   },
@@ -303,9 +304,11 @@ export default {
     },
     addExpressionCondition(expression, prefixLogic) {
       this.dialogFormVisible = false
-      const functionName = this.$refs.personFormComp.$refs.personForm.model.name
-      const param1 = this.$refs.personFormComp.$refs.personForm.model.param1
-      const param2 = this.$refs.personFormComp.$refs.personForm.model.param2
+      const functionName = this.$refs.paramFormComp.$refs.paramForm.model.name
+      const param1 = this.$refs.paramFormComp.$refs.paramForm.model.param1
+      const param2 = this.$refs.paramFormComp.$refs.paramForm.model.param2
+      const operator = this.$refs.paramFormComp.$refs.paramForm.model.operator
+      const n = this.$refs.paramFormComp.$refs.paramForm.model.n
       let func = ''
       if (!param1 && !param2) {
         func = functionName + '()'
@@ -314,13 +317,13 @@ export default {
       }
       switch (prefixLogic) {
         case this.logicType.AND:
-          this.form.expression = this.form.expression + ' & ' + expression + '.' + func
+          this.form.expression = this.form.expression + ' & ' + expression + '.' + func + operator + n
           break
         case this.logicType.OR:
-          this.form.expression = this.form.expression + ' | ' + expression + '.' + func
+          this.form.expression = this.form.expression + ' | ' + expression + '.' + func + operator + n
           break
         default:
-          this.form.expression = this.form.expression + expression + '.' + func
+          this.form.expression = this.form.expression + expression + '.' + func + operator + n
       }
     }
   }
@@ -329,11 +332,4 @@ export default {
 </script>
 
 <style scoped>
-  .el-col {
-    border-radius: 4px;
-  }
-  img {
-    width: 20px;
-    height: 20px;
-  }
 </style>
