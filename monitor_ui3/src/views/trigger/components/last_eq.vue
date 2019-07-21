@@ -19,9 +19,9 @@ import { validateName } from '../../../lib/validator.js'
 
 class ParamForm {
   constructor() {
-    this.param1 = '1'
-    this.param2 = '0'
-    this.name = ''
+    this.param1 = ''
+    this.param2 = ''
+    this.name = 'last'
   }
 
   static getRule() {

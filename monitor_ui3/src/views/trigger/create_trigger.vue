@@ -20,7 +20,7 @@
               <el-button
                 v-if="form.expression.length<=0"
                 type="primary"
-                @click="addCondition"
+                @click="addCondition(logicType.SINGLE)"
               >添加条件
               </el-button
               >
@@ -29,14 +29,14 @@
               <el-button
                 v-if="form.expression.length>0"
                 type="primary"
-                @click="addCondition"
+                @click="addCondition(logicType.AND)"
               >添加AND条件
               </el-button
               >
               <el-button
                 v-if="form.expression.length>0"
                 type="primary"
-                @click="addCondition"
+                @click="addCondition(logicType.OR)"
               >添加OR条件
               </el-button
               >
@@ -171,7 +171,7 @@
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="addExpression(ItemSelectModel.key)"
+            @click="addExpressionCondition(ItemSelectModel.key, specificLogicType)"
           >确 定
           </el-button
           >
@@ -194,6 +194,11 @@ export default {
   },
   data() {
     return {
+      logicType: {
+        SINGLE: 'single',
+        AND: 'and',
+        OR: 'or'
+      },
       form: {
         name: '',
         expression: '',
@@ -239,13 +244,15 @@ export default {
       monitorItemListData: [],
       functionListData: [],
       radio: 'template',
-      selectTemplateOrServerGroup: '请选择模板'
+      selectTemplateOrServerGroup: '请选择模板',
+      specificLogicType: null
     }
   },
   methods: {
-    addCondition() {
+    addCondition(logic) {
       // 打开对话框
       this.dialogFormVisible = true
+      this.specificLogicType = logic
       this.fetchData()
     },
     // 获取所有模板列表
@@ -274,6 +281,7 @@ export default {
           arr.push(value)
         })
         this.monitorItemListData = arr
+        // 默认选中第一项
         this.ItemSelectModel = arr[0]
       })
     },
@@ -293,12 +301,31 @@ export default {
     jumpTriggerList() {
       this.$router.go(-1)
     },
-    addExpression(expression) {
+    addExpressionCondition(expression, prefixLogic) {
       this.dialogFormVisible = false
-      this.form.expression = expression
+      const functionName = this.$refs.personFormComp.$refs.personForm.model.name
+      const param1 = this.$refs.personFormComp.$refs.personForm.model.param1
+      const param2 = this.$refs.personFormComp.$refs.personForm.model.param2
+      let func = ''
+      if (!param1 && !param2) {
+        func = functionName + '()'
+      } else {
+        func = functionName + '(' + param1 + ',' + param2 + ')'
+      }
+      switch (prefixLogic) {
+        case this.logicType.AND:
+          this.form.expression = this.form.expression + ' & ' + expression + '.' + func
+          break
+        case this.logicType.OR:
+          this.form.expression = this.form.expression + ' | ' + expression + '.' + func
+          break
+        default:
+          this.form.expression = this.form.expression + expression + '.' + func
+      }
     }
   }
 }
+
 </script>
 
 <style scoped>
