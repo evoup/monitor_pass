@@ -1,7 +1,7 @@
 <template>
   <div class="param-form">
 
-    <el-form ref="paramForm" :model="paramForm" :rules="paramFormRules">
+    <el-form ref="personForm" :model="paramForm" :rules="paramFormRules">
       <!-- 参数1 -->
       <el-form-item label="最近的(T)连续次数" prop="param1" label-width="150px">
         <el-input v-model="paramForm.param1" />
@@ -9,9 +9,6 @@
       <!-- 参数2 -->
       <el-form-item label="多少时间前的" prop="param2" label-width="150px">
         <el-input v-model="paramForm.param2" />
-      </el-form-item>
-      <el-form-item label="N" prop="n" label-width="150px">
-        <el-input v-model="paramForm.n" />
       </el-form-item>
     </el-form>
   </div>
@@ -25,8 +22,6 @@ class ParamForm {
     this.param1 = ''
     this.param2 = ''
     this.name = 'last'
-    this.operator = '='
-    this.n = '0'
   }
 
   static getRule() {
