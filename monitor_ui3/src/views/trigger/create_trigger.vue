@@ -186,6 +186,10 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
+// 必须预先加载，不然会闪烁
+import './components/last_gt'
+import './components/last_lt'
+import './components/last_eq'
 
 export default {
   name: 'CreateTrigger',
@@ -328,7 +332,6 @@ export default {
       this.$router.go(-1)
     },
     addExpressionCondition(expression, prefixLogic) {
-      console.log(this.$store.state.triggerParamComponentName)
       this.dialogFormVisible = false
       const functionName = this.$refs.paramFormComp.$refs.paramForm.model.name
       const param1 = this.$refs.paramFormComp.$refs.paramForm.model.param1
