@@ -185,12 +185,11 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
-import ParamForm from './components/last_eq'
 
 export default {
   name: 'CreateTrigger',
   components: {
-    'param-form': ParamForm
+    'param-form': () => import('./components/last_eq')
   },
   data() {
     return {
