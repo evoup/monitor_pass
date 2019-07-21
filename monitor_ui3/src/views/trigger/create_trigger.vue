@@ -312,7 +312,10 @@ export default {
         this.monitorItemListData = arr
         // 默认选中第一项
         this.ItemSelectModel = arr[0]
-        this.functionSelectModel = this.functionOptions[0]
+        // 默认选中第一项，由于选中的是对象，所以可以用是否是对象，来判断是否第一次加载，如果第一次，就设置为第一项
+        if (typeof this.functionSelectModel !== 'object') {
+          this.functionSelectModel = this.functionOptions[0]
+        }
       })
     },
     fetchData() {
