@@ -155,8 +155,8 @@
         >
           <el-select
             v-model="functionSelectModel"
-            placeholder=""
             style="width: 80%"
+            placeholder="请选择函数"
             @change="changeData(functionSelectModel.component)"
           >
             <el-option
