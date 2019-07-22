@@ -19,7 +19,7 @@
             <el-input v-model="paramForm.n" />
           </el-form-item>
         </el-col>
-        <el-col :span="9"></el-col>
+        <el-col :span="9"/>
       </el-row>
     </el-form>
   </div>
