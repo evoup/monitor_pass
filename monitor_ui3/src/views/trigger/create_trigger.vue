@@ -191,6 +191,10 @@ import './components/last_gt'
 import './components/last_lt'
 import './components/last_eq'
 import './components/last_neq'
+import './components/avg_gt'
+import './components/avg_lt'
+import './components/avg_eq'
+import './components/avg_neq'
 
 export default {
   name: 'CreateTrigger',
@@ -252,6 +256,18 @@ export default {
         value: 'avg[=]',
         label: '期间T的平均值是N',
         component: 'avg_eq'
+      }, {
+        value: 'avg[>]',
+        label: '期间T的平均值大于N',
+        component: 'avg_gt'
+      }, {
+        value: 'avg[<]',
+        label: '期间T的平均值小于N',
+        component: 'avg_lt'
+      }, {
+        value: 'avg[#]',
+        label: '期间T的平均值不等于N',
+        component: 'avg_neq'
       }
       ],
       // 默认严重等级

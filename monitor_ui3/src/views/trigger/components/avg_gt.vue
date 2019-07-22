@@ -40,7 +40,7 @@ class ParamForm {
     this.param2 = ''
     this.param3 = ''
     this.name = 'avg'
-    this.operator = '='
+    this.operator = '>'
     this.n = '0'
   }
 
