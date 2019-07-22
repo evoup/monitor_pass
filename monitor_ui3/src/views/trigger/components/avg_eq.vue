@@ -10,8 +10,8 @@
         </el-col>
         <el-col :span="6">
           <el-radio-group v-model="paramForm.param2">
-            <el-radio-button label="时间"/>
-            <el-radio-button label="次数"/>
+            <el-radio-button label="0">时间</el-radio-button>
+            <el-radio-button label="1">次数</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="4">
@@ -37,7 +37,7 @@ import { validateName } from '../../../lib/validator.js'
 class ParamForm {
   constructor() {
     this.param1 = ''
-    this.param2 = ''
+    this.param2 = '0'
     this.param3 = ''
     this.name = 'avg'
     this.operator = '='
