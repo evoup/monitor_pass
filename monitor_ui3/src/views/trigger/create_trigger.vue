@@ -190,6 +190,7 @@ import { item_list } from '../../api/item'
 import './components/last_gt'
 import './components/last_lt'
 import './components/last_eq'
+import './components/last_neq'
 
 export default {
   name: 'CreateTrigger',
@@ -233,16 +234,24 @@ export default {
       ],
       functionOptions: [{
         value: 'last[=]',
-        label: '最末(最近) T值是 = N',
+        label: '最末(最近) T值是N',
         component: 'last_eq'
       }, {
         value: 'last[>]',
-        label: '最末(最近) T值是 > N',
+        label: '最末(最近) T值大于N',
         component: 'last_gt'
       }, {
         value: 'last[<]',
-        label: '最末(最近) T值是 < N',
+        label: '最末(最近) T值小于N',
         component: 'last_lt'
+      }, {
+        value: 'last[#]',
+        label: '最末(最近) T值不是N',
+        component: 'last_neq'
+      }, {
+        value: 'avg[=]',
+        label: '期间T的平均值是N',
+        component: 'avg_eq'
       }
       ],
       // 默认严重等级
