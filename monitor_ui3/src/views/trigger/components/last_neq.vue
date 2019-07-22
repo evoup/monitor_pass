@@ -15,7 +15,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item label="N" prop="n" label-width="150px">
+          <el-form-item label="N" prop="n" label-width="110px">
             <el-input v-model="paramForm.n" />
           </el-form-item>
         </el-col>
