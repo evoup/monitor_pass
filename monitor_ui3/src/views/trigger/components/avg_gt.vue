@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="8">
           <!-- 参数1 -->
-          <el-form-item label="最近的(T)连续次数" prop="param1" label-width="150px">
+          <el-form-item label="最近的(T)" prop="param1" label-width="150px">
             <el-input v-model="paramForm.param1" />
           </el-form-item>
         </el-col>

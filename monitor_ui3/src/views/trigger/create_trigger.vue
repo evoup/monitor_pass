@@ -195,6 +195,7 @@ import './components/avg_gt'
 import './components/avg_lt'
 import './components/avg_eq'
 import './components/avg_neq'
+import './components/diff_eq'
 
 export default {
   name: 'CreateTrigger',
@@ -268,6 +269,10 @@ export default {
         value: 'avg[#]',
         label: '期间T的平均值不等于N',
         component: 'avg_neq'
+      }, {
+        value: 'diff[=]',
+        label: '最末和之前的值的差, 则 N = 1, 0 - 除外',
+        component: 'diff_eq'
       }
       ],
       // 默认严重等级
