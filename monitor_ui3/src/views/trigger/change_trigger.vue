@@ -186,6 +186,7 @@
 import { template_list } from '../../api/template'
 import { server_group_list } from '../../api/server'
 import { item_list } from '../../api/item'
+import { read_trigger } from '../../api/trigger'
 // 必须预先加载，不然会闪烁
 import './components/last_gt'
 import './components/last_lt'
@@ -304,7 +305,17 @@ export default {
       return () => import(`./components/${componentName}.vue`)
     }
   },
+  created() {
+    this.fetchTriggerData({ id: this.$route.query.id })
+  },
   methods: {
+    fetchTriggerData(id) {
+      read_trigger(id).then(response => {
+        this.form.name = response.data.item.trigger_name
+        this.form.expression = response.data.item.expression
+        this.form.desc = response.data.item.desc
+      })
+    },
     changeData(d) {
       this.$store.state.triggerParamComponentName = d
     },

@@ -21,3 +21,11 @@ export function trigger_list(param) {
     params: param
   })
 }
+
+export function read_trigger(param) {
+  return request({
+    url: '/trigger/info',
+    method: 'get',
+    params: param
+  })
+}
