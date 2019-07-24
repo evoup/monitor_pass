@@ -49,8 +49,8 @@ class TriggerList(APIView):
 class TriggerInfo(APIView):
     @method_decorator(permission_required('monitor_web.change_trigger', raise_exception=True))
     def get(self, request, pk=None, format=None):
-        trigger_id = self.request.query_params['trigger_id']
-        data = models.Function.objects.filter(trigger=trigger_id).all(0)
+        trigger_id = self.request.query_params['id']
+        data = models.Function.objects.filter(trigger=trigger_id).all()[0]
         serializer = TriggerFunctionSerializer(instance=data, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,

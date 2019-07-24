@@ -72,5 +72,7 @@ urlpatterns = [
         url(r'^item/info$', item_view.ItemInfo.as_view()),
         # 触发器列表
         url(r'^trigger/list$', trigger_view.TriggerList.as_view()),
+        # 读取触发器
+        url(r'^trigger/info$', trigger_view.TriggerInfo.as_view()),
     ]))
 ]
