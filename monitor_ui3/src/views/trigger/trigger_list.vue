@@ -67,7 +67,7 @@
           <el-button
             size="small"
             type="primary"
-            @click="jumpChangeItem(prop.row.id)"
+            @click="jumpChangeTrigger(prop.row.id)"
           >编辑</el-button
           >
           <el-button size="small" type="danger">删除</el-button>
@@ -163,6 +163,13 @@ export default {
     // 跳转到添加触发器页面
     jumpAddTrigger() {
       this.$router.push({ path: '/add_trigger' })
+    },
+    // 跳转到修改除法器页面
+    jumpChangeTrigger(id) {
+      this.$router.push({
+        path: '/change_trigger',
+        query: { id: id }
+      })
     }
   }
 }

@@ -135,6 +135,13 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/change_trigger',
+        name: 'ChangeTrigger',
+        component: () => import('../views/trigger/change_trigger'),
+        meta: { title: '修改触发器', icon: 'trigger' },
+        hidden: true
+      },
+      {
         path: '/template_list',
         name: 'TemplateList',
         component: () => import('../views/template/template_list'),
