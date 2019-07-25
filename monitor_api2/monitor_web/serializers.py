@@ -124,7 +124,7 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
         record = models.Trigger.objects.filter(id=obj.trigger.id).all()
         if len(record) > 0:
             trigger = record[0]
-            return trigger.desc
+            return trigger.name
         return None
 
     def get_expression(self, obj):
