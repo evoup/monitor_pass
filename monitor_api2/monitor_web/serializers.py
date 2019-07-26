@@ -114,6 +114,7 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
     expression = serializers.SerializerMethodField()
     level = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
+    desc = serializers.SerializerMethodField()
 
     class Meta:
         model = Function
@@ -138,6 +139,12 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
                 item = models.MonitorItem.objects.filter(id=function.item_id).all()[0]
                 item_function = "{%s.%s(%s)}" % (item.key, function.name, function.parameter)
                 return re.sub(r"{(\d+)}", item_function, trigger.expression, count=1)
+
+    def get_desc(self, obj):
+        record = models.Trigger.objects.filter(id=obj.trigger.id).all()
+        if len(record) > 0:
+            trigger = record[0]
+            return trigger.desc
 
     def get_level(self, obj):
         return "警告"
