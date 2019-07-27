@@ -157,7 +157,6 @@
             v-model="functionSelectModel"
             style="width: 80%"
             placeholder="请选择函数"
-            @change="changeData(functionSelectModel.component)"
           >
             <el-option
               v-for="item in functionOptions"
