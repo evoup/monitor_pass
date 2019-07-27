@@ -1,7 +1,33 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{ name }}</div>
-    <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
+    <el-row>
+      <el-col :span="8">
+        <el-table
+          :v-loading="listLoading"
+          :data="dataList"
+          :header-cell-style="discountHeaderStyle1"
+          stripe
+          border
+          tooltip-effect="dark"
+          style="width: 100%"
+          @sort-change="sortChange"
+        >
+          <el-table-column align="center" label="主机">
+            <el-table-column
+              :index="indexMethod"
+              prop="name"
+              label="项目"
+              width="80"
+              align="center"
+            />
+            <el-table-column label="数目" prop="num" width="180" />
+          </el-table-column>
+
+        </el-table>
+      </el-col>
+      <el-col :span="8" />
+      <el-col :span="8" />
+    </el-row>
   </div>
 </template>
 
@@ -10,11 +36,34 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Dashboard',
+  data() {
+    return {
+      dataList: [
+        {
+          date: '2016-05-03',
+          name: '宕机',
+          num: 3
+        }, {
+          date: '2016-05-03',
+          name: '在线',
+          num: 31
+        }, {
+          date: '2016-05-03',
+          name: '未监控',
+          num: 31
+        }
+      ]
+    }
+  },
   computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
+    ...mapGetters(['name', 'roles'])
+  },
+  methods: {
+    discountHeaderStyle1({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex == 1) {
+        return { display: 'none' }
+      }
+    }
   }
 }
 </script>
