@@ -3,24 +3,21 @@
     <el-row>
       <el-col :span="8">
         <el-table
-          :v-loading="listLoading"
           :data="dataList"
           :header-cell-style="discountHeaderStyle1"
           stripe
           border
           tooltip-effect="dark"
           style="width: 100%"
-          @sort-change="sortChange"
         >
           <el-table-column align="center" label="主机">
             <el-table-column
-              :index="indexMethod"
               prop="name"
               label="项目"
-              width="80"
+              width="150"
               align="center"
             />
-            <el-table-column label="数目" prop="num" width="180" />
+            <el-table-column label="数目" prop="num" width="150" />
           </el-table-column>
 
         </el-table>
@@ -60,7 +57,7 @@ export default {
   },
   methods: {
     discountHeaderStyle1({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex == 1) {
+      if (rowIndex === 1) {
         return { display: 'none' }
       }
     }
