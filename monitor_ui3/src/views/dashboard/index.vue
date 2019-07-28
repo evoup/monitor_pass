@@ -49,9 +49,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'Dashboard',
+  components: {
+    draggable
+  },
   data() {
     return {
       dataList: [
