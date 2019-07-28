@@ -1,7 +1,7 @@
 <template>
   <el-table
     :data="dataList"
-    :header-cell-style="discountHeaderStyle1"
+    :header-cell-style="myHeaderStyle"
     stripe
     border
     tooltip-effect="dark"
@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    discountHeaderStyle1({ row, column, rowIndex, columnIndex }) {
+    myHeaderStyle({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 1) {
         return 'background:#CED7DF;color:#1f1f1f;text-align:center;font-weight:500;font-size:10px;'
       }
