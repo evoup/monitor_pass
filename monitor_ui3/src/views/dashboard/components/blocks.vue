@@ -6,7 +6,7 @@
           <li v-for="element in list" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
           </li>
-          <div v-if="list.length==0" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+          <div v-if="list.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
 
         </draggable>
       </el-col>
@@ -15,7 +15,7 @@
           <li v-for="element in list2" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
           </li>
-          <div v-if="list2.length==0" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+          <div v-if="list2.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
         </draggable>
       </el-col>
       <el-col :span="8">
@@ -23,7 +23,7 @@
           <li v-for="element in list3" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
           </li>
-          <div v-if="list3.length==0" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+          <div v-if="list3.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
         </draggable>
       </el-col>
     </el-row>
@@ -106,5 +106,11 @@ export default {
   }
   .list-group-item i {
     cursor: pointer;
+  }
+  .empty-area {
+    width:100%;
+    height: 200px;
+    background-color: #d3dce6;
+    border: 1px dashed darkblue;
   }
 </style>

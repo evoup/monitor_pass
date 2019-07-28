@@ -27,15 +27,12 @@ export default {
     return {
       dataList: [
         {
-          date: '2016-05-03',
           name: '宕机',
           num: 3
         }, {
-          date: '2016-05-03',
           name: '在线',
           num: 31
         }, {
-          date: '2016-05-03',
           name: '未监控',
           num: 31
         }

@@ -27,19 +27,15 @@ export default {
     return {
       dataList2: [
         {
-          date: '2016-05-03',
           name: '信息',
           num: 3
         }, {
-          date: '2016-05-03',
           name: '警告',
           num: 31
         }, {
-          date: '2016-05-03',
           name: '严重警告',
           num: 31
         }, {
-          date: '2016-05-03',
           name: '灾难警告',
           num: 31
         }

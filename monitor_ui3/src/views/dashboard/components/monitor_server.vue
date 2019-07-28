@@ -7,7 +7,7 @@
     tooltip-effect="dark"
     style="width: 100%"
   >
-    <el-table-column align="center" label="事件">
+    <el-table-column align="center" label="监控服务器状态">
       <el-table-column
         prop="name"
         label="项目"
