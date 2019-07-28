@@ -11,12 +11,12 @@
       <el-table-column
         prop="host"
         label="主机"
-        min-width="20%"
+        min-width="16%"
         align="center"
       />
-      <el-table-column label="问题" prop="issue" min-width="20%" />
+      <el-table-column label="问题" prop="issue" min-width="16%" />
       <el-table-column label="时长" prop="age" min-width="20%" />
-      <el-table-column label="最后改动" prop="last_change" min-width="20%" />
+      <el-table-column label="最后改动" prop="last_change" min-width="28%" />
       <el-table-column label="已确认" prop="ack" min-width="20%" />
     </el-table-column>
 
@@ -32,21 +32,21 @@ export default {
         {
           host: 'serve',
           issue: '主机',
-          last_change: '2019-07-29',
+          last_change: '2019-07-29 12:01:03',
           age: 180,
           ack: 1
         },
         {
           host: 'serve',
           issue: '主机',
-          last_change: '2019-07-29',
+          last_change: '2019-07-29 12:11:03',
           age: 180,
           ack: 1
         },
         {
           host: 'serve',
           issue: '主机',
-          last_change: '2019-07-29',
+          last_change: '2019-07-29 12:16:03',
           age: 180,
           ack: 1
         }
