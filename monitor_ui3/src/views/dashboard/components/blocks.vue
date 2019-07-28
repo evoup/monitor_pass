@@ -25,6 +25,12 @@
           </li>
           <div v-if="list3.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
         </draggable>
+        <draggable v-model="list4" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
+          <li v-for="element in list4" :key="element.order" class="list-group-item">
+            <component :is="element.comp_name"/>
+          </li>
+          <div v-if="list3.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+        </draggable>
       </el-col>
     </el-row>
   </div>
@@ -35,19 +41,23 @@ import draggable from 'vuedraggable'
 import Host from './host'
 import Event from './event'
 import MonitorServer from './monitor_server'
+import Issue from './issue'
+
 export default {
   name: 'Blocks',
   components: {
     draggable,
     Host,
     Event,
-    MonitorServer
+    MonitorServer,
+    Issue
   },
   data() {
     return {
       list: [{ name: '看板列1', order: 0, fixed: false, comp_name: 'Host' }],
       list2: [{ name: '看板列2', order: 1, fixed: false, comp_name: 'Event' }],
       list3: [{ name: '看板列3', order: 2, fixed: false, comp_name: 'MonitorServer' }],
+      list4: [{ name: '看板列4', order: 3, fixed: false, comp_name: 'Issue' }],
       isDragging: false,
       delayedDragging: false
     }
@@ -110,7 +120,7 @@ export default {
   .empty-area {
     width:100%;
     height: 200px;
-    background-color: #d3dce6;
+    background-color: #dde7f1;
     border: 1px dashed darkblue;
   }
 </style>

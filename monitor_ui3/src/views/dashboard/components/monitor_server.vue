@@ -11,10 +11,10 @@
       <el-table-column
         prop="name"
         label="项目"
-        width="180"
+        min-width="50%"
         align="center"
       />
-      <el-table-column label="信息" prop="info" width="180" />
+      <el-table-column label="信息" prop="info" min-width="50%" />
     </el-table-column>
 
   </el-table>
@@ -42,8 +42,9 @@ export default {
   methods: {
     discountHeaderStyle1({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 1) {
-        return { display: 'none' }
+        return 'display:none;'
       }
+      return 'background:#486586;color:#fff;text-align:center;font-weight:500;font-size:10px;'
     }
   }
 }
