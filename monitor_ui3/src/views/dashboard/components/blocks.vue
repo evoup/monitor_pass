@@ -96,9 +96,11 @@ export default {
   }
   .list-group {
     min-height: 20px;
+    padding-left:0;
   }
   .list-group-item {
     cursor: move;
+    list-style: none;
   }
   .list-group-item i {
     cursor: pointer;
