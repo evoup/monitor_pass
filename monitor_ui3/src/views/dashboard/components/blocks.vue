@@ -1,40 +1,38 @@
 <template>
   <div class="fluid container">
-    <div class="col-md-3">
-      <draggable v-model="list" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
-        <transition-group :name="'flip-list'" type="transition">
+    <el-row>
+      <el-col :span="8">
+        <draggable v-model="list" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list" :key="element.order" class="list-group-item">
             {{ element.name }}
             <span class="badge">{{ element.order }}</span>
             <component :is="element.comp_name"/>
           </li>
-        </transition-group>
-      </draggable>
-    </div>
+          <div @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
 
-    <div class="col-md-3">
-      <draggable v-model="list2" v-bind="dragOptions" :move="onMove" element="span">
-        <transition-group name="no" class="list-group" tag="ul">
+        </draggable>
+      </el-col>
+      <el-col :span="8">
+        <draggable v-model="list2" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list2" :key="element.order" class="list-group-item">
             {{ element.name }}
             <span class="badge">{{ element.order }}</span>
             <component :is="element.comp_name"/>
           </li>
-        </transition-group>
-      </draggable>
-    </div>
-
-    <div class="col-md-3">
-      <draggable v-model="list3" v-bind="dragOptions" :move="onMove" element="span">
-        <transition-group name="no" class="list-group" tag="ul">
+          <div @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+        </draggable>
+      </el-col>
+      <el-col :span="8">
+        <draggable v-model="list3" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list3" :key="element.order" class="list-group-item">
             {{ element.name }}
             <span class="badge">{{ element.order }}</span>
             <component :is="element.comp_name"/>
           </li>
-        </transition-group>
-      </draggable>
-    </div>
+          <div @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
+        </draggable>
+      </el-col>
+    </el-row>
 
     <div class="list-group col-md-3">
       <pre>{{ listString }}</pre>
@@ -85,15 +83,6 @@ export default {
     },
     list3String() {
       return JSON.stringify(this.list3, null, 2)
-    },
-    get_current_tab() {
-      return 'Host'
-    },
-    get_current_tab1() {
-      return 'Host'
-    },
-    get_current_tab2() {
-      return 'Host'
     }
   },
   watch: {
