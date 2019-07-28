@@ -62,6 +62,6 @@ export default {
   color: red;
 }
 .online {
-  color: #0ea516;
+  color: #00AA00;
 }
 </style>

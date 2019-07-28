@@ -14,7 +14,15 @@
         min-width="50%"
         align="center"
       />
-      <el-table-column label="数目" prop="num"  min-width="50%" />
+      <el-table-column label="数目" min-width="50%">
+        <template slot-scope="scope">
+          <a v-if="scope.row.num==0" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
+          <a v-if="scope.row.num>0 && scope.row.name=='警告'" :href="scope.row.num" target="_blank" class="warn">{{ scope.row.num }}</a>
+          <a v-if="scope.row.num>0 && scope.row.name=='严重警告'" :href="scope.row.num" target="_blank" class="warn">{{ scope.row.num }}</a>
+          <a v-if="scope.row.num>0 && scope.row.name=='灾难警告'" :href="scope.row.num" target="_blank" class="warn">{{ scope.row.num }}</a>
+          <a v-if="scope.row.num>0 && scope.row.name=='信息'" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
+        </template>
+      </el-table-column>
     </el-table-column>
 
   </el-table>
@@ -54,5 +62,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .warn {
+    color: red;
+  }
 </style>
