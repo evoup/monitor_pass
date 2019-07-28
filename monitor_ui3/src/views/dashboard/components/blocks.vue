@@ -6,6 +6,7 @@
           <li v-for="element in list" :key="element.order" class="list-group-item">
             {{ element.name }}
             <span class="badge">{{ element.order }}</span>
+            <component :is="element.comp_name"/>
           </li>
         </transition-group>
       </draggable>
@@ -17,6 +18,19 @@
           <li v-for="element in list2" :key="element.order" class="list-group-item">
             {{ element.name }}
             <span class="badge">{{ element.order }}</span>
+            <component :is="element.comp_name"/>
+          </li>
+        </transition-group>
+      </draggable>
+    </div>
+
+    <div class="col-md-3">
+      <draggable v-model="list3" v-bind="dragOptions" :move="onMove" element="span">
+        <transition-group name="no" class="list-group" tag="ul">
+          <li v-for="element in list3" :key="element.order" class="list-group-item">
+            {{ element.name }}
+            <span class="badge">{{ element.order }}</span>
+            <component :is="element.comp_name"/>
           </li>
         </transition-group>
       </draggable>
@@ -28,32 +42,28 @@
     <div class="list-group col-md-3">
       <pre>{{ list2String }}</pre>
     </div>
+    <div class="list-group col-md-3">
+      <pre>{{ list3String }}</pre>
+    </div>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-const message = [
-  'vue.draggable',
-  'draggable',
-  'component',
-  'for',
-  'vue.js 2.0',
-  'based',
-  'on',
-  'Sortablejs'
-]
+import Host from './host'
+import Event from './event'
 export default {
-  name: 'Hello',
+  name: 'Blocks',
   components: {
-    draggable
+    draggable,
+    Host,
+    Event
   },
   data() {
     return {
-      list: message.map((name, index) => {
-        return { name, order: index + 1, fixed: false }
-      }),
-      list2: [],
+      list: [{ name: 'xx', order: 0, fixed: false, comp_name: 'Host' }],
+      list2: [{ name: 'xx', order: 1, fixed: false, comp_name: 'Event' }],
+      list3: [{ name: 'xx', order: 2, fixed: false, comp_name: 'Host' }],
       isDragging: false,
       delayedDragging: false
     }
@@ -72,6 +82,18 @@ export default {
     },
     list2String() {
       return JSON.stringify(this.list2, null, 2)
+    },
+    list3String() {
+      return JSON.stringify(this.list3, null, 2)
+    },
+    get_current_tab() {
+      return 'Host'
+    },
+    get_current_tab1() {
+      return 'Host'
+    },
+    get_current_tab2() {
+      return 'Host'
     }
   },
   watch: {

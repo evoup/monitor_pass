@@ -1,43 +1,16 @@
 <template>
   <div class="dashboard-container">
-    <el-row>
-      <el-col :span="8">
-        <component :is="get_current_tab"/>
-      </el-col>
-      <el-col :span="8">
-        <component :is="get_current_tab"/>
-      </el-col>
-      <el-col :span="8">
-        <component :is="get_current_tab"/>
-      </el-col>
-    </el-row>
-    <hello/>
+    <blocks/>
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable'
-import Hello from './components/hello'
-import Host from './components/host'
-import Event from './components/event'
+import Blocks from './components/blocks'
 
 export default {
   name: 'Dashboard',
   components: {
-    draggable,
-    Hello,
-    Host,
-    Event
-  },
-  data() {
-    return {
-      componentName: 'host'
-    }
-  },
-  computed: {
-    get_current_tab() {
-      return 'Host'
-    }
+    Blocks
   }
 }
 </script>
