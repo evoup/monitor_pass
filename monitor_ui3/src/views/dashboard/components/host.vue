@@ -14,7 +14,7 @@
         min-width="50%"
         align="center"
       />
-      <el-table-column label="数目" prop="num"  min-width="50%" />
+      <el-table-column label="数目" prop="num" min-width="50%" />
     </el-table-column>
 
   </el-table>

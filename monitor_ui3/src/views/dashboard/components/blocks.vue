@@ -1,7 +1,7 @@
 <template>
   <div class="fluid container">
-    <el-row>
-      <el-col :span="8">
+    <el-row row>
+      <el-col :span="6">
         <draggable v-model="list" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
@@ -10,7 +10,7 @@
 
         </draggable>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <draggable v-model="list2" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list2" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
@@ -18,7 +18,7 @@
           <div v-if="list2.length==0" class="empty-area" @start="isDragging=false" @end="isDragging=false"><a>添加图表看板</a></div>
         </draggable>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="12">
         <draggable v-model="list3" v-bind="dragOptions" :move="onMove" class="list-group" tag="ul" @start="isDragging=true" @end="isDragging=false">
           <li v-for="element in list3" :key="element.order" class="list-group-item">
             <component :is="element.comp_name"/>
