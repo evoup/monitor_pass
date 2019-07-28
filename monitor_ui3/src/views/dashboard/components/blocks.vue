@@ -34,18 +34,20 @@
 import draggable from 'vuedraggable'
 import Host from './host'
 import Event from './event'
+import MonitorServer from './monitor_server'
 export default {
   name: 'Blocks',
   components: {
     draggable,
     Host,
-    Event
+    Event,
+    MonitorServer
   },
   data() {
     return {
       list: [{ name: '看板列1', order: 0, fixed: false, comp_name: 'Host' }],
       list2: [{ name: '看板列2', order: 1, fixed: false, comp_name: 'Event' }],
-      list3: [{ name: '看板列3', order: 2, fixed: false, comp_name: 'Host' }],
+      list3: [{ name: '看板列3', order: 2, fixed: false, comp_name: 'MonitorServer' }],
       isDragging: false,
       delayedDragging: false
     }
