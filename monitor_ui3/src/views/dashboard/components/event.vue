@@ -8,12 +8,11 @@
       tooltip-effect="dark"
       style="width: 100%"
     >
-      <el-table-column align="center" label="事件">
+      <el-table-column label="事件">
         <el-table-column
           prop="name"
           label="项目"
           min-width="50%"
-          align="center"
         />
         <el-table-column label="数目" min-width="50%">
           <template slot-scope="scope">
@@ -58,7 +57,7 @@ export default {
       if (rowIndex === 1) {
         return 'display:none;'
       }
-      return 'background:-webkit-gradient(linear, left top, left bottom, from(#4e6ea7), to(#698CB8));color:#fff;text-align:center;font-weight:500;font-size:10px;'
+      return 'background:-webkit-gradient(linear, left top, left bottom, from(#4e6ea7), to(#698CB8));color:#fff;text-align:left;font-weight:bold;font-size:10px;'
     }
   }
 }
@@ -69,7 +68,7 @@ export default {
     color: red;
   }
   .my /deep/ .el-table .cell {
-    line-height: 12px;
+    line-height: 14px;
     font-size:12px;
   }
 </style>
