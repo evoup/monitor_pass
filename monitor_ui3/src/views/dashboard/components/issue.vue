@@ -21,7 +21,7 @@
         <el-table-column label="最后改动" prop="last_change" min-width="24%" />
         <el-table-column label="已确认" prop="ack" min-width="10%">
           <template slot-scope="scope">
-            <p v-if="scope.row.ack ===1">
+            <p v-if="scope.row.ack ===1" style="color: #00AA00">
               是
             </p>
             <p v-else-if="scope.row.ack===0">

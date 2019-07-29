@@ -36,6 +36,9 @@ export default {
         }, {
           name: '监控状态',
           info: '良好'
+        }, {
+          name: '在线用户数',
+          info: '2'
         }
       ]
     }
