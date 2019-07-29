@@ -14,12 +14,21 @@
         <el-table-column
           prop="host"
           label="主机"
-          min-width="12%"
+          min-width="15%"
         />
         <el-table-column label="问题" prop="issue" min-width="36%" />
-        <el-table-column label="时长" prop="age" min-width="18%" />
+        <el-table-column label="时长" prop="age" min-width="15%" />
         <el-table-column label="最后改动" prop="last_change" min-width="24%" />
-        <el-table-column label="已确认" prop="ack" min-width="10%" />
+        <el-table-column label="已确认" prop="ack" min-width="10%">
+          <template slot-scope="scope">
+            <p v-if="scope.row.ack ===1">
+              是
+            </p>
+            <p v-else-if="scope.row.ack===0">
+              否
+            </p>
+          </template>
+        </el-table-column>
       </el-table-column>
 
     </el-table>
@@ -34,25 +43,25 @@ export default {
     return {
       dataList: [
         {
-          host: 'serve',
+          host: 'adserver01',
           level: 1,
-          issue: '主机',
+          issue: 'Zabbix agent on 192.168.2.197 is unreachable for 5 minutes',
           last_change: '2019-07-29 12:01:03',
           age: 180,
           ack: 1
         },
         {
-          host: 'serve',
+          host: 'scribeHm02',
           level: 2,
-          issue: '主机',
+          issue: 'Zabbix agent on 192.168.2.197 is unreachable for 5 minutes',
           last_change: '2019-07-29 12:11:03',
           age: 180,
-          ack: 1
+          ack: 0
         },
         {
-          host: 'serve',
+          host: 'haproxyZj01',
           level: 3,
-          issue: '主机',
+          issue: 'Zabbix agent on 192.168.2.197 is unreachable for 5 minutes',
           last_change: '2019-07-29 12:16:03',
           age: 180,
           ack: 1
