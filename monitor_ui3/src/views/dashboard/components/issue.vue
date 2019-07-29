@@ -3,6 +3,8 @@
     <el-table
       :data="dataList"
       :header-cell-style="myHeaderStyle"
+      :row-style="tdStyle"
+      :cell-style="tdStyle"
       stripe
       border
       tooltip-effect="dark"
@@ -12,12 +14,12 @@
         <el-table-column
           prop="host"
           label="主机"
-          min-width="16%"
+          min-width="12%"
         />
-        <el-table-column label="问题" prop="issue" min-width="16%" />
-        <el-table-column label="时长" prop="age" min-width="20%" />
-        <el-table-column label="最后改动" prop="last_change" min-width="28%" />
-        <el-table-column label="已确认" prop="ack" min-width="20%" />
+        <el-table-column label="问题" prop="issue" min-width="36%" />
+        <el-table-column label="时长" prop="age" min-width="18%" />
+        <el-table-column label="最后改动" prop="last_change" min-width="24%" />
+        <el-table-column label="已确认" prop="ack" min-width="10%" />
       </el-table-column>
 
     </el-table>
@@ -33,6 +35,7 @@ export default {
       dataList: [
         {
           host: 'serve',
+          level: 1,
           issue: '主机',
           last_change: '2019-07-29 12:01:03',
           age: 180,
@@ -40,6 +43,7 @@ export default {
         },
         {
           host: 'serve',
+          level: 2,
           issue: '主机',
           last_change: '2019-07-29 12:11:03',
           age: 180,
@@ -47,6 +51,7 @@ export default {
         },
         {
           host: 'serve',
+          level: 3,
           issue: '主机',
           last_change: '2019-07-29 12:16:03',
           age: 180,
@@ -61,6 +66,21 @@ export default {
         return 'background:#CED7DF;color:#1f1f1f;text-align:left;font-weight:500;font-size:10px;'
       }
       return 'background:-webkit-gradient(linear, left top, left bottom, from(#4e6ea7), to(#698CB8));;color:#fff;text-align:left;font-weight:bold;font-size:10px;'
+    },
+    tdStyle({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 1) {
+        if (row.level === 1) {
+          return 'background:#d6f6fd;color:#1f1f1f;text-align:left;font-weight:500;font-size:10px;'
+        }
+        if (row.level === 2) {
+          return 'background:#fff2a5;color:#1f1f1f;text-align:left;font-weight:500;font-size:10px;'
+        }
+        if (row.level === 3) {
+          return 'background:#feb689;color:#1f1f1f;text-align:left;font-weight:500;font-size:10px;'
+        }
+        return 'background:#CED7DF;color:#1f1f1f;text-align:left;font-weight:500;font-size:10px;'
+      }
+      return 'text-align:left;font-size:10px;'
     }
   }
 }
