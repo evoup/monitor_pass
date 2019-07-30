@@ -75,7 +75,6 @@ class Server(models.Model):
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     status = models.IntegerField(choices=status_choices, default=0)
-    # asset = models.OneToOneField('Asset', on_delete=models.CASCADE, default="", editable=False)
     asset = models.OneToOneField('Asset', on_delete=models.CASCADE, null=True, blank=True)
 
     hostname = models.CharField(max_length=128, unique=True, null=True)
@@ -101,7 +100,6 @@ class Server(models.Model):
                                        on_delete=models.CASCADE)
 
     class Meta:
-        # ordering = ('id',)
         verbose_name_plural = '服务器表'
         db_table = 'server'
 

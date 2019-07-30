@@ -54,7 +54,7 @@ class ServerInfo(APIView):
                 i.save()
                 a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
                 Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'],
-                                      snmp_address=data['snmp_addr'], asset=a)
+                                      snmp_address=data['snmp_addr'], asset=a, server_group=data['server_groups'])
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
