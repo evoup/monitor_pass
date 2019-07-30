@@ -53,8 +53,11 @@ class ServerInfo(APIView):
                 i = ser.create(ser.validated_data)
                 i.save()
                 a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
-                Server.objects.create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'],
-                                      snmp_address=data['snmp_addr'], asset=a, server_group=data['server_groups'])
+                server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'],
+                                      snmp_address=data['snmp_addr'], asset=a)
+                srv = Server.objects.get(id=server.id)
+                for sg in data['server_groups']:
+                    srv.server_group.add(sg)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
