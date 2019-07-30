@@ -21,10 +21,28 @@
           <el-input v-model="form.jmx"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="服务器组">
+        <el-col :span="14">
+          <el-select
+            v-model="serverGroupSelectModel"
+            multiple
+            placeholder="请选择服务器组（可选）"
+            style="width: 80%"
+          >
+            <el-option
+              v-for="item in form.serverGroups"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
+          </el-select>
+        </el-col>
+      </el-form-item>
       <el-form-item label="模板">
         <el-col :span="14">
           <el-select
-            v-model="form.template"
+            v-model="templateSelectModel"
             multiple
             placeholder="请选择模板（可选）"
             style="width: 80%"
@@ -53,7 +71,7 @@
 </template>
 
 <script>
-import { add_server } from '../../api/server'
+  import { add_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 export default {
   data() {
@@ -71,12 +89,15 @@ export default {
         type: [],
         resource: '',
         desc: '',
-        templates: []
+        templates: [],
+        serverGroups: []
       },
+      serverGroupSelectModel: null,
       templateSelectModel: null
     }
   },
   created() {
+    this.fetchServerGroupListData()
     this.fetchTemplateListData()
   },
   methods: {
@@ -84,6 +105,11 @@ export default {
     fetchTemplateListData() {
       template_list().then(response => {
         this.form.templates = response.data.items
+      })
+    },
+    fetchServerGroupListData() {
+      server_group_list().then(response => {
+        this.form.serverGroups = response.data.items
       })
     },
     addServer(a, b, c, d, e) {
