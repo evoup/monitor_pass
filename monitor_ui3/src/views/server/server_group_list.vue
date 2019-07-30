@@ -16,8 +16,8 @@
       border
       tooltip-effect="dark"
       style="width: 100%;margin-top:10px"
-      @sort-change="sortChange">
-      <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
+    >
+      <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
         label="服务器组"
         sortable="custom"

@@ -23,7 +23,20 @@
       </el-form-item>
       <el-form-item label="模板">
         <el-col :span="14">
-          <el-input v-model="form.template" type="textarea" />
+          <el-select
+            v-model="form.template"
+            multiple
+            placeholder="请选择模板（可选）"
+            style="width: 80%"
+          >
+            <el-option
+              v-for="item in form.templates"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
+          </el-select>
         </el-col>
       </el-form-item>
       <el-form-item label="所在机房">
@@ -41,6 +54,7 @@
 
 <script>
 import { add_server } from '../../api/server'
+import { template_list } from '../../api/template'
 export default {
   data() {
     return {
@@ -56,11 +70,22 @@ export default {
         delivery: false,
         type: [],
         resource: '',
-        desc: ''
-      }
+        desc: '',
+        templates: []
+      },
+      templateSelectModel: null
     }
   },
+  created() {
+    this.fetchTemplateListData()
+  },
   methods: {
+    // 获取所有模板列表
+    fetchTemplateListData() {
+      template_list().then(response => {
+        this.form.templates = response.data.items
+      })
+    },
     addServer(a, b, c, d, e) {
       add_server(a, b, c, d, e)
     },

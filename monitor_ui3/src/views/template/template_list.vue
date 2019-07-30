@@ -19,7 +19,7 @@
       stripe
       border
       tooltip-effect="dark"
-      style="width: 100%"
+      style="width: 100%;margin-top:10px"
       @sort-change="sortChange"
     >
       <el-table-column
