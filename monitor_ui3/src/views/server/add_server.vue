@@ -3,22 +3,22 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="主机名">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入hostname"/>
+          <el-input v-model="form.name" placeholder="请输入hostname" />
         </el-col>
       </el-form-item>
       <el-form-item label="监控代理">
         <el-col :span="8">
-          <el-input v-model="form.client" placeholder="请输入ip:port"/>
+          <el-input v-model="form.client" placeholder="请输入ip:port" />
         </el-col>
       </el-form-item>
       <el-form-item label="SNMP">
         <el-col :span="14">
-          <el-input v-model="form.snmp"/>
+          <el-input v-model="form.snmp" />
         </el-col>
       </el-form-item>
       <el-form-item label="JMX">
         <el-col :span="14">
-          <el-input v-model="form.jmx"/>
+          <el-input v-model="form.jmx" />
         </el-col>
       </el-form-item>
       <el-form-item label="服务器组">
@@ -63,7 +63,13 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
+        <el-button
+          type="primary"
+          @click="
+            addServer(form.name, form.client, form.jmx, form.snmp, form.idc, serverGroupSelectModel, templateSelectModel)
+          "
+        >创建</el-button
+        >
         <el-button @click="jumpServerList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +77,7 @@
 </template>
 
 <script>
-  import { add_server, server_group_list } from '../../api/server'
+import { add_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 export default {
   data() {
@@ -112,8 +118,8 @@ export default {
         this.form.serverGroups = response.data.items
       })
     },
-    addServer(a, b, c, d, e) {
-      add_server(a, b, c, d, e)
+    addServer(a, b, c, d, e, f, g) {
+      add_server(a, b, c, d, e, f, g)
     },
     jumpServerList() {
       this.$router.push({ path: '/server_list' })
@@ -122,6 +128,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
