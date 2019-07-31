@@ -58,7 +58,9 @@ class ServerInfo(APIView):
                                                                snmp_address=data['snmp_addr'], asset=a)
                 srv = Server.objects.get(id=server.id)
                 for sg in data['server_groups']:
-                    srv.server_group.add(sg)
+                    srv.server_groups.add(sg)
+                for sg in data['templates']:
+                    srv.templates.add(sg)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
