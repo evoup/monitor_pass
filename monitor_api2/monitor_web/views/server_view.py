@@ -53,8 +53,9 @@ class ServerInfo(APIView):
                 i = ser.create(ser.validated_data)
                 i.save()
                 a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
-                server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'], jmx_address=data['jmx_addr'],
-                                      snmp_address=data['snmp_addr'], asset=a)
+                server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'],
+                                                               jmx_address=data['jmx_addr'],
+                                                               snmp_address=data['snmp_addr'], asset=a)
                 srv = Server.objects.get(id=server.id)
                 for sg in data['server_groups']:
                     srv.server_group.add(sg)
@@ -144,7 +145,8 @@ class ServerGroupInfo(APIView):
             'message': '创建服务器组失败'
         }
         data = JSONParser().parse(request)
-        new_group, created = models.ServerGroup.objects.get_or_create(name=data['name'], desc=data['desc'], alarm_type=data['alarm_type'])
+        new_group, created = models.ServerGroup.objects.get_or_create(name=data['name'], desc=data['desc'],
+                                                                      alarm_type=data['alarm_type'])
         new_group_id = new_group.id
         # 维护服务器组用户组关系
         user_groups = models.UserGroup.objects.filter(id__in=data['user_groups']).all()
