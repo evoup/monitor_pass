@@ -212,6 +212,12 @@ export const constantRouterMap = [
         component: () => import('../views/user/add_user_group'),
         meta: { title: '添加用户组', icon: 'form' },
         hidden: true
+      },
+      {
+        path: '/server_room_list',
+        name: 'ServerRoomManager',
+        component: () => import('../views/server_room/server_room_list'),
+        meta: { title: '机房管理', icon: 'form' }
       }
     ]
   },
