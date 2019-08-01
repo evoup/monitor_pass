@@ -16,7 +16,7 @@ class IDCSerializer(serializers.ModelSerializer):
     def create(self, attrs, instance=None):
         assert instance is None, 'Cannot create idc with IDCSerializer'
         (idc_object, created) = IDC.objects \
-            .get_or_create(name=attrs.get('name'), floor=attrs.get('floor') if attrs.get('floor') else 0)
+            .get_or_create(name=attrs.get('name'), floor=attrs.get('floor') if attrs.get('floor') else None)
         return idc_object
 
     def update(self, attrs, instance=None):

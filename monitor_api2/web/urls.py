@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view, template_view, item_view, trigger_view
+from monitor_web.views import view, template_view, item_view, trigger_view, idc_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -56,6 +56,8 @@ urlpatterns = [
         url(r'^server/info$', server_view.ServerInfo.as_view()),
         # 服务器列表
         url(r'^server/list$', server_view.ServerList.as_view()),
+        # 机房列表
+        url(r'^idc/list$', idc_view.IdcList.as_view()),
         # 服务组列表
         url(r'^server_group/list$', server_view.ServerGroupList.as_view()),
         # 服务器组删除
