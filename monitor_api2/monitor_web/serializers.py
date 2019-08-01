@@ -11,7 +11,7 @@ from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, Us
 class IDCSerializer(serializers.ModelSerializer):
     class Meta:
         model = IDC
-        fields = ('name', 'floor')
+        fields = ('id', 'name', 'floor', 'desc')
 
     def create(self, attrs, instance=None):
         assert instance is None, 'Cannot create idc with IDCSerializer'

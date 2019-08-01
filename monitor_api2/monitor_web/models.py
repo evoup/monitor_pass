@@ -330,6 +330,7 @@ class IDC(models.Model):
     """
     机房信息
     """
+    id = models.AutoField(primary_key=True)
     name = models.CharField('机房', max_length=32, blank=False)
     floor = models.IntegerField('楼层', null=True)
     desc = models.CharField(u'备注', max_length=256, default='', null=True)

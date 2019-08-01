@@ -39,9 +39,6 @@ class IdcInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
-
-@permission_classes((IsAuthenticated,))
-class IdcInfo(APIView):
     @method_decorator(permission_required('monitor_web.delete_idc', raise_exception=True))
     def delete(self, *args, **kwargs):
         """
