@@ -332,6 +332,7 @@ class IDC(models.Model):
     """
     name = models.CharField('机房', max_length=32, blank=False)
     floor = models.IntegerField('楼层', null=True)
+    desc = models.CharField(u'备注', max_length=256, default='', null=True)
 
     class Meta:
         verbose_name_plural = "机房表"

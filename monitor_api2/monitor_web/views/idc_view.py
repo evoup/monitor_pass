@@ -1,3 +1,5 @@
+import traceback
+
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -7,7 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
-from monitor_web.serializers import ItemSerializer, IDCSerializer
+from monitor_web.models import IDC
+from monitor_web.serializers import IDCSerializer
 from web.common import constant
 from web.common.paging import paging_request
 
@@ -25,12 +28,38 @@ class IdcInfo(APIView):
             'message': '创建机房失败'
         }
         try:
-            pass
+            IDC.objects.create(name=data['name'], floor=data['floor'] if data['floor'] else None,
+                               desc=data['desc'] if data['desc'] else None)
         except:
-            pass
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
         ret = {
             'code': constant.BACKEND_CODE_CREATED,
             'message': '创建机房成功'
+        }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class IdcInfo(APIView):
+    @method_decorator(permission_required('monitor_web.delete_idc', raise_exception=True))
+    def delete(self, *args, **kwargs):
+        """
+        删除机房
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '删除机房失败'
+        }
+        try:
+            idc = models.IDC.objects.get(id=self.request.query_params['id'])
+            idc.delete()
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除机房成功'
         }
         return JsonResponse(ret, safe=False)
 

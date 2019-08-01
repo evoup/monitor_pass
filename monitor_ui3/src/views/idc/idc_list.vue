@@ -30,8 +30,8 @@
         width="330" />
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteServerRoom(prop.row.id, prop.$index)">删除</el-button>
+          <el-button size="small" type="primary">编辑</el-button>
+          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,7 +96,8 @@ export default {
       rows.splice(index, 1)
     },
     // 删除机房
-    deleteServerRoom(id, rowIdx) {
+    deleteIdc(id, rowIdx) {
+      console.log(id)
       delete_idc({ id: id }).then(response => {
         this.deleteRow(rowIdx, this.dataList)
       })
