@@ -214,6 +214,19 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/data_collector_list',
+        name: 'DataCollectorManager',
+        component: () => import('../views/data_collector/data_collector_list'),
+        meta: { title: '数据收集器', icon: 'data_collector' }
+      },
+      {
+        path: '/add_data_collector',
+        name: 'AddDataCollector',
+        component: () => import('../views/data_collector/add_data_collector'),
+        meta: { title: '添加数据收集器', icon: 'data_collector' },
+        hidden: true
+      },
+      {
         path: '/idc_list',
         name: 'IDCManager',
         component: () => import('../views/idc/idc_list'),
