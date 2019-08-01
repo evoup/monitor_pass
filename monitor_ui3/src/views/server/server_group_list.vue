@@ -65,7 +65,8 @@ export default {
   data() {
     return {
       typeData: [],
-      dataList: [], // 列表数据
+      // 列表数据
+      dataList: [],
       // 列表前端分页
       pageList: {
         totalCount: '',
@@ -75,8 +76,10 @@ export default {
       },
       // 列表分页辅助类(传参)
       pageHelp: {
-        page: 1, // 和后端参数一样
-        size: 5, // 后端参数为size
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
         order: 'asc'
       },
       sortHelp: {

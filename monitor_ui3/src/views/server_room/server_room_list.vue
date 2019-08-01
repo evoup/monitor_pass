@@ -19,39 +19,19 @@
     >
       <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
-        label="服务器组"
+        label="机房"
         sortable="custom"
         prop="name"
         width="180" />
       <el-table-column
-        label="在线数"
+        label="备注"
         sortable="custom"
-        prop="ip"
-        width="130" />
-      <el-table-column
-        label="宕机数"
-        sortable="custom"
-        prop="data_collector"
-        width="130" />
-      <el-table-column
-        label="正常事件数"
-        sortable="custom"
-        prop="date"
-        width="130" />
-      <el-table-column
-        label="正常事件数"
-        sortable="custom"
-        prop="date"
-        width="130" />
-      <el-table-column
-        label="正常事件数"
-        sortable="custom"
-        prop="date"
-        width="130" />
+        prop="desc"
+        width="330" />
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
-          <el-button size="small" type="danger" @click="deleteServerGroup(prop.row.id, prop.$index)">删除</el-button>
+          <el-button size="small" type="danger" @click="deleteServerRoom(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,12 +40,13 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_group_list, delete_server_group } from '../../api/server'
+import { server_room_list, delete_server_room } from '../../api/server_room'
 export default {
   data() {
     return {
       typeData: [],
-      dataList: [], // 列表数据
+      // 列表数据
+      dataList: [],
       // 列表前端分页
       pageList: {
         totalCount: '',
@@ -75,8 +56,10 @@ export default {
       },
       // 列表分页辅助类(传参)
       pageHelp: {
-        page: 1, // 和后端参数一样
-        size: 5, // 后端参数为size
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
         order: 'asc'
       },
       sortHelp: {
@@ -97,24 +80,24 @@ export default {
   },
   methods: {
     fetchData() {
-      server_group_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+      server_room_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false
         this.total = response.data.count
       })
     },
-    // 跳转到服务器添加页面
-    jumpAddServerGroup() {
-      this.$router.push({ path: '/add_server_group' })
+    // 跳转到机房添加页面
+    jumpAddServerRoom() {
+      this.$router.push({ path: '/add_server_room' })
     },
     // 删除当前行
     deleteRow(index, rows) {
       rows.splice(index, 1)
     },
-    // 删除服务器组
-    deleteServerGroup(id, rowIdx) {
-      delete_server_group({ id: id }).then(response => {
+    // 删除机房
+    deleteServerRoom(id, rowIdx) {
+      delete_server_room({ id: id }).then(response => {
         this.deleteRow(rowIdx, this.dataList)
       })
     }
