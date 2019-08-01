@@ -59,14 +59,29 @@
       </el-form-item>
       <el-form-item label="所在机房">
         <el-col :span="14">
-          <el-input v-model="form.idc" type="textarea" />
+          <el-select
+            v-model="idcSelectModel"
+            placeholder="请选择机房（可选）"
+            style="width: 80%"
+            filterable
+            allow-create
+          >
+            <el-option
+              v-for="item in form.idcs"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.name"
+            />
+          </el-select>
         </el-col>
       </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           @click="
-            addServer(form.name, form.client, form.jmx, form.snmp, form.idc, serverGroupSelectModel, templateSelectModel)
+            addServer(form.name, form.client, form.jmx, form.snmp, idcSelectModel, serverGroupSelectModel,
+                      templateSelectModel)
           "
         >创建</el-button
         >
@@ -79,6 +94,7 @@
 <script>
 import { add_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
+import { idc_list } from '../../api/idc'
 export default {
   data() {
     return {
@@ -96,15 +112,18 @@ export default {
         resource: '',
         desc: '',
         templates: [],
-        serverGroups: []
+        serverGroups: [],
+        idcs: []
       },
       serverGroupSelectModel: null,
-      templateSelectModel: null
+      templateSelectModel: null,
+      idcSelectModel: null
     }
   },
   created() {
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
+    this.fetchIdcListData()
   },
   methods: {
     // 获取所有模板列表
@@ -116,6 +135,11 @@ export default {
     fetchServerGroupListData() {
       server_group_list().then(response => {
         this.form.serverGroups = response.data.items
+      })
+    },
+    fetchIdcListData() {
+      idc_list().then(response => {
+        this.form.idcs = response.data.items
       })
     },
     addServer(a, b, c, d, e, f, g) {
