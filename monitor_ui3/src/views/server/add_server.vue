@@ -61,7 +61,7 @@
         <el-col :span="14">
           <el-select
             v-model="idcSelectModel"
-            placeholder="请选择机房（可选）"
+            placeholder="请输入或选择机房（可选）"
             style="width: 80%"
             filterable
             allow-create
