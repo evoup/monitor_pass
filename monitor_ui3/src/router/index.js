@@ -92,7 +92,29 @@ export const constantRouterMap = [
         meta: { title: '批量命令执行', icon: 'command_exec' }
       }
     ]
-  }, {
+  },
+  {
+    path: '/assets',
+    component: Layout,
+    redirect: null,
+    name: 'Assets',
+    meta: { title: '资产管理', icon: 'server2' },
+    children: [
+      {
+        path: '/asset_list',
+        name: 'Table1',
+        component: () => import('../views/asset/asset_list'),
+        meta: { title: '资产列表', icon: 'form' }
+      },
+      {
+        path: '/asset_change',
+        name: 'Table1',
+        component: () => import('../views/asset/asset_change'),
+        meta: { title: '资产变更信息', icon: 'form' }
+      }
+    ]
+  },
+  {
     path: '/config',
     component: Layout,
     redirect: null,
