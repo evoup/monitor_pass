@@ -217,13 +217,13 @@ export const constantRouterMap = [
         path: '/idc_list',
         name: 'IDCManager',
         component: () => import('../views/idc/idc_list'),
-        meta: { title: '机房管理', icon: 'form' }
+        meta: { title: '机房管理', icon: 'jifang' }
       },
       {
         path: '/add_idc',
         name: 'AddIDC',
         component: () => import('../views/idc/add_idc'),
-        meta: { title: '添加机房', icon: 'form' },
+        meta: { title: '添加机房', icon: 'jifang' },
         hidden: true
       }
     ]
