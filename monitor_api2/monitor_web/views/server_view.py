@@ -124,7 +124,7 @@ class ServerGroupList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class ServerGroupInfo(APIView):
-    @method_decorator(permission_required('monitor_web.delete_server_group', raise_exception=True))
+    @method_decorator(permission_required('monitor_web.delete_servergroup', raise_exception=True))
     def delete(self, *args, **kwargs):
         """
         删除服务组
@@ -137,7 +137,7 @@ class ServerGroupInfo(APIView):
         serverGroup.delete()
         return JsonResponse(ret, safe=False)
 
-    @method_decorator(permission_required('monitor_web.add_server_group', raise_exception=True))
+    @method_decorator(permission_required('monitor_web.add_servergroup', raise_exception=True))
     def post(self, request, *args, **kwargs):
         """
         创建服务器组
