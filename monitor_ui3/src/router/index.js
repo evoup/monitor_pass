@@ -214,9 +214,9 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        path: '/server_room_list',
-        name: 'ServerRoomManager',
-        component: () => import('../views/server_room/server_room_list'),
+        path: '/idc_list',
+        name: 'IDCManager',
+        component: () => import('../views/idc/idc_list'),
         meta: { title: '机房管理', icon: 'form' }
       }
     ]

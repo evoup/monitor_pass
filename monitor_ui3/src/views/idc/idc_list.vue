@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
-            <el-button type="primary" @click="jumpAddServerGroup()"><i class="el-icon-plus el-icon--right" />添加机房</el-button>
+            <el-button type="primary" @click="jumpAddIdc()"><i class="el-icon-plus el-icon--right" />添加机房</el-button>
           </div>
         </el-col>
       </el-col>
@@ -40,7 +40,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_room_list, delete_server_room } from '../../api/server_room'
+import { idc_list, delete_idc } from '../../api/idc'
 export default {
   data() {
     return {
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     fetchData() {
-      server_room_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+      idc_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false
@@ -88,7 +88,7 @@ export default {
       })
     },
     // 跳转到机房添加页面
-    jumpAddServerRoom() {
+    jumpAddIdc() {
       this.$router.push({ path: '/add_server_room' })
     },
     // 删除当前行
@@ -97,7 +97,7 @@ export default {
     },
     // 删除机房
     deleteServerRoom(id, rowIdx) {
-      delete_server_room({ id: id }).then(response => {
+      delete_idc({ id: id }).then(response => {
         this.deleteRow(rowIdx, this.dataList)
       })
     }
