@@ -56,6 +56,8 @@ urlpatterns = [
         url(r'^server/info$', server_view.ServerInfo.as_view()),
         # 服务器列表
         url(r'^server/list$', server_view.ServerList.as_view()),
+        # 添加机房
+        url(r'^idc/info$', idc_view.IdcInfo.as_view()),
         # 机房列表
         url(r'^idc/list$', idc_view.IdcList.as_view()),
         # 服务组列表

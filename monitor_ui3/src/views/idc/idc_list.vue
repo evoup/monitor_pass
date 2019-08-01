@@ -30,7 +30,7 @@
         width="330" />
       <el-table-column label="操作">
         <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
+          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteServerRoom(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
@@ -89,7 +89,7 @@ export default {
     },
     // 跳转到机房添加页面
     jumpAddIdc() {
-      this.$router.push({ path: '/add_server_room' })
+      this.$router.push({ path: '/add_idc' })
     },
     // 删除当前行
     deleteRow(index, rows) {

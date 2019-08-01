@@ -43,7 +43,7 @@ class ServerInfo(APIView):
         data = JSONParser().parse(self.request)
         ret = {
             'code': constant.BACKEND_CODE_OPT_FAIL,
-            'message': '服务器创建失败'
+            'message': '创建服务器失败'
         }
         try:
             ser = IDCSerializer(data={'name': data['idc']})
@@ -66,7 +66,7 @@ class ServerInfo(APIView):
             return JsonResponse(ret, safe=False)
         ret = {
             'code': constant.BACKEND_CODE_CREATED,
-            'message': '服务器创建成功'
+            'message': '创建服务器成功'
         }
         return JsonResponse(ret, safe=False)
 
