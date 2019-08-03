@@ -3,22 +3,22 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="主机名">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入hostname" />
+          <el-input v-model="form.name" placeholder="请输入hostname"/>
         </el-col>
       </el-form-item>
       <el-form-item label="监控代理">
         <el-col :span="8">
-          <el-input v-model="form.client" placeholder="请输入ip:port" />
+          <el-input v-model="form.client" placeholder="请输入ip:port"/>
         </el-col>
       </el-form-item>
       <el-form-item label="SNMP">
         <el-col :span="14">
-          <el-input v-model="form.snmp" />
+          <el-input v-model="form.snmp"/>
         </el-col>
       </el-form-item>
       <el-form-item label="JMX">
         <el-col :span="14">
-          <el-input v-model="form.jmx" />
+          <el-input v-model="form.jmx"/>
         </el-col>
       </el-form-item>
       <el-form-item label="服务器组">
@@ -61,9 +61,8 @@
         <el-col :span="14">
           <el-select
             v-model="dataCollectorSelectModel"
-            multiple
             placeholder="请选择数据收集器"
-            style="width: 80%"
+            style="width: 40%"
           >
             <el-option
               v-for="item in form.dataCollectors"
@@ -80,7 +79,7 @@
           <el-select
             v-model="idcSelectModel"
             placeholder="请输入或选择机房（可选）"
-            style="width: 80%"
+            style="width: 40%"
             filterable
             allow-create
           >
@@ -101,7 +100,8 @@
             addServer(form.name, form.client, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
                       serverGroupSelectModel, templateSelectModel)
           "
-        >创建</el-button
+        >创建
+        </el-button
         >
         <el-button @click="jumpServerList">取消</el-button>
       </el-form-item>
@@ -114,6 +114,7 @@ import { add_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 import { idc_list } from '../../api/idc'
 import { data_collector_list } from '../../api/data_collector'
+
 export default {
   data() {
     return {
@@ -145,6 +146,7 @@ export default {
     this.fetchServerGroupListData()
     this.fetchTemplateListData()
     this.fetchIdcListData()
+    this.fetchDataCollectorListData()
   },
   methods: {
     // 获取所有模板列表
@@ -169,7 +171,10 @@ export default {
       })
     },
     addServer(a, b, c, d, e, f, g, h) {
-      add_server(a, b, c, d, e, f, g, h)
+      add_server(a, b, c, d, e, f, g, h).then(response => {
+      }).catch(e => {
+        console.log(e)
+      })
     },
     jumpServerList() {
       this.$router.push({ path: '/server_list' })
