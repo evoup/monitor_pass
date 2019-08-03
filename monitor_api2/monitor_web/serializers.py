@@ -68,10 +68,18 @@ class AssetSerializer(serializers.ModelSerializer):
 
 class ServerSerializer(serializers.ModelSerializer):
     asset = AssetSerializer(required=True)
+    data_collector = serializers.SerializerMethodField()
 
     class Meta:
         model = Server
         fields = '__all__'
+
+    def get_data_collector(self, obj):
+        d = models.DataCollector.objects.filter(id=obj.id).all()
+        if len(d):
+            return d[0].name
+        else:
+            return None
 
 
 class ServerGroupSerializer(serializers.ModelSerializer):
