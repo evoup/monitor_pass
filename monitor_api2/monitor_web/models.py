@@ -97,7 +97,7 @@ class Server(models.Model):
     jmx_address = models.CharField('jmx地址', max_length=50, default='')
     snmp_address = models.CharField('snmp地址', max_length=50, default='')
     data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True,
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name_plural = '服务器表'
