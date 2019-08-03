@@ -136,7 +136,7 @@ class DataCollector(models.Model):
     """
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'数据收集器名', max_length=40, null=False)
-    ip = models.CharField(u'IP地址', max_length=20, null=False)
+    ip = models.GenericIPAddressField(u'IP地址', null=False)
     port = models.IntegerField(u'端口号')
 
     class Meta:
