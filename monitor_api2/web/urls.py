@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view, template_view, item_view, trigger_view, idc_view
+from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -56,6 +56,10 @@ urlpatterns = [
         url(r'^server/info$', server_view.ServerInfo.as_view()),
         # 服务器列表
         url(r'^server/list$', server_view.ServerList.as_view()),
+        # 添加数据收集器
+        url(r'^data_collector/info$', data_collector_view.DataCollectorInfo.as_view()),
+        # 数据收集器列表
+        url(r'^data_collector/list$', data_collector_view.DataCollectorList.as_view()),
         # 添加机房
         url(r'^idc/info$', idc_view.IdcInfo.as_view()),
         # 机房列表

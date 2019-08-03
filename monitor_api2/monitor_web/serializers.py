@@ -5,7 +5,29 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function
+    Function, DataCollector
+
+
+class DataCollectorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataCollector
+        fields = ('id', 'name', 'ip', 'port')
+
+    def create(self, attrs, instance=None):
+        assert instance is None, 'Cannot create data_collector with DataCollectorSerializer'
+        (object, created) = DataCollector.objects \
+            .get_or_create(name=attrs.get('name'), ip=attrs.get('ip'), port=attrs.get('port'))
+        return object
+
+    def update(self, attrs, instance=None):
+        assert instance is None, 'Cannot update data collector with DataCollectorSerializer'
+        a = {'name': attrs.get('name')}
+        if attrs.get('ip'):
+            a['ip'] = attrs.get('ip')
+        if attrs.get('port'):
+            a['port'] = attrs.get('port')
+        (object, created) = DataCollector.objects.get_or_create(a)
+        return object
 
 
 class IDCSerializer(serializers.ModelSerializer):

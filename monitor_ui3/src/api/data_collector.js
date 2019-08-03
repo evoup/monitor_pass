@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-export function add_data_collector(name) {
+export function add_data_collector(name, ip, port) {
   return request({
     url: '/data_collector/info',
     method: 'post',
     data: {
-      name
+      name, ip, port
     }
   })
 }
