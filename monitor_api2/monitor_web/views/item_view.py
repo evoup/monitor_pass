@@ -44,12 +44,13 @@ class ItemInfo(APIView):
         """
         获取指定监控项
         """
-        item = models.MonitorItem.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        item = models.MonitorItem.objects.get(
+            id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
         serializer = ItemSerializer(instance=item, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-            "item": serializer.data
+                "item": serializer.data
             }
         }
         return JsonResponse(ret, safe=False)
@@ -62,9 +63,9 @@ class ItemStatus(APIView):
         """
         修改指定监控项状态，开始或者关闭
         """
-        user = User.objects.get(id = request.user.id)
-        item = models.MonitorItem.objects.get(id = request.data['id'])
-        template = models.Template.objects.get(id = request.data['template_id'])
+        user = User.objects.get(id=request.user.id)
+        item = models.MonitorItem.objects.get(id=request.data['id'])
+        template = models.Template.objects.get(id=request.data['template_id'])
         qs = models.RelationUserItem.objects.filter(user=user, item=item, template=template)
         if qs.count() is 0:
             qs.create(user=user, item=item, template=template, status=request.data['status'])
@@ -75,4 +76,3 @@ class ItemStatus(APIView):
             'message': '更新监控项状态成功'
         }
         return JsonResponse(ret, safe=False)
-

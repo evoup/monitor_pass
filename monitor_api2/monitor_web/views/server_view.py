@@ -12,7 +12,6 @@ from rest_framework.views import APIView
 
 from monitor_web import models
 from monitor_web.models import Server, Asset, DataCollector
-# Create your views here.
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.paging import paging_request

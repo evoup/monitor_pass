@@ -1,5 +1,3 @@
-import operator
-from collections import OrderedDict
 
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
