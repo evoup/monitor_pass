@@ -135,7 +135,7 @@ export default {
       listLoading: true,
       total: 0,
       pageNum: 1,
-      serverGroupSelectModel: [],
+      serverGroupSelectModel: 0,
       serverGroups: []
     }
   },
@@ -157,6 +157,7 @@ export default {
     fetchServerGroupListData() {
       server_group_list().then(response => {
         this.serverGroups = response.data.items
+        this.serverGroups.push({ id: 0, name: '所有', desc: null, alarm_type: null })
       })
     },
     indexMethod(index) {
