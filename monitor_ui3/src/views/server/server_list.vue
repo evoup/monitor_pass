@@ -1,96 +1,100 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="row-bg">
+    <el-form ref="form">
+      <el-form-item label="服务器组">
+        <el-row>
+          <el-col :span="18">
+            <el-select
+              v-model="serverGroupSelectModel"
+              placeholder="请选择服务器组"
+            >
+              <el-option
+                v-for="item in serverGroups"
+                :key="item.id"
+                :label="item.name"
+                :aria-selected="true"
+                :value="item.id"
+              />
+            </el-select>
+          </el-col>
+          <el-col :span="4" align="right">
+            <div class="grid-content">
+              <el-button type="primary" @click="jumpAddServer()"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-col :span="24">
-        <el-col :span="3" :offset="21">
-          <div class="grid-content">
-            <el-button type="primary" @click="jumpAddServer()"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
-          </div>
-        </el-col>
+        <el-table
+          :v-loading="listLoading"
+          :data="dataList"
+          stripe
+          border
+          tooltip-effect="dark"
+          style="width: 100%"
+          @sort-change="sortChange">
+          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
+          <el-table-column
+            label="主机名"
+            sortable="custom"
+            prop="name"
+            width="180" />
+          <el-table-column
+            label="IP"
+            prop="ip"
+            width="130" />
+          <el-table-column
+            label="收集节点"
+            prop="data_collector"
+            width="180" />
+          <el-table-column
+            label="更新时间"
+            sortable="custom"
+            prop="date"
+            width="180" />
+          <el-table-column
+            label="状态"
+            sortable="custom"
+            prop="status"
+            width="80">
+            <template slot-scope="prop">
+              <el-tag v-if="prop.row.status === 1" type="success">在线</el-tag>
+              <el-tag v-if="prop.row.status === 2" type="danger">宕机</el-tag>
+              <el-tag v-if="prop.row.status === 0" type="primary">未监控</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="机房"
+            prop="asset.idc.name" />
+          <el-table-column label="操作">
+            <template slot-scope="prop">
+              <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-col>
-    </el-row>
-    <el-col :span="24" class="warp-breadcrum">
-      <!--搜索栏-->
-      <el-col :span="21" class="toolbar">
-        <el-form :inline="true" :model="filters">
-          <el-form-item>
-            <el-input v-model="filters.name" placeholder="请输入关键字"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="fetchData">搜索</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-col>
-    <el-table
-      :v-loading="listLoading"
-      :data="dataList"
-      stripe
-      border
-      tooltip-effect="dark"
-      style="width: 100%"
-      @sort-change="sortChange">
-      <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
-      <el-table-column
-        label="主机名"
-        sortable="custom"
-        prop="name"
-        width="180" />
-      <el-table-column
-        label="IP"
-        prop="ip"
-        width="130" />
-      <el-table-column
-        label="收集节点"
-        prop="data_collector"
-        width="180" />
-      <el-table-column
-        label="更新时间"
-        sortable="custom"
-        prop="date"
-        width="180" />
-      <el-table-column
-        label="状态"
-        sortable="custom"
-        prop="status"
-        width="80">
-        <template slot-scope="prop">
-          <el-tag v-if="prop.row.status === 1" type="success">在线</el-tag>
-          <el-tag v-if="prop.row.status === 2" type="danger">宕机</el-tag>
-          <el-tag v-if="prop.row.status === 0" type="primary">未监控</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="机房"
-        prop="asset.idc.name" />
-      <el-table-column label="操作">
-        <template slot-scope="prop">
-          <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-col :span="24" class="toolbar block">
-      <!--数据分页
+      <el-col :span="24" class="toolbar block">
+        <!--数据分页
      layout：分页显示的样式
      :page-size：每页显示的条数
      :total：总数
      具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
      -->
-      <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
-      <el-pagination
-        :page-sizes="[5,10,15]"
-        :page-size="5"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
-    </el-col>
-  </div>
+        <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
+        <el-pagination
+          :page-sizes="[5,10,15]"
+          :page-size="5"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" />
+      </el-col>
+  </el-form></div>
 </template>
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { server_list } from '../../api/server'
+import { server_group_list, server_list } from '../../api/server'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 export default {
   components: { ElPager },
@@ -130,11 +134,14 @@ export default {
       },
       listLoading: true,
       total: 0,
-      pageNum: 1
+      pageNum: 1,
+      serverGroupSelectModel: [],
+      serverGroups: []
     }
   },
   created() {
     this.fetchData()
+    this.fetchServerGroupListData()
   },
   methods: {
     fetchData() {
@@ -145,6 +152,11 @@ export default {
         this.pageList = response.data.page
         this.listLoading = false
         this.total = response.data.count
+      })
+    },
+    fetchServerGroupListData() {
+      server_group_list().then(response => {
+        this.serverGroups = response.data.items
       })
     },
     indexMethod(index) {
