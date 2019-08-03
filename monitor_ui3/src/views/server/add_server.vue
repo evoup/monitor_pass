@@ -12,13 +12,13 @@
         </el-col>
       </el-form-item>
       <el-form-item label="SNMP">
-        <el-col :span="14">
-          <el-input v-model="form.snmp"/>
+        <el-col :span="8">
+          <el-input v-model="form.snmp" placeholder="请输入ip:port"/>
         </el-col>
       </el-form-item>
       <el-form-item label="JMX">
-        <el-col :span="14">
-          <el-input v-model="form.jmx"/>
+        <el-col :span="8">
+          <el-input v-model="form.jmx" placeholder="请输入ip:port"/>
         </el-col>
       </el-form-item>
       <el-form-item label="服务器组">
@@ -26,7 +26,7 @@
           <el-select
             v-model="serverGroupSelectModel"
             multiple
-            placeholder="请选择服务器组（可选）"
+            placeholder="请选择服务器组（可选0个或多个）"
             style="width: 80%"
           >
             <el-option
@@ -44,7 +44,7 @@
           <el-select
             v-model="templateSelectModel"
             multiple
-            placeholder="请选择模板（可选）"
+            placeholder="请选择模板（可选0个或多个）"
             style="width: 80%"
           >
             <el-option
