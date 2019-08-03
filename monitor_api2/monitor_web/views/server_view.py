@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
-from monitor_web.models import Server, Asset
+from monitor_web.models import Server, Asset, DataCollector
 # Create your views here.
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
@@ -46,21 +46,28 @@ class ServerInfo(APIView):
             'message': '创建服务器失败'
         }
         try:
-            ser = IDCSerializer(data={'name': data['idc']})
-            if not ser.is_valid():
-                return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
-            else:
-                i = ser.create(ser.validated_data)
-                i.save()
-                a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
-                server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'],
-                                                               jmx_address=data['jmx_addr'],
-                                                               snmp_address=data['snmp_addr'], asset=a)
-                srv = Server.objects.get(id=server.id)
-                for sg in data['server_groups']:
-                    srv.server_groups.add(sg)
-                for sg in data['templates']:
-                    srv.templates.add(sg)
+            i = None
+            if data['idc']:
+                ser = IDCSerializer(data={'name': data['idc']})
+                if not ser.is_valid():
+                    return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
+                else:
+                    i = ser.create(ser.validated_data)
+                    i.save()
+            a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
+            if not data['data_collector']:
+                ret['message'] = ret['message'] + ":需要先创建数据收集器"
+                return JsonResponse(ret, safe=False)
+            d = DataCollector.objects.get(id=data['data_collector'])
+            server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'],
+                                                           jmx_address=data['jmx_addr'],
+                                                           snmp_address=data['snmp_addr'], asset=a,
+                                                           data_collector=d)
+            srv = Server.objects.get(id=server.id)
+            for sg in data['server_groups']:
+                srv.server_groups.add(sg)
+            for sg in data['templates']:
+                srv.templates.add(sg)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
