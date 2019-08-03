@@ -139,7 +139,6 @@ class DataCollector(models.Model):
     name = models.CharField(u'数据收集器名', max_length=40, null=False)
     ip = models.CharField(u'IP地址', max_length=20, null=False)
     port = models.IntegerField(u'端口号')
-    desc = models.CharField(u'描述', max_length=50, blank=True, null=True)
 
     class Meta:
         # ordering = ('id',)

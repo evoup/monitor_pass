@@ -57,6 +57,24 @@
           </el-select>
         </el-col>
       </el-form-item>
+      <el-form-item label="数据收集器">
+        <el-col :span="14">
+          <el-select
+            v-model="dataCollectorSelectModel"
+            multiple
+            placeholder="请选择数据收集器"
+            style="width: 80%"
+          >
+            <el-option
+              v-for="item in form.dataCollectors"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
+          </el-select>
+        </el-col>
+      </el-form-item>
       <el-form-item label="所在机房">
         <el-col :span="14">
           <el-select
@@ -80,8 +98,8 @@
         <el-button
           type="primary"
           @click="
-            addServer(form.name, form.client, form.jmx, form.snmp, idcSelectModel, serverGroupSelectModel,
-                      templateSelectModel)
+            addServer(form.name, form.client, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
+                      serverGroupSelectModel, templateSelectModel)
           "
         >创建</el-button
         >
@@ -95,6 +113,7 @@
 import { add_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 import { idc_list } from '../../api/idc'
+import { data_collector_list } from '../../api/data_collector'
 export default {
   data() {
     return {
@@ -113,10 +132,12 @@ export default {
         desc: '',
         templates: [],
         serverGroups: [],
+        dataCollectors: [],
         idcs: []
       },
       serverGroupSelectModel: null,
       templateSelectModel: null,
+      dataCollectorSelectModel: null,
       idcSelectModel: null
     }
   },
@@ -137,13 +158,18 @@ export default {
         this.form.serverGroups = response.data.items
       })
     },
+    fetchDataCollectorListData() {
+      data_collector_list().then(response => {
+        this.form.dataCollectors = response.data.items
+      })
+    },
     fetchIdcListData() {
       idc_list().then(response => {
         this.form.idcs = response.data.items
       })
     },
-    addServer(a, b, c, d, e, f, g) {
-      add_server(a, b, c, d, e, f, g)
+    addServer(a, b, c, d, e, f, g, h) {
+      add_server(a, b, c, d, e, f, g, h)
     },
     jumpServerList() {
       this.$router.push({ path: '/server_list' })

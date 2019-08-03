@@ -102,13 +102,13 @@ export const constantRouterMap = [
     children: [
       {
         path: '/asset_list',
-        name: 'Table1',
+        name: 'Asset',
         component: () => import('../views/asset/asset_list'),
         meta: { title: '资产列表', icon: 'form' }
       },
       {
         path: '/asset_change',
-        name: 'Table1',
+        name: 'ChangeAsset',
         component: () => import('../views/asset/asset_change'),
         meta: { title: '资产变更信息', icon: 'form' }
       }
