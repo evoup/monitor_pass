@@ -7,6 +7,7 @@
             <el-select
               v-model="serverGroupSelectModel"
               placeholder="请选择服务器组"
+              @change="fetchData"
             >
               <el-option
                 v-for="item in serverGroups"
@@ -147,7 +148,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+      server_list(Object.assign(this.pageHelp, this.sortHelp, { serverGroup: this.serverGroupSelectModel })).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false
