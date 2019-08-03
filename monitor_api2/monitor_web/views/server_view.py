@@ -88,7 +88,10 @@ class ServerList(APIView):
         """
         获取服务器列表
         """
-        page_data, count = paging_request(request, models.Server, self)
+        # 0是服务器组
+        filter = {'server_groups__in': request.query_params.get('serverGroup')} if request.query_params.get(
+            'serverGroup') is not '0' else None
+        page_data, count = paging_request(request, models.Server, self, filter=filter)
         # 对数据进行序列化
         serializer = ServerSerializer(instance=page_data, many=True)
         ret = {
