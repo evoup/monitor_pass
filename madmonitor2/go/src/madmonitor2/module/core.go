@@ -33,6 +33,7 @@ import (
 	"syscall"
 	"time"
 	"encoding/json"
+    "net"
 )
 
 // start unix timestamp
@@ -178,6 +179,15 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	if *Service_status {
 		return service.Status()
 	}
+    // Listen for monitor server incoming connections.
+    l, err := net.Listen("tcp", "localhost:8338")
+    if err != nil {
+        fmt.Println("Error listening:", err.Error())
+        os.Exit(1)
+    }
+    // Close the listener when the application closes.
+    defer l.Close()
+    go LocalService(l)
 	// because system network maybe not ready after reboot, when as a systemd service called, so wait a few seconds
 	time.Sleep(time.Second*10)
 	go run_read(readChannel)
