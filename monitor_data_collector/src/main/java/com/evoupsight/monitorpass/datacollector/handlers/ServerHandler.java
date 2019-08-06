@@ -87,7 +87,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             if (!m.matches()) {
                 LOG.error("invalid protocol:" + msg.toString());
                 ctx.channel().write("invalid protocol\n");
-                //ctx.channel().close();
+                ctx.channel().close();
                 return;
             }
             String clientFirstMessageBare = m.group(5);
