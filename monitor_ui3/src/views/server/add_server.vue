@@ -98,7 +98,7 @@
           </el-select>
         </el-col>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="自动收集资产">
         <el-switch
           v-model="form.auto_asset"
           active-color="#13ce66"
