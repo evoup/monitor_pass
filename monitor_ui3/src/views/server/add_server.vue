@@ -183,4 +183,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+  .app-container /deep/ .el-form-item {
+    margin-bottom: 12px;
+  }
+</style>
