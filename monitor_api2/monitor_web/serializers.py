@@ -75,9 +75,9 @@ class ServerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_data_collector(self, obj):
-        d = models.DataCollector.objects.filter(id=obj.id).all()
-        if len(d):
-            return d[0].name
+        s = models.Server.objects.filter(id=obj.id).all()
+        if len(s):
+            return s[0].data_collector.name
         else:
             return None
 

@@ -11,6 +11,11 @@
           <el-input v-model="form.client" placeholder="请输入ip:port"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="SSH">
+        <el-col :span="8">
+          <el-input v-model="form.ssh" placeholder="请输入ip:port"/>
+        </el-col>
+      </el-form-item>
       <el-form-item label="SNMP">
         <el-col :span="8">
           <el-input v-model="form.snmp" placeholder="请输入ip:port"/>
@@ -93,12 +98,17 @@
           </el-select>
         </el-col>
       </el-form-item>
+      <el-form-item label="自动收集资产">
+        <el-switch
+          v-model="form.auto_asset"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           @click="
-            addServer(form.name, form.client, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
-                      serverGroupSelectModel, templateSelectModel)
+            addServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
+                      serverGroupSelectModel, templateSelectModel, form.auto_asset)
           "
         >创建
         </el-button
@@ -119,8 +129,9 @@ export default {
   data() {
     return {
       form: {
-        client: '',
         name: '',
+        client: '',
+        ssh: '',
         jmx: '',
         snmp: '',
         idc: '',
@@ -134,7 +145,8 @@ export default {
         templates: [],
         serverGroups: [],
         dataCollectors: [],
-        idcs: []
+        idcs: [],
+        auto_asset: true
       },
       serverGroupSelectModel: null,
       templateSelectModel: null,
@@ -170,8 +182,8 @@ export default {
         this.form.idcs = response.data.items
       })
     },
-    addServer(a, b, c, d, e, f, g, h) {
-      add_server(a, b, c, d, e, f, g, h).then(response => {
+    addServer(a, b, c, d, e, f, g, h, i, j) {
+      add_server(a, b, c, d, e, f, g, h, i, j).then(response => {
       }).catch(e => {
         console.log(e)
       })
@@ -183,4 +195,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+  .app-container /deep/ .el-form-item {
+    margin-bottom: 12px;
+  }
+</style>

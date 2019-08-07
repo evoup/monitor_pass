@@ -57,8 +57,12 @@ class ServerInfo(APIView):
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
                 return JsonResponse(ret, safe=False)
+            if not data['name']:
+                ret['message'] = ret['message'] + ":服务器名字不能为空"
+                return JsonResponse(ret, safe=False)
             d = DataCollector.objects.get(id=data['data_collector'])
             server, created = Server.objects.get_or_create(name=data['name'], agent_address=data['agent_addr'],
+                                                           ssh_address=data['ssh_addr'],
                                                            jmx_address=data['jmx_addr'],
                                                            snmp_address=data['snmp_addr'], asset=a,
                                                            data_collector=d)
