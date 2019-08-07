@@ -74,9 +74,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("client message:" + msg);
-        if (dispatchClientConfig(ctx, msg)) {
-            return;
-        }
+        /**
+         * 分发方式有问题，应该是数据收集器直接请求到监控代理的端口，一次性下发。
+         if (dispatchClientConfig(ctx, msg)) {
+         return;
+         }*/
 
         if (!ctx.channel().hasAttr(AttributeKey.valueOf("clientId")) ||
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.INITIAL)) {
@@ -145,8 +147,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-            HbaseUtils.getInstance().saveHostInfo(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(),
-                    ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress(), dataCollectorServerName);
+            // 不再操作hbase
+            // HbaseUtils.getInstance().saveHostInfo(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(), ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress(), dataCollectorServerName);
+
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
@@ -175,6 +178,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 分发客户端配置文件
+     *
      * @param ctx
      * @param msg
      * @return
