@@ -19,19 +19,38 @@
     >
       <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
-        label="机房"
+        label="资产类型"
+        sortable="custom"
+        prop="asset_type"
+        width="120" />
+      <el-table-column
+        label="名称"
         sortable="custom"
         prop="name"
-        width="180" />
+        width="120" />
       <el-table-column
-        label="楼层"
+        label="机房"
         sortable="custom"
-        prop="floor"
-        width="330" />
+        prop="idc"
+        width="120" />
+      <el-table-column
+        label="机柜号"
+        sortable="custom"
+        prop="carbinet"
+        width="120" />
+      <el-table-column
+        label="业务线"
+        sortable="custom"
+        prop="business"
+        width="120" />
+      <el-table-column
+        label="资产状态"
+        sortable="custom"
+        prop="status"
+        width="120" />
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
