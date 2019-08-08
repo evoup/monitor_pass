@@ -78,8 +78,12 @@ class AssetSerializer(serializers.ModelSerializer):
         return '--'
 
     def get_host_name(self, obj):
-
-        pass
+        if obj.device_type_id == 1:
+            s = models.Server.objects.filter(asset=obj.id).all()
+            if len(s) > 0:
+                return s[0].name
+        else:
+            return '--'
 
     def get_network_device_name(self, obj):
         pass
