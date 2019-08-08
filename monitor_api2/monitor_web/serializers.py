@@ -60,10 +60,29 @@ class TagSerializer(serializers.ModelSerializer):
 class AssetSerializer(serializers.ModelSerializer):
     tag = TagSerializer(required=True)
     idc = IDCSerializer(required=True)
+    type = serializers.SerializerMethodField()
+    host_name = serializers.SerializerMethodField()
+    network_device_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Asset
         fields = '__all__'
+
+    def get_type(self, obj):
+        if obj.device_type_id == 1:
+            return '服务器'
+        if obj.device_type_id == 2:
+            return '交换机'
+        if obj.device_type_id == 3:
+            return '防火墙'
+        return '--'
+
+    def get_host_name(self, obj):
+
+        pass
+
+    def get_network_device_name(self, obj):
+        pass
 
 
 class ServerSerializer(serializers.ModelSerializer):

@@ -186,7 +186,7 @@ export const constantRouterMap = [
       {
         path: '/general_conf',
         name: 'GeneralConf',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/template/add_template'),
         meta: { title: '常规设置', icon: 'form' }
       },
       {

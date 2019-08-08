@@ -21,13 +21,18 @@
       <el-table-column
         label="资产类型"
         sortable="custom"
-        prop="asset_type"
+        prop="type"
         width="120" />
       <el-table-column
-        label="名称"
+        label="主机名"
         sortable="custom"
-        prop="name"
+        prop="host_name"
         width="120" />
+      <el-table-column
+        label="网络设备标识"
+        sortable="custom"
+        prop="network_device_name"
+        width="140" />
       <el-table-column
         label="机房"
         sortable="custom"
@@ -58,8 +63,52 @@
 </template>
 
 <script>
+import { asset_list } from '../../api/asset'
+
 export default {
-  name: 'AssetList'
+  name: 'AssetList',
+  data() {
+    return {
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1,
+        size: 5,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      listLoading: true,
+      total: 0,
+      pageNum: 1
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
+      asset_list(Object.assign(this.pageHelp, this.sortHelp, { serverGroup: this.serverGroupSelectModel })).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    }
+  }
+
 }
 </script>
 
