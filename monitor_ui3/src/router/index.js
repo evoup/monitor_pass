@@ -111,6 +111,12 @@ export const constantRouterMap = [
         name: 'ChangeAsset',
         component: () => import('../views/asset/asset_change_list'),
         meta: { title: '资产变更信息', icon: 'form' }
+      },
+      {
+        path: '/asset_detail',
+        name: 'AssetDetail',
+        component: () => import('../views/asset/asset_detail'),
+        meta: { title: '资产详情', icon: 'form' }
       }
     ]
   },

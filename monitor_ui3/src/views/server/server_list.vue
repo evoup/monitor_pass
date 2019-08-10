@@ -83,8 +83,8 @@
      -->
         <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
         <el-pagination
-          :page-sizes="[5,10,15]"
-          :page-size="5"
+          :page-sizes="[7,10,15]"
+          :page-size="7"
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
@@ -122,7 +122,7 @@ export default {
       // 列表分页辅助类(传参)
       pageHelp: {
         page: 1,
-        size: 5,
+        size: 7,
         order: 'asc'
       },
       sortHelp: {
