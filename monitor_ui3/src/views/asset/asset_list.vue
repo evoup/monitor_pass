@@ -21,8 +21,15 @@
       <el-table-column
         label="资产类型"
         sortable="custom"
-        prop="type"
-        width="120" />
+        prop="device_type_id"
+        width="120">
+        <template slot-scope="prop">
+          <el-tag v-if="prop.row.device_type_id === 1">服务器</el-tag>
+          <el-tag v-if="prop.row.device_type_id === 2">交换机</el-tag>
+          <el-tag v-if="prop.row.device_type_id === 3">防火墙</el-tag>
+          <el-tag v-if="prop.row.device_type_id > 3">--</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="主机名"
         sortable="custom"
@@ -51,8 +58,14 @@
       <el-table-column
         label="资产状态"
         sortable="custom"
-        prop="status"
-        width="120" />
+        prop="device_status_id"
+        width="120" >
+        <template slot-scope="prop">
+          <el-tag v-if="prop.row.status === 1" type="success">在线</el-tag>
+          <el-tag v-if="prop.row.status === 2" type="danger">宕机</el-tag>
+          <el-tag v-if="prop.row.status === 0" type="primary">未监控</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary">编辑</el-button>
