@@ -98,7 +98,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: null,
     name: 'Assets',
-    meta: { title: '资产管理', icon: 'server2' },
+    meta: { title: '资产管理', icon: 'asset' },
     children: [
       {
         path: '/asset_list',
@@ -107,9 +107,9 @@ export const constantRouterMap = [
         meta: { title: '资产列表', icon: 'form' }
       },
       {
-        path: '/asset_change',
+        path: '/asset_change_list',
         name: 'ChangeAsset',
-        component: () => import('../views/asset/asset_change'),
+        component: () => import('../views/asset/asset_change_list'),
         meta: { title: '资产变更信息', icon: 'form' }
       }
     ]
