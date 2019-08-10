@@ -1,0 +1,636 @@
+[
+{
+  "model": "monitor_web.profile",
+  "pk": 1,
+  "fields": {
+    "telephone": null,
+    "mobile": null,
+    "desc": null,
+    "user": 1
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 1,
+  "fields": {
+    "name": "Template OS Linux",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 2,
+  "fields": {
+    "name": "Template SNMP Interfaces",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 3,
+  "fields": {
+    "name": "Template SNMP Generic",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 4,
+  "fields": {
+    "name": "Template SNMP Device",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 5,
+  "fields": {
+    "name": "Template SNMP OS Windows",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 6,
+  "fields": {
+    "name": "Template SNMP Disks",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 7,
+  "fields": {
+    "name": "Template SNMP OS Linux",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 8,
+  "fields": {
+    "name": "Template SNMP Processors",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.template",
+  "pk": 9,
+  "fields": {
+    "name": "Template App MySQL",
+    "server_id": [],
+    "monitor_set_id": [],
+    "server_group": [],
+    "template_id": []
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 1,
+  "fields": {
+    "name": "Number of processes",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "Total number of processes in any state.",
+    "error": "",
+    "key": "proc.num[]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 2,
+  "fields": {
+    "name": "Processor load (1 min average per core)",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The processor load is calculated as system CPU load divided by number of CPU cores.",
+    "error": "",
+    "key": "system.cpu.load[percpu,avg1]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 3,
+  "fields": {
+    "name": "Number of running processes",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "Number of processes in running state.",
+    "error": "",
+    "key": "proc.num[,,run]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 4,
+  "fields": {
+    "name": "Free swap space",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "",
+    "error": "",
+    "key": "system.swap.size[,free]",
+    "multiplier": 0.0,
+    "unit": "B",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 5,
+  "fields": {
+    "name": "Number of logged in users",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "Number of users who are currently logged in.",
+    "error": "",
+    "key": "system.users.num",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 6,
+  "fields": {
+    "name": "Checksum of /etc/passwd",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "Number of users who are currently logged in.",
+    "error": "",
+    "key": "vfs.file.cksum[/etc/passwd]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 7,
+  "fields": {
+    "name": "Agent ping",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.",
+    "error": "",
+    "key": "agent.ping",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 8,
+  "fields": {
+    "name": "System uptime",
+    "data_type": 0,
+    "delay": 600,
+    "desc": "",
+    "error": "",
+    "key": "system.uptime",
+    "multiplier": 0.0,
+    "unit": "uptime",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 9,
+  "fields": {
+    "name": "Total memory",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "",
+    "error": "",
+    "key": "vm.memory.size[total]",
+    "multiplier": 0.0,
+    "unit": "B",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 10,
+  "fields": {
+    "name": "Total swap space",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "",
+    "error": "",
+    "key": "system.swap.size[,total]",
+    "multiplier": 0.0,
+    "unit": "B",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 11,
+  "fields": {
+    "name": "Maximum number of processes",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.",
+    "error": "",
+    "key": "kernel.maxproc",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 12,
+  "fields": {
+    "name": "Maximum number of opened files",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.",
+    "error": "",
+    "key": "kernel.maxfiles",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 13,
+  "fields": {
+    "name": "Host name",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "System host name.",
+    "error": "",
+    "key": "system.hostname",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 14,
+  "fields": {
+    "name": "System information",
+    "data_type": 0,
+    "delay": 3600,
+    "desc": "The information as normally returned by 'uname -a'.",
+    "error": "",
+    "key": "system.uname",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 15,
+  "fields": {
+    "name": "Host boot time",
+    "data_type": 0,
+    "delay": 600,
+    "desc": "",
+    "error": "",
+    "key": "system.boottime",
+    "multiplier": 0.0,
+    "unit": "unixtime",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 16,
+  "fields": {
+    "name": "Free swap space in %",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "",
+    "error": "",
+    "key": "system.swap.size[,pfree]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 17,
+  "fields": {
+    "name": "Host local time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "",
+    "error": "",
+    "key": "system.localtime",
+    "multiplier": 0.0,
+    "unit": "unixtime",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 18,
+  "fields": {
+    "name": "CPU idle time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The time the CPU has spent doing nothing.",
+    "error": "",
+    "key": "system.cpu.util[,idle]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 19,
+  "fields": {
+    "name": "CPU user time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The time the CPU has spent running users' processes that are not niced.",
+    "error": "",
+    "key": "system.cpu.util[,user]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 20,
+  "fields": {
+    "name": "CPU nice time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The time the CPU has spent running users' processes that have been niced.",
+    "error": "",
+    "key": "system.cpu.util[,nice]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 21,
+  "fields": {
+    "name": "CPU system time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The time the CPU has spent running the kernel and its processes.",
+    "error": "",
+    "key": "system.cpu.util[,system]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 22,
+  "fields": {
+    "name": "CPU iowait time",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "Amount of time the CPU has been waiting for I/O to complete.",
+    "error": "",
+    "key": "system.cpu.util[,iowait]",
+    "multiplier": 0.0,
+    "unit": "%",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 23,
+  "fields": {
+    "name": "Available memory",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "Available memory is defined as free+cached+buffers memory.",
+    "error": "",
+    "key": "vm.memory.size[available]",
+    "multiplier": 0.0,
+    "unit": "B",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 24,
+  "fields": {
+    "name": "MySQL status",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "It requires user parameter mysql.ping, which is defined in userparameter_mysql.conf.\n\n0 - MySQL server is down\n1 - MySQL server is up",
+    "error": "",
+    "key": "mysql.ping",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 9,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 25,
+  "fields": {
+    "name": "MySQL bytes received per second",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "It requires user parameter mysql.ping, which is defined in userparameter_mysql.conf.\n\n0 - MySQL server is down\n1 - MySQL server is up",
+    "error": "",
+    "key": "mysql.status[Bytes_received]",
+    "multiplier": 0.0,
+    "unit": "Bps",
+    "host_id": 0,
+    "template_id": 9,
+    "delta": 1
+  }
+},
+{
+  "model": "monitor_web.trigger",
+  "pk": 1,
+  "fields": {
+    "expression": "{1}>300",
+    "template": 1,
+    "name": "Too many processes on {HOST.NAME}",
+    "desc": null
+  }
+},
+{
+  "model": "monitor_web.trigger",
+  "pk": 2,
+  "fields": {
+    "expression": "{2}>5",
+    "template": 1,
+    "name": "Processor load is too high on {HOST.NAME}",
+    "desc": null
+  }
+},
+{
+  "model": "monitor_web.trigger",
+  "pk": 3,
+  "fields": {
+    "expression": "{3}>30",
+    "template": 1,
+    "name": "Too many processes running on {HOST.NAME}",
+    "desc": null
+  }
+},
+{
+  "model": "monitor_web.trigger",
+  "pk": 4,
+  "fields": {
+    "expression": "{4}>0",
+    "template": 1,
+    "name": "Host information was changed on {HOST.NAME}",
+    "desc": null
+  }
+},
+{
+  "model": "monitor_web.trigger",
+  "pk": 5,
+  "fields": {
+    "expression": "{5}<50",
+    "template": 1,
+    "name": "Lack of free swap space on {HOST.NAME}",
+    "desc": "It probably means that the systems requires more physical memory."
+  }
+},
+{
+  "model": "monitor_web.function",
+  "pk": 1,
+  "fields": {
+    "item": 1,
+    "trigger": 1,
+    "name": "avg",
+    "parameter": "5m"
+  }
+},
+{
+  "model": "monitor_web.function",
+  "pk": 2,
+  "fields": {
+    "item": 2,
+    "trigger": 2,
+    "name": "avg",
+    "parameter": "5m"
+  }
+},
+{
+  "model": "monitor_web.function",
+  "pk": 3,
+  "fields": {
+    "item": 3,
+    "trigger": 3,
+    "name": "avg",
+    "parameter": "5m"
+  }
+},
+{
+  "model": "monitor_web.function",
+  "pk": 4,
+  "fields": {
+    "item": 14,
+    "trigger": 4,
+    "name": "diff",
+    "parameter": "0"
+  }
+},
+{
+  "model": "monitor_web.function",
+  "pk": 5,
+  "fields": {
+    "item": 16,
+    "trigger": 5,
+    "name": "last",
+    "parameter": "0"
+  }
+}
+]
