@@ -4,6 +4,8 @@
 #python3=$BASEDIR/venv/bin/python3
 
 #python3 manage.py sqlflush | python3 manage.py dbshell
+export PYTHONUNBUFFERED=1
+export DJANGO_SETTINGS_MODULE=web.dev_settings
 python3 manage.py makemigrations monitor_web
 python3 manage.py migrate
 python3 manage.py syncdb --noinput

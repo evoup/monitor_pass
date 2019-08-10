@@ -3,3 +3,4 @@ venv/
 monitor_web/__pycache__/*
 web/__pycache__/*
 monitor_web/migrations/__pycache__/*
+*.sqlite3
