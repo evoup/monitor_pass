@@ -61,7 +61,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="prop">
-            <el-button size="small" type="primary">查看详情</el-button>
+            <el-button size="small" type="primary" @click="jumpViewDetail(prop.row.id)">查看详情</el-button>
             <el-button size="small" type="primary">编辑</el-button>
           </template>
         </el-table-column>
@@ -148,6 +148,11 @@ export default {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
+    },
+    jumpViewDetail(id) {
+      this.$router.push({
+        path: '/asset_detail', query: { asset_id: id }
+      })
     }
   }
 
