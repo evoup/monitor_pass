@@ -1,18 +1,11 @@
 # monitor api2.0 SPEC
 
 # install
-```bash
-python3 manage.py makemigrations monitor_web
-python3 manage.py migrate
-python3 manage.py createsuperuserwithpassword \
-        --username admin \
-        --password admin \
-        --email admin@example.org \
-        --preserve
-```
-or run shell install.sh
+
+run shell install.sh
 
 ###nginx conf
+
 add default to /etc/nginx/sites-available
 
 context is:
@@ -26,4 +19,10 @@ context is:
             proxy_pass   http://localhost:8000;                                                                         
             proxy_redirect default ;                                                                                    
         }
+```
+
+#development
+If add initial Sql, should dump them for installation:
+```
+python3 manage.py dumpdata monitor_web --indent=2 > initial_monitor_web.json
 ```
