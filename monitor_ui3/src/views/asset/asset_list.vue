@@ -36,7 +36,7 @@
       <el-table-column
         label="机房"
         sortable="custom"
-        prop="idc"
+        prop="idc.name"
         width="120" />
       <el-table-column
         label="机柜号"
