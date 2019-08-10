@@ -1,14 +1,5 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="warp-breadcrum" >
-      <el-col :span="24">
-        <el-col :span="3" :offset="21">
-          <div class="grid-content">
-            <el-button type="primary" @click="jumpAddIdc()"><i class="el-icon-plus el-icon--right" />添加机房</el-button>
-          </div>
-        </el-col>
-      </el-col>
-    </el-row>
     <el-table
       :v-loading="listLoading"
       :data="dataList"
@@ -61,13 +52,15 @@
         prop="device_status_id"
         width="120" >
         <template slot-scope="prop">
-          <el-tag v-if="prop.row.status === 1" type="success">在线</el-tag>
-          <el-tag v-if="prop.row.status === 2" type="danger">宕机</el-tag>
-          <el-tag v-if="prop.row.status === 0" type="primary">未监控</el-tag>
+          <el-tag v-if="prop.row.device_status_id === 1" type="success">上架</el-tag>
+          <el-tag v-if="prop.row.device_status_id === 2" type="danger">在线</el-tag>
+          <el-tag v-if="prop.row.device_status_id === 3" type="primary">离线</el-tag>
+          <el-tag v-if="prop.row.device_status_id === 4" type="primary">下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
+          <el-button size="small" type="primary">查看详情</el-button>
           <el-button size="small" type="primary">编辑</el-button>
         </template>
       </el-table-column>
