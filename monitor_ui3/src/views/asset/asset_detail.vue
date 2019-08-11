@@ -229,7 +229,19 @@
           </tbody>
         </table>
       </el-tab-pane>
-      <el-tab-pane label="变更记录"/>
+      <el-tab-pane label="变更记录">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(activity, index) in activities"
+            :key="index"
+            :timestamp="activity.timestamp">
+            <el-card>
+              <h4>{{ activity.content }}</h4>
+              <p>自动采集</p>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -250,7 +262,17 @@ export default {
         'floor': '12f',
         'position': '5',
         'business_line': '广告投放'
-      }
+      },
+      activities: [{
+        content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
+        timestamp: '2019-04-15'
+      }, {
+        content: '[新增网卡]eth0:mac地址为00:1c:42:a5:57:7a;状态为True;掩码为255.255.255.0;IP地址为10.211.55.4',
+        timestamp: '2019-04-13'
+      }, {
+        content: '系统由变更为linux;系统版本由变更为CentOS release 6.6 (Final);主板SN号由asdfasdfasdfasdf变更为Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30;主板厂商由变更为Parallels Software International Inc.;主板型号由变更为Parallels Virtual Platform;CPU逻辑核数由None变更为24;CPU物理核数由None变更为2;CPU型号由变更为 Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz',
+        timestamp: '2019-04-11'
+      }]
     }
   }
 }
@@ -277,5 +299,8 @@ export default {
   .app-container /deep/ table td {
     padding:0 10px;
     border: 1px solid #dcdcdc;
+  }
+  .app-container /deep/ .el-card h4 {
+    font-weight: normal;
   }
 </style>
