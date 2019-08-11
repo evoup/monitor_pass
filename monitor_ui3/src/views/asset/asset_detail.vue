@@ -93,7 +93,7 @@
 
             <!-- 网卡信息开始 -->
             <tr>
-              <th colspan="5" class="title f14 th"><span class="padding-l-8">网卡信息</span></th>
+              <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;"><span class="padding-l-8">网卡信息</span></th>
             </tr>
             <tr>
               <td>名称</td>
@@ -107,7 +107,7 @@
               <td>00：1c：42：a5：57：7a</td>
               <td>10.211.55.4</td>
               <td>255.255.255.0</td>
-              <td>真正</td>
+              <td>是</td>
             </tr>
             <!-- 网卡信息结束 -->
             <!-- 硬盘信息开始 -->
@@ -252,7 +252,7 @@ export default {
 </script>
 
 <style scoped>
-  table {
+  .app-container /deep/ table {
     font-size: 14px;
     text-align: left;
     width:100%;
@@ -261,10 +261,10 @@ export default {
     border-collapse: collapse;
     border: 1px solid #dcdcdc;
   }
-  table th {
+  .app-container /deep/ table th {
     padding:0 10px;
   }
-  table td {
+  .app-container /deep/ table td {
     padding:0 10px;
     border: 1px solid #dcdcdc;
   }
