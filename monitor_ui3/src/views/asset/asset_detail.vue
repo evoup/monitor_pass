@@ -263,6 +263,7 @@ export default {
   }
   .app-container /deep/ table th {
     padding:0 10px;
+    background-color: #f5f7fa;
   }
   .app-container /deep/ table td {
     padding:0 10px;
