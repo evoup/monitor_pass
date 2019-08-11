@@ -1,49 +1,54 @@
 <template>
   <div class="app-container">
     <el-tabs type="border-card">
-      <el-tab-pane label="基本信息">
+      <el-tab-pane label="基本信息" class="base-info">
         <el-row>
-          <el-col :span="8">
+          <el-col>
             主机名： {{ x.host_name }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             序列号： {{ x.serial_number }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             IP： {{ x.ip }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             状态： {{ x.status }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             更新时间： {{ x.update_time }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             机房： {{ x.idc }}
           </el-col>
+          <el-row>
+            <el-col>
+              楼层： {{ x.floor }}
+            </el-col>
+          </el-row>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             机柜： {{ x.carinet }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             柜上位置： {{ x.position }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col>
             业务线： {{ x.business_line }}
           </el-col>
         </el-row>
@@ -52,7 +57,7 @@
         <table class="guige-table">
           <tbody>
             <tr>
-              <th colspan="5" class="title f14 th"><span class="padding-l-8">基础信息</span></th>
+              <th colspan="5"><span class="padding-l-8">基础信息</span></th>
             </tr>
             <tr>
               <td>名称</td>
@@ -252,6 +257,10 @@ export default {
 </script>
 
 <style scoped>
+  .app-container /deep/ .base-info {
+    line-height: 30px;
+    font-size: 14px;
+  }
   .app-container /deep/ table {
     font-size: 14px;
     text-align: left;
