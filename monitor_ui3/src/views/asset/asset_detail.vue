@@ -57,7 +57,7 @@
         <table class="guige-table">
           <tbody>
             <tr>
-              <th colspan="5"><span class="padding-l-8">基础信息</span></th>
+              <th colspan="5" style="border-left:2px solid #0488cd;"><span class="padding-l-8">基础信息</span></th>
             </tr>
             <tr>
               <td>名称</td>
