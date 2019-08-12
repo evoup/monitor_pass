@@ -15,7 +15,11 @@
         prop="content"
         min-width="40%">
         <template slot-scope="prop">
-          <b>{{ prop.row.name }}</b>: {{ prop.row.content }}
+          <span v-if="prop.row.type === 1">服务器</span>
+          <span v-if="prop.row.type === 2">防火墙</span>
+          <span v-if="prop.row.type === 3">网络设备</span>
+          <b>{{ prop.row.name }}</b>
+          : {{ prop.row.content }}
         </template>
       </el-table-column>
       <el-table-column
@@ -24,7 +28,7 @@
         prop="creator"
         min-width="10%" >
         <template slot-scope="prop">
-          <el-tag v-if="prop.row.creator = 1" type="success">自动添加</el-tag>
+          <span v-if="prop.row.creator === ''" type="success">自动添加</span>
         </template>
       </el-table-column>
       <el-table-column

@@ -80,11 +80,19 @@ class AssetSerializer(serializers.ModelSerializer):
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
     class Meta:
         model = AssetRecord
         fields = '__all__'
+
+    def get_type(self, obj):
+        a = models.Asset.objects.filter(id=obj.id).all()
+        if len(a):
+            return a[0].device_type_id
+        else:
+            return 0
 
     def get_name(self, obj):
         a = models.Asset.objects.filter(id=obj.id).all()
