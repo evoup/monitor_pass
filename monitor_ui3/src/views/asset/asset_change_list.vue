@@ -8,22 +8,30 @@
       tooltip-effect="dark"
       style="width: 100%;margin-top:10px"
     >
-      <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
+      <el-table-column prop="id" label="序号" type="index" width="80px" align="center" />
       <el-table-column
         label="内容"
         sortable="custom"
         prop="content"
-        width="520" />
+        min-width="40%">
+        <template slot-scope="prop">
+          <b>{{ prop.row.name }}</b>: {{ prop.row.content }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="创建"
         sortable="custom"
-        prop="create_id"
-        width="330" />
+        prop="creator"
+        min-width="10%" >
+        <template slot-scope="prop">
+          <el-tag v-if="prop.row.creator = 1" type="success">自动添加</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="创建日期"
         sortable="custom"
-        prop="create_date"
-        width="330" />
+        prop="create_at"
+        min-width="10%" />
     </el-table>
     <el-col :span="24" class="toolbar block">
       <el-pagination

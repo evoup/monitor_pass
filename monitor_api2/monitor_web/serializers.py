@@ -80,9 +80,26 @@ class AssetSerializer(serializers.ModelSerializer):
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = AssetRecord
         fields = '__all__'
+
+    def get_name(self, obj):
+        a = models.Asset.objects.filter(id=obj.id).all()
+        if len(a):
+            # 服务器
+            if a[0].device_type_id == 1:
+                return a[0].server.name
+            # 防火墙
+            elif a[0].device_type_id == 2:
+                return a[0].sn
+            # 交换机
+            elif a[0].device_type_id == 3:
+                return a[0].sn
+        else:
+            return None
 
 
 class ServerSerializer(serializers.ModelSerializer):
