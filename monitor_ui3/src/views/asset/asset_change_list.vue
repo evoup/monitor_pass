@@ -19,14 +19,19 @@
     >
       <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
       <el-table-column
-        label="机房"
+        label="内容"
         sortable="custom"
-        prop="name"
+        prop="content"
         width="180" />
       <el-table-column
-        label="楼层"
+        label="创建"
         sortable="custom"
-        prop="floor"
+        prop="create_id"
+        width="330" />
+      <el-table-column
+        label="创建日期"
+        sortable="custom"
+        prop="create_date"
         width="330" />
       <el-table-column label="操作">
         <template slot-scope="prop">
