@@ -13,7 +13,7 @@
         label="内容"
         sortable="custom"
         prop="content"
-        width="180" />
+        width="520" />
       <el-table-column
         label="创建"
         sortable="custom"
@@ -24,12 +24,6 @@
         sortable="custom"
         prop="create_date"
         width="330" />
-      <el-table-column label="操作">
-        <template slot-scope="prop">
-          <el-button size="small" type="primary">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <el-col :span="24" class="toolbar block">
       <el-pagination
@@ -78,11 +72,10 @@ export default {
       pageNum: 1
     }
   },
-  dataList: [],
+  created() {
+    this.fetchData()
+  },
   methods: {
-    created() {
-      this.fetchData()
-    },
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
@@ -92,6 +85,25 @@ export default {
         this.listLoading = false
         this.total = response.data.count
       })
+    },
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
+    },
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
+      this.fetchData()
+    },
+    // 点击分页sort-change
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
+      this.fetchData()
     }
   }
 }

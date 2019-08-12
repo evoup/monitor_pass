@@ -5,7 +5,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from monitor_web.serializers import AssetSerializer
+from monitor_web.serializers import AssetSerializer, AssetRecordSerializer
 from web.common import constant
 from web.common.paging import paging_request
 
@@ -42,9 +42,9 @@ class AssetRecordList(APIView):
         获取资产变更记录列表
         """
         from monitor_web import models
-        page_data, count = paging_request(request, models.Asset, self)
+        page_data, count = paging_request(request, models.AssetRecord, self)
         # 对数据进行序列化
-        serializer = AssetSerializer(instance=page_data, many=True)
+        serializer = AssetRecordSerializer(instance=page_data, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

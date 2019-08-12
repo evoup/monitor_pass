@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function, DataCollector
+    Function, DataCollector, AssetRecord
 
 
 class DataCollectorSerializer(serializers.ModelSerializer):
@@ -77,6 +77,12 @@ class AssetSerializer(serializers.ModelSerializer):
 
     def get_network_device_name(self, obj):
         return '--'
+
+
+class AssetRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssetRecord
+        fields = '__all__'
 
 
 class ServerSerializer(serializers.ModelSerializer):
