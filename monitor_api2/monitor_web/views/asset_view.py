@@ -33,3 +33,28 @@ class AssetList(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+
+class AssetRecordList(APIView):
+    @method_decorator(permission_required('monitor_web.view_asset', raise_exception=True))
+    def get(self, request, pk=None, format=None):
+        """
+        获取资产变更记录列表
+        """
+        from monitor_web import models
+        page_data, count = paging_request(request, models.Asset, self)
+        # 对数据进行序列化
+        serializer = AssetSerializer(instance=page_data, many=True)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "count": count,
+                "items": serializer.data,
+                "page": {
+                    "currPage": request.GET.get('page', constant.DEFAULT_CURRENT_PAGE),
+                    "pageSize": request.GET.get('size', constant.DEFAULT_PAGE_SIZE)
+                }
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
