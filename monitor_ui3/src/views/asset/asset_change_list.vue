@@ -31,6 +31,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-col :span="24" class="toolbar block">
+      <el-pagination
+        :page-sizes="[7,10,15]"
+        :page-size="7"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
+    </el-col>
   </div>
 </template>
 
@@ -39,6 +48,37 @@ import { asset_record_list } from '../../api/asset'
 
 export default {
   name: 'AssetRecordList',
+  data() {
+    return {
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1,
+        size: 7,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      filters: {
+        name: '',
+        type: 1
+      },
+      listLoading: true,
+      total: 0,
+      pageNum: 1
+    }
+  },
+  dataList: [],
   methods: {
     created() {
       this.fetchData()
