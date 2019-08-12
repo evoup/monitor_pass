@@ -7,3 +7,11 @@ export function asset_list(param) {
     params: param
   })
 }
+
+export function asset_record_list(param) {
+  return request({
+    url: '/asset_record/list',
+    method: 'get',
+    params: param
+  })
+}

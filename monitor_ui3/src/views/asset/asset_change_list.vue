@@ -1,14 +1,5 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="warp-breadcrum" >
-      <el-col :span="24">
-        <el-col :span="3" :offset="21">
-          <div class="grid-content">
-            <el-button type="primary" @click="jumpAddIdc()"><i class="el-icon-plus el-icon--right" />添加机房</el-button>
-          </div>
-        </el-col>
-      </el-col>
-    </el-row>
     <el-table
       :v-loading="listLoading"
       :data="dataList"
@@ -44,8 +35,25 @@
 </template>
 
 <script>
+import { asset_record_list } from '../../api/asset'
+
 export default {
-  name: 'AssetList'
+  name: 'AssetRecordList',
+  methods: {
+    created() {
+      this.fetchData()
+    },
+    fetchData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
+      asset_record_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    }
+  }
 }
 </script>
 
