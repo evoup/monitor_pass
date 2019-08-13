@@ -116,7 +116,8 @@ export const constantRouterMap = [
         path: '/asset_detail',
         name: 'AssetDetail',
         component: () => import('../views/asset/asset_detail'),
-        meta: { title: '资产详情', icon: 'form' }
+        meta: { title: '资产详情', icon: 'form' },
+        hidden: true
       }
     ]
   },
