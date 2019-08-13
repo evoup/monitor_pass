@@ -24,6 +24,9 @@ ln -s /path/to/monitor_pass/madmonitor2/go/src/madmonitor2/ madmonitor2
 adduser monitoruser
 sudo chown -R monitoruser:monitoruser /usr/local/lib/madmonitor2
 ```
+此外，还需要在go/src目录下，安放好依赖的库文件，在这里获取https://gitee.com/evoup/3rd_golib
+
+需要把其中的github.com和golang.org文件夹，放到~/go/src/目录下。
 
 
 
