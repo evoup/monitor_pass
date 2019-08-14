@@ -103,7 +103,8 @@ func sysload() {
 
 		r := bufio.NewReader(stdout)
 		for {
-
+		    // wait 0.1 seconds to avoid high load problem
+            time.Sleep(time.Duration(100))
 			line, err := r.ReadString('\n')
 
 			// CPU: --> CPU all:  : FreeBSD, to match the all CPU
