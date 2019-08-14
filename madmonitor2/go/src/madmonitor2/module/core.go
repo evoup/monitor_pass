@@ -195,7 +195,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	// we must open connection to server before send data
 	//cName, foundServer, serverConn := ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
 	ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
-	go run_reconnect(ServerConnection, readChannel, reconnectChannel)
+	//go run_reconnect(ServerConnection, readChannel, reconnectChannel)
 	go run_get_config(ServerConnection)
 	//auth(serverConn, cName, foundServer, readChannel, reconnectChannel)
 
