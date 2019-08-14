@@ -49,7 +49,7 @@ cd madmonitor2
 
 
 ## 安装
-
+mpstat必须安装。
 复制/usr/local/lib/madmonitor2下对应的扩展库，以及madmonitor2主程序到目标机器。
 
 ```bash
@@ -62,7 +62,7 @@ sudo chown -R monitoruser:monitoruser /usr/local/bin/madmonitor2
 #### 第一次运行
 
 ```bash
-madmonitor2 -d 4
+madmonitor2 -d=4
 ```
 
 
