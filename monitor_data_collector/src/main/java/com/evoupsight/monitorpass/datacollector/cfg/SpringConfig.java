@@ -201,17 +201,11 @@ public class SpringConfig {
 
     @Bean(name = "jmxExecutorServiceThreadPool")
     public ExecutorService jmxExecutorServiceThreadPool() {
-        // ExecutorService es = Executors.newFixedThreadPool(5);
-        // ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("snmp-pool-%d").build();
-        // ExecutorService es = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
         return Executors.newFixedThreadPool(5);
     }
 
     @Bean(name = "snmpExecutorServiceThreadPool")
     public ExecutorService snmpExecutorServiceThreadPool() {
-        // ExecutorService es = Executors.newFixedThreadPool(5);
-        // ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("snmp-pool-%d").build();
-        // ExecutorService es = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
         return Executors.newFixedThreadPool(5);
     }
 
