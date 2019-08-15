@@ -17,9 +17,9 @@
         <el-table-column label="数目" min-width="50%">
           <template slot-scope="scope">
             <a v-if="scope.row.num==0" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='宕机'" class="warn" @click="jumpServerList">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='在线'" :href="scope.row.num" target="_blank" class="online">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='未监控'" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name=='宕机'" class="warn" @click="jumpServerList(1)">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name=='在线'" :href="scope.row.num" target="_blank" class="online" @click="jumpServerList(2)">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name=='未监控'" :href="scope.row.num" target="_blank" @click="jumpServerList(3)">{{ scope.row.num }}</a>
           </template>
         </el-table-column>
       </el-table-column>
@@ -49,8 +49,8 @@ export default {
     }
   },
   methods: {
-    jumpServerList() {
-      this.$router.push({ path: '/server_list' })
+    jumpServerList(type) {
+      this.$router.push({ path: '/server_list?type=' + type })
     },
     myHeaderStyle({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 1) {
