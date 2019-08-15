@@ -180,7 +180,7 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 		return service.Status()
 	}
     // Listen for monitor server incoming connections.
-    l, err := net.Listen("tcp", "localhost:8338")
+    l, err := net.Listen("tcp", "0.0.0.0:8338")
     if err != nil {
         fmt.Println("Error listening:", err.Error())
         os.Exit(1)
