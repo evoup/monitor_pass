@@ -2,13 +2,16 @@ package com.evoupsight.monitorpass.datacollector.sender;
 
 
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
+import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
+import com.evoupsight.monitorpass.datacollector.manager.DataCollectorCache;
 import com.evoupsight.monitorpass.datacollector.manager.ServerCache;
 import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.SimpleHttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,9 +27,12 @@ public class Sender {
     private ServerCache serverCache;
     @Autowired
     private ServerMapper serverMapper;
+    @Autowired
+    private DataCollectorCache dataCollectorCache;
 
     private PoolingHttpClient httpClient;
-
+    @Value("${datacollector.servername}")
+    String dataCollectorServerName;
     private String message;
     private String opentsdbServerUrl;
 
@@ -83,11 +89,15 @@ public class Sender {
             if (StringUtils.isNotEmpty(host)) {
                 if (serverCache.findServer(host) == null) {
                     System.out.println("发现新服务器");
-                    // 新服务器，设置状态为没有监控
-                    Server server = new Server();
-                    server.setHostname(host);
-//                    server.setDataCollectorId(null);
-                    serverMapper.insert(server);
+                    DataCollector dataCollector = dataCollectorCache.findDataCollector(dataCollectorServerName);
+                    // 需要找到数据收集器的IP，要求部署的IP
+                    if (dataCollector != null) {
+                        // 新服务器，设置状态为没有监控
+                        Server server = new Server();
+                        server.setHostname(host);
+                        server.setDataCollectorId(dataCollector.getId());
+                        serverMapper.insert(server);
+                    }
                 } else {
                     // 老朋友了，pass
                 }

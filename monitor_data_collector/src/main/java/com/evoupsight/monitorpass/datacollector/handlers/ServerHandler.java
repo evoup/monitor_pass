@@ -55,8 +55,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     String brokers;
     @Value("${kafka.topic}")
     String topic;
-    @Value("${datacollector.servername}")
-    String dataCollectorServerName;
     @Autowired
     protected JedisPool jedisPool;
 
