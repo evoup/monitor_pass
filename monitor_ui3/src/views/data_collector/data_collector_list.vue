@@ -22,17 +22,17 @@
         label="数据收集器"
         sortable="custom"
         prop="name"
-        width="180" />
+        min-width="20%" />
       <el-table-column
         label="ip"
         sortable="custom"
         prop="ip"
-        width="330" />
+        min-width="30%" />
       <el-table-column
         label="port"
         sortable="custom"
         prop="port"
-        width="330" />
+        min-width="20%" />
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button size="small" type="primary">编辑</el-button>
