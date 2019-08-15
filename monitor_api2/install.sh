@@ -1,10 +1,7 @@
 #!/bin/bash
-#BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
-#echo $BASEDIR
-#python3=$BASEDIR/venv/bin/python3
-
-#python3 manage.py sqlflush | python3 manage.py dbshell
-rm -f monitor.sqlite3
+BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
+python3=$BASEDIR/venv/bin/python3
+source $BASEDIR/venv/bin/activate
 export PYTHONUNBUFFERED=1
 export DJANGO_SETTINGS_MODULE=web.deploy_settings
 python3 manage.py makemigrations monitor_web
