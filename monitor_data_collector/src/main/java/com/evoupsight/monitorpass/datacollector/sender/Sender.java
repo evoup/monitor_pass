@@ -1,10 +1,14 @@
 package com.evoupsight.monitorpass.datacollector.sender;
 
 
+import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
+import com.evoupsight.monitorpass.datacollector.dao.model.Server;
+import com.evoupsight.monitorpass.datacollector.manager.ServerCache;
+import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.SimpleHttpResponse;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +18,12 @@ import java.util.Map;
  * @author evoup
  */
 
+@SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class Sender {
-
+    @Autowired
+    private ServerCache serverCache;
+    @Autowired
+    private ServerMapper serverMapper;
 
     private PoolingHttpClient httpClient;
 
@@ -70,6 +78,20 @@ public class Sender {
             SimpleHttpResponse response = httpClient.doPost(
                     opentsdbServerUrl + "/api/put/?details",
                     builder.build());
+            String host = map.get("host");
+            // 写入服务器到数据库，主要为了显示到服务器列表
+            if (StringUtils.isNotEmpty(host)) {
+                if (serverCache.findServer(host) == null) {
+                    System.out.println("发现新服务器");
+                    // 新服务器，设置状态为没有监控
+                    Server server = new Server();
+                    server.setHostname(host);
+//                    server.setDataCollectorId(null);
+                    serverMapper.insert(server);
+                } else {
+                    // 老朋友了，pass
+                }
+            }
             System.out.println(response.getStatusCode());
             System.out.println(response.getContent());
         }

@@ -6,7 +6,7 @@ import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolEx
 import com.evoupsight.monitorpass.datacollector.domain.*;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
-import com.evoupsight.monitorpass.datacollector.utils.HbaseUtils;
+//import com.evoupsight.monitorpass.datacollector.utils.HbaseUtils;
 import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
@@ -38,6 +38,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author evoup
+ */
 @Component
 @Qualifier("serverHandler")
 @Sharable

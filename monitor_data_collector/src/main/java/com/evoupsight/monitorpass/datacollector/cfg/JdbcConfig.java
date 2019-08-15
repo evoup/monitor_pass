@@ -32,7 +32,7 @@ import java.util.List;
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:jdbc.properties", "file:${external_conf}/jdbc.properties"}, ignoreResourceNotFound = true)
-@MapperScan(basePackages = {"com.evoupsight.monitorpass.datacollector.dao.mapper"},sqlSessionFactoryRef = "sqlSessionFactoryBean")
+@MapperScan(basePackages = {"com.evoupsight.monitorpass.datacollector.dao.mapper"}, sqlSessionFactoryRef = "sqlSessionFactoryBean")
 public class JdbcConfig {
 
     @Value("${db.driver}")
@@ -82,7 +82,7 @@ public class JdbcConfig {
     }
 
     @Bean(name = "sqlSession")
-    public SqlSessionTemplate SqlSessionTemplate() throws Exception {
+    public SqlSessionTemplate sqlSessionTemplate() throws Exception {
         return new SqlSessionTemplate(sqlSessionFactoryBean());
     }
 

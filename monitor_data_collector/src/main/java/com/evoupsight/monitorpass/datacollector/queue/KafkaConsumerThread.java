@@ -6,11 +6,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.log4j.Logger;
 import org.opentsdb.client.PoolingHttpClient;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
 
+/**
+ * @author evoup
+ */
 public class KafkaConsumerThread extends Thread {
     private static final Logger LOG = Logger.getLogger(KafkaConsumerThread.class);
     private KafkaConsumer<String, String> consumer;
@@ -21,7 +24,7 @@ public class KafkaConsumerThread extends Thread {
         Properties props = new Properties();
         props.putAll(consumerConfig);
         this.consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Arrays.asList(topic));
+        consumer.subscribe(Collections.singletonList(topic));
         this.openstdbServerUrl = openstdbServerUrl;
         this.httpClient = httpClient;
     }
