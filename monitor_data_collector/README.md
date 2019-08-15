@@ -2,5 +2,5 @@
 
 ### 运行
 ```bash
-java -Dexternal_conf=/path/to/conf/ -jar target/xxx.jar
+java -Xms256m -Xmx512m -Dexternal_conf=/path/to/conf/ -jar target/xxx.jar
 ```
