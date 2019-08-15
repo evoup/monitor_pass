@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+
+  <!--<classPathEntry-->
+          <!--location="/opt/maven-local-repository/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar"/>-->
+  <context id="context1" >
+  
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://lab4:3307/monitor" userId="dba" password="123456" />
+    <javaModelGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.model" targetProject="src/main/java" />
+    <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources" />
+    <javaClientGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.mapper" targetProject="src/main/java" type="XMLMAPPER" />
+    
+
+    <table schema="" tableName="r_pmuser_advt_act" domainObjectName="RelationPmUserAdvtAct">
+      <columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>
+    </table>
+
+  </context>
+</generatorConfiguration>
