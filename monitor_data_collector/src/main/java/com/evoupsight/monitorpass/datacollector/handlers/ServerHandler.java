@@ -6,7 +6,6 @@ import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolEx
 import com.evoupsight.monitorpass.datacollector.domain.*;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
-//import com.evoupsight.monitorpass.datacollector.utils.HbaseUtils;
 import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
@@ -29,7 +28,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -64,13 +62,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final Pattern
             CLIENT_FIRST_MESSAGE = Pattern.compile("^(([pny])=?([^,]*),([^,]*),)(m?=?[^,]*,?n=([^,]*),r=([^,]*),?.*)$");
-    //    private static final Pattern
-//            CLIENT_FINAL_MESSAGE = Pattern.compile("(c=([^,]*),r=([^,]*)),p=(.*)$");
     private static final Pattern
             CLIENT_GET_CONF_MESSAGE = Pattern.compile("getconf\\|(.*)");
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
     }
 
@@ -150,8 +146,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-            // 不再操作hbase
-            // HbaseUtils.getInstance().saveHostInfo(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(), ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress(), dataCollectorServerName);
 
             return;
         }
