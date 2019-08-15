@@ -12,8 +12,8 @@
     <javaClientGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.mapper" targetProject="src/main/java" type="XMLMAPPER" />
     
 
-    <table schema="" tableName="r_pmuser_advt_act" domainObjectName="RelationPmUserAdvtAct">
-      <columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>
+    <table schema="" tableName="server" domainObjectName="Server">
+      <!--<columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>-->
     </table>
 
   </context>
