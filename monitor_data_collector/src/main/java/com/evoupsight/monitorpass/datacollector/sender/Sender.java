@@ -103,7 +103,7 @@ public class Sender {
             Map<String, String> map = new HashMap<>();
             // 第五位开始是tag=tag_value
             for (int i = 4; i < split.length; i++) {
-                String tagKv = split[4];
+                String tagKv = split[i];
                 String[] tagKV = tagKv.split("=");
                 try {
                     map.put(tagKV[0], tagKV[1]);
@@ -114,9 +114,7 @@ public class Sender {
 
             MetricBuilder builder = MetricBuilder.getInstance();
             builder.addMetric(metricKey).setDataPoint(timeStamp, value).addTags(map);
-            SimpleHttpResponse response = httpClient.doPost(
-                    opentsdbServerUrl + "/api/put/?details",
-                    builder.build());
+            SimpleHttpResponse response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
             String host = map.get("host");
             String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表
