@@ -14,7 +14,7 @@
           label="资产类型"
           sortable="custom"
           prop="device_type_id"
-          width="110">
+          min-width="10%">
           <template slot-scope="prop">
             <el-tag v-if="prop.row.device_type_id === 1">服务器</el-tag>
             <el-tag v-if="prop.row.device_type_id === 2">交换机</el-tag>
@@ -26,32 +26,32 @@
           label="主机名"
           sortable="custom"
           prop="host_name"
-          width="120"/>
+          min-width="10%"/>
         <el-table-column
           label="网络设备标识"
           sortable="custom"
           prop="network_device_name"
-          width="140"/>
+          min-width="14%"/>
         <el-table-column
           label="机房"
           sortable="custom"
           prop="idc.name"
-          width="120"/>
+          min-width="10%"/>
         <el-table-column
           label="机柜号"
           sortable="custom"
           prop="carbinet"
-          width="100"/>
+          min-width="10%"/>
         <el-table-column
           label="业务线"
           sortable="custom"
           prop="business"
-          width="120"/>
+          min-width="10%"/>
         <el-table-column
           label="资产状态"
           sortable="custom"
           prop="device_status_id"
-          width="120">
+          min-width="10%">
           <template slot-scope="prop">
             <el-tag v-if="prop.row.device_status_id === 1" type="success">上架</el-tag>
             <el-tag v-if="prop.row.device_status_id === 2" type="danger">在线</el-tag>
@@ -59,7 +59,7 @@
             <el-tag v-if="prop.row.device_status_id === 4" type="primary">下架</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" min-width="17%">
           <template slot-scope="prop">
             <el-button size="small" type="primary" @click="jumpViewDetail(prop.row.id)">查看详情</el-button>
             <el-button size="small" type="primary">编辑</el-button>
