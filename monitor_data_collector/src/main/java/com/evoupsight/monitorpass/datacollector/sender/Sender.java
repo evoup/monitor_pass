@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -126,6 +127,7 @@ public class Sender {
                         server.setName(host);
                         server.setDataCollectorId(dataCollector.getId());
                         server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
+                        server.setCreateAt(new Date());
                         sender.serverMapper.insert(server);
                     }
                 } else {
