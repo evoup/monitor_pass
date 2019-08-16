@@ -6,6 +6,7 @@ import com.evoupsight.monitorpass.datacollector.dao.model.DataCollectorExample;
 import com.evoupsight.monitorpass.datacollector.manager.DataCollectorCache;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author evoup
  */
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
+@Component
 public class DataCollectorCacheImpl implements DataCollectorCache {
     @Autowired
     private DataCollectorMapper dataCollectorMapper;

@@ -1,7 +1,6 @@
 package com.evoupsight.monitorpass.datacollector.sender;
 
 
-import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.manager.DataCollectorCache;
@@ -12,7 +11,9 @@ import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.SimpleHttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,20 +22,40 @@ import java.util.Map;
  * @author evoup
  */
 
-@SuppressWarnings("SpringJavaAutowiredMembersInspection")
+/**
+ * 发送数据到opentsdb
+ *
+ * 加component是注入失败，要么从spring的上下文获取bean，要么采用本类做成组件，定义构造函数，在初始化该类的时候，
+ * 预先加载到本类的成员变量里的变通方式
+ *
+ * @author evoup
+ */
+@SuppressWarnings({"unused"})
+@Component
 public class Sender {
-    @Autowired
-    private ServerCache serverCache;
-    @Autowired
-    private ServerMapper serverMapper;
-    @Autowired
-    private DataCollectorCache dataCollectorCache;
 
     private PoolingHttpClient httpClient;
     @Value("${datacollector.servername}")
     String dataCollectorServerName;
     private String message;
     private String opentsdbServerUrl;
+
+    @Autowired
+    private ServerCache serverCache;
+    @Autowired
+    private DataCollectorCache dataCollectorCache;
+
+    private static Sender sender;
+
+    public Sender() {
+    }
+
+    @PostConstruct
+    public void init() {
+        sender = this;
+        sender.serverCache = this.serverCache;
+        sender.dataCollectorCache = this.dataCollectorCache;
+    }
 
     public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient) {
         this.message = message;
@@ -87,7 +108,7 @@ public class Sender {
             String host = map.get("host");
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
-                if (serverCache.findServer(host) == null) {
+                if (sender.serverCache.findServer(host) == null) {
                     System.out.println("发现新服务器");
                     DataCollector dataCollector = dataCollectorCache.findDataCollector(dataCollectorServerName);
                     // 需要找到数据收集器的IP，要求部署的IP
@@ -96,7 +117,7 @@ public class Sender {
                         Server server = new Server();
                         server.setHostname(host);
                         server.setDataCollectorId(dataCollector.getId());
-                        serverMapper.insert(server);
+//                        sender.serverMapper.insert(server);
                     }
                 } else {
                     // 老朋友了，pass
