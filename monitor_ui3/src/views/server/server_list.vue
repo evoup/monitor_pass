@@ -59,9 +59,9 @@
             prop="status"
             width="80">
             <template slot-scope="prop">
-              <el-tag v-if="prop.row.status === 1" type="success">在线</el-tag>
-              <el-tag v-if="prop.row.status === 2" type="danger">宕机</el-tag>
-              <el-tag v-if="prop.row.status === 0" type="primary">未监控</el-tag>
+              <el-tag v-if="prop.row.status === 0" type="success">在线</el-tag>
+              <el-tag v-if="prop.row.status === 1" type="danger">宕机</el-tag>
+              <el-tag v-if="prop.row.status === 2" type="primary">未监控</el-tag>
             </template>
           </el-table-column>
           <el-table-column
