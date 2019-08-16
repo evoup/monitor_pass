@@ -1,12 +1,12 @@
-package com.evoupsight.monitorpass.datacollector.manager.impl;
+package com.evoupsight.monitorpass.datacollector.services.impl;
 
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.dao.model.ServerExample;
-import com.evoupsight.monitorpass.datacollector.manager.ServerCache;
+import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import java.util.List;
  * @author evoup
  */
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
-@Component
-public class ServerCacheImpl implements ServerCache {
+@Service
+public class ServerServiceImpl implements ServerService {
     @Autowired
     private ServerMapper serverMapper;
 

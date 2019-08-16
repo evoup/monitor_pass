@@ -1,11 +1,11 @@
-package com.evoupsight.monitorpass.datacollector.manager;
+package com.evoupsight.monitorpass.datacollector.services;
 
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 
 /**
  * @author evoup
  */
-public interface DataCollectorCache {
+public interface DataCollectorService {
     /**
      * 根据收集收集器的IP，返回DataCollector
      *

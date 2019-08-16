@@ -2,6 +2,9 @@ package com.evoupsight.monitorpass.datacollector.cfg;
 
 
 import com.evoupsight.monitorpass.datacollector.handlers.StringProtocolInitalizer;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -209,4 +212,15 @@ public class SpringConfig {
         return Executors.newFixedThreadPool(5);
     }
 
+    @Bean(name = "guava_cache")
+    public LoadingCache<String, String> guavaCacheBean() {
+        CacheLoader<String, String> loader;
+        loader = new CacheLoader<String, String>() {
+            @Override
+            public String load(String key) {
+                return key.toUpperCase();
+            }
+        };
+        return CacheBuilder.newBuilder().build(loader);
+    }
 }

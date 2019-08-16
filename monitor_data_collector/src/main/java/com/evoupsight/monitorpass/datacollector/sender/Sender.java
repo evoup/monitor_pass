@@ -5,8 +5,8 @@ import com.evoupsight.monitorpass.constants.ServerStatusEnum;
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
-import com.evoupsight.monitorpass.datacollector.manager.DataCollectorCache;
-import com.evoupsight.monitorpass.datacollector.manager.ServerCache;
+import com.evoupsight.monitorpass.datacollector.services.DataCollectorService;
+import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
@@ -42,9 +42,9 @@ public class Sender {
     private String dataCollectorServerName;
 
     @Autowired
-    private ServerCache serverCache;
+    private ServerService serverCache;
     @Autowired
-    private DataCollectorCache dataCollectorCache;
+    private DataCollectorService dataCollectorCache;
     @Autowired
     private ServerMapper serverMapper;
 
