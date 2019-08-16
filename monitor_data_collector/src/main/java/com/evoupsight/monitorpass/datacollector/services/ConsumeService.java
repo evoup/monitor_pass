@@ -29,6 +29,8 @@ public class ConsumeService {
     String opentsdbServerUrl;
     @Autowired
     PoolingHttpClient httpClient;
+    @Value("${datacollector.servername}")
+    String dataCollectorServerName;
 
     @PostConstruct
     public void initConsumer() {
@@ -43,7 +45,7 @@ public class ConsumeService {
     private void consume() {
         Map<String, Object> config = setKafkaConfig();
         for (int i = 0; i < 5; i++) {
-            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient).start();
+            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient, dataCollectorServerName).start();
         }
     }
 

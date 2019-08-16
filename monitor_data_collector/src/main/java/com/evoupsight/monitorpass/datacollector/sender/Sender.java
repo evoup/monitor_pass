@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.datacollector.sender;
 
 
+import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.manager.DataCollectorCache;
@@ -10,7 +11,6 @@ import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.SimpleHttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -35,32 +35,38 @@ import java.util.Map;
 public class Sender {
 
     private PoolingHttpClient httpClient;
-    @Value("${datacollector.servername}")
-    String dataCollectorServerName;
     private String message;
     private String opentsdbServerUrl;
+    private String dataCollectorServerName;
 
     @Autowired
     private ServerCache serverCache;
     @Autowired
     private DataCollectorCache dataCollectorCache;
+    @Autowired
+    private ServerMapper serverMapper;
 
     private static Sender sender;
 
     public Sender() {
     }
 
+    /**
+     * 解决注入问题
+     */
     @PostConstruct
     public void init() {
         sender = this;
         sender.serverCache = this.serverCache;
         sender.dataCollectorCache = this.dataCollectorCache;
+        sender.serverMapper = this.serverMapper;
     }
 
-    public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient) {
+    public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient, String dataCollectorServerName) {
         this.message = message;
         this.opentsdbServerUrl = opentsdbServerUrl;
         this.httpClient = httpClient;
+        this.dataCollectorServerName = dataCollectorServerName;
     }
 
     public void myProcessMsgBag() throws IOException {
@@ -110,14 +116,15 @@ public class Sender {
             if (StringUtils.isNotEmpty(host)) {
                 if (sender.serverCache.findServer(host) == null) {
                     System.out.println("发现新服务器");
-                    DataCollector dataCollector = dataCollectorCache.findDataCollector(dataCollectorServerName);
+                    DataCollector dataCollector = sender.dataCollectorCache.findDataCollector(dataCollectorServerName);
                     // 需要找到数据收集器的IP，要求部署的IP
                     if (dataCollector != null) {
                         // 新服务器，设置状态为没有监控
                         Server server = new Server();
                         server.setHostname(host);
+                        server.setName(host);
                         server.setDataCollectorId(dataCollector.getId());
-//                        sender.serverMapper.insert(server);
+                        sender.serverMapper.insert(server);
                     }
                 } else {
                     // 老朋友了，pass
