@@ -65,7 +65,7 @@ class ServerInfo(APIView):
                                                            ssh_address=data['ssh_addr'],
                                                            jmx_address=data['jmx_addr'],
                                                            snmp_address=data['snmp_addr'], asset=a,
-                                                           data_collector=d)
+                                                           data_collector=d, status=2)
             srv = Server.objects.get(id=server.id)
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
