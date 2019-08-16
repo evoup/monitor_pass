@@ -72,12 +72,12 @@ class Server(models.Model):
     )
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
-    ip = models.CharField(u'IP地址', max_length=20, null=False)
+    ip = models.CharField(u'IP地址', max_length=20, null=True)
     status = models.IntegerField(choices=status_choices, default=0)
     asset = models.OneToOneField('Asset', on_delete=models.CASCADE, null=True, blank=True)
 
     hostname = models.CharField(max_length=128, unique=True, null=True)
-    sn = models.CharField('SN号', max_length=64, db_index=True, default='')
+    sn = models.CharField('SN号', max_length=64, db_index=True, default='', null=True)
     manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
     model = models.CharField('型号', max_length=64, null=True, blank=True)
 
@@ -93,10 +93,10 @@ class Server(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, blank=True)
     server_groups = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
     templates = models.ManyToManyField('Template', db_table='r_server_template')
-    agent_address = models.CharField('监控代理地址', max_length=50, default='')
-    ssh_address = models.CharField('SSH地址', max_length=50, default='')
-    jmx_address = models.CharField('JMX地址', max_length=50, default='')
-    snmp_address = models.CharField('SNMP地址', max_length=50, default='')
+    agent_address = models.CharField('监控代理地址', max_length=50, default='', null=True)
+    ssh_address = models.CharField('SSH地址', max_length=50, default='', null=True)
+    jmx_address = models.CharField('JMX地址', max_length=50, default='', null=True)
+    snmp_address = models.CharField('SNMP地址', max_length=50, default='', null=True)
     data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True,
                                        on_delete=models.SET_NULL)
 
