@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.datacollector.sender;
 
 
+import com.evoupsight.monitorpass.constants.ServerStatusEnum;
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
@@ -124,6 +125,7 @@ public class Sender {
                         server.setHostname(host);
                         server.setName(host);
                         server.setDataCollectorId(dataCollector.getId());
+                        server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
                         sender.serverMapper.insert(server);
                     }
                 } else {
