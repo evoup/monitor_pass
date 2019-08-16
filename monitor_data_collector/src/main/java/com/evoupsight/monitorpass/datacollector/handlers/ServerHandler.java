@@ -28,6 +28,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -157,7 +158,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     ProducerRecord<String, String> record = null;
                     for (String s : m) {
                         if (StringUtils.isNotEmpty(s)) {
-                            s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString();
+                            s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString()
+                                    + " ip=" + ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
                             record = new ProducerRecord<>(topic, s);
                             kafkaProducerPool.submit(new KafkaProducerThread(kafkaProducer, record));
                         }

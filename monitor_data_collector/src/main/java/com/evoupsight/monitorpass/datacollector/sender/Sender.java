@@ -118,6 +118,7 @@ public class Sender {
                     opentsdbServerUrl + "/api/put/?details",
                     builder.build());
             String host = map.get("host");
+            String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
                 if (sender.loadingCache.getIfPresent(host) == null) {
@@ -133,6 +134,7 @@ public class Sender {
                             server.setDataCollectorId(dataCollector.getId());
                             server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
                             server.setCreateAt(new Date());
+                            server.setIp(map.get("ip"));
                             sender.serverMapper.insert(server);
                         }
                     } else {
