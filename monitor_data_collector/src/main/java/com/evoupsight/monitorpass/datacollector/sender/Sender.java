@@ -7,6 +7,7 @@ import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.services.DataCollectorService;
 import com.evoupsight.monitorpass.datacollector.services.ServerService;
+import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
@@ -47,6 +48,8 @@ public class Sender {
     private DataCollectorService dataCollectorCache;
     @Autowired
     private ServerMapper serverMapper;
+    @Autowired
+    private LoadingCache loadingCache;
 
     private static Sender sender;
 
@@ -62,6 +65,7 @@ public class Sender {
         sender.serverCache = this.serverCache;
         sender.dataCollectorCache = this.dataCollectorCache;
         sender.serverMapper = this.serverMapper;
+        sender.loadingCache = this.loadingCache;
     }
 
     public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient, String dataCollectorServerName) {
@@ -116,22 +120,25 @@ public class Sender {
             String host = map.get("host");
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
-                if (sender.serverCache.findServer(host) == null) {
-                    System.out.println("发现新服务器");
-                    DataCollector dataCollector = sender.dataCollectorCache.findDataCollector(dataCollectorServerName);
-                    // 需要找到数据收集器的IP，要求部署的IP
-                    if (dataCollector != null) {
-                        // 新服务器，设置状态为没有监控
-                        Server server = new Server();
-                        server.setHostname(host);
-                        server.setName(host);
-                        server.setDataCollectorId(dataCollector.getId());
-                        server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
-                        server.setCreateAt(new Date());
-                        sender.serverMapper.insert(server);
+                if (sender.loadingCache.getIfPresent(host) == null) {
+                    if (sender.serverCache.findServer(host) == null) {
+                        System.out.println("发现新服务器");
+                        DataCollector dataCollector = sender.dataCollectorCache.findDataCollector(dataCollectorServerName);
+                        // 需要找到数据收集器的IP，要求部署的IP
+                        if (dataCollector != null) {
+                            // 新服务器，设置状态为没有监控
+                            Server server = new Server();
+                            server.setHostname(host);
+                            server.setName(host);
+                            server.setDataCollectorId(dataCollector.getId());
+                            server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
+                            server.setCreateAt(new Date());
+                            sender.serverMapper.insert(server);
+                        }
+                    } else {
+                        // 老朋友了，pass
                     }
-                } else {
-                    // 老朋友了，pass
+                    sender.loadingCache.getUnchecked(host);
                 }
             }
             System.out.println(response.getStatusCode());
