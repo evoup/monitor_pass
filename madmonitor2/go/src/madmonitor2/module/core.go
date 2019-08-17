@@ -268,6 +268,8 @@ func run_send(readChannel inc.ReaderChannel, sc *ServerConn, reconnectChannel *i
 			_, err := sc.conn.Write([]byte(msg))
 			if err != nil {
 				fmt.Printf(err.Error())
+				utils.Log(HLog, "send fail, exit program", 1, *Debug_level)
+                os.Exit(1)
 				reconnectChannel.ReconnectQueue <- "broken pipe"
 			}
 			fmt.Println("message sent:" + msg)
