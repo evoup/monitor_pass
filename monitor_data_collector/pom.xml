@@ -255,6 +255,7 @@
     </profiles>
 
     <build>
+        <finalName>data_collector</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
