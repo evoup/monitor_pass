@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -221,6 +222,9 @@ public class SpringConfig {
                 return key.toUpperCase();
             }
         };
-        return CacheBuilder.newBuilder().build(loader);
+        return CacheBuilder.newBuilder()
+                .maximumSize(10000)
+                .expireAfterAccess(30L, TimeUnit.SECONDS)
+                .build(loader);
     }
 }
