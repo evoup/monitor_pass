@@ -132,5 +132,10 @@ export default {
 </script>
 
 <style scoped>
-
+.app-container /deep/ .list_1 li {
+  list-style-type: none;
+  font-size: 14px;
+  line-height: 30px;
+  color:#606266;
+}
 </style>
