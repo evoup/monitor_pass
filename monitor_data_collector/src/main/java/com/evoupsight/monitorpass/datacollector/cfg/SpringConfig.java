@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @ComponentScan("com.evoupsight")
 @PropertySources({
-        @PropertySource("classpath:netty-server.properties"),
-        @PropertySource("data-collector.properties"),
-        @PropertySource("kafka-client.properties")
+        @PropertySource(value = {"classpath:netty-server.properties", "file:${external_conf}/netty-server.properties"}, ignoreResourceNotFound = true),
+        @PropertySource(value={"data-collector.properties","file:${external_conf}/data-collector.properties"}, ignoreResourceNotFound = true),
+        @PropertySource(value= {"kafka-client.properties","file:${external_conf}/kafka-client.properties"}, ignoreResourceNotFound = true)
 })
 public class SpringConfig {
 
