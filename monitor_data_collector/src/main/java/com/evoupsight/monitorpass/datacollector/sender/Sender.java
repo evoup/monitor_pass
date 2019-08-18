@@ -54,7 +54,15 @@ public class Sender {
     @Autowired
     private ServerMapper serverMapper;
 
-    private LoadingCache loadingCache;
+    private LoadingCache loadingCache = CacheBuilder.newBuilder()
+            .maximumSize(10000)
+            .expireAfterAccess(30L, TimeUnit.SECONDS)
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String key) {
+                    return key.toUpperCase();
+                }
+            });
 
     private static Sender sender;
 
