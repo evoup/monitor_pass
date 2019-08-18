@@ -56,7 +56,7 @@ public class Sender {
 
     private LoadingCache loadingCache = CacheBuilder.newBuilder()
             .maximumSize(10000)
-            .expireAfterAccess(30L, TimeUnit.SECONDS)
+            .expireAfterWrite(5L, TimeUnit.SECONDS)
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String key) {
@@ -88,7 +88,7 @@ public class Sender {
         };
         sender.loadingCache = CacheBuilder.newBuilder()
                 .maximumSize(10000)
-                .expireAfterAccess(5L, TimeUnit.SECONDS)
+                .expireAfterWrite(5L, TimeUnit.SECONDS)
                 .build(loader);
     }
 
