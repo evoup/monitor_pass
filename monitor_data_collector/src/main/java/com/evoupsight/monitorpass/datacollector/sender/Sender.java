@@ -92,7 +92,7 @@ public class Sender {
         this.dataCollectorServerName = dataCollectorServerName;
     }
 
-    public void myProcessMsgBag() throws IOException {
+    public synchronized void myProcessMsgBag() throws IOException {
         String m = this.message;
         String opentsdbServerUrl = this.opentsdbServerUrl;
         //HttpClient client = new HttpClientImpl(opentsdbServerUrl);
