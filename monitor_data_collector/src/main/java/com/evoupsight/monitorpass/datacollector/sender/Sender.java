@@ -122,9 +122,10 @@ public class Sender {
             String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
+                LOG.info("host name not null");
                 if (sender.loadingCache.getIfPresent(host) == null) {
                     if (sender.serverService.findServer(host) == null) {
-                        LOG.info("发现新服务器");
+                        LOG.info("find new server!");
                         DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
                         // 需要找到数据收集器的IP，要求部署的IP
                         if (dataCollector != null) {
