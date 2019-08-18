@@ -38,10 +38,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author evoup
  */
-@SuppressWarnings({"unused"})
 @Component
 public class Sender {
-
+    @Autowired
     private PoolingHttpClient httpClient;
     private String message;
     private String opentsdbServerUrl;
@@ -68,6 +67,7 @@ public class Sender {
     @PostConstruct
     public void init() {
         sender = this;
+        sender.httpClient = this.httpClient;
         sender.serverService = this.serverService;
         sender.dataCollectorService = this.dataCollectorService;
         sender.serverMapper = this.serverMapper;
@@ -84,10 +84,9 @@ public class Sender {
                 .build(loader);
     }
 
-    public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient, String dataCollectorServerName) {
+    public Sender(String message, String opentsdbServerUrl, String dataCollectorServerName) {
         this.message = message;
         this.opentsdbServerUrl = opentsdbServerUrl;
-        this.httpClient = httpClient;
         this.dataCollectorServerName = dataCollectorServerName;
     }
 
@@ -130,7 +129,7 @@ public class Sender {
 
             MetricBuilder builder = MetricBuilder.getInstance();
             builder.addMetric(metricKey).setDataPoint(timeStamp, value).addTags(map);
-            SimpleHttpResponse response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
+            SimpleHttpResponse response = sender.httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
             String host = map.get("host");
             String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表

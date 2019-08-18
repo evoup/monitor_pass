@@ -19,7 +19,7 @@ public class KafkaConsumerThread extends Thread {
     private static final Logger LOG = Logger.getLogger(KafkaConsumerThread.class);
     private KafkaConsumer<String, String> consumer;
     private String openstdbServerUrl;
-    private PoolingHttpClient httpClient;
+//    private PoolingHttpClient httpClient;
     private String dataCollectorServerName;
 
     public KafkaConsumerThread(Map<String, Object> consumerConfig, String topic, String openstdbServerUrl,
@@ -29,7 +29,7 @@ public class KafkaConsumerThread extends Thread {
         this.consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(topic));
         this.openstdbServerUrl = openstdbServerUrl;
-        this.httpClient = httpClient;
+//        this.httpClient = httpClient;
         this.dataCollectorServerName = dataCollectorServerName;
     }
 
@@ -42,7 +42,7 @@ public class KafkaConsumerThread extends Thread {
                     System.out.printf("threadId=%s,partition=%d,offset=%d,key=%s,value=%s%n",
                             Thread.currentThread().getId(),
                             record.partition(), record.offset(), record.key(), record.value());
-                    new Sender(record.value(), this.openstdbServerUrl, this.httpClient, this.dataCollectorServerName).myProcessMsgBag();
+                    new Sender(record.value(), this.openstdbServerUrl, this.dataCollectorServerName).myProcessMsgBag();
                 }
             }
         } catch (Exception e) {
