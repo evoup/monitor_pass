@@ -91,7 +91,7 @@ public class Sender {
         this.dataCollectorServerName = dataCollectorServerName;
     }
 
-    public void myProcessMsgBag() throws IOException {
+    public void myProcessMsgBag() {
         String m = this.message;
         String opentsdbServerUrl = this.opentsdbServerUrl;
         //HttpClient client = new HttpClientImpl(opentsdbServerUrl);
@@ -130,7 +130,12 @@ public class Sender {
 
             MetricBuilder builder = MetricBuilder.getInstance();
             builder.addMetric(metricKey).setDataPoint(timeStamp, value).addTags(map);
-            SimpleHttpResponse response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
+            SimpleHttpResponse response = null;
+            try {
+                response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
+            } catch (IOException e) {
+                LOG.error("opentsdb error", e);
+            }
             String host = map.get("host");
             String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表
