@@ -77,7 +77,14 @@ export const constantRouterMap = [
         path: '/server_list',
         name: 'ServerList',
         component: () => import('../views/server/server_list'),
-        meta: { title: '服务器详情管理', icon: 'server3' }
+        meta: { title: '服务器管理', icon: 'server3' }
+      },
+      {
+        path: '/server_detail',
+        name: 'ServerDetail',
+        component: () => import('../views/server/server_detail'),
+        meta: { title: '服务器详情', icon: 'server3' },
+        hidden: true
       },
       {
         path: 'batch_file_upload',

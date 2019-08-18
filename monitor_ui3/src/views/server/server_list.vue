@@ -69,7 +69,7 @@
             prop="asset.idc.name" />
           <el-table-column label="操作">
             <template slot-scope="prop">
-              <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
+              <el-button size="small" type="primary" @click="jumpServerDetail(prop.row.id)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -183,6 +183,13 @@ export default {
     // 跳转到服务器添加页面
     jumpAddServer() {
       this.$router.push({ path: '/add_server' })
+    },
+    // 跳转到服务器详情页面
+    jumpServerDetail(id) {
+      this.$router.push({
+        path: '/server_detail',
+        query: { id: id }
+      })
     }
   }
 }
