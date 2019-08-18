@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
 import org.opentsdb.client.builder.MetricBuilder;
 import org.opentsdb.client.response.SimpleHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,11 +43,12 @@ public class Sender {
     private String message;
     private String opentsdbServerUrl;
     private String dataCollectorServerName;
+    private static final Logger LOG = LoggerFactory.getLogger(Sender.class);
 
     @Autowired
-    private ServerService serverCache;
+    private ServerService serverService;
     @Autowired
-    private DataCollectorService dataCollectorCache;
+    private DataCollectorService dataCollectorService;
     @Autowired
     private ServerMapper serverMapper;
     @Autowired
@@ -62,8 +65,8 @@ public class Sender {
     @PostConstruct
     public void init() {
         sender = this;
-        sender.serverCache = this.serverCache;
-        sender.dataCollectorCache = this.dataCollectorCache;
+        sender.serverService = this.serverService;
+        sender.dataCollectorService = this.dataCollectorService;
         sender.serverMapper = this.serverMapper;
         sender.loadingCache = this.loadingCache;
     }
@@ -120,9 +123,9 @@ public class Sender {
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
                 if (sender.loadingCache.getIfPresent(host) == null) {
-                    if (sender.serverCache.findServer(host) == null) {
-                        System.out.println("发现新服务器");
-                        DataCollector dataCollector = sender.dataCollectorCache.findDataCollector(dataCollectorServerName);
+                    if (sender.serverService.findServer(host) == null) {
+                        LOG.info("发现新服务器");
+                        DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
                         // 需要找到数据收集器的IP，要求部署的IP
                         if (dataCollector != null) {
                             // 新服务器，设置状态为没有监控
