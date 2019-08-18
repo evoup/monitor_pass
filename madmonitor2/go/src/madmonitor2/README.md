@@ -13,7 +13,8 @@ madmonitor2 golang
 
 
 ## 操作指南
-
+systemd重启服务设置
+http://www.voidcn.com/article/p-esmremgn-btw.html
 
 
 
