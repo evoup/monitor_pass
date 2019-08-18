@@ -213,7 +213,13 @@ public class SpringConfig {
         return Executors.newFixedThreadPool(5);
     }
 
-//    @Bean
+
+    /**
+     * netty自动注入失败，获取bean的方式没有成功，只能用变通方案
+     * @See com.evoupsight.monitorpass.datacollector.sender.Sender#init()
+     */
+    //
+//    @Bean(name = "guava_cache")
 //    public LoadingCache<String, String> guavaCacheBean() {
 //        CacheLoader<String, String> loader;
 //        loader = new CacheLoader<String, String>() {
@@ -227,4 +233,5 @@ public class SpringConfig {
 //                .expireAfterAccess(30L, TimeUnit.SECONDS)
 //                .build(loader);
 //    }
+
 }

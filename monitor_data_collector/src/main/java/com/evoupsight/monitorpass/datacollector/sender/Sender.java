@@ -7,6 +7,8 @@ import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.services.DataCollectorService;
 import com.evoupsight.monitorpass.datacollector.services.ServerService;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang.StringUtils;
 import org.opentsdb.client.PoolingHttpClient;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author evoup
@@ -52,7 +55,7 @@ public class Sender {
     private DataCollectorService dataCollectorService;
     @Autowired
     private ServerMapper serverMapper;
-    @Autowired
+
     private LoadingCache loadingCache;
 
     private static Sender sender;
@@ -69,7 +72,17 @@ public class Sender {
         sender.serverService = this.serverService;
         sender.dataCollectorService = this.dataCollectorService;
         sender.serverMapper = this.serverMapper;
-        sender.loadingCache = this.loadingCache;
+        CacheLoader<String, String> loader;
+        loader = new CacheLoader<String, String>() {
+            @Override
+            public String load(String key) {
+                return key.toUpperCase();
+            }
+        };
+        sender.loadingCache = CacheBuilder.newBuilder()
+                .maximumSize(10000)
+                .expireAfterAccess(30L, TimeUnit.SECONDS)
+                .build(loader);
     }
 
     public Sender(String message, String opentsdbServerUrl, PoolingHttpClient httpClient, String dataCollectorServerName) {
