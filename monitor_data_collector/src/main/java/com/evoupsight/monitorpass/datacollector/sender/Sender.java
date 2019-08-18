@@ -40,13 +40,12 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class Sender {
-    @Autowired
-    private PoolingHttpClient httpClient;
+    private static final Logger LOG = LoggerFactory.getLogger(Sender.class);
     private String message;
     private String opentsdbServerUrl;
     private String dataCollectorServerName;
-    private static final Logger LOG = LoggerFactory.getLogger(Sender.class);
-
+    @Autowired
+    private PoolingHttpClient httpClient;
     @Autowired
     private ServerService serverService;
     @Autowired
@@ -56,7 +55,7 @@ public class Sender {
 
     private LoadingCache loadingCache = CacheBuilder.newBuilder()
             .maximumSize(10000)
-            .expireAfterWrite(5L, TimeUnit.SECONDS)
+            .expireAfterWrite(15L, TimeUnit.SECONDS)
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String key) {
@@ -135,7 +134,7 @@ public class Sender {
                 LOG.info("host name not null");
                 try {
                     if (sender.loadingCache.getIfPresent(host) == null) {
-                        LOG.info("host not added");
+                        LOG.info("host not in cache");
                         if (sender.serverService.findServer(host) == null) {
                             LOG.info("find new server!");
                             DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
