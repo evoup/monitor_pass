@@ -53,7 +53,6 @@ public class Sender {
     @Autowired
     private ServerMapper serverMapper;
     @Autowired
-    @Qualifier("guava_server_cache")
     private LoadingCache loadingCache;
 
     private static Sender sender;

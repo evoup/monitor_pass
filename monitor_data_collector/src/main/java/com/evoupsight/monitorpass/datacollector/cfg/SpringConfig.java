@@ -213,18 +213,18 @@ public class SpringConfig {
         return Executors.newFixedThreadPool(5);
     }
 
-    @Bean(name = "guava_server_cache")
-    public LoadingCache<String, String> guavaCacheBean() {
-        CacheLoader<String, String> loader;
-        loader = new CacheLoader<String, String>() {
-            @Override
-            public String load(String key) {
-                return key.toUpperCase();
-            }
-        };
-        return CacheBuilder.newBuilder()
-                .maximumSize(10000)
-                .expireAfterAccess(30L, TimeUnit.SECONDS)
-                .build(loader);
-    }
+//    @Bean
+//    public LoadingCache<String, String> guavaCacheBean() {
+//        CacheLoader<String, String> loader;
+//        loader = new CacheLoader<String, String>() {
+//            @Override
+//            public String load(String key) {
+//                return key.toUpperCase();
+//            }
+//        };
+//        return CacheBuilder.newBuilder()
+//                .maximumSize(10000)
+//                .expireAfterAccess(30L, TimeUnit.SECONDS)
+//                .build(loader);
+//    }
 }
