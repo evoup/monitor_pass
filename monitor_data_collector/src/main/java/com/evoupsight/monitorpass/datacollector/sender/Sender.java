@@ -137,6 +137,7 @@ public class Sender {
                 LOG.info("host name not null");
                 try {
                     if (sender.loadingCache.getIfPresent(host) == null) {
+                        LOG.info("host not added");
                         if (sender.serverService.findServer(host) == null) {
                             LOG.info("find new server!");
                             DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
