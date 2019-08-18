@@ -88,7 +88,7 @@ public class Sender {
         };
         sender.loadingCache = CacheBuilder.newBuilder()
                 .maximumSize(10000)
-                .expireAfterAccess(30L, TimeUnit.SECONDS)
+                .expireAfterAccess(5L, TimeUnit.SECONDS)
                 .build(loader);
     }
 
