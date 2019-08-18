@@ -79,17 +79,7 @@ public class Sender {
         sender.serverService = this.serverService;
         sender.dataCollectorService = this.dataCollectorService;
         sender.serverMapper = this.serverMapper;
-        CacheLoader<String, String> loader;
-        loader = new CacheLoader<String, String>() {
-            @Override
-            public String load(String key) {
-                return key.toUpperCase();
-            }
-        };
-        sender.loadingCache = CacheBuilder.newBuilder()
-                .maximumSize(10000)
-                .expireAfterWrite(5L, TimeUnit.SECONDS)
-                .build(loader);
+        sender.loadingCache = this.loadingCache;
     }
 
     public Sender(String message, String opentsdbServerUrl, String dataCollectorServerName) {
