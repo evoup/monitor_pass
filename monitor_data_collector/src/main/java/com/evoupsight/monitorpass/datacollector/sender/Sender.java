@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 发送数据到opentsdb
- * <p>
+ *
  * 加component是注入失败，要么从spring的上下文获取bean，要么采用本类做成组件，定义构造函数，在初始化该类的时候，
  * 预先加载到本类的成员变量里的变通方式
  *
@@ -54,7 +54,7 @@ public class Sender {
     private DataCollectorService dataCollectorService;
     @Autowired
     private ServerMapper serverMapper;
-    @Autowired
+
     private LoadingCache loadingCache;
 
     private static Sender sender;
@@ -130,37 +130,36 @@ public class Sender {
 
             MetricBuilder builder = MetricBuilder.getInstance();
             builder.addMetric(metricKey).setDataPoint(timeStamp, value).addTags(map);
-            SimpleHttpResponse response = null;
-            try {
-                response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
-            } catch (IllegalStateException | IOException e) {
-                LOG.error("opentsdb error", e);
-            }
+            SimpleHttpResponse response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
             String host = map.get("host");
             String ip = map.get("ip");
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
-                LOG.info("host name:" + host);
-                if (sender != null && sender.loadingCache != null && sender.loadingCache.getIfPresent(host) == null) {
-                    if (sender.serverService.findServer(host) == null) {
-                        LOG.info("find new server!");
-                        DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
-                        // 需要找到数据收集器的IP，要求部署的IP
-                        if (dataCollector != null) {
-                            // 新服务器，设置状态为没有监控
-                            Server server = new Server();
-                            server.setHostname(host);
-                            server.setName(host);
-                            server.setDataCollectorId(dataCollector.getId());
-                            server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
-                            server.setCreateAt(new Date());
-                            server.setIp(map.get("ip"));
-                            sender.serverMapper.insert(server);
+                LOG.info("host name not null");
+                try {
+                    if (sender.loadingCache.getIfPresent(host) == null) {
+                        if (sender.serverService.findServer(host) == null) {
+                            LOG.info("find new server!");
+                            DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
+                            // 需要找到数据收集器的IP，要求部署的IP
+                            if (dataCollector != null) {
+                                // 新服务器，设置状态为没有监控
+                                Server server = new Server();
+                                server.setHostname(host);
+                                server.setName(host);
+                                server.setDataCollectorId(dataCollector.getId());
+                                server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
+                                server.setCreateAt(new Date());
+                                server.setIp(map.get("ip"));
+                                sender.serverMapper.insert(server);
+                            }
+                        } else {
+                            // 老朋友了，pass
                         }
-                    } else {
-                        // 老朋友了，pass
+                        sender.loadingCache.getUnchecked(host);
                     }
-                    sender.loadingCache.getUnchecked(host);
+                } catch (Exception e) {
+                    LOG.error(e.getMessage(), e);
                 }
             }
             System.out.println(response.getStatusCode());
