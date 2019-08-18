@@ -17,7 +17,6 @@ import org.opentsdb.client.response.SimpleHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 发送数据到opentsdb
- *
+ * <p>
  * 加component是注入失败，要么从spring的上下文获取bean，要么采用本类做成组件，定义构造函数，在初始化该类的时候，
  * 预先加载到本类的成员变量里的变通方式
  *
