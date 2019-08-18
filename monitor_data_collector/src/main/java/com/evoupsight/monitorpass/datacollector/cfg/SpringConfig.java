@@ -213,7 +213,7 @@ public class SpringConfig {
         return Executors.newFixedThreadPool(5);
     }
 
-    @Bean(name = "guava_cache")
+    @Bean(name = "guava_server_cache")
     public LoadingCache<String, String> guavaCacheBean() {
         CacheLoader<String, String> loader;
         loader = new CacheLoader<String, String>() {
