@@ -133,7 +133,7 @@ public class Sender {
             SimpleHttpResponse response = null;
             try {
                 response = httpClient.doPost(opentsdbServerUrl + "/api/put/?details", builder.build());
-            } catch (IOException e) {
+            } catch (IllegalStateException | IOException e) {
                 LOG.error("opentsdb error", e);
             }
             String host = map.get("host");
