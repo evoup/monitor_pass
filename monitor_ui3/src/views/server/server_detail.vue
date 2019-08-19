@@ -120,6 +120,9 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
+        <el-button type="primary" style="min-width:10%;" @click.native.prevent="genGrafana">
+          添加
+        </el-button>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -127,7 +130,49 @@
 
 <script>
 export default {
-  name: 'ServerDetail'
+  name: 'ServerDetail',
+  methods: {
+    genGrafana() {
+      var grafana = require('grafana-dash-gen')
+      var Row = grafana.Row
+      var Dashboard = grafana.Dashboard
+      var Panels = grafana.Panels
+      var Target = grafana.Target
+      // var Templates = grafana.Templates
+
+      grafana.configure({
+        url: 'http://localhost/grafana/api/dashboards/db',
+        cookie: 'grafana_session=78b64e236a96a152b586b95bb5cbdaa4'
+      })
+
+      var dashboard = new Dashboard({
+        title: 'Api dashboard',
+        slug: 'api',
+        templating: [{
+          name: 'dc',
+          options: ['dc1', 'dc2']
+        }, {
+          name: 'smoothing',
+          options: ['30min', '10min', '5min', '2min', '1min']
+        }],
+        annotations: [{
+          name: 'Deploy',
+          target: 'stats.$dc.production.deploy'
+        }]
+      })
+      var row = new Row()
+      var panel = new Panels.Graph({
+        title: 'api req/sec',
+        span: 5,
+        targets: [
+          new Target('api.statusCode.*').transformNull(0).sum().hitcount('1seconds').scale(0.1).alias('rps')
+        ]
+      })
+      row.addPanel(panel)
+      grafana.publish(dashboard)
+      console.log(dashboard.generate())
+    }
+  }
 }
 </script>
 
