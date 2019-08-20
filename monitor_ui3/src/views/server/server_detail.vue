@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" @tab-click="genGrafana">
       <!-- tab-pane1 -->
       <el-tab-pane label="明细状态">
         <div id="status">
@@ -120,9 +120,9 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
-        <el-button type="primary" style="min-width:10%;" @click.native.prevent="genGrafana">
-          添加
-        </el-button>
+        <iframe :src="y" width="100%" height="200" frameborder="0" />
+        <iframe :src="y1" width="100%" height="200" frameborder="0" />
+        <iframe :src="y2" width="100%" height="200" frameborder="0" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -131,8 +131,22 @@
 <script>
 export default {
   name: 'ServerDetail',
+  data() {
+    return {
+      x: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566291323174&theme=dark&panelId=2&to=',
+      x1: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566295949026&panelId=3&to=',
+      x2: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566296048479&panelId=4&to=',
+      y: '',
+      y1: '',
+      y2: ''
+    }
+  },
   methods: {
-
+    genGrafana() {
+      this.y = this.x + Date.parse(new Date())
+      this.y1 = this.x1 + Date.parse(new Date())
+      this.y2 = this.x2 + Date.parse(new Date())
+    }
   }
 }
 </script>
