@@ -109,7 +109,7 @@ class ServerInfo(APIView):
                 ret['message'] = ret['message'] + ":服务器名字不能为空"
                 return JsonResponse(ret, safe=False)
             d = DataCollector.objects.get(id=data['data_collector'])
-            server, created = Server.objects.update(id=1, name=data['name'], agent_address=data['agent_addr'],
+            server = Server.objects.update(id=data['id'], name=data['name'], agent_address=data['agent_addr'],
                                                            ssh_address=data['ssh_addr'],
                                                            jmx_address=data['jmx_addr'],
                                                            snmp_address=data['snmp_addr'], asset=a,

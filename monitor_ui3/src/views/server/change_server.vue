@@ -107,8 +107,7 @@
         <el-button
           type="primary"
           @click="
-            addServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
-                      serverGroupSelectModel, templateSelectModel, form.auto_asset)
+            changeServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel, serverGroupSelectModel, templateSelectModel, form.auto_asset)
           "
         >更新
         </el-button
@@ -196,7 +195,7 @@ export default {
       })
     },
     changeServer(a, b, c, d, e, f, g, h, i, j) {
-      change_server(a, b, c, d, e, f, g, h, i, j).then(response => {
+      change_server(this.$route.query.id, a, b, c, d, e, f, g, h, i, j).then(response => {
       }).catch(e => {
         console.log(e)
       })
