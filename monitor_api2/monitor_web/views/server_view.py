@@ -82,6 +82,52 @@ class ServerInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.change_server', raise_exception=True))
+    def put(self, *args, **kwargs):
+        """
+        修改单台服务器
+        """
+        data = JSONParser().parse(self.request)
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '修改服务器失败'
+        }
+        try:
+            i = None
+            if data['idc']:
+                ser = IDCSerializer(data={'name': data['idc']})
+                if not ser.is_valid():
+                    return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
+                else:
+                    i = ser.create(ser.validated_data)
+                    i.save()
+            a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
+            if not data['data_collector']:
+                ret['message'] = ret['message'] + ":需要先创建数据收集器"
+                return JsonResponse(ret, safe=False)
+            if not data['name']:
+                ret['message'] = ret['message'] + ":服务器名字不能为空"
+                return JsonResponse(ret, safe=False)
+            d = DataCollector.objects.get(id=data['data_collector'])
+            server, created = Server.objects.update(id=1, name=data['name'], agent_address=data['agent_addr'],
+                                                           ssh_address=data['ssh_addr'],
+                                                           jmx_address=data['jmx_addr'],
+                                                           snmp_address=data['snmp_addr'], asset=a,
+                                                           data_collector=d, status=2)
+            srv = Server.objects.get(id=server.id)
+            for sg in data['server_groups']:
+                srv.server_groups.add(sg)
+            for sg in data['templates']:
+                srv.templates.add(sg)
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '修改服务器成功'
+        }
+        return JsonResponse(ret, safe=False)
+
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(ServerInfo, self).dispatch(*args, **kwargs)
