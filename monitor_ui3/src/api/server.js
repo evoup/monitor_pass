@@ -20,6 +20,14 @@ export function add_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data
   })
 }
 
+export function read_server(param) {
+  return request({
+    url: '/server/info',
+    method: 'get',
+    params: param
+  })
+}
+
 export function server_list(param) {
   return request({
     url: '/server/list',

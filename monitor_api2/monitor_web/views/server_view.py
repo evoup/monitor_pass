@@ -22,10 +22,11 @@ logger = logging.getLogger(__name__)
 @permission_classes((IsAuthenticated,))
 class ServerInfo(APIView):
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """
         获取单台服务器
         """
+        models.Server.objects.get(id=self.request.query_params['id'])
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

@@ -52,7 +52,7 @@ urlpatterns = [
         url(r'^user_group/list$', user_view.UserGroupList.as_view()),
         # 所有权限列表
         url(r'^user_perm/list$', user_view.UserPerm.as_view()),
-        # 添加服务器
+        # 读取/创建服务器
         url(r'^server/info$', server_view.ServerInfo.as_view()),
         # 服务器列表
         url(r'^server/list$', server_view.ServerList.as_view()),

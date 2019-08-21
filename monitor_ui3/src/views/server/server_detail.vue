@@ -9,7 +9,7 @@
             <li>
               <strong>主机名：</strong>
               <span>
-                bam4atd50monitor01-a0a3010
+                {{ form.name }}
               </span>
             </li>
 
@@ -129,19 +129,32 @@
 </template>
 
 <script>
+import { read_server } from '../../api/server'
+
 export default {
   name: 'ServerDetail',
   data() {
     return {
-      x: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566291323174&theme=dark&panelId=2&to=',
-      x1: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566295949026&panelId=3&to=',
-      x2: 'http://localhost/grafana/d-solo/vYLsplOWz/my?orgId=1&from=1566296048479&panelId=4&to=',
+      form: {
+        name: ''
+      },
+      x: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=1&to=',
+      x1: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=2&to=',
+      x2: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=3&to=',
       y: '',
       y1: '',
       y2: ''
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
+    fetchData(id) {
+      read_server(id).then(response => {
+        this.form.name = response.data.item.name
+      })
+    },
     genGrafana() {
       this.y = this.x + Date.parse(new Date())
       this.y1 = this.x1 + Date.parse(new Date())
