@@ -147,11 +147,11 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.fetchData(this.$route.query.id)
   },
   methods: {
     fetchData(id) {
-      read_server(id).then(response => {
+      read_server({ id: id }).then(response => {
         this.form.name = response.data.item.name
       })
     },
