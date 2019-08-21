@@ -120,7 +120,7 @@
 </template>
 
 <script>
-  import { change_server, server_group_list } from '../../api/server'
+import { change_server, read_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 import { idc_list } from '../../api/idc'
 import { data_collector_list } from '../../api/data_collector'
@@ -159,8 +159,21 @@ export default {
     this.fetchTemplateListData()
     this.fetchIdcListData()
     this.fetchDataCollectorListData()
+    this.fetchData(this.$route.query.id)
   },
   methods: {
+    fetchData(id) {
+      read_server({ id: id }).then(response => {
+        this.form.name = response.data.item.name
+        // 所属的服务器组
+        const serverGroupIds = response.data.item.server_groups
+        const a = []
+        serverGroupIds.forEach(function(e) {
+          a.push(e)
+        })
+        this.serverGroupSelectModel = a
+      })
+    },
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list().then(response => {
