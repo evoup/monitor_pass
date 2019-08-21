@@ -110,7 +110,7 @@
             addServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
                       serverGroupSelectModel, templateSelectModel, form.auto_asset)
           "
-        >创建
+        >更新
         </el-button
         >
         <el-button @click="jumpServerList">取消</el-button>
@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { add_server, server_group_list } from '../../api/server'
+  import { change_server, server_group_list } from '../../api/server'
 import { template_list } from '../../api/template'
 import { idc_list } from '../../api/idc'
 import { data_collector_list } from '../../api/data_collector'
@@ -182,8 +182,8 @@ export default {
         this.form.idcs = response.data.items
       })
     },
-    addServer(a, b, c, d, e, f, g, h, i, j) {
-      add_server(a, b, c, d, e, f, g, h, i, j).then(response => {
+    changeServer(a, b, c, d, e, f, g, h, i, j) {
+      change_server(a, b, c, d, e, f, g, h, i, j).then(response => {
       }).catch(e => {
         console.log(e)
       })

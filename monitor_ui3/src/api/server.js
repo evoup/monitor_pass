@@ -20,6 +20,26 @@ export function add_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data
   })
 }
 
+export function change_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data_collector, idc, server_groups,
+  templates, auto_asset) {
+  return request({
+    url: '/server/info',
+    method: 'put',
+    data: {
+      name,
+      agent_addr,
+      ssh_addr,
+      jmx_addr,
+      snmp_addr,
+      data_collector,
+      idc,
+      server_groups,
+      templates,
+      auto_asset
+    }
+  })
+}
+
 export function read_server(param) {
   return request({
     url: '/server/info',
