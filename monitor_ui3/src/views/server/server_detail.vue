@@ -12,11 +12,16 @@
                 {{ form.name }}
               </span>
             </li>
-
+            <li>
+              <strong>所属服务器组：</strong>
+              <span>
+                {{ form.server_group }}
+              </span>
+            </li>
             <li>
               <strong>IP地址：</strong>
               <span>
-                10.10.48.16
+                {{ form.ip }}
               </span>
             </li>
 
@@ -136,7 +141,9 @@ export default {
   data() {
     return {
       form: {
-        name: ''
+        name: '',
+        ip: '',
+        server_groups: []
       },
       x: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=1&to=',
       x1: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=2&to=',
@@ -153,6 +160,8 @@ export default {
     fetchData(id) {
       read_server({ id: id }).then(response => {
         this.form.name = response.data.item.name
+        this.form.ip = response.data.item.ip
+        this.form.server_groups = response.data.item.server_groups
       })
     },
     genGrafana() {

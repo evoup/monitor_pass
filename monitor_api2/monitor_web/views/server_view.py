@@ -26,11 +26,12 @@ class ServerInfo(APIView):
         """
         获取单台服务器
         """
-        models.Server.objects.get(id=self.request.query_params['id'])
+        server = models.Server.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        serializer = ServerSerializer(instance=server, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-                "name": "server1"
+                "item": serializer.data
             }
         }
         return JsonResponse(ret, safe=False)
