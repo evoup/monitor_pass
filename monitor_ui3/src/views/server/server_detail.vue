@@ -7,10 +7,24 @@
           <ul class="list_1">
 
             <li>
-              <strong>主机名：</strong>
-              <span>
-                {{ form.name }}
-              </span>
+              <el-rpw>
+                <el-col span="20">
+                  <strong>主机名：</strong>
+                  <span>
+                    {{ form.name }}
+                  </span>
+                </el-col>
+                <el-col span="2">
+                  <el-button :loading="loading" type="primary" plain @click.native.prevent="jumpChangeServer">
+                    配置
+                  </el-button>
+                </el-col>
+                <el-col span="2">
+                  <el-button :loading="loading" type="danger" plain @click.native.prevent="handleLogin">
+                    删除
+                  </el-button>
+                </el-col>
+              </el-rpw>
             </li>
             <li>
               <strong>所属服务器组：</strong>
@@ -168,6 +182,9 @@ export default {
       this.y = this.x + Date.parse(new Date())
       this.y1 = this.x1 + Date.parse(new Date())
       this.y2 = this.x2 + Date.parse(new Date())
+    },
+    jumpChangeServer() {
+      this.$router.push({ path: '/change_server?id=' + this.$route.query.id })
     }
   }
 }

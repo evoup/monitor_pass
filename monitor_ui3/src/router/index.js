@@ -69,9 +69,16 @@ export const constantRouterMap = [
     children: [
       {
         path: '/add_server',
-        name: 'Table1',
+        name: 'AddServer',
         component: () => import('../views/server/add_server'),
         meta: { title: '添加服务器', icon: 'form' }
+      },
+      {
+        path: '/change_server',
+        name: 'ChangeServer',
+        component: () => import('../views/server/change_server'),
+        meta: { title: '修改服务器', icon: 'form' },
+        hidden: true
       },
       {
         path: '/server_list',
