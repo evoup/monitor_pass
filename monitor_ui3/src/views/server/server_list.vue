@@ -46,7 +46,7 @@
             width="130" />
           <el-table-column
             label="收集节点"
-            prop="data_collector"
+            prop="data_collector_name"
             width="180" />
           <el-table-column
             label="更新时间"

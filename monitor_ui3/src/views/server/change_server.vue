@@ -171,6 +171,9 @@ export default {
           a.push(e)
         })
         this.serverGroupSelectModel = a
+        // 数据收集器
+        const dataCollectorId = response.data.item.data_collector
+        this.dataCollectorSelectModel = dataCollectorId
       })
     },
     // 获取所有模板列表

@@ -112,18 +112,14 @@ class AssetRecordSerializer(serializers.ModelSerializer):
 
 class ServerSerializer(serializers.ModelSerializer):
     asset = AssetSerializer(required=True)
-    data_collector = serializers.SerializerMethodField()
+    data_collector_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Server
         fields = '__all__'
 
-    def get_data_collector(self, obj):
-        s = models.Server.objects.filter(id=obj.id).all()
-        if len(s):
-            return s[0].data_collector.name
-        else:
-            return None
+    def get_data_collector_name(self, obj):
+        return obj.data_collector.name
 
 
 class ServerGroupSerializer(serializers.ModelSerializer):
