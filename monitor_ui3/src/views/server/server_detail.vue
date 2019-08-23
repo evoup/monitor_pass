@@ -5,9 +5,8 @@
       <el-tab-pane label="明细状态">
         <div id="status">
           <ul class="list_1">
-
             <li>
-              <el-rpw>
+              <el-row>
                 <el-col span="20">
                   <strong>主机名：</strong>
                   <span>
@@ -15,16 +14,16 @@
                   </span>
                 </el-col>
                 <el-col span="2">
-                  <el-button :loading="loading" type="primary" plain @click.native.prevent="jumpChangeServer">
+                  <el-button type="primary" plain @click.native.prevent="jumpChangeServer">
                     配置
                   </el-button>
                 </el-col>
                 <el-col span="2">
-                  <el-button :loading="loading" type="danger" plain @click.native.prevent="handleLogin">
+                  <el-button type="danger" plain @click.native.prevent="handleLogin">
                     删除
                   </el-button>
                 </el-col>
-              </el-rpw>
+              </el-row>
             </li>
             <li>
               <strong>所属服务器组：</strong>
