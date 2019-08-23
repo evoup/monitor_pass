@@ -151,7 +151,7 @@ export default {
         dataCollectors: [],
         idcs: [],
         auto_asset: true,
-        monitoring: true
+        monitoring: null
       },
       serverGroupSelectModel: null,
       templateSelectModel: null,
@@ -185,6 +185,8 @@ export default {
         this.dataCollectorSelectModel = response.data.item.data_collector
         // 机房
         this.idcSelectModel = response.data.item.asset.idc.id
+        // 是否监控
+        this.form.monitoring = response.data.item.status !== 2
       })
     },
     // 获取所有模板列表
