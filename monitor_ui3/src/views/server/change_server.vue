@@ -103,6 +103,11 @@
           v-model="form.auto_asset"
         />
       </el-form-item>
+      <el-form-item label="是否监控">
+        <el-switch
+          v-model="form.monitoring"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -145,7 +150,8 @@ export default {
         serverGroups: [],
         dataCollectors: [],
         idcs: [],
-        auto_asset: true
+        auto_asset: true,
+        monitoring: true
       },
       serverGroupSelectModel: null,
       templateSelectModel: null,
@@ -217,6 +223,6 @@ export default {
 
 <style scoped>
   .app-container /deep/ .el-form-item {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 </style>
