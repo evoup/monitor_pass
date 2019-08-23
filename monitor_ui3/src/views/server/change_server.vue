@@ -176,8 +176,7 @@ export default {
         })
         this.serverGroupSelectModel = a
         // 数据收集器
-        const dataCollectorId = response.data.item.data_collector
-        this.dataCollectorSelectModel = dataCollectorId
+        this.dataCollectorSelectModel = response.data.item.data_collector
         // 机房
         this.idcSelectModel = response.data.item.asset.idc.id
       })
