@@ -7,18 +7,18 @@
           <ul class="list_1">
             <li>
               <el-row>
-                <el-col span="20">
+                <el-col :span="20">
                   <strong>主机名：</strong>
                   <span>
                     {{ form.name }}
                   </span>
                 </el-col>
-                <el-col span="2">
+                <el-col :span="2">
                   <el-button type="primary" plain @click.native.prevent="jumpChangeServer">
                     配置
                   </el-button>
                 </el-col>
-                <el-col span="2">
+                <el-col :span="2">
                   <el-button type="danger" plain @click.native.prevent="handleLogin">
                     删除
                   </el-button>
@@ -28,7 +28,7 @@
             <li>
               <strong>所属服务器组：</strong>
               <span>
-                {{ form.server_group }}
+                {{ form.server_groups }}
               </span>
             </li>
             <li>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { read_server } from '../../api/server'
+import { read_server, server_group_list } from '../../api/server'
 
 export default {
   name: 'ServerDetail',
@@ -156,7 +156,7 @@ export default {
       form: {
         name: '',
         ip: '',
-        server_groups: []
+        server_groups: null
       },
       x: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=1&to=',
       x1: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=2&to=',
@@ -171,10 +171,19 @@ export default {
   },
   methods: {
     fetchData(id) {
+      var server_groups = []
+      server_group_list().then(response => {
+        server_groups = response.data.items
+      })
       read_server({ id: id }).then(response => {
         this.form.name = response.data.item.name
         this.form.ip = response.data.item.ip
-        this.form.server_groups = response.data.item.server_groups
+        var grps = []
+        for (var grp in response.data.item.server_groups) {
+          console.log(grp)
+          grps.push(server_groups[grp].name)
+        }
+        this.form.server_groups = grps.join()
       })
     },
     genGrafana() {
