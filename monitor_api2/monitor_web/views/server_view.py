@@ -26,7 +26,8 @@ class ServerInfo(APIView):
         """
         获取单台服务器
         """
-        server = models.Server.objects.get(id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        server = models.Server.objects.get(
+            id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
         serializer = ServerSerializer(instance=server, many=False)
         ret = {
             "code": constant.BACKEND_CODE_OK,
@@ -95,7 +96,7 @@ class ServerInfo(APIView):
         try:
             # a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
             server = Server.objects.get(id=data['id'])
-            idc= models.IDC.objects.get(id=data['idc'])
+            idc = models.IDC.objects.get(id=data['idc'])
             Asset.objects.filter(id=server.asset.id).update(idc=idc)
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
@@ -104,11 +105,18 @@ class ServerInfo(APIView):
                 ret['message'] = ret['message'] + ":服务器名字不能为空"
                 return JsonResponse(ret, safe=False)
             d = DataCollector.objects.get(id=data['data_collector'])
-            Server.objects.update(id=data['id'], name=data['name'], agent_address=data['agent_addr'],
-                                                           ssh_address=data['ssh_addr'],
-                                                           jmx_address=data['jmx_addr'],
-                                                           snmp_address=data['snmp_addr'],
-                                                           data_collector=d, status=2)
+            if not data['monitoring']:
+                Server.objects.update(id=data['id'], name=data['name'], agent_address=data['agent_addr'],
+                                      ssh_address=data['ssh_addr'],
+                                      jmx_address=data['jmx_addr'],
+                                      snmp_address=data['snmp_addr'],
+                                      data_collector=d, status=2)
+            else:
+                Server.objects.update(id=data['id'], name=data['name'], agent_address=data['agent_addr'],
+                                      ssh_address=data['ssh_addr'],
+                                      jmx_address=data['jmx_addr'],
+                                      snmp_address=data['snmp_addr'],
+                                      data_collector=d, status=3)
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)

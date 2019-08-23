@@ -21,7 +21,7 @@ export function add_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data
 }
 
 export function change_server(id, name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data_collector, idc, server_groups,
-  templates, auto_asset) {
+  templates, auto_asset, monitoring) {
   return request({
     url: '/server/info',
     method: 'put',
@@ -36,7 +36,8 @@ export function change_server(id, name, agent_addr, ssh_addr, jmx_addr, snmp_add
       idc,
       server_groups,
       templates,
-      auto_asset
+      auto_asset,
+      monitoring
     }
   })
 }
