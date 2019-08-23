@@ -180,7 +180,6 @@ export default {
         this.form.ip = response.data.item.ip
         var grps = []
         for (var grp in response.data.item.server_groups) {
-          console.log(grp)
           grps.push(server_groups[grp].name)
         }
         this.form.server_groups = grps.join()

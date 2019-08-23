@@ -164,6 +164,10 @@ export default {
     fetchData(id) {
       read_server({ id: id }).then(response => {
         this.form.name = response.data.item.name
+        this.form.client = response.data.item.agent_address
+        this.form.ssh = response.data.item.ssh_address
+        this.form.snmp = response.data.item.snmp_address
+        this.form.jmx = response.data.item.jmx_address
         // 所属的服务器组
         const serverGroupIds = response.data.item.server_groups
         const a = []
