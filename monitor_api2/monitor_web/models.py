@@ -69,6 +69,7 @@ class Server(models.Model):
         (0, '宕机'),
         (1, '在线'),
         (2, '不监控'),
+        (3, '状态未知'),
     )
     id = models.AutoField(primary_key=True)
     name = models.CharField(u'服务器主机名', max_length=40, null=False)
