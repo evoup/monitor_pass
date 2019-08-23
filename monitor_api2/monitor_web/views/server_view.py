@@ -93,15 +93,10 @@ class ServerInfo(APIView):
             'message': '修改服务器失败'
         }
         try:
-            i = None
-            if data['idc']:
-                ser = IDCSerializer(data={'name': data['idc']})
-                if not ser.is_valid():
-                    return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
-                else:
-                    i = ser.create(ser.validated_data)
-                    i.save()
-            a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
+            # a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
+            server = Server.objects.get(id=data['id'])
+            idc= models.IDC.objects.get(id=data['idc'])
+            Asset.objects.filter(id=server.asset.id).update(idc=idc)
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
                 return JsonResponse(ret, safe=False)
@@ -112,7 +107,7 @@ class ServerInfo(APIView):
             Server.objects.update(id=data['id'], name=data['name'], agent_address=data['agent_addr'],
                                                            ssh_address=data['ssh_addr'],
                                                            jmx_address=data['jmx_addr'],
-                                                           snmp_address=data['snmp_addr'], asset=a,
+                                                           snmp_address=data['snmp_addr'],
                                                            data_collector=d, status=2)
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
