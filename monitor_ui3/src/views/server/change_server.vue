@@ -113,7 +113,7 @@
           type="primary"
           @click="
             changeServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
-            serverGroupSelectModel, templateSelectModel, form.auto_asset, form.monitoring)
+                         serverGroupSelectModel, templateSelectModel, form.auto_asset, form.monitoring)
           "
         >更新
         </el-button

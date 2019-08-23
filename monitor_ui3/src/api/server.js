@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function add_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data_collector, idc, server_groups,
-  templates, auto_asset) {
+  templates, auto_asset, monitoring) {
   return request({
     url: '/server/info',
     method: 'post',
@@ -15,7 +15,8 @@ export function add_server(name, agent_addr, ssh_addr, jmx_addr, snmp_addr, data
       idc,
       server_groups,
       templates,
-      auto_asset
+      auto_asset,
+      monitoring
     }
   })
 }

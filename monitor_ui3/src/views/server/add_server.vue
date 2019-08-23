@@ -103,12 +103,17 @@
           v-model="form.auto_asset"
         />
       </el-form-item>
+      <el-form-item label="是否监控">
+        <el-switch
+          v-model="form.monitoring"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           @click="
             addServer(form.name, form.client, form.ssh, form.jmx, form.snmp, dataCollectorSelectModel, idcSelectModel,
-                      serverGroupSelectModel, templateSelectModel, form.auto_asset)
+                      serverGroupSelectModel, templateSelectModel, form.auto_asset, form.monitoring)
           "
         >创建
         </el-button
@@ -146,7 +151,8 @@ export default {
         serverGroups: [],
         dataCollectors: [],
         idcs: [],
-        auto_asset: true
+        auto_asset: true,
+        monitoring: true
       },
       serverGroupSelectModel: null,
       templateSelectModel: null,
@@ -182,8 +188,8 @@ export default {
         this.form.idcs = response.data.items
       })
     },
-    addServer(a, b, c, d, e, f, g, h, i, j) {
-      add_server(a, b, c, d, e, f, g, h, i, j).then(response => {
+    addServer(a, b, c, d, e, f, g, h, i, j, k) {
+      add_server(a, b, c, d, e, f, g, h, i, j, k).then(response => {
       }).catch(e => {
         console.log(e)
       })
