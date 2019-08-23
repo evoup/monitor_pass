@@ -93,7 +93,7 @@
               :key="item.id"
               :label="item.name"
               :aria-selected="true"
-              :value="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-col>
@@ -178,6 +178,8 @@ export default {
         // 数据收集器
         const dataCollectorId = response.data.item.data_collector
         this.dataCollectorSelectModel = dataCollectorId
+        // 机房
+        this.idcSelectModel = response.data.item.asset.idc.id
       })
     },
     // 获取所有模板列表
