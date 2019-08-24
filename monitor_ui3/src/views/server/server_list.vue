@@ -61,7 +61,7 @@
             <template slot-scope="prop">
               <el-tag v-if="prop.row.status === 0" type="success">在线</el-tag>
               <el-tag v-if="prop.row.status === 1" type="danger">宕机</el-tag>
-              <el-tag v-if="prop.row.status === 2" type="primary">未监控</el-tag>
+              <el-tag v-if="prop.row.status === 2" type="info">未监控</el-tag>
               <el-tag v-if="prop.row.status === 3" type="primary">状态未知</el-tag>
             </template>
           </el-table-column>
