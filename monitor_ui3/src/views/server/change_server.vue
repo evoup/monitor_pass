@@ -185,7 +185,9 @@ export default {
         // 数据收集器
         this.dataCollectorSelectModel = response.data.item.data_collector
         // 机房
-        this.idcSelectModel = response.data.item.asset.idc.name
+        if (response.data.item.asset != null) {
+          this.idcSelectModel = response.data.item.asset.idc.name
+        }
         // 是否监控
         this.form.monitoring = response.data.item.status !== 2
       })
