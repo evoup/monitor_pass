@@ -22,33 +22,38 @@
         label="服务器组"
         sortable="custom"
         prop="name"
-        width="180" />
+        min-width="10%" />
       <el-table-column
         label="在线数"
         sortable="custom"
         prop="ip"
-        width="130" />
+        min-width="10%" />
       <el-table-column
         label="宕机数"
         sortable="custom"
         prop="data_collector"
-        width="130" />
+        min-width="10%" />
+      <el-table-column
+        label="未监控数"
+        sortable="custom"
+        prop="unmonitoring"
+        min-width="10%" />
       <el-table-column
         label="正常事件数"
         sortable="custom"
         prop="date"
-        width="130" />
+        min-width="10%" />
       <el-table-column
         label="正常事件数"
         sortable="custom"
         prop="date"
-        width="130" />
+        min-width="10%" />
       <el-table-column
         label="正常事件数"
         sortable="custom"
         prop="date"
-        width="130" />
-      <el-table-column label="操作">
+        min-width="10%" />
+      <el-table-column label="操作" min-width="15%">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
           <el-button size="small" type="danger" @click="deleteServerGroup(prop.row.id, prop.$index)">删除</el-button>
