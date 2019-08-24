@@ -30,7 +30,7 @@
             label="名称"
             sortable="custom"
             prop="name"
-            min-width="30%" />
+            min-width="40%" />
           <el-table-column
             label="取值方式"
             sortable="custom"
@@ -41,17 +41,25 @@
                 v-for="item in functionOptions"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
-              </el-option>
+                :value="item.value"/>
             </el-select>
           </el-table-column>
-          <el-table-column label="操作" min-width="30%">
+          <el-table-column label="操作" min-width="20%">
             <template slot-scope="prop">
               <el-button size="small" type="primary" @click="jumpChangeUser(prop.row.id)">编辑</el-button>
               <el-button size="small" type="danger" @click="deleteUser(prop.row.id, prop.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          @click="x"
+        >更新
+        </el-button
+        >
+        <el-button @click="jumpServerList">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -73,6 +81,9 @@ export default {
       }],
       functionSelectModel: null
     }
+  },
+  methods: {
+    x(){}
   }
 }
 </script>
