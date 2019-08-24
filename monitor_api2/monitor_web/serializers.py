@@ -110,9 +110,18 @@ class ServerSerializer(serializers.ModelSerializer):
 
 
 class ServerGroupSerializer(serializers.ModelSerializer):
+    on = serializers.SerializerMethodField()
+    down = serializers.SerializerMethodField()
+    unmonitoring = serializers.SerializerMethodField()
     class Meta:
         model = ServerGroup
         fields = '__all__'
+    def get_on(self, obj):
+        return models.Server.objects.filter(status=1, server_groups__in=str(obj.id)).all().count()
+    def get_down(self, obj):
+        return models.Server.objects.filter(status=2, server_groups__in=str(obj.id)).all().count()
+    def get_unmonitoring(self, obj):
+        return models.Server.objects.filter(status=3, server_groups__in=str(obj.id)).all().count()
 
 
 class ItemSerializer(serializers.ModelSerializer):
