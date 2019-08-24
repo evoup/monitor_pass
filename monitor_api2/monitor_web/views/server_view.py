@@ -90,8 +90,11 @@ class ServerInfo(APIView):
             # a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
             server = Server.objects.get(id=data['id'])
             i, _ = IDC.objects.get_or_create(name=data['idc'])
+            a = None
             if server.asset is not None:
-                Asset.objects.filter(id=server.asset.id).update(idc=i)
+                a = Asset.objects.filter(id=server.asset.id).update(idc=i)
+            else:
+                a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, host_name=data['name'])
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
                 return JsonResponse(ret, safe=False)
@@ -103,7 +106,7 @@ class ServerInfo(APIView):
                                                         ssh_address=data['ssh_addr'],
                                                         jmx_address=data['jmx_addr'],
                                                         snmp_address=data['snmp_addr'],
-                                                        data_collector=d, status=3 if data['monitoring'] else 2)
+                                                        asset = a, data_collector=d, status=3 if data['monitoring'] else 2)
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
