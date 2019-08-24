@@ -19,7 +19,10 @@ class DiagramList(APIView):
         获取图表列表
         """
         from monitor_web import models
-        page_data, count = paging_request(request, models.Diagram, self)
+        if self.request.query_params.__contains__('id'):
+            page_data, count = paging_request(request, models.Diagram, self, filter={'id__in': request.query_params['id']})
+        else:
+            page_data, count = paging_request(request, models.Diagram, self)
         # 对数据进行序列化
         serializer = DiagramSerializer(instance=page_data, many=True)
         ret = {
