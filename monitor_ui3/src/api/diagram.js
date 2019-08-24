@@ -7,3 +7,10 @@ export function diagram_list(param) {
     params: param
   })
 }
+export function diagram_info(param) {
+  return request({
+    url: '/diagram/info',
+    method: 'get',
+    params: param
+  })
+}

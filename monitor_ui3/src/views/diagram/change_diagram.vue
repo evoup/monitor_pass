@@ -7,12 +7,12 @@
         </el-col>
       </el-form-item>
       <el-form-item label="宽度">
-        <el-col :span="8">
+        <el-col :span="3">
           <el-input v-model="form.width" placeholder="请输入宽度"/>
         </el-col>
       </el-form-item>
       <el-form-item label="高度">
-        <el-col :span="8">
+        <el-col :span="3">
           <el-input v-model="form.height" placeholder="请输入高度"/>
         </el-col>
       </el-form-item>
@@ -23,12 +23,12 @@
           stripe
           border
           tooltip-effect="dark"
-          style="width: 100%">
+          style="width: 80%">
           <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
           <el-table-column
             label="名称"
             sortable="custom"
-            prop="name"
+            prop="item"
             min-width="40%" />
           <el-table-column
             label="取值方式"
@@ -65,29 +65,41 @@
 </template>
 
 <script>
+import { diagram_info } from '../../api/diagram'
 export default {
   name: 'ChangeDiagram',
   data() {
     return {
       form: {
         name: '',
-        width: null,
-        height: null
+        width: 900,
+        height: 200
       },
-      functionOptions: [{
-        value: '选项1',
-        label: '黄金糕'
-      }],
-      functionSelectModel: null,
+      functionOptions: [[{
+        value: 'avg',
+        label: 'avg'
+      }]],
+      functionSelectModel: 'avg',
       listLoading: true,
       dataList: []
     }
   },
+  created() {
+    this.getData()
+  },
   methods: {
     x() {},
+    getData() {
+      diagram_info({ id: 1 }).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
-    },
+    }
   }
 }
 </script>
