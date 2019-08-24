@@ -53,9 +53,11 @@ class ServerInfo(APIView):
                 ser = IDCSerializer(data={'name': data['idc']})
                 if not ser.is_valid():
                     return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
-                else:
+                elif models.IDC.objects.filter(name=data['idc']).all().count() == 0:
                     i = ser.create(ser.validated_data)
                     i.save()
+                else:
+                    i = models.IDC.objects.filter(name=data['idc']).get()
             a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
