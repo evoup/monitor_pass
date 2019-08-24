@@ -58,7 +58,7 @@ class ServerInfo(APIView):
                     i.save()
                 else:
                     i = models.IDC.objects.filter(name=data['idc']).get()
-            a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, name=data['name'])
+            a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, host_name=data['name'])
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
                 return JsonResponse(ret, safe=False)
