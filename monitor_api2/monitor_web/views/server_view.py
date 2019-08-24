@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
-from monitor_web.models import Server, Asset, DataCollector
+from monitor_web.models import Server, Asset, DataCollector, IDC
 from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.paging import paging_request
@@ -48,16 +48,7 @@ class ServerInfo(APIView):
             'message': '创建服务器失败'
         }
         try:
-            i = None
-            if data['idc']:
-                ser = IDCSerializer(data={'name': data['idc']})
-                if not ser.is_valid():
-                    return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
-                elif models.IDC.objects.filter(name=data['idc']).all().count() == 0:
-                    i = ser.create(ser.validated_data)
-                    i.save()
-                else:
-                    i = models.IDC.objects.filter(name=data['idc']).get()
+            i = IDC.objects.get(name=data['idc'])
             a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, host_name=data['name'])
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
@@ -98,18 +89,7 @@ class ServerInfo(APIView):
         try:
             # a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i)
             server = Server.objects.get(id=data['id'])
-
-            i = None
-            if data['idc']:
-                ser = IDCSerializer(data={'name': data['idc']})
-                if not ser.is_valid():
-                    return JsonResponse({'code': 40001, 'message': ser.errors}, safe=False)
-                elif models.IDC.objects.filter(name=data['idc']).all().count() == 0:
-                    i = ser.create(ser.validated_data)
-                    i.save()
-                else:
-                    i = models.IDC.objects.filter(name=data['idc']).get()
-
+            i = IDC.objects.get(name=data['idc'])
             if server.asset is not None:
                 Asset.objects.filter(id=server.asset.id).update(idc=i)
             if not data['data_collector']:
@@ -119,18 +99,11 @@ class ServerInfo(APIView):
                 ret['message'] = ret['message'] + ":服务器名字不能为空"
                 return JsonResponse(ret, safe=False)
             d = DataCollector.objects.get(id=data['data_collector'])
-            if not data['monitoring']:
-                Server.objects.filter(id=data['id']).update(name=data['name'], agent_address=data['agent_addr'],
-                                                            ssh_address=data['ssh_addr'],
-                                                            jmx_address=data['jmx_addr'],
-                                                            snmp_address=data['snmp_addr'],
-                                                            data_collector=d, status=2)
-            else:
-                Server.objects.filter(id=data['id']).update(name=data['name'], agent_address=data['agent_addr'],
-                                                            ssh_address=data['ssh_addr'],
-                                                            jmx_address=data['jmx_addr'],
-                                                            snmp_address=data['snmp_addr'],
-                                                            data_collector=d, status=3)
+            Server.objects.filter(id=data['id']).update(name=data['name'], agent_address=data['agent_addr'],
+                                                        ssh_address=data['ssh_addr'],
+                                                        jmx_address=data['jmx_addr'],
+                                                        snmp_address=data['snmp_addr'],
+                                                        data_collector=d, status=3 if data['monitoring'] else 2)
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
