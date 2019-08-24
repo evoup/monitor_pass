@@ -193,11 +193,11 @@ export default {
     // 删除服务器
     deleteServer() {
       delete_server({ id: this.$route.query.id }).then(response => {
-        this.jumpChangeServer()
+        this.jumpServerList()
       })
     },
-    jumpChangeServer() {
-      this.$router.push({ path: '/change_server?id=' + this.$route.query.id })
+    jumpServerList() {
+      this.$router.push({ path: '/server_list' })
     }
   }
 }
