@@ -632,5 +632,39 @@
     "name": "last",
     "parameter": "0"
   }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 26,
+  "fields": {
+    "name": "Processor load (5 min average per core)",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The processor load is calculated as system CPU load divided by number of CPU cores.",
+    "error": "",
+    "key": "system.cpu.load[percpu,avg5]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
+},
+{
+  "model": "monitor_web.monitoritem",
+  "pk": 27,
+  "fields": {
+    "name": "Processor load (15 min average per core)",
+    "data_type": 0,
+    "delay": 60,
+    "desc": "The processor load is calculated as system CPU load divided by number of CPU cores.",
+    "error": "",
+    "key": "system.cpu.load[percpu,avg15]",
+    "multiplier": 0.0,
+    "unit": "",
+    "host_id": 0,
+    "template_id": 1,
+    "delta": 0
+  }
 }
 ]
