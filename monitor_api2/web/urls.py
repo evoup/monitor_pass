@@ -89,5 +89,7 @@ urlpatterns = [
         url(r'^asset_record/list$', asset_view.AssetRecordList.as_view()),
         # 图表列表
         url(r'^diagram/list$', diagram_view.DiagramList.as_view()),
+        # 读取图表
+        url(r'^diagram/info', diagram_view.DiagramInfo.as_view()),
     ]))
 ]

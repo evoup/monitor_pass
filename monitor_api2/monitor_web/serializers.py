@@ -193,10 +193,14 @@ class DiagramSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DiagramItemSerializer(serializers.SerializerMethodField):
+class DiagramItemSerializer(serializers.ModelSerializer):
+    item = serializers.SerializerMethodField()
     class Meta:
         model = DiagramItem
         fields = '__all__'
+
+    def get_item(self, obj):
+        return obj.item.name
 
 
 class TriggerFunctionSerializer(serializers.ModelSerializer):

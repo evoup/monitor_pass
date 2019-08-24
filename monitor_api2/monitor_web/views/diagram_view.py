@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
-from monitor_web.serializers import DiagramSerializer
+from monitor_web.serializers import DiagramSerializer, DiagramItemSerializer
 from web.common import constant
 from web.common.paging import paging_request
 
@@ -37,7 +37,7 @@ class DiagramList(APIView):
 
 @permission_classes((IsAuthenticated,))
 class DiagramInfo(APIView):
-
+    @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
     def get(self, request, *args, **kwargs):
         """
         获取图表
@@ -45,12 +45,12 @@ class DiagramInfo(APIView):
         diagram = models.Diagram.objects.get(
             id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
 
-        di = models.DiagramItem.objects.filter(diagram__in=diagram.id).get()
-        serializer = DiagramSerializer(instance=di, many=True)
+        di = models.DiagramItem.objects.filter(diagram__in=str(diagram.id)).all()
+        serializer = DiagramItemSerializer(instance=di, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-                "item": serializer.data
+                "items": serializer.data
             }
         }
         return JsonResponse(ret, safe=False)
