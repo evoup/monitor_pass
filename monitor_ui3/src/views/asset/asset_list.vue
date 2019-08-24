@@ -26,12 +26,22 @@
           label="主机名"
           sortable="custom"
           prop="host_name"
-          min-width="10%"/>
+          min-width="10%">
+          <template slot-scope="prop">
+            <div v-if="prop.row.host_name === null">--</div>
+            <div v-if="prop.row.host_name !== null">{{ prop.row.host_name }}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           label="网络设备标识"
           sortable="custom"
           prop="network_device_name"
-          min-width="14%"/>
+          min-width="14%">
+          <template slot-scope="prop">
+            <div v-if="prop.row.network_device_name === null">--</div>
+            <div v-if="prop.row.network_device_name !== null">{{ prop.row.network_device_name }}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           label="机房"
           sortable="custom"
