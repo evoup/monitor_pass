@@ -54,6 +54,15 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="图表数" prop="diagram" width="130">
+        <template slot-scope="prop">
+          <div align="center">
+            <el-link type="primary" @click="jumpDiagramList(prop.row.id)">{{
+              prop.row.diagrams
+            }}</el-link>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="prop">
           <el-button
@@ -185,6 +194,12 @@ export default {
     jumpTriggerList(id) {
       this.$router.push({
         path: '/trigger_list',
+        query: { template_id: id }
+      })
+    },
+    jumpDiagramList(id) {
+      this.$router.push({
+        path: '/dragram_list',
         query: { template_id: id }
       })
     },

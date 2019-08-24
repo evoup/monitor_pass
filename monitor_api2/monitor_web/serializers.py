@@ -151,6 +151,7 @@ class ItemSerializer(serializers.ModelSerializer):
 class TemplateSerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
     triggers = serializers.SerializerMethodField()
+    diagrams = serializers.SerializerMethodField()
 
     class Meta:
         model = Template
@@ -168,6 +169,8 @@ class TemplateSerializer(serializers.ModelSerializer):
             triggers = triggers + len(models.Function.objects.filter(item=item.id).all())
         return triggers
 
+    def get_diagrams(self, obj):
+        return 0
 
 class TriggerSerializer(serializers.ModelSerializer):
     class Meta:
