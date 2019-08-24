@@ -51,6 +51,14 @@ export function read_server(param) {
   })
 }
 
+export function delete_server(param) {
+  return request({
+    url: '/server/info',
+    method: 'delete',
+    params: param
+  })
+}
+
 export function server_list(param) {
   return request({
     url: '/server/list',

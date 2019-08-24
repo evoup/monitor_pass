@@ -19,7 +19,7 @@
                   </el-button>
                 </el-col>
                 <el-col :span="2">
-                  <el-button type="danger" plain @click.native.prevent="handleLogin">
+                  <el-button type="danger" plain @click.native.prevent="deleteServer">
                     删除
                   </el-button>
                 </el-col>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { read_server, server_group_list } from '../../api/server'
+import { delete_server, read_server, server_group_list } from '../../api/server'
 
 export default {
   name: 'ServerDetail',
@@ -189,6 +189,12 @@ export default {
       this.y = this.x + Date.parse(new Date())
       this.y1 = this.x1 + Date.parse(new Date())
       this.y2 = this.x2 + Date.parse(new Date())
+    },
+    // 删除服务器
+    deleteServer() {
+      delete_server({ id: this.$route.query.id }).then(response => {
+        this.jumpChangeServer()
+      })
     },
     jumpChangeServer() {
       this.$router.push({ path: '/change_server?id=' + this.$route.query.id })
