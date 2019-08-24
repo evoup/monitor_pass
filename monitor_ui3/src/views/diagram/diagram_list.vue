@@ -7,7 +7,7 @@
             <el-button
               type="primary"
               @click="jumpAddTemplate()"
-            ><i class="el-icon-plus el-icon--right" />添加模板
+            ><i class="el-icon-plus el-icon--right" />添加图表
             </el-button>
           </div>
         </el-col>
@@ -31,39 +31,24 @@
         align="center"
       />
       <el-table-column
-        label="模板名"
+        label="名称"
         sortable="custom"
         prop="name"
-        width="220"
+        min-width="30"
       />
-      <el-table-column label="监控项数" prop="items" width="130">
-        <template slot-scope="prop">
-          <div align="center">
-            <el-link type="primary" @click="jumpItemList(prop.row.id)">{{
-              prop.row.items
-            }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="触发器数" prop="triggers" width="130">
-        <template slot-scope="prop">
-          <div align="center">
-            <el-link type="primary" @click="jumpTriggerList(prop.row.id)">{{
-              prop.row.triggers
-            }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="图表数" prop="diagram" width="130">
-        <template slot-scope="prop">
-          <div align="center">
-            <el-link type="primary" @click="jumpDiagramList(prop.row.id)">{{
-              prop.row.diagrams
-            }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column
+        label="宽度"
+        sortable="custom"
+        prop="width"
+        min-width="18%"
+      />
+      <el-table-column
+        label="高度"
+        sortable="custom"
+        prop="height"
+        min-width="18%"
+      />
+      <el-table-column label="操作" min-width="20%">
         <template slot-scope="prop">
           <el-button
             size="small"
@@ -101,7 +86,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import { template_list, delete_template } from '../../api/template'
+import diagram_list from '../../api/diagram'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 
 export default {
@@ -146,7 +131,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      template_list(Object.assign(this.pageHelp, this.sortHelp)).then(
+      diagram_list(Object.assign(this.pageHelp, this.sortHelp)).then(
         response => {
           this.dataList = response.data.items
           this.pageList = response.data.page
@@ -199,7 +184,7 @@ export default {
     },
     jumpDiagramList(id) {
       this.$router.push({
-        path: '/diagram_list',
+        path: '/dragram_list',
         query: { template_id: id }
       })
     },
@@ -209,9 +194,9 @@ export default {
     },
     // 删除模板
     deleteTemplate(id, rowIdx) {
-      delete_template({ id: id }).then(response => {
-        this.deleteRow(rowIdx, this.dataList)
-      })
+      // delete_template({ id: id }).then(response => {
+      //   this.deleteRow(rowIdx, this.dataList)
+      // })
     }
   }
 }

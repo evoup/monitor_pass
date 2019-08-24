@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view
+from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
+    diagram_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -86,5 +87,7 @@ urlpatterns = [
         url(r'^asset/list$', asset_view.AssetList.as_view()),
         # 资产变更记录列表
         url(r'^asset_record/list$', asset_view.AssetRecordList.as_view()),
+        # 图表列表
+        url(r'^diagram/list$', diagram_view.DiagramList.as_view()),
     ]))
 ]

@@ -205,6 +205,27 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/diagram_list',
+        name: 'DiagramList',
+        component: () => import('../views/diagram/diagram_list'),
+        meta: { title: '图表', icon: 'template' },
+        hidden: true
+      },
+      // {
+      //   path: '/add_diagram',
+      //   name: 'AddDiagram',
+      //   component: () => import('../views/diagram/add_diagram'),
+      //   meta: { title: '添加图表', icon: 'template' },
+      //   hidden: true
+      // },
+      // {
+      //   path: '/change_diagram',
+      //   name: 'ChangeDiagram',
+      //   component: () => import('../views/diagram/change_diagram'),
+      //   meta: { title: '修改图表', icon: 'template' },
+      //   hidden: true
+      // },
+      {
         path: '/general_conf',
         name: 'GeneralConf',
         component: () => import('../views/template/add_template'),
