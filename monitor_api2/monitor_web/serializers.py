@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function, DataCollector, AssetRecord, Diagram
+    Function, DataCollector, AssetRecord, Diagram, DiagramItem
 
 
 class DataCollectorSerializer(serializers.ModelSerializer):
@@ -127,8 +127,10 @@ class ServerGroupSerializer(serializers.ModelSerializer):
 
     def get_unmonitoring(self, obj):
         return models.Server.objects.filter(status=2, server_groups__in=str(obj.id)).all().count()
+
     def get_unknown(self, obj):
         return models.Server.objects.filter(status=3, server_groups__in=str(obj.id)).all().count()
+
 
 class ItemSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
@@ -188,6 +190,12 @@ class TriggerSerializer(serializers.ModelSerializer):
 class DiagramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diagram
+        fields = '__all__'
+
+
+class DiagramItemSerializer(serializers.SerializerMethodField):
+    class Meta:
+        model = DiagramItem
         fields = '__all__'
 
 

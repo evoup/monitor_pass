@@ -23,9 +23,8 @@
           stripe
           border
           tooltip-effect="dark"
-          style="width: 100%"
-          @sort-change="sortChange">
-          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
+          style="width: 100%">
+          <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
           <el-table-column
             label="名称"
             sortable="custom"
@@ -59,7 +58,7 @@
         >更新
         </el-button
         >
-        <el-button @click="jumpServerList">取消</el-button>
+        <el-button @click="jumpDiagramList">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -79,11 +78,16 @@ export default {
         value: '选项1',
         label: '黄金糕'
       }],
-      functionSelectModel: null
+      functionSelectModel: null,
+      listLoading: true,
+      dataList: []
     }
   },
   methods: {
-    x(){}
+    x() {},
+    jumpDiagramList() {
+      this.$router.push({ path: '/diagram_list' })
+    },
   }
 }
 </script>
