@@ -85,6 +85,8 @@
             v-model="idcSelectModel"
             placeholder="请输入或选择机房（可选）"
             style="width: 40%"
+            filterable
+            allow-create
           >
             <el-option
               v-for="item in form.idcs"
