@@ -26,12 +26,12 @@
       <el-table-column
         label="在线数"
         sortable="custom"
-        prop="ip"
+        prop="on"
         min-width="10%" />
       <el-table-column
         label="宕机数"
         sortable="custom"
-        prop="data_collector"
+        prop="down"
         min-width="10%" />
       <el-table-column
         label="未监控数"
