@@ -60,23 +60,10 @@ class TagSerializer(serializers.ModelSerializer):
 class AssetSerializer(serializers.ModelSerializer):
     tag = TagSerializer(required=True)
     idc = IDCSerializer(required=True)
-    host_name = serializers.SerializerMethodField()
-    network_device_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Asset
         fields = '__all__'
-
-    def get_host_name(self, obj):
-        if obj.device_type_id == 1:
-            s = models.Server.objects.filter(asset=obj.id).all()
-            if len(s) > 0:
-                return s[0].name
-        else:
-            return '--'
-
-    def get_network_device_name(self, obj):
-        return '--'
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):
