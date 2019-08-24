@@ -198,6 +198,9 @@ export default {
     },
     jumpServerList() {
       this.$router.push({ path: '/server_list' })
+    },
+    jumpChangeServer() {
+      this.$router.push({ path: '/change_server?id=' + this.$route.query.id })
     }
   }
 }
