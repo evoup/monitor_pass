@@ -53,7 +53,7 @@
           <el-button
             size="small"
             type="primary"
-            @click="jumpChangeTemplate(prop.row.id)"
+            @click="jumpChangeDiagram(prop.row.id)"
           >编辑</el-button
           >
           <el-button
@@ -163,25 +163,25 @@ export default {
     jumpAddTemplate() {
       this.$router.push({ path: '/add_template' })
     },
-    // 跳转到模板修改页面
-    jumpChangeTemplate(id) {
+    // 跳转到图表修改页面
+    jumpChangeDiagram(id) {
       this.$router.push({
-        path: '/change_template',
+        path: '/change_diagram',
         query: { id: id }
       })
     },
-    jumpItemList(id) {
-      this.$router.push({
-        path: '/item_list',
-        query: { template_id: id }
-      })
-    },
-    jumpTriggerList(id) {
-      this.$router.push({
-        path: '/trigger_list',
-        query: { template_id: id }
-      })
-    },
+    // jumpItemList(id) {
+    //   this.$router.push({
+    //     path: '/item_list',
+    //     query: { template_id: id }
+    //   })
+    // },
+    // jumpTriggerList(id) {
+    //   this.$router.push({
+    //     path: '/trigger_list',
+    //     query: { template_id: id }
+    //   })
+    // },
     jumpDiagramList(id) {
       this.$router.push({
         path: '/diagram_list',
