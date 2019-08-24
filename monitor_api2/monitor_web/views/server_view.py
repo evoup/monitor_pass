@@ -107,16 +107,16 @@ class ServerInfo(APIView):
             d = DataCollector.objects.get(id=data['data_collector'])
             if not data['monitoring']:
                 Server.objects.filter(id=data['id']).update(name=data['name'], agent_address=data['agent_addr'],
-                                      ssh_address=data['ssh_addr'],
-                                      jmx_address=data['jmx_addr'],
-                                      snmp_address=data['snmp_addr'],
-                                      data_collector=d, status=2)
+                                                            ssh_address=data['ssh_addr'],
+                                                            jmx_address=data['jmx_addr'],
+                                                            snmp_address=data['snmp_addr'],
+                                                            data_collector=d, status=2)
             else:
                 Server.objects.filter(id=data['id']).update(name=data['name'], agent_address=data['agent_addr'],
-                                      ssh_address=data['ssh_addr'],
-                                      jmx_address=data['jmx_addr'],
-                                      snmp_address=data['snmp_addr'],
-                                      data_collector=d, status=3)
+                                                            ssh_address=data['ssh_addr'],
+                                                            jmx_address=data['jmx_addr'],
+                                                            snmp_address=data['snmp_addr'],
+                                                            data_collector=d, status=3)
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
@@ -129,6 +129,19 @@ class ServerInfo(APIView):
             'code': constant.BACKEND_CODE_CREATED,
             'message': '修改服务器成功'
         }
+        return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('monitor_web.delete_server', raise_exception=True))
+    def delete(self, request, *args, **kwargs):
+        """
+        删除单台服务器
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除服务器成功'
+        }
+        server = models.Server.objects.get(id=self.request.query_params['id'])
+        server.delete()
         return JsonResponse(ret, safe=False)
 
     @csrf_exempt
@@ -191,11 +204,11 @@ class ServerGroupInfo(APIView):
     @method_decorator(permission_required('monitor_web.delete_servergroup', raise_exception=True))
     def delete(self, *args, **kwargs):
         """
-        删除服务组
+        删除服务器组
         """
         ret = {
             'code': constant.BACKEND_CODE_DELETED,
-            'message': '删除服务组成功'
+            'message': '删除服务器组成功'
         }
         serverGroup = models.ServerGroup.objects.get(id=self.request.query_params['id'])
         serverGroup.delete()
