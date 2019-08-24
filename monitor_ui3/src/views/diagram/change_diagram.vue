@@ -24,12 +24,12 @@
           border
           tooltip-effect="dark"
           style="width: 80%">
-          <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
+          <el-table-column prop="id" label="序号" type="index" width="80" align="center"/>
           <el-table-column
             label="名称"
             sortable="custom"
             prop="item"
-            min-width="40%" />
+            min-width="40%"/>
           <el-table-column
             label="取值方式"
             sortable="custom"
@@ -65,7 +65,8 @@
 </template>
 
 <script>
-import { diagram_info } from '../../api/diagram'
+import { diagram_info, diagram_list } from '../../api/diagram'
+
 export default {
   name: 'ChangeDiagram',
   data() {
@@ -88,8 +89,15 @@ export default {
     this.getData()
   },
   methods: {
-    x() {},
+    x() {
+    },
     getData() {
+      diagram_list({ id: 1 }).then(
+        response => {
+          this.form.name = response.data.items[0].name
+          this.form.width = response.data.items[0].width
+          this.form.height = response.data.items[0].height
+        })
       diagram_info({ id: 1 }).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
