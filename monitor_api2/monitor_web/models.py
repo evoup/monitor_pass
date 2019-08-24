@@ -372,7 +372,7 @@ class Asset(models.Model):
         (3, '离线'),
         (4, '下架'),
     )
-
+    name = models.CharField(max_length=256, unique=False, null=True)
     device_type_id = models.IntegerField(choices=device_type_choices, default=1)
     device_status_id = models.IntegerField(choices=device_status_choices, default=1)
 
