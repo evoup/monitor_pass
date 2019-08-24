@@ -86,7 +86,7 @@
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-import diagram_list from '../../api/diagram'
+import { diagram_list } from '../../api/diagram'
 import ElPager from 'element-ui/packages/pagination/src/pager'
 
 export default {
@@ -184,7 +184,7 @@ export default {
     },
     jumpDiagramList(id) {
       this.$router.push({
-        path: '/dragram_list',
+        path: '/diagram_list',
         query: { template_id: id }
       })
     },
