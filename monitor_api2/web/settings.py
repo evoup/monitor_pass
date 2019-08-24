@@ -388,4 +388,15 @@ PERMISSIONS = {
     "delete_servergroup": "服务器组删除",
     "view_servergroup": "服务器组查看",
 
+    # 图表
+    "add_diagram": "图表添加",
+    "change_diagram": "图表修改",
+    "delete_diagram": "图表删除",
+    "view_diagram": "图表查看",
+
+    # 图表项
+    "add_diagramitem": "图表项添加",
+    "change_diagramitem": "图表项修改",
+    "delete_diagramitem": "图表项删除",
+    "view_diagramitem": "图表项查看",
 }

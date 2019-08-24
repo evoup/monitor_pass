@@ -25,6 +25,8 @@ admin.site.register(models.Memory)
 admin.site.register(models.Disk)
 admin.site.register(models.NetworkDevice)
 admin.site.register(models.NIC)
+admin.site.register(models.Diagram)
+admin.site.register(models.DiagramItem)
 
 # ----------扩展django用户组开始-----------------
 class GroupInline(admin.StackedInline):

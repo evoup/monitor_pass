@@ -295,6 +295,33 @@ class Trigger(models.Model):
         return self.expression
 
 
+class Diagram(models.Model):
+    """
+    图表
+    """
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(u'图表名称', max_length=256, default='')
+    width = models.IntegerField(u'宽度', 0)
+    height = models.IntegerField(u'高度', 0)
+
+    class Meta:
+        verbose_name_plural = '图表表'
+        db_table = 'diagram'
+
+
+class DiagramItem(models.Model):
+    """
+    图表项
+    """
+    id = models.BigAutoField(primary_key=True)
+    diagram = models.ForeignKey(Diagram, on_delete=models.SET_NULL, null=True)
+    item = models.ForeignKey(MonitorItem, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name_plural = '图表项表'
+        db_table = 'diagram_item'
+
+
 class Function(models.Model):
     """
     函数
