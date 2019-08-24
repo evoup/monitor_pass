@@ -85,15 +85,13 @@
             v-model="idcSelectModel"
             placeholder="请输入或选择机房（可选）"
             style="width: 40%"
-            filterable
-            allow-create
           >
             <el-option
               v-for="item in form.idcs"
               :key="item.id"
               :label="item.name"
               :aria-selected="true"
-              :value="item.id"
+              :value="item.name"
             />
           </el-select>
         </el-col>
@@ -185,7 +183,7 @@ export default {
         // 数据收集器
         this.dataCollectorSelectModel = response.data.item.data_collector
         // 机房
-        this.idcSelectModel = response.data.item.asset.idc.id
+        this.idcSelectModel = response.data.item.asset.idc.name
         // 是否监控
         this.form.monitoring = response.data.item.status !== 2
       })
