@@ -203,6 +203,6 @@ export default {
 
 <style scoped>
   .app-container /deep/ .el-form-item {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 </style>
