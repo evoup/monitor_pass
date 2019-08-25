@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="180px">
       <el-form-item label="Grafana的api key">
-        <el-col :span="8">
+        <el-col :span="18">
           <el-input v-model="form.api_key" placeholder="请输入api key"/>
         </el-col>
       </el-form-item>
