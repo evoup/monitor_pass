@@ -1,6 +1,8 @@
 import logging
+import re
 import traceback
 
+import requests
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -237,8 +239,11 @@ class ServerInfo(APIView):
 	}
 }
                 """ % (srv.name, ','.join(metrics))
-
-                pass
+                outter = re.sub('\s+', ' ', outter)
+                grafana_url = 'http://localhost/grafana/api/dashboards/db'
+                headers = {'Authorization': 'Bearer eyJrIjoid3hTV3ZCaTE4c29NTmhGTThUdzdEbWcxQ2xKUkF1NjciLCJuIjoibXkiLCJpZCI6MX0=',
+                           'Accept': 'application/json', 'Content-Type': 'application/json'}
+                r = requests.post(grafana_url, data=outter, headers=headers)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
