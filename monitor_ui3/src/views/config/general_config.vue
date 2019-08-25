@@ -6,7 +6,7 @@
           <el-input v-model="form.api_key" placeholder="请输入api key"/>
         </el-col>
       </el-form-item>
-      <el-form-item label="是否在服务端故障时告警">
+      <el-form-item label="服务端故障时告警">
         <el-col :span="8">
           <el-switch
             v-model="form.switchValue"
