@@ -107,11 +107,29 @@ class ServerInfo(APIView):
                                                         jmx_address=data['jmx_addr'],
                                                         snmp_address=data['snmp_addr'],
                                                         asset = a, data_collector=d, status=3 if data['monitoring'] else 2)
+            match_monitor_items = {}
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
+                # 指向服务器组
                 srv.server_groups.add(sg)
-            for sg in data['templates']:
-                srv.templates.add(sg)
+                # 服务器组中模板有监控项
+                template = models.Template.objects.filter(server_group=sg).get()
+                monitor_items = models.MonitorItem.objects.filter(template_id=template.id).all()
+                for monitor_item in monitor_items:
+                    match_monitor_items[monitor_item.id] = 1
+            for tp in data['templates']:
+                # 指向模板
+                srv.templates.add(tp)
+                # 服务器组中模板有监控项
+                template = models.Template.objects.filter(server_group=tp).get()
+                monitor_items = models.MonitorItem.objects.filter(template_id=template.id).all()
+                for monitor_item in monitor_items:
+                    match_monitor_items[monitor_item.id] = 1
+            diagram_items = models.DiagramItem.objects.filter(item__in=match_monitor_items.keys()).all()
+            if diagram_items.count()>0:
+                for diagram_item in diagram_items:
+                    opentsdb_key = diagram_item.item.key
+                    pass
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
