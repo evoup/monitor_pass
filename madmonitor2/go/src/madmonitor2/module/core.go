@@ -368,7 +368,7 @@ func process_line(readChannel inc.ReaderChannel, line string) {
 	// fmt.Println("process_line: " + msg)
 	readChannel.AddLinesCollected()
 	// 解析消息
-	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)
+	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9,_/\-\[\]]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)
 	submatch := r.FindAllStringSubmatch(line, -1)
 	if submatch != nil {
 		fmt.Println(submatch)

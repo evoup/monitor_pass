@@ -179,7 +179,7 @@ class ServerInfo(APIView):
 		"downsampleAggregator": "avg",
 		"downsampleFillPolicy": "none",
 		"hide": false,
-		"metric": "apps.backend.lab3.%s",
+		"metric": "apps.backend.%s.%s",
 		"refId": "A"
 	}],
 	"thresholds": [],
@@ -223,7 +223,7 @@ class ServerInfo(APIView):
 		"alignLevel": null
 	}
 }
-                    """ % (i, opentsdb_key, name)
+                    """ % (i, srv.name, opentsdb_key, name)
                     metrics.append(metric)
                     i = i + 1
                 outter = """
@@ -237,7 +237,7 @@ class ServerInfo(APIView):
 	}
 }
                 """ % (srv.name, ','.join(metrics))
-                
+
                 pass
         except:
             print(traceback.format_exc())
