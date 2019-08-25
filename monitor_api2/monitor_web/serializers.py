@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function, DataCollector, AssetRecord, Diagram, DiagramItem
+    Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig
 
 
 class DataCollectorSerializer(serializers.ModelSerializer):
@@ -195,6 +195,7 @@ class DiagramSerializer(serializers.ModelSerializer):
 
 class DiagramItemSerializer(serializers.ModelSerializer):
     item = serializers.SerializerMethodField()
+
     class Meta:
         model = DiagramItem
         fields = '__all__'
@@ -299,3 +300,9 @@ class GroupSerializer(serializers.ModelSerializer):
     def get_desc(self, obj):
         if len(UserGroup.objects.filter(group_id=obj.id).all()) > 0:
             return UserGroup.objects.filter(group_id=obj.id).all()[0].desc
+
+
+class GeneralConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeneralConfig
+        fields = '__all__'

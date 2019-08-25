@@ -16,7 +16,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addTemplate(form.name, serverGroupSelectModel, templateSelectModel)">更新</el-button>
+        <el-button type="primary" @click="changeGeneralConfig(form.api_key, form.switchValue)">更新</el-button>
         <el-button @click="jumpTemplateList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -24,19 +24,30 @@
 </template>
 
 <script>
+import { change_general_config, read_general_config } from '../../api/general_config'
+
 export default {
   name: 'GeneralConfig',
   data() {
     return {
       form: {
         api_key: null,
-        switchValue: '1'
+        switchValue: null
       }
     }
   },
+  created() {
+    this.readGeneralConfig()
+  },
   methods: {
-    addTemplate(a, b, c) {
-      // add_template(a, b, c)
+    readGeneralConfig() {
+      read_general_config().then(response => {
+        this.form.api_key = response.data.item.grafana_api_key
+        this.form.switchValue = response.data.item.send_warn ? '1' : '2'
+      })
+    },
+    changeGeneralConfig(a, b) {
+      change_general_config(a, b)
     },
     jumpTemplateList() {
       this.$router.push({ path: '/template_list' })
