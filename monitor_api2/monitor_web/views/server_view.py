@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 
 from monitor_web import models
 from monitor_web.models import Server, Asset, DataCollector, IDC
-from monitor_web.serializers import ServerSerializer, IDCSerializer, ServerGroupSerializer
+from monitor_web.serializers import ServerSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.paging import paging_request
 
@@ -108,7 +108,8 @@ class ServerInfo(APIView):
                                                         ssh_address=data['ssh_addr'],
                                                         jmx_address=data['jmx_addr'],
                                                         snmp_address=data['snmp_addr'],
-                                                        asset = a, data_collector=d, status=3 if data['monitoring'] else 2)
+                                                        asset=a, data_collector=d,
+                                                        status=3 if data['monitoring'] else 2)
             match_monitor_items = {}
             srv = Server.objects.get(id=data['id'])
             for sg in data['server_groups']:
@@ -128,7 +129,7 @@ class ServerInfo(APIView):
                 for monitor_item in monitor_items:
                     match_monitor_items[monitor_item.id] = 1
             diagram_items = models.DiagramItem.objects.filter(item__in=match_monitor_items.keys()).all()
-            if diagram_items.count()>0:
+            if diagram_items.count() > 0:
                 i = 1
                 metrics = []
                 for diagram_item in diagram_items:
@@ -241,8 +242,10 @@ class ServerInfo(APIView):
                 """ % (srv.name, ','.join(metrics))
                 outter = re.sub('\s+', ' ', outter)
                 grafana_url = 'http://localhost/grafana/api/dashboards/db'
-                headers = {'Authorization': 'Bearer eyJrIjoid3hTV3ZCaTE4c29NTmhGTThUdzdEbWcxQ2xKUkF1NjciLCJuIjoibXkiLCJpZCI6MX0=',
-                           'Accept': 'application/json', 'Content-Type': 'application/json'}
+                gconf = models.GeneralConfig.objects.all()[0]
+                headers = {
+                    'Authorization': gconf.grafana_api_key,
+                    'Accept': 'application/json', 'Content-Type': 'application/json'}
                 r = requests.post(grafana_url, data=outter, headers=headers)
         except:
             print(traceback.format_exc())
