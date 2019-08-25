@@ -536,3 +536,17 @@ class AssetErrorLog(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class GeneralConfig(models.Model):
+    """
+    常规设置
+    """
+    grafana_api_key = models.CharField(u'grafana的api key', max_length=32, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = '常规设置表'
+        db_table = 'general_config'
+
+    def __str__(self):
+        return self.title

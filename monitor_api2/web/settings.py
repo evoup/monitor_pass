@@ -399,4 +399,10 @@ PERMISSIONS = {
     "change_diagramitem": "图表项修改",
     "delete_diagramitem": "图表项删除",
     "view_diagramitem": "图表项查看",
+
+    #常规设置
+    "add_generalconfig": "常规设置添加",
+    "change_generalconfig": "常规设置修改",
+    "delete_generalconfig": "常规设置删除",
+    "view_generalconfig": "常规设置查看",
 }
