@@ -127,9 +127,119 @@ class ServerInfo(APIView):
                     match_monitor_items[monitor_item.id] = 1
             diagram_items = models.DiagramItem.objects.filter(item__in=match_monitor_items.keys()).all()
             if diagram_items.count()>0:
+                i = 1
+                metrics = []
                 for diagram_item in diagram_items:
+                    name = diagram_item.item.name
                     opentsdb_key = diagram_item.item.key
-                    pass
+                    metric = """
+                    {
+	"aliasColors": {},
+	"bars": false,
+	"cacheTimeout": null,
+	"dashLength": 10,
+	"dashes": false,
+	"fill": 1,
+	"fillGradient": 10,
+	"gridPos": {
+		"h": 9,
+		"w": 12,
+		"x": 0,
+		"y": 0
+	},
+	"id": %s,
+	"legend": {
+		"avg": false,
+		"current": false,
+		"max": false,
+		"min": false,
+		"show": true,
+		"total": false,
+		"values": false
+	},
+	"lines": true,
+	"linewidth": 1,
+	"links": [],
+	"nullPointMode": "null",
+	"options": {
+		"dataLinks": []
+	},
+	"percentage": false,
+	"pluginVersion": "6.3.3",
+	"pointradius": 2,
+	"points": false,
+	"renderer": "flot",
+	"seriesOverrides": [],
+	"spaceLength": 10,
+	"stack": false,
+	"steppedLine": false,
+	"targets": [{
+		"aggregator": "sum",
+		"disableDownsampling": false,
+		"downsampleAggregator": "avg",
+		"downsampleFillPolicy": "none",
+		"hide": false,
+		"metric": "apps.backend.lab3.%s",
+		"refId": "A"
+	}],
+	"thresholds": [],
+	"timeFrom": null,
+	"timeRegions": [],
+	"timeShift": null,
+	"title": "%s",
+	"tooltip": {
+		"shared": true,
+		"sort": 0,
+		"value_type": "individual"
+	},
+	"transparent": true,
+	"type": "graph",
+	"xaxis": {
+		"buckets": null,
+		"mode": "time",
+		"name": null,
+		"show": true,
+		"values": []
+	},
+	"yaxes": [{
+			"format": "short",
+			"label": null,
+			"logBase": 1,
+			"max": null,
+			"min": null,
+			"show": true
+		},
+		{
+			"format": "short",
+			"label": null,
+			"logBase": 1,
+			"max": null,
+			"min": null,
+			"show": true
+		}
+	],
+	"yaxis": {
+		"align": false,
+		"alignLevel": null
+	}
+}
+                    """
+                    metric = metric % (i, name, opentsdb_key)
+                    metrics.append(metric)
+                    i = i + 1
+                outter = """
+                {
+	"dashboard": {
+		"id": null,
+		"uid": null,
+		"title": "Production Overview %s",
+		"overwrite": true,
+		"panels": [%s]
+	}
+}
+                """
+                outter = outter % (srv.name, ','.join(metrics))
+                pass
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
