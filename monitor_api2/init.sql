@@ -63,3 +63,6 @@ INSERT INTO `diagram` (`id`,`name`,`width`,`height`) VALUES (1,'cpu load',900,20
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (1,1,2);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (2,1,26);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (3,1,27);
+
+
+INSERT INTO `monitor`.`general_config` (`send_warn`) VALUES ('1');

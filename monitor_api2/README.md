@@ -23,6 +23,10 @@ context is:
 
 #development
 If add initial Sql, should dump them for installation:
-```
+```bash
 python3 manage.py dumpdata monitor_web --indent=2 > initial_monitor_web.json
+```
+
+```bash
+./manage.py dumpdata monitor_web.generalconfig > x1.json
 ```

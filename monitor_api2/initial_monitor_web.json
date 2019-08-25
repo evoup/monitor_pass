@@ -699,5 +699,13 @@
       "diagram": 1,
       "item": 27
     }
+  },
+  {
+    "model": "monitor_web.generalconfig",
+    "pk": 1,
+    "fields": {
+      "grafana_api_key": null,
+      "send_warn": true
+    }
   }
 ]
