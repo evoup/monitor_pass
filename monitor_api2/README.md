@@ -1,10 +1,13 @@
-# monitor api2.0 SPEC
+# monitor web api2.0 SPEC
+
+# enviorment
+python3.7.4
 
 # install
 
 run shell install.sh
 
-###nginx conf
+### nginx conf
 
 add default to /etc/nginx/sites-available
 
@@ -21,7 +24,7 @@ context is:
         }
 ```
 
-#development
+# development
 If add initial Sql, should dump them for installation:
 ```bash
 python3 manage.py dumpdata monitor_web --indent=2 > initial_monitor_web.json
