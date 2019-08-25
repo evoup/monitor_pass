@@ -52,6 +52,9 @@
         </el-table>
       </el-form-item>
       <el-form-item>
+        <el-link :underline="false" type="primary">添加监控项到图表</el-link>
+      </el-form-item>
+      <el-form-item>
         <el-button
           type="primary"
           @click="x"
@@ -89,8 +92,6 @@ export default {
     this.getData()
   },
   methods: {
-    x() {
-    },
     getData() {
       diagram_list({ id: 1 }).then(
         response => {
@@ -113,5 +114,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .app-container /deep/ .el-form-item {
+    margin-bottom: 8px;
+  }
 </style>
