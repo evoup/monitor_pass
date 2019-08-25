@@ -263,22 +263,14 @@ func procstats() {
 			if m == nil || len(m[0]) != 6 {
 				continue
 			}
-			//print "proc.loadavg.1min %d %s" % (ts, m.group(1))
-			//print "proc.loadavg.5min %d %s" % (ts, m.group(2))
-			//print "proc.loadavg.15min %d %s" % (ts, m.group(3))
-			//print "proc.loadavg.runnable %d %s" % (ts, m.group(4))
-			//print "proc.loadavg.total_threads %d %s" % (ts, m.group(5))
-			//fmt.Printf("procstats system.cpu.load[percpu,avg1] %v %v\n", ts, m[0][1])
-			//fmt.Printf("procstats system.cpu.load[percpu,avg5] %v %v\n", ts, m[0][2])
-			//fmt.Printf("procstats system.cpu.load[percpu,avg15] %v %v\n", ts, m[0][3])
-			fmt.Printf("procstats proc.loadavg.1min %v %v\n", ts, m[0][1])
-			fmt.Printf("procstats proc.loadavg.5min %v %v\n", ts, m[0][2])
-			fmt.Printf("procstats proc.loadavg.15min %v %v\n", ts, m[0][3])
+			fmt.Printf("procstats system.cpu.load[percpu,avg1] %v %v\n", ts, m[0][1])
+			fmt.Printf("procstats system.cpu.load[percpu,avg5] %v %v\n", ts, m[0][2])
+			fmt.Printf("procstats system.cpu.load[percpu,avg15] %v %v\n", ts, m[0][3])
 			fmt.Printf("procstats proc.loadavg.runnable %v %v\n", ts, m[0][4])
 			fmt.Printf("procstats proc.loadavg.total_threads %v %v\n", ts, m[0][5])
-			inc.MsgQueue <- fmt.Sprintf("procstats %vproc.loadavg.1min %v %v\n", metricPrefix, ts, m[0][1])
-			inc.MsgQueue <- fmt.Sprintf("procstats %vproc.loadavg.5min %v %v\n", metricPrefix, ts, m[0][2])
-			inc.MsgQueue <- fmt.Sprintf("procstats %vproc.loadavg.15min %v %v\n", metricPrefix, ts, m[0][3])
+			inc.MsgQueue <- fmt.Sprintf("procstats %vsystem.cpu.load[percpu,avg1] %v %v\n", metricPrefix, ts, m[0][1])
+			inc.MsgQueue <- fmt.Sprintf("procstats %vsystem.cpu.load[percpu,avg5] %v %v\n", metricPrefix, ts, m[0][2])
+			inc.MsgQueue <- fmt.Sprintf("procstats %vsystem.cpu.load[percpu,avg15] %v %v\n", metricPrefix, ts, m[0][3])
 			inc.MsgQueue <- fmt.Sprintf("procstats %vproc.loadavg.runnable %v %v\n", metricPrefix, ts, m[0][4])
 			inc.MsgQueue <- fmt.Sprintf("procstats %vproc.loadavg.total_threads %v %v\n", metricPrefix, ts, m[0][5])
 		}

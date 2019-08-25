@@ -223,8 +223,7 @@ class ServerInfo(APIView):
 		"alignLevel": null
 	}
 }
-                    """
-                    metric = metric % (i, name, opentsdb_key)
+                    """ % (i, opentsdb_key, name)
                     metrics.append(metric)
                     i = i + 1
                 outter = """
@@ -237,8 +236,8 @@ class ServerInfo(APIView):
 		"panels": [%s]
 	}
 }
-                """
-                outter = outter % (srv.name, ','.join(metrics))
+                """ % (srv.name, ','.join(metrics))
+                
                 pass
         except:
             print(traceback.format_exc())
