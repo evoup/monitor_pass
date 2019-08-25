@@ -24,7 +24,6 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	s "strings"
 )
 
 var FsTypeIgnore = map[string]bool{
@@ -63,8 +62,8 @@ func (p dfstatPlugin) Collect() {
 
 func dfstat() {
 	host, _ := inc.ConfObject.GetString("ServerName")
-	host = s.Replace(host, ".", "", -1)
-	host = s.Replace(host, "-", "", -1)
+	//host = s.Replace(host, ".", "", -1)
+	//host = s.Replace(host, "-", "", -1)
 	metricPrefix := "apps.backend." + host + "."
 	collection_interval := DFSTAT_DEFAULT_COLLECTION_INTERVAL
 	f, err := os.Open("/proc/mounts")
