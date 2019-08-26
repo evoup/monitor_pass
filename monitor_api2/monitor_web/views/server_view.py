@@ -140,7 +140,6 @@ class ServerInfo(APIView):
                     diagrams_names[str(diagram_item.diagram.id)] = diagram_item.diagram.name
                     diagrams_tsdb_keys[str(diagram_item.diagram.id)].append(diagram_item.item.key)
             panes = []
-            id = 1
             for diagram_id in diagrams_names.keys():
                 targets = []
                 for tsdb_key in diagrams_tsdb_keys[str(diagram_id)]:
@@ -240,15 +239,14 @@ class ServerInfo(APIView):
                 		"alignLevel": null
                 	}
                 }
-                                    """ % (id, targets, diagrams_names[diagram_id])
+                                    """ % (diagram_id, targets, diagrams_names[diagram_id])
                 panes.append(pane)
-                id = id + 1
             dashboard = """
                 {
                 	"dashboard": {
                 		"id": null,
                 		"uid": null,
-                		"title": "Production Overview %s",
+                		"title": "Dashboard %s",
                 		"overwrite": true,
                 		"panels": [%s]
                 	}
