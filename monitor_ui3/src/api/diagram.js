@@ -14,3 +14,11 @@ export function diagram_info(param) {
     params: param
   })
 }
+
+export function server_diagram_list(param) {
+  return request({
+    url: '/server_diagram/list',
+    method: 'get',
+    params: param
+  })
+}

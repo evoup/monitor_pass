@@ -139,8 +139,6 @@
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
         <iframe :src="y" width="100%" height="200" frameborder="0" />
-        <iframe :src="y1" width="100%" height="200" frameborder="0" />
-        <iframe :src="y2" width="100%" height="200" frameborder="0" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -159,11 +157,7 @@ export default {
         server_groups: null
       },
       x: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=1&to=',
-      x1: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=2&to=',
-      x2: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=3&to=',
-      y: '',
-      y1: '',
-      y2: ''
+      y: ''
     }
   },
   created() {
@@ -187,8 +181,6 @@ export default {
     },
     genGrafana() {
       this.y = this.x + Date.parse(new Date())
-      this.y1 = this.x1 + Date.parse(new Date())
-      this.y2 = this.x2 + Date.parse(new Date())
     },
     // 删除服务器
     deleteServer() {
