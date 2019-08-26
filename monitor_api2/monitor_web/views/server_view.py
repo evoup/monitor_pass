@@ -129,124 +129,137 @@ class ServerInfo(APIView):
                 for monitor_item in monitor_items:
                     match_monitor_items[monitor_item.id] = 1
             diagram_items = models.DiagramItem.objects.filter(item__in=match_monitor_items.keys()).all()
+            # 将所有要生成的图表准备好数据,一个图表就是grafana的一个pane
+            diagrams_tsdb_keys = {}
+            diagrams_names = {}
+            for d in models.Diagram.objects.all():
+                diagrams_tsdb_keys[str(d.id)] = []
+                diagrams_names[str(d.id)] = []
             if diagram_items.count() > 0:
-                i = 1
-                panes = []
                 for diagram_item in diagram_items:
-                    name = diagram_item.item.name
-                    opentsdb_key = diagram_item.item.key
-                    pane = """
+                    diagrams_names[str(diagram_item.diagram.id)] = diagram_item.diagram.name
+                    diagrams_tsdb_keys[str(diagram_item.diagram.id)].append(diagram_item.item.key)
+            panes = []
+            id = 1
+            for diagram_id in diagrams_names.keys():
+                targets = []
+                for tsdb_key in diagrams_tsdb_keys[str(diagram_id)]:
+                    target = """
                     {
-	"aliasColors": {},
-	"bars": false,
-	"cacheTimeout": null,
-	"dashLength": 10,
-	"dashes": false,
-	"fill": 1,
-	"fillGradient": 10,
-	"gridPos": {
-		"h": 9,
-		"w": 12,
-		"x": 0,
-		"y": 0
-	},
-	"id": %s,
-	"legend": {
-		"avg": false,
-		"current": false,
-		"max": false,
-		"min": false,
-		"show": true,
-		"total": false,
-		"values": false
-	},
-	"lines": true,
-	"linewidth": 1,
-	"links": [],
-	"nullPointMode": "null",
-	"options": {
-		"dataLinks": []
-	},
-	"percentage": false,
-	"pluginVersion": "6.3.3",
-	"pointradius": 2,
-	"points": false,
-	"renderer": "flot",
-	"seriesOverrides": [],
-	"spaceLength": 10,
-	"stack": false,
-	"steppedLine": false,
-	"targets": [{
-		"aggregator": "sum",
-		"disableDownsampling": false,
-		"downsampleAggregator": "avg",
-		"downsampleFillPolicy": "none",
-		"hide": false,
-		"metric": "apps.backend.%s.%s",
-		"refId": "A"
-	}],
-	"thresholds": [],
-	"timeFrom": null,
-	"timeRegions": [],
-	"timeShift": null,
-	"title": "%s",
-	"tooltip": {
-		"shared": true,
-		"sort": 0,
-		"value_type": "individual"
-	},
-	"transparent": true,
-	"type": "graph",
-	"xaxis": {
-		"buckets": null,
-		"mode": "time",
-		"name": null,
-		"show": true,
-		"values": []
-	},
-	"yaxes": [{
-			"format": "short",
-			"label": null,
-			"logBase": 1,
-			"max": null,
-			"min": null,
-			"show": true
-		},
-		{
-			"format": "short",
-			"label": null,
-			"logBase": 1,
-			"max": null,
-			"min": null,
-			"show": true
-		}
-	],
-	"yaxis": {
-		"align": false,
-		"alignLevel": null
-	}
-}
-                    """ % (i, srv.name, opentsdb_key, name)
-                    panes.append(pane)
-                    i = i + 1
-                dashboard = """
+                		"aggregator": "sum",
+                		"disableDownsampling": false,
+                		"downsampleAggregator": "avg",
+                		"downsampleFillPolicy": "none",
+                		"hide": false,
+                		"metric": "apps.backend.%s.%s",
+                		"refId": "A"
+                	}
+                	""" % (srv.name, tsdb_key)
+                    targets.append(target)
+                targets = ','.join(targets)
+                pane = """
+                                    {
+                	"aliasColors": {},
+                	"bars": false,
+                	"cacheTimeout": null,
+                	"dashLength": 10,
+                	"dashes": false,
+                	"fill": 1,
+                	"fillGradient": 10,
+                	"gridPos": {
+                		"h": 9,
+                		"w": 12,
+                		"x": 0,
+                		"y": 0
+                	},
+                	"id": %s,
+                	"legend": {
+                		"avg": false,
+                		"current": false,
+                		"max": false,
+                		"min": false,
+                		"show": true,
+                		"total": false,
+                		"values": false
+                	},
+                	"lines": true,
+                	"linewidth": 1,
+                	"links": [],
+                	"nullPointMode": "null",
+                	"options": {
+                		"dataLinks": []
+                	},
+                	"percentage": false,
+                	"pluginVersion": "6.3.3",
+                	"pointradius": 2,
+                	"points": false,
+                	"renderer": "flot",
+                	"seriesOverrides": [],
+                	"spaceLength": 10,
+                	"stack": false,
+                	"steppedLine": false,
+                	"targets": [%s],
+                	"thresholds": [],
+                	"timeFrom": null,
+                	"timeRegions": [],
+                	"timeShift": null,
+                	"title": "%s",
+                	"tooltip": {
+                		"shared": true,
+                		"sort": 0,
+                		"value_type": "individual"
+                	},
+                	"transparent": true,
+                	"type": "graph",
+                	"xaxis": {
+                		"buckets": null,
+                		"mode": "time",
+                		"name": null,
+                		"show": true,
+                		"values": []
+                	},
+                	"yaxes": [{
+                			"format": "short",
+                			"label": null,
+                			"logBase": 1,
+                			"max": null,
+                			"min": null,
+                			"show": true
+                		},
+                		{
+                			"format": "short",
+                			"label": null,
+                			"logBase": 1,
+                			"max": null,
+                			"min": null,
+                			"show": true
+                		}
+                	],
+                	"yaxis": {
+                		"align": false,
+                		"alignLevel": null
+                	}
+                }
+                                    """ % (id, targets, diagrams_names[diagram_id])
+                panes.append(pane)
+                id = id + 1
+            dashboard = """
                 {
-	"dashboard": {
-		"id": null,
-		"uid": null,
-		"title": "Production Overview %s",
-		"overwrite": true,
-		"panels": [%s]
-	}
-}
+                	"dashboard": {
+                		"id": null,
+                		"uid": null,
+                		"title": "Production Overview %s",
+                		"overwrite": true,
+                		"panels": [%s]
+                	}
+                }
                 """ % (srv.name, ','.join(panes))
-                dashboard = re.sub('\s+', ' ', dashboard)
-                grafana_url = 'http://localhost/grafana/api/dashboards/db'
-                gconf = models.GeneralConfig.objects.all()[0]
-                headers = {
-                    'Authorization': gconf.grafana_api_key,
-                    'Accept': 'application/json', 'Content-Type': 'application/json'}
-                r = requests.post(grafana_url, data=dashboard, headers=headers)
+            dashboard = re.sub('\s+', ' ', dashboard)
+            grafana_url = 'http://localhost/grafana/api/dashboards/db'
+            gconf = models.GeneralConfig.objects.all()[0]
+            headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
+                       'Content-Type': 'application/json'}
+            r = requests.post(grafana_url, data=dashboard, headers=headers)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
