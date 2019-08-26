@@ -131,11 +131,11 @@ class ServerInfo(APIView):
             diagram_items = models.DiagramItem.objects.filter(item__in=match_monitor_items.keys()).all()
             if diagram_items.count() > 0:
                 i = 1
-                metrics = []
+                panes = []
                 for diagram_item in diagram_items:
                     name = diagram_item.item.name
                     opentsdb_key = diagram_item.item.key
-                    metric = """
+                    pane = """
                     {
 	"aliasColors": {},
 	"bars": false,
@@ -227,9 +227,9 @@ class ServerInfo(APIView):
 	}
 }
                     """ % (i, srv.name, opentsdb_key, name)
-                    metrics.append(metric)
+                    panes.append(pane)
                     i = i + 1
-                outter = """
+                dashboard = """
                 {
 	"dashboard": {
 		"id": null,
@@ -239,14 +239,14 @@ class ServerInfo(APIView):
 		"panels": [%s]
 	}
 }
-                """ % (srv.name, ','.join(metrics))
-                outter = re.sub('\s+', ' ', outter)
+                """ % (srv.name, ','.join(panes))
+                dashboard = re.sub('\s+', ' ', dashboard)
                 grafana_url = 'http://localhost/grafana/api/dashboards/db'
                 gconf = models.GeneralConfig.objects.all()[0]
                 headers = {
                     'Authorization': gconf.grafana_api_key,
                     'Accept': 'application/json', 'Content-Type': 'application/json'}
-                r = requests.post(grafana_url, data=outter, headers=headers)
+                r = requests.post(grafana_url, data=dashboard, headers=headers)
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
