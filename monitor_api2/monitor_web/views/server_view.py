@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 import traceback
@@ -258,6 +259,13 @@ class ServerInfo(APIView):
             headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
                        'Content-Type': 'application/json'}
             r = requests.post(grafana_url, data=dashboard, headers=headers)
+            if r.status_code != 200:
+                ret['message'] = "grafana异常信息：" + r.json()['message']
+                return JsonResponse(ret, safe=False)
+            else:
+                for diagram_id in diagrams_names.keys():
+                    models.Diagram.objects.filter(id=diagram_id).update(
+                        grafana_dashboard_url='%s&panelId=%s' % (r.json()['url'], diagram_id))
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)

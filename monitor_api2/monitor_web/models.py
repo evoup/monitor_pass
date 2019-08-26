@@ -303,6 +303,7 @@ class Diagram(models.Model):
     name = models.CharField(u'图表名称', max_length=256, default='')
     width = models.IntegerField(u'宽度', 0)
     height = models.IntegerField(u'高度', 0)
+    grafana_dashboard_url = models.CharField(u'url', max_length=256, default='')
 
     class Meta:
         verbose_name_plural = '图表表'
