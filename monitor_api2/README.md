@@ -1,7 +1,7 @@
 # monitor web api2.0 SPEC
 
 # enviorment
-python3.7.4
+python3.7.4, should update pip to newest
 
 # install
 
