@@ -20,7 +20,8 @@ class DiagramList(APIView):
         """
         from monitor_web import models
         if self.request.query_params.__contains__('id'):
-            page_data, count = paging_request(request, models.Diagram, self, filter={'id__in': request.query_params['id']})
+            page_data, count = paging_request(request, models.Diagram, self,
+                                              filter={'id__in': request.query_params['id']})
         else:
             page_data, count = paging_request(request, models.Diagram, self)
         # 对数据进行序列化
@@ -37,6 +38,7 @@ class DiagramList(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
 
 @permission_classes((IsAuthenticated,))
 class DiagramInfo(APIView):
@@ -58,7 +60,27 @@ class DiagramInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
-# @permission_classes((IsAuthenticated,))
-# class ServerDiagramList(APIView):
-#     @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
-#     def get(self, request, *args, **kwargs):
+
+@permission_classes((IsAuthenticated,))
+class ServerDiagramList(APIView):
+    @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
+    def get(self, request, *args, **kwargs):
+        """
+        grafana图表
+        """
+        server_id = self.request.query_params['id']
+        server = models.Server.objects.filter(id=server_id).get()
+        server_name = server.name.lower()
+        dashboards = models.GrafanaDashboard.objects.filter(device_id=server_id, device_type=1).all()
+        ret_urls = []
+        if dashboards.count() > 0:
+            for d in dashboards:
+                url = '/grafana/d-solo/%s/dashboard-%s?&panelId=%s' % (d.dashboard_uid, server_name, d.diagram_id)
+                ret_urls.append(url)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "items": ret_urls
+            }
+        }
+        return JsonResponse(ret, safe=False)

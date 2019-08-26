@@ -93,5 +93,7 @@ urlpatterns = [
         url(r'^diagram/info', diagram_view.DiagramInfo.as_view()),
         # 读取常规设置
         url(r'^general_config/info', general_config_view.GeneralConfig.as_view()),
+        # grafana图表
+        url(r'^server_diagram/list', diagram_view.ServerDiagramList.as_view()),
     ]))
 ]
