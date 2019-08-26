@@ -174,13 +174,13 @@ class ServerInfo(APIView):
                 	},
                 	"id": %s,
                 	"legend": {
-                		"avg": false,
+                		"avg": true,
                 		"current": false,
-                		"max": false,
-                		"min": false,
+                		"max": true,
+                		"min": true,
                 		"show": true,
                 		"total": false,
-                		"values": false
+                		"values": true
                 	},
                 	"lines": true,
                 	"linewidth": 1,
@@ -196,7 +196,7 @@ class ServerInfo(APIView):
                 	"renderer": "flot",
                 	"seriesOverrides": [],
                 	"spaceLength": 10,
-                	"stack": false,
+                	"stack": true,
                 	"steppedLine": false,
                 	"targets": [%s],
                 	"thresholds": [],
