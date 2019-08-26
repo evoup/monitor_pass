@@ -259,13 +259,18 @@ class ServerInfo(APIView):
             headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
                        'Content-Type': 'application/json'}
             r = requests.post(grafana_url, data=dashboard, headers=headers)
-            if r.status_code != 200:
+            if r.status_code == 502:
+                ret['message'] = "grafana异常信息：502错误的网关"
+                return JsonResponse(ret, safe=False)
+            elif r.status_code != 200:
                 ret['message'] = "grafana异常信息：" + r.json()['message']
                 return JsonResponse(ret, safe=False)
             else:
                 for diagram_id in diagrams_names.keys():
-                    models.Diagram.objects.filter(id=diagram_id).update(
-                        grafana_dashboard_url='%s&panelId=%s' % (r.json()['url'], diagram_id))
+                    uid = r.json()['uid']
+                    models.GrafanaDashboard.objects.update_or_create(dashboard_uid=uid, device_id=srv.id, device_type=1,
+                                                                     diagram=models.Diagram.objects.filter(
+                                                                         id=diagram_id).get())
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)

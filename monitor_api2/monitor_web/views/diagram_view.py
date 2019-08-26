@@ -16,7 +16,7 @@ class DiagramList(APIView):
     @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
     def get(self, request, pk=None, format=None):
         """
-        获取图表列表
+        【模板下的】获取图表列表
         """
         from monitor_web import models
         if self.request.query_params.__contains__('id'):
@@ -43,7 +43,7 @@ class DiagramInfo(APIView):
     @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
     def get(self, request, *args, **kwargs):
         """
-        获取图表
+        【模板下的】获取图表
         """
         diagram = models.Diagram.objects.get(
             id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
@@ -57,3 +57,8 @@ class DiagramInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+# @permission_classes((IsAuthenticated,))
+# class ServerDiagramList(APIView):
+#     @method_decorator(permission_required('monitor_web.view_diagram', raise_exception=True))
+#     def get(self, request, *args, **kwargs):

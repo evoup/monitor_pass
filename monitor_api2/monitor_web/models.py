@@ -303,7 +303,6 @@ class Diagram(models.Model):
     name = models.CharField(u'图表名称', max_length=256, default='')
     width = models.IntegerField(u'宽度', 0)
     height = models.IntegerField(u'高度', 0)
-    grafana_dashboard_url = models.CharField(u'url', max_length=256, default='')
 
     class Meta:
         verbose_name_plural = '图表表'
@@ -322,6 +321,26 @@ class DiagramItem(models.Model):
         verbose_name_plural = '图表项表'
         db_table = 'diagram_item'
 
+
+class GrafanaDashboard(models.Model):
+    """
+    grafana仪表盘
+    """
+    device_type_choices = (
+        (1, '服务器'),
+        (2, '交换机'),
+        (3, '防火墙'),
+    )
+    id = models.BigAutoField(primary_key=True)
+    dashboard_uid = models.CharField(u'仪表盘uid', max_length=100, default='', null=False)
+    device_id = models.IntegerField('服务器或网络设备的id', null=True)
+    device_type = models.IntegerField(choices=device_type_choices, default=1)
+    diagram = models.ForeignKey(Diagram, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Grafana仪表盘表'
+        db_table = 'grafana_dashboard'
+        unique_together = ('device_id', 'device_type', 'diagram')
 
 class Function(models.Model):
     """
