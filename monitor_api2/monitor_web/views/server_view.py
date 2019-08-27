@@ -141,7 +141,17 @@ class ServerInfo(APIView):
                     diagrams_names[str(diagram_item.diagram.id)] = diagram_item.diagram.name
                     diagrams_tsdb_keys[str(diagram_item.diagram.id)].append(diagram_item.item.key)
             panes = []
+            grafana_url = 'http://localhost/grafana/api/dashboards/db'
+            grafana_delete_url = 'http://localhost/grafana/api/dashboards/uid/%s'
             for diagram_id in diagrams_names.keys():
+                # 先删除以前的图表
+                old = models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
+                                                             diagram=models.Diagram.objects.filter(
+                                                                 id=diagram_id).get()).get()
+                gconf = models.GeneralConfig.objects.all()[0]
+                headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
+                           'Content-Type': 'application/json'}
+                requests.delete(grafana_delete_url % old.dashboard_uid, headers=headers)
                 targets = []
                 for tsdb_key in diagrams_tsdb_keys[str(diagram_id)]:
                     target = """
@@ -254,10 +264,6 @@ class ServerInfo(APIView):
                 }
                 """ % (srv.name, ','.join(panes))
             dashboard = re.sub('\s+', ' ', dashboard)
-            grafana_url = 'http://localhost/grafana/api/dashboards/db'
-            gconf = models.GeneralConfig.objects.all()[0]
-            headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
-                       'Content-Type': 'application/json'}
             r = requests.post(grafana_url, data=dashboard, headers=headers)
             if r.status_code == 502:
                 ret['message'] = "grafana异常信息：502错误的网关"
@@ -268,14 +274,15 @@ class ServerInfo(APIView):
             else:
                 for diagram_id in diagrams_names.keys():
                     uid = r.json()['uid']
-                    try:
-                        models.GrafanaDashboard.objects.update_or_create(dashboard_uid=uid, device_id=srv.id,
-                                                                         device_type=1,
-                                                                         diagram=models.Diagram.objects.filter(
-                                                                             id=diagram_id).get())
-                    except:
-                        # 忽略唯一索引错误
-                        pass
+                    if (models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
+                                                               diagram=models.Diagram.objects.filter(
+                                                                   id=diagram_id).get()).all().count() > 0):
+                        models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
+                                                               diagram=models.Diagram.objects.filter(
+                                                                   id=diagram_id).get()).update(dashboard_uid=uid)
+                    else:
+                        models.GrafanaDashboard.objects.create(dashboard_uid=uid, device_id=srv.id, device_type=1,
+                                                               diagram=models.Diagram.objects.filter(id=diagram_id).get())
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
