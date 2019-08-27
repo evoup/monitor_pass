@@ -75,8 +75,10 @@ class ServerDiagramList(APIView):
         ret_urls = []
         if dashboards.count() > 0:
             for d in dashboards:
+                # 图表id，暂时没用
+                did = d.diagram_id
                 url = '/grafana/d-solo/%s/dashboard-%s?&panelId=%s&to=' % (d.dashboard_uid, server_name, d.diagram_id)
-                ret_urls.append(url)
+                ret_urls.append({'did': did, 'url': url})
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
