@@ -138,7 +138,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
-        <iframe :src="y" width="100%" height="200" frameborder="0" />
+        <div v-for="(v,_) in all_diagrams" :key="shit_key" v-html="v"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -146,6 +146,7 @@
 
 <script>
 import { delete_server, read_server, server_group_list } from '../../api/server'
+import { server_diagram_list } from '../../api/diagram'
 
 export default {
   name: 'ServerDetail',
@@ -156,8 +157,8 @@ export default {
         ip: '',
         server_groups: null
       },
-      x: 'http://localhost/grafana/d-solo/P9w2hrOZz/production-overview-lab3?orgId=1&from=1566356881638&panelId=1&to=',
-      y: ''
+      all_diagrams: [],
+      shit_key: 0
     }
   },
   created() {
@@ -174,13 +175,23 @@ export default {
         this.form.ip = response.data.item.ip
         var grps = []
         for (var grp in response.data.item.server_groups) {
-          grps.push(server_groups[grp].name)
+          if (server_groups[grp] !== null && server_groups[grp].hasOwnProperty('name')) {
+            grps.push(server_groups[grp].name)
+          }
         }
         this.form.server_groups = grps.join()
+      })
+      // 加载图表
+      server_diagram_list({ id: this.$route.query.id }).then(response => {
+        const ts = Date.parse(new Date())
+        for (const i in response.data.items) {
+          this.all_diagrams.push(`<iframe src="http://${document.domain}/${response.data.items[i]}${ts}" width="100%" height="260" frameborder="0" />`)
+        }
       })
     },
     genGrafana() {
       this.y = this.x + Date.parse(new Date())
+      this.shit_key = this.shit_key + 1
     },
     // 删除服务器
     deleteServer() {
@@ -199,10 +210,10 @@ export default {
 </script>
 
 <style scoped>
-.app-container /deep/ .list_1 li {
-  list-style-type: none;
-  font-size: 14px;
-  line-height: 30px;
-  color:#606266;
-}
+  .app-container /deep/ .list_1 li {
+    list-style-type: none;
+    font-size: 14px;
+    line-height: 30px;
+    color: #606266;
+  }
 </style>
