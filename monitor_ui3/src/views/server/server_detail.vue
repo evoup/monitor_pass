@@ -185,7 +185,8 @@ export default {
       server_diagram_list({ id: this.$route.query.id }).then(response => {
         const ts = Date.parse(new Date())
         for (const i in response.data.items) {
-          this.all_diagrams.push(`<iframe src="http://${document.domain}/${response.data.items[i]}${ts}" width="100%" height="260" frameborder="0" />`)
+          const diagram_name = response.data.items[i].dname
+          this.all_diagrams.push(`<!--${diagram_name}--><iframe src="http://${document.domain}/${response.data.items[i].url}${ts}" width="100%" height="260" frameborder="0" />`)
         }
       })
     },
