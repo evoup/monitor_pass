@@ -268,9 +268,14 @@ class ServerInfo(APIView):
             else:
                 for diagram_id in diagrams_names.keys():
                     uid = r.json()['uid']
-                    models.GrafanaDashboard.objects.update_or_create(dashboard_uid=uid, device_id=srv.id, device_type=1,
-                                                                     diagram=models.Diagram.objects.filter(
-                                                                         id=diagram_id).get())
+                    try:
+                        models.GrafanaDashboard.objects.update_or_create(dashboard_uid=uid, device_id=srv.id,
+                                                                         device_type=1,
+                                                                         diagram=models.Diagram.objects.filter(
+                                                                             id=diagram_id).get())
+                    except:
+                        # 忽略唯一索引错误
+                        pass
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
