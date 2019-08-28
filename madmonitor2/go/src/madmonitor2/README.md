@@ -16,6 +16,8 @@ madmonitor2 golang
 systemd重启服务设置
 http://www.voidcn.com/article/p-esmremgn-btw.html
 
+# 开发说明
+调试环境采用build_debug.sh编译出插件，当前首先要创建好插件目录/usr/local/lib/madmonitor2/，并且保证目录有写入权限。
 
 
 ## 版本说明
