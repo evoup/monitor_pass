@@ -42,7 +42,7 @@ http://www.voidcn.com/article/p-esmremgn-btw.html
 
 调试环境采用build_debug.sh编译出插件，当前首先要创建好插件目录/usr/local/lib/madmonitor2/，并且保证目录有写入权限。
 
-
+开发插件的话，插件的代码里有main函数，可以直接调试， 插件模式go不能加载断点需要注意。
 
 * * *
 *Developed by evoup(evoex123@gmail.com)*
