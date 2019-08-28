@@ -147,11 +147,12 @@ class ServerInfo(APIView):
                 # 先删除以前的图表
                 old = models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
                                                              diagram=models.Diagram.objects.filter(
-                                                                 id=diagram_id).get()).get()
+                                                                 id=diagram_id).get())
                 gconf = models.GeneralConfig.objects.all()[0]
                 headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
                            'Content-Type': 'application/json'}
-                requests.delete(grafana_delete_url % old.dashboard_uid, headers=headers)
+                if old.count() > 0:
+                    requests.delete(grafana_delete_url % old.get().dashboard_uid, headers=headers)
                 targets = []
                 for tsdb_key in diagrams_tsdb_keys[str(diagram_id)]:
                     target = """
@@ -282,7 +283,8 @@ class ServerInfo(APIView):
                                                                    id=diagram_id).get()).update(dashboard_uid=uid)
                     else:
                         models.GrafanaDashboard.objects.create(dashboard_uid=uid, device_id=srv.id, device_type=1,
-                                                               diagram=models.Diagram.objects.filter(id=diagram_id).get())
+                                                               diagram=models.Diagram.objects.filter(
+                                                                   id=diagram_id).get())
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
