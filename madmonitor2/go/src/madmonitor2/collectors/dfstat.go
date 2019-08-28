@@ -106,7 +106,7 @@ func dfstat() {
             }
             if strings.HasPrefix(fsFile, "/dev") || strings.HasPrefix(fsFile, "/sys") ||
                 strings.HasPrefix(fsFile, "/proc") || strings.HasPrefix(fsFile, "/lib") ||
-                strings.HasPrefix(fsFile, "net:") {
+                strings.HasPrefix(fsFile, "net:") || strings.HasPrefix(fsFile, "/var/lib/kubelet") {
                 continue
             }
             // keep /dev/xxx device with shorter fs_file (remove mount binds)
