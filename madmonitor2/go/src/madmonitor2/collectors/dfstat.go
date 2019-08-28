@@ -146,8 +146,8 @@ func dfstat() {
 					continue
 				}
 				blocks := fs.Blocks * uint64(fs.Bsize)
-				free := fs.Bfree * uint64(fs.Bsize)
-				used := blocks - free
+				avail := fs.Bavail * uint64(fs.Bsize)
+				used := blocks - avail
 				percentUsed := float64(0)
 				if blocks == 0 {
 					percentUsed = float64(100)
