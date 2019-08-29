@@ -92,6 +92,7 @@ class Server(models.Model):
     cpu_model = models.CharField('CPU型号', max_length=128, null=True, blank=True)
 
     create_at = models.DateTimeField(auto_now_add=True, blank=True)
+    last_online = models.DateTimeField(blank=True, null=True)
     server_groups = models.ManyToManyField('ServerGroup', db_table='r_server_server_group')
     templates = models.ManyToManyField('Template', db_table='r_server_template')
     agent_address = models.CharField('监控代理地址', max_length=50, default='', null=True)
