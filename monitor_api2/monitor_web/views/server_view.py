@@ -18,6 +18,7 @@ from monitor_web.models import Server, Asset, DataCollector, IDC
 from monitor_web.serializers import ServerSerializer, ServerGroupSerializer
 from web.common import constant
 from web.common.paging import paging_request
+from web.settings import GRAFANA_UNIT_MAP
 
 logger = logging.getLogger(__name__)
 
@@ -133,13 +134,16 @@ class ServerInfo(APIView):
             # 将所有要生成的图表准备好数据,一个图表就是grafana的一个pane
             diagrams_tsdb_keys = {}
             diagrams_names = {}
+            diagrams_units = {}
             for d in models.Diagram.objects.all():
                 diagrams_tsdb_keys[str(d.id)] = []
                 diagrams_names[str(d.id)] = []
+                diagrams_units[str(d.id)] = []
             if diagram_items.count() > 0:
                 for diagram_item in diagram_items:
                     diagrams_names[str(diagram_item.diagram.id)] = diagram_item.diagram.name
                     diagrams_tsdb_keys[str(diagram_item.diagram.id)].append(diagram_item.item.key)
+                    diagrams_units[str(diagram_item.diagram.id)] = diagram_item.item.unit
             panes = []
             grafana_url = 'http://localhost/grafana/api/dashboards/db'
             grafana_delete_url = 'http://localhost/grafana/api/dashboards/uid/%s'
@@ -230,7 +234,7 @@ class ServerInfo(APIView):
                 		"values": []
                 	},
                 	"yaxes": [{
-                			"format": "short",
+                			"format": "%s",
                 			"label": null,
                 			"logBase": 1,
                 			"max": null,
@@ -251,7 +255,8 @@ class ServerInfo(APIView):
                 		"alignLevel": null
                 	}
                 }
-                                    """ % (diagram_id, targets, diagrams_names[diagram_id])
+                                    """ % (
+                diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
                 panes.append(pane)
             dashboard = """
                 {

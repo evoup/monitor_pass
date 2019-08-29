@@ -161,7 +161,11 @@ func procstats() {
 				name := strings.TrimPrefix(reg.ReplaceAllString(data[0][1], "_"), "_")
 				//print ("proc.meminfo.%s %d %s"% (name, ts, value))
 				fmt.Printf("procstats proc.meminfo.%v %v %v\n", name, ts, value)
+                //proc.meminfo.MemAvailable => vm.memory.size[available]
 				inc.MsgQueue <- fmt.Sprintf("procstats %vproc.meminfo.%v %v %v\n", metricPrefix, name, ts, value)
+				if name == "MemAvailable" {
+				    inc.MsgQueue <- fmt.Sprintf("procstats %v%v %v %v\n", metricPrefix, "vm.memory.size[available]", ts, value)
+                }
 			}
 		}
 

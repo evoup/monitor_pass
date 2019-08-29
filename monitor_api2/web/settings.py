@@ -406,3 +406,10 @@ PERMISSIONS = {
     "delete_generalconfig": "常规设置删除",
     "view_generalconfig": "常规设置查看",
 }
+
+# grafana单位映射(数据库中的单位<=>grafana的单位)
+GRAFANA_UNIT_MAP = {
+    None: "short",
+    "": "short",
+    "B": "decbytes"
+}

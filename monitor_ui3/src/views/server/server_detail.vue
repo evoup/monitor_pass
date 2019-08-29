@@ -138,7 +138,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
-        <div v-for="(v,_) in all_diagrams" :key="shit_key" v-html="v"/>
+        <div v-for="(v,i) in all_diagrams" :key="shit_key + i" v-html="v"/>
       </el-tab-pane>
     </el-tabs>
   </div>
