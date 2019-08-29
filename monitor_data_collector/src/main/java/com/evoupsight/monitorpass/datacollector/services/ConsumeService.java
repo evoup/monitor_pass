@@ -46,7 +46,7 @@ public class ConsumeService {
         Map<String, Object> config = setKafkaConfig();
         for (int i = 0; i < 5; i++) {
             LOG.info("opentsdbServerUrl:" + opentsdbServerUrl);
-            new KafkaConsumerThread(config, topic, opentsdbServerUrl, httpClient, dataCollectorServerName).start();
+            new KafkaConsumerThread(config, topic, opentsdbServerUrl, dataCollectorServerName).start();
         }
     }
 
