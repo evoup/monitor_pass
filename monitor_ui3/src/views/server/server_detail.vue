@@ -188,6 +188,7 @@ export default {
           const diagram_name = response.data.items[i].dname
           const width = response.data.items[i].width
           const height = response.data.items[i].height
+          /* eslint-disable */
           this.all_diagrams.push(`<!--${diagram_name}--><iframe src="http://${document.domain}/${response.data.items[i].url}${ts}" width="${width}" height="${height}" frameborder="0" />`)
         }
       })
