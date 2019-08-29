@@ -162,8 +162,8 @@ public class ScanService {
      * @param trigger　触发器
      */
     private void runExpression(String host, List<String> hostTemplateIds, TriggerDto trigger) {
-        if (trigger != null && StringUtils.isNotEmpty(trigger.getHostid())) {
-            if (hostTemplateIds.contains(trigger.getHostid())) {
+        if (trigger != null && StringUtils.isNotEmpty(trigger.getHostId())) {
+            if (hostTemplateIds.contains(trigger.getHostId())) {
                 String myhost = StringUtils.remove(host, "-");
                 LOG.info("host:{} call expression:{}", host, trigger.getExpression());
                 // {13078}>5 <=> system.cpu.load[allcpu,avg1].avg(5m)>5 => proc.loadavg.1min>5

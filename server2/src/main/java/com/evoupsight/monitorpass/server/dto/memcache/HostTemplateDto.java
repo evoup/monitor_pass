@@ -1,10 +1,15 @@
 package com.evoupsight.monitorpass.server.dto.memcache;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
  * @author evoup
  */
+@Getter
+@Setter
 public class HostTemplateDto {
 
     /**
@@ -17,19 +22,4 @@ public class HostTemplateDto {
      */
     private List<String> templateIds;
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public List<String> getTemplateIds() {
-        return templateIds;
-    }
-
-    public void setTemplateIds(List<String> templateIds) {
-        this.templateIds = templateIds;
-    }
 }
