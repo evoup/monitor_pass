@@ -677,6 +677,15 @@
     }
   },
   {
+    "model": "monitor_web.diagram",
+    "pk": 2,
+    "fields": {
+      "name": "memory usage",
+      "width": "100%",
+      "height": "230"
+    }
+  },
+  {
     "model": "monitor_web.diagramitem",
     "pk": 1,
     "fields": {
@@ -698,6 +707,14 @@
     "fields": {
       "diagram": 1,
       "item": 27
+    }
+  },
+  {
+    "model": "monitor_web.diagramitem",
+    "pk": 4,
+    "fields": {
+      "diagram": 2,
+      "item": 23
     }
   },
   {

@@ -64,7 +64,7 @@ INSERT INTO `diagram` (`id`,`name`,`width`,`height`) VALUES (2,'memory usage','1
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (1,1,2);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (2,1,26);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (3,1,27);
-INSERT INTO `monitor`.`diagram_item` (`diagram_id`, `item_id`) VALUES ('2', '23');
+INSERT INTO `monitor`.`diagram_item` (`diagram_id`, `item_id`) VALUES (2, 23);
 
 
 INSERT INTO `monitor`.`general_config` (`send_warn`) VALUES ('1');
