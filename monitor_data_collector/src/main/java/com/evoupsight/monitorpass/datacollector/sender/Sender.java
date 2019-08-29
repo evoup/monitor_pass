@@ -5,6 +5,7 @@ import com.evoupsight.monitorpass.constants.ServerStatusEnum;
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
+import com.evoupsight.monitorpass.datacollector.dao.model.ServerExample;
 import com.evoupsight.monitorpass.datacollector.services.DataCollectorService;
 import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import com.google.common.cache.CacheBuilder;
@@ -147,10 +148,16 @@ public class Sender {
                                 server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
                                 server.setCreateAt(new Date());
                                 server.setIp(map.get("ip"));
+                                server.setLastOnline(new Date());
                                 sender.serverMapper.insert(server);
                             }
                         } else {
-                            // 老朋友了，pass
+                            // 老朋友了，只更新时间
+                            ServerExample example = new ServerExample();
+                            example.createCriteria().andHostnameEqualTo(host);
+                            Server server = new Server();
+                            server.setLastOnline(new Date());
+                            sender.serverMapper.updateByExampleSelective(server, example);
                         }
                         sender.loadingCache.getUnchecked(host);
                     }

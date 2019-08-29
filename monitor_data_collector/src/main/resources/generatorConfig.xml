@@ -12,10 +12,10 @@
     <javaClientGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.mapper" targetProject="src/main/java" type="XMLMAPPER" />
     
 
-    <!--<table schema="" tableName="server" domainObjectName="Server">-->
-      <!--&lt;!&ndash;<columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>&ndash;&gt;-->
-    <!--</table>-->
-    <table schema="" tableName="data_collector" domainObjectName="DataCollector" />
+    <table schema="" tableName="server" domainObjectName="Server">
+      <!--<columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>-->
+    </table>
+    <!--<table schema="" tableName="data_collector" domainObjectName="DataCollector" />-->
 
   </context>
 </generatorConfiguration>
