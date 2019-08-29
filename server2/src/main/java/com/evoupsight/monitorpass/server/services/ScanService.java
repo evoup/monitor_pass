@@ -12,7 +12,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
@@ -68,17 +67,20 @@ public class ScanService {
     /**
      * 执行所有工作
      */
-    void doAllJobs() throws IOException {
-        saveLastScanTime();
+    void doAllJobs() {
+        // TODO写入扫描时间
+
+        // 检查宕机
         scanHostDown();
     }
 
     /**
-     * 保存上次扫描时间
+     * 保存上次扫描时间(Hbase中，已经没用了)
      *
      * @throws IOException 异常
      */
-    private void saveLastScanTime() throws IOException {
+    @Deprecated
+    private void saveHBaseLastScanTime() throws IOException {
         LOG.debug("save scan time");
         try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf(MDB_TAB_ENGINE))) {
