@@ -301,8 +301,8 @@ class Diagram(models.Model):
     """
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(u'图表名称', max_length=256, default='')
-    width = models.IntegerField(u'宽度', 0)
-    height = models.IntegerField(u'高度', 0)
+    width = models.CharField(u'宽度', max_length=40, default='100%')
+    height = models.CharField(u'高度', max_length=40, default='230')
 
     class Meta:
         verbose_name_plural = '图表表'

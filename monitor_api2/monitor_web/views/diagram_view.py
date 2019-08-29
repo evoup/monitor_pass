@@ -79,7 +79,8 @@ class ServerDiagramList(APIView):
                 did = d.diagram_id
                 dname = models.Diagram.objects.filter(id=did).get().name
                 url = '/grafana/d-solo/%s/dashboard-%s?&panelId=%s&to=' % (d.dashboard_uid, server_name, d.diagram_id)
-                ret_urls.append({'dname': dname, 'did': did, 'url': url})
+                ret_urls.append(
+                    {'dname': dname, 'did': did, 'url': url, 'width': d.diagram.width, 'height': d.diagram.height})
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

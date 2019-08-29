@@ -672,8 +672,8 @@
     "pk": 1,
     "fields": {
       "name": "cpu load",
-      "width": 900,
-      "height": 200
+      "width": "100%",
+      "height": "230"
     }
   },
   {

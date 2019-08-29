@@ -186,7 +186,9 @@ export default {
         const ts = Date.parse(new Date())
         for (const i in response.data.items) {
           const diagram_name = response.data.items[i].dname
-          this.all_diagrams.push(`<!--${diagram_name}--><iframe src="http://${document.domain}/${response.data.items[i].url}${ts}" width="100%" height="260" frameborder="0" />`)
+          const width = response.data.items[i].width
+          const height = response.data.items[i].height
+          this.all_diagrams.push(`<!--${diagram_name}--><iframe src="http://${document.domain}/${response.data.items[i].url}${ts}" width="${width}" height="${height}" frameborder="0" />`)
         }
       })
     },
