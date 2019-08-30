@@ -105,12 +105,13 @@ public class ScanService {
      * 检查主机
      */
     private void checkHosts() {
-        List<Server> servers = serverCache.fetchAll();
         List<Trigger> triggers = triggerCache.fetchAll();
-        System.out.println("");
         triggers.stream().filter(Objects::nonNull).forEach(x -> {
             System.out.println(x.getTemplateId());
         });
+        List<Server> servers = serverCache.fetchAll();
+        System.out.println("");
+
     }
 
     /**
