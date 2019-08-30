@@ -14,4 +14,10 @@ public interface ServerCache {
      * @return List<Server>
      */
     List<Server> fetchAll();
+
+    /**
+     * @param id
+     * @return
+     */
+    List<Server> getByTemplate(Long id);
 }
