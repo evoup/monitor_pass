@@ -36,5 +36,25 @@ public class Constants {
         PROBLEM
     }
 
-
+    /**
+     * 主机状态
+     */
+    public enum ServerStatus {
+        /**
+         * 宕机
+         */
+        DOWN,
+        /**
+         * 在线
+         */
+        ON,
+        /**
+         * 不监控
+         */
+        NOT_MONITORING,
+        /**
+         * 状态未知
+         */
+        STATUS_UNKNOWN
+    }
 }

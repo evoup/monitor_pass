@@ -1,6 +1,7 @@
 package com.evoupsight.monitorpass.server.cache.impl;
 
 import com.evoupsight.monitorpass.server.cache.ServerCache;
+import com.evoupsight.monitorpass.server.constants.Constants;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
@@ -59,7 +60,11 @@ public class ServerCacheImpl implements ServerCache {
             List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(relationServerServerGroupExample);
             relationServerServerGroups.stream().filter(Objects::nonNull).forEach(r -> {
                 Server server = serverMapper.selectByPrimaryKey(r.getServerId());
-                Optional.ofNullable(server).ifPresent(serverSets::add);
+                Optional.ofNullable(server).ifPresent(s -> {
+                    if (!new Integer(Constants.ServerStatus.NOT_MONITORING.ordinal()).equals(s.getId())) {
+                        serverSets.add(s);
+                    }
+                });
             });
         });
         return new ArrayList<>(serverSets);

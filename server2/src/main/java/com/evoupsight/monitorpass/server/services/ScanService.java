@@ -106,13 +106,17 @@ public class ScanService {
      */
     private void checkHosts() {
         List<Trigger> triggers = triggerCache.fetchAll();
+        Set<Server> checkServers = new HashSet<>();
         triggers.stream().filter(Objects::nonNull).forEach(x -> {
             System.out.println(x.getTemplateId());
             Long templateId = x.getTemplateId();
+            List<Server> servers = serverCache.getByTemplate(templateId);
+            servers.stream().filter(Objects::nonNull).forEach(checkServers::add);
         });
-        List<Server> servers = serverCache.fetchAll();
-        System.out.println("");
-
+        checkServers.stream().filter(Objects::nonNull).forEach(s -> {
+            LOG.info("server:{} will be checked", s.getName());
+        });
+        System.out.println("check done");
     }
 
     /**
@@ -144,7 +148,7 @@ public class ScanService {
                             String response = EntityUtils.toString(entity, "utf-8");
                             ArrayList<QueryDto> queryDtos = gson.fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                             }.getType());
-                            if (queryDtos != null && queryDtos.size()> 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
+                            if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
                                 hostStatus = HOST_STATUS_UP;
                             }
                         }
@@ -182,9 +186,10 @@ public class ScanService {
 
     /**
      * 执行表达式
-     * @param host　主机名
-     * @param hostTemplateIds　主机对应的模板
-     * @param trigger　触发器
+     *
+     * @param host            　主机名
+     * @param hostTemplateIds 　主机对应的模板
+     * @param trigger         　触发器
      */
     private void runExpression(String host, List<String> hostTemplateIds, TriggerDto trigger) {
         if (trigger != null && StringUtils.isNotEmpty(trigger.getHostId())) {
