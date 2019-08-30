@@ -39,25 +39,25 @@
             label="主机名"
             sortable="custom"
             prop="name"
-            width="180" />
+            min-width="14%" />
           <el-table-column
             label="IP"
             prop="ip"
-            width="130" />
+            min-width="14%" />
           <el-table-column
             label="收集节点"
             prop="data_collector_name"
-            width="180" />
+            min-width="10%" />
           <el-table-column
             label="更新时间"
             sortable="custom"
-            prop="date"
-            width="180" />
+            prop="last_online"
+            min-width="18%" />
           <el-table-column
             label="状态"
             sortable="custom"
             prop="status"
-            width="120">
+            min-width="10%">
             <template slot-scope="prop">
               <el-tag v-if="prop.row.status === 0" type="success">在线</el-tag>
               <el-tag v-if="prop.row.status === 1" type="danger">宕机</el-tag>
@@ -67,8 +67,9 @@
           </el-table-column>
           <el-table-column
             label="机房"
-            prop="asset.idc.name" />
-          <el-table-column label="操作">
+            prop="asset.idc.name"
+            min-width="16%" />
+          <el-table-column label="操作" min-width="16%">
             <template slot-scope="prop">
               <el-button size="small" type="primary" @click="jumpServerDetail(prop.row.id)">查看</el-button>
             </template>
