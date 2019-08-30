@@ -1,6 +1,6 @@
-package com.evoupsight.monitorpass.server.dao.impl;
+package com.evoupsight.monitorpass.server.cache.impl;
 
-import com.evoupsight.monitorpass.server.dao.ServerDao;
+import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.server.dao.model.Server;
 import com.evoupsight.monitorpass.server.dao.model.ServerExample;
@@ -9,8 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @author evoup
+ */
 @Repository
-public class ServerDaoImpl implements ServerDao {
+public class ServerCacheImpl implements ServerCache {
     @Autowired
     ServerMapper serverMapper;
 

@@ -1,7 +1,7 @@
 package com.evoupsight.monitorpass.server.services;
 
-import com.evoupsight.monitorpass.server.dao.ServerDao;
-import com.evoupsight.monitorpass.server.dao.TriggerDao;
+import com.evoupsight.monitorpass.server.cache.ServerCache;
+import com.evoupsight.monitorpass.server.cache.TriggerCache;
 import com.evoupsight.monitorpass.server.dao.model.Server;
 import com.evoupsight.monitorpass.server.dao.model.Trigger;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
@@ -69,9 +69,9 @@ public class ScanService {
     }
 
     @Autowired
-    private TriggerDao triggerDao;
+    private TriggerCache triggerCache;
     @Autowired
-    private ServerDao serverDao;
+    private ServerCache serverCache;
 
     /**
      * 执行所有工作
@@ -105,8 +105,8 @@ public class ScanService {
      * 检查主机
      */
     private void checkHosts() {
-        List<Server> servers = serverDao.fetchAll();
-        List<Trigger> triggers = triggerDao.fetchAll();
+        List<Server> servers = serverCache.fetchAll();
+        List<Trigger> triggers = triggerCache.fetchAll();
         System.out.println("");
         triggers.stream().filter(Objects::nonNull).forEach(x -> {
             System.out.println(x.getTemplateId());

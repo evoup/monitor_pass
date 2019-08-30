@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.server.dao;
+package com.evoupsight.monitorpass.server.cache;
 
 import com.evoupsight.monitorpass.server.dao.model.Server;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author evoup
  */
-public interface ServerDao {
+public interface ServerCache {
     /**
      * 获取所有Server
      *

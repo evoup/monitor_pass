@@ -1,6 +1,6 @@
-package com.evoupsight.monitorpass.server.dao.impl;
+package com.evoupsight.monitorpass.server.cache.impl;
 
-import com.evoupsight.monitorpass.server.dao.TemplateDao;
+import com.evoupsight.monitorpass.server.cache.TemplateCache;
 import com.evoupsight.monitorpass.server.dao.mapper.TemplateMapper;
 import com.evoupsight.monitorpass.server.dao.model.Template;
 import com.evoupsight.monitorpass.server.dao.model.TemplateExample;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author evoup
  */
-public class TemplateDaoImpl implements TemplateDao {
+public class TemplateCacheImpl implements TemplateCache {
     @Autowired
     private TemplateMapper templateMapper;
 

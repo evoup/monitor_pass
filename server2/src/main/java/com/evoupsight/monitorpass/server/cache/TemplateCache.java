@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.server.dao;
+package com.evoupsight.monitorpass.server.cache;
 
 import com.evoupsight.monitorpass.server.dao.model.Template;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author evoup
  */
-public interface TemplateDao {
+public interface TemplateCache {
     /**
      * 获取所有模板
      *
