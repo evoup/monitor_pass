@@ -40,6 +40,7 @@ import redis.clients.jedis.JedisPool;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
 
@@ -106,6 +107,19 @@ public class ScanService {
      */
     private void checkHosts() {
         List<Trigger> triggers = triggerCache.fetchAll();
+        triggers.stream().filter(Objects::nonNull).forEach(t -> {
+            String expression = t.getExpression();
+            // 找出表达式中的function，进行演算
+//            Pattern pattern = Pattern.compile("{}");
+//            CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
+//            TriggerLexer lexer = new TriggerLexer(input);
+//            CommonTokenStream tokens = new CommonTokenStream(lexer);
+//            TriggerParser parser = new TriggerParser(tokens);
+//            ParseTree tree = parser.expr();
+//            MainVisitor.Visitor eval = new MainVisitor.Visitor();
+//            Object visit = eval.visit(tree);
+//            LOG.info("Trigger result:" + visit);
+        });
         Set<Server> checkServers = new HashSet<>();
         triggers.stream().filter(Objects::nonNull).forEach(x -> {
             System.out.println(x.getTemplateId());
@@ -116,6 +130,16 @@ public class ScanService {
         checkServers.stream().filter(Objects::nonNull).forEach(s -> {
             LOG.info("server:{} will be checked", s.getName());
         });
+        //
+        Double average = 1.10;
+        CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
+        TriggerLexer lexer = new TriggerLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        TriggerParser parser = new TriggerParser(tokens);
+        ParseTree tree = parser.expr();
+        MainVisitor.Visitor eval = new MainVisitor.Visitor();
+        Object visit = eval.visit(tree);
+        LOG.info("Trigger result:" + visit);
         System.out.println("check done");
     }
 
