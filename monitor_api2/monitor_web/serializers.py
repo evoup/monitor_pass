@@ -100,6 +100,7 @@ class AssetRecordSerializer(serializers.ModelSerializer):
 class ServerSerializer(serializers.ModelSerializer):
     asset = AssetSerializer(required=True)
     data_collector_name = serializers.SerializerMethodField()
+    last_online = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Server
