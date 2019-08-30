@@ -127,7 +127,7 @@ public class ScanService {
                     if (hostStatus.equals(HOST_STATUS_UP)) {
                         goThroughTriggers(host, hostTemplateDto.getTemplateIds());
                     }
-                    saveHostStatus(hostStatus, host);
+                    // saveHbaseHostStatus(hostStatus, host);
                 }
             }
         } catch (IOException e) {
@@ -215,7 +215,8 @@ public class ScanService {
      * @param hostStatus host状态
      * @param host       　host名字
      */
-    private void saveHostStatus(String hostStatus, String host) {
+    @Deprecated
+    private void saveHbaseHostStatus(String hostStatus, String host) {
         try (Connection connection = ConnectionFactory.createConnection(hbaseConf);
              Table table = connection.getTable(TableName.valueOf(MDB_TAB_HOST))) {
             Put p = new Put(Bytes.toBytes(host));
