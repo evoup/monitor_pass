@@ -1,5 +1,9 @@
 package com.evoupsight.monitorpass.server.services;
 
+import com.evoupsight.monitorpass.server.dao.ServerDao;
+import com.evoupsight.monitorpass.server.dao.TriggerDao;
+import com.evoupsight.monitorpass.server.dao.model.Server;
+import com.evoupsight.monitorpass.server.dao.model.Trigger;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
 import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
@@ -64,6 +68,11 @@ public class ScanService {
         this.httpClient = httpClient;
     }
 
+    @Autowired
+    private TriggerDao triggerDao;
+    @Autowired
+    private ServerDao serverDao;
+
     /**
      * 执行所有工作
      */
@@ -71,7 +80,9 @@ public class ScanService {
         // TODO写入扫描时间
 
         // 检查宕机
-        scanHostDown();
+        // scanHostDownOld();
+
+        checkHosts();
     }
 
     /**
@@ -90,11 +101,23 @@ public class ScanService {
         }
     }
 
+    /**
+     * 检查主机
+     */
+    private void checkHosts() {
+        List<Server> servers = serverDao.fetchAll();
+        List<Trigger> triggers = triggerDao.fetchAll();
+        System.out.println("");
+        triggers.stream().filter(Objects::nonNull).forEach(x -> {
+            System.out.println(x.getTemplateId());
+        });
+    }
 
     /**
      * 检查是否宕机
      */
-    private void scanHostDown() {
+    @Deprecated
+    private void scanHostDownOld() {
         HttpResponse httpResponse = null;
         Gson gson = new Gson();
         try (Jedis resource = jedisPool.getResource()) {

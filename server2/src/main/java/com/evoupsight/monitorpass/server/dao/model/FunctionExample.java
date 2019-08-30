@@ -482,17 +482,17 @@ public class FunctionExample {
         }
 
         public Criteria andNameIsNull() {
-            addCriterion("name is null");
+            addCriterion("`name` is null");
             return (Criteria) this;
         }
 
         public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+            addCriterion("`name` is not null");
             return (Criteria) this;
         }
 
         public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+            addCriterion("`name` =", value, "name");
             return (Criteria) this;
         }
 
@@ -503,12 +503,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+            addCriterion("`name` <>", value, "name");
             return (Criteria) this;
         }
 
@@ -519,12 +519,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameNotEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+            addCriterion("`name` >", value, "name");
             return (Criteria) this;
         }
 
@@ -535,12 +535,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+            addCriterion("`name` >=", value, "name");
             return (Criteria) this;
         }
 
@@ -551,12 +551,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanOrEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+            addCriterion("`name` <", value, "name");
             return (Criteria) this;
         }
 
@@ -567,12 +567,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+            addCriterion("`name` <=", value, "name");
             return (Criteria) this;
         }
 
@@ -583,52 +583,52 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanOrEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("name <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+            addCriterion("`name` like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+            addCriterion("`name` not like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+            addCriterion("`name` in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+            addCriterion("`name` not in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+            addCriterion("`name` between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+            addCriterion("`name` not between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andParameterIsNull() {
-            addCriterion("parameter is null");
+            addCriterion("`parameter` is null");
             return (Criteria) this;
         }
 
         public Criteria andParameterIsNotNull() {
-            addCriterion("parameter is not null");
+            addCriterion("`parameter` is not null");
             return (Criteria) this;
         }
 
         public Criteria andParameterEqualTo(String value) {
-            addCriterion("parameter =", value, "parameter");
+            addCriterion("`parameter` =", value, "parameter");
             return (Criteria) this;
         }
 
@@ -639,12 +639,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterNotEqualTo(String value) {
-            addCriterion("parameter <>", value, "parameter");
+            addCriterion("`parameter` <>", value, "parameter");
             return (Criteria) this;
         }
 
@@ -655,12 +655,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterNotEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterGreaterThan(String value) {
-            addCriterion("parameter >", value, "parameter");
+            addCriterion("`parameter` >", value, "parameter");
             return (Criteria) this;
         }
 
@@ -671,12 +671,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterGreaterThanColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterGreaterThanOrEqualTo(String value) {
-            addCriterion("parameter >=", value, "parameter");
+            addCriterion("`parameter` >=", value, "parameter");
             return (Criteria) this;
         }
 
@@ -687,12 +687,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterGreaterThanOrEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterLessThan(String value) {
-            addCriterion("parameter <", value, "parameter");
+            addCriterion("`parameter` <", value, "parameter");
             return (Criteria) this;
         }
 
@@ -703,12 +703,12 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterLessThanColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterLessThanOrEqualTo(String value) {
-            addCriterion("parameter <=", value, "parameter");
+            addCriterion("`parameter` <=", value, "parameter");
             return (Criteria) this;
         }
 
@@ -719,37 +719,37 @@ public class FunctionExample {
          * @mbg.generated
          */
         public Criteria andParameterLessThanOrEqualToColumn(Function.Column column) {
-            addCriterion(new StringBuilder("parameter <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`parameter` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andParameterLike(String value) {
-            addCriterion("parameter like", value, "parameter");
+            addCriterion("`parameter` like", value, "parameter");
             return (Criteria) this;
         }
 
         public Criteria andParameterNotLike(String value) {
-            addCriterion("parameter not like", value, "parameter");
+            addCriterion("`parameter` not like", value, "parameter");
             return (Criteria) this;
         }
 
         public Criteria andParameterIn(List<String> values) {
-            addCriterion("parameter in", values, "parameter");
+            addCriterion("`parameter` in", values, "parameter");
             return (Criteria) this;
         }
 
         public Criteria andParameterNotIn(List<String> values) {
-            addCriterion("parameter not in", values, "parameter");
+            addCriterion("`parameter` not in", values, "parameter");
             return (Criteria) this;
         }
 
         public Criteria andParameterBetween(String value1, String value2) {
-            addCriterion("parameter between", value1, value2, "parameter");
+            addCriterion("`parameter` between", value1, value2, "parameter");
             return (Criteria) this;
         }
 
         public Criteria andParameterNotBetween(String value1, String value2) {
-            addCriterion("parameter not between", value1, value2, "parameter");
+            addCriterion("`parameter` not between", value1, value2, "parameter");
             return (Criteria) this;
         }
 

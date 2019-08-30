@@ -618,17 +618,17 @@ public class TriggerExample {
         }
 
         public Criteria andNameIsNull() {
-            addCriterion("name is null");
+            addCriterion("`name` is null");
             return (Criteria) this;
         }
 
         public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+            addCriterion("`name` is not null");
             return (Criteria) this;
         }
 
         public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+            addCriterion("`name` =", value, "name");
             return (Criteria) this;
         }
 
@@ -639,12 +639,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+            addCriterion("`name` <>", value, "name");
             return (Criteria) this;
         }
 
@@ -655,12 +655,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameNotEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+            addCriterion("`name` >", value, "name");
             return (Criteria) this;
         }
 
@@ -671,12 +671,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+            addCriterion("`name` >=", value, "name");
             return (Criteria) this;
         }
 
@@ -687,12 +687,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanOrEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+            addCriterion("`name` <", value, "name");
             return (Criteria) this;
         }
 
@@ -703,12 +703,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+            addCriterion("`name` <=", value, "name");
             return (Criteria) this;
         }
 
@@ -719,52 +719,52 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanOrEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("name <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+            addCriterion("`name` like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+            addCriterion("`name` not like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+            addCriterion("`name` in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+            addCriterion("`name` not in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+            addCriterion("`name` between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+            addCriterion("`name` not between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andDescIsNull() {
-            addCriterion("desc is null");
+            addCriterion("`desc` is null");
             return (Criteria) this;
         }
 
         public Criteria andDescIsNotNull() {
-            addCriterion("desc is not null");
+            addCriterion("`desc` is not null");
             return (Criteria) this;
         }
 
         public Criteria andDescEqualTo(String value) {
-            addCriterion("desc =", value, "desc");
+            addCriterion("`desc` =", value, "desc");
             return (Criteria) this;
         }
 
@@ -775,12 +775,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescNotEqualTo(String value) {
-            addCriterion("desc <>", value, "desc");
+            addCriterion("`desc` <>", value, "desc");
             return (Criteria) this;
         }
 
@@ -791,12 +791,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescNotEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescGreaterThan(String value) {
-            addCriterion("desc >", value, "desc");
+            addCriterion("`desc` >", value, "desc");
             return (Criteria) this;
         }
 
@@ -807,12 +807,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescGreaterThanColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescGreaterThanOrEqualTo(String value) {
-            addCriterion("desc >=", value, "desc");
+            addCriterion("`desc` >=", value, "desc");
             return (Criteria) this;
         }
 
@@ -823,12 +823,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescGreaterThanOrEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescLessThan(String value) {
-            addCriterion("desc <", value, "desc");
+            addCriterion("`desc` <", value, "desc");
             return (Criteria) this;
         }
 
@@ -839,12 +839,12 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescLessThanColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescLessThanOrEqualTo(String value) {
-            addCriterion("desc <=", value, "desc");
+            addCriterion("`desc` <=", value, "desc");
             return (Criteria) this;
         }
 
@@ -855,37 +855,37 @@ public class TriggerExample {
          * @mbg.generated
          */
         public Criteria andDescLessThanOrEqualToColumn(Trigger.Column column) {
-            addCriterion(new StringBuilder("desc <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`desc` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andDescLike(String value) {
-            addCriterion("desc like", value, "desc");
+            addCriterion("`desc` like", value, "desc");
             return (Criteria) this;
         }
 
         public Criteria andDescNotLike(String value) {
-            addCriterion("desc not like", value, "desc");
+            addCriterion("`desc` not like", value, "desc");
             return (Criteria) this;
         }
 
         public Criteria andDescIn(List<String> values) {
-            addCriterion("desc in", values, "desc");
+            addCriterion("`desc` in", values, "desc");
             return (Criteria) this;
         }
 
         public Criteria andDescNotIn(List<String> values) {
-            addCriterion("desc not in", values, "desc");
+            addCriterion("`desc` not in", values, "desc");
             return (Criteria) this;
         }
 
         public Criteria andDescBetween(String value1, String value2) {
-            addCriterion("desc between", value1, value2, "desc");
+            addCriterion("`desc` between", value1, value2, "desc");
             return (Criteria) this;
         }
 
         public Criteria andDescNotBetween(String value1, String value2) {
-            addCriterion("desc not between", value1, value2, "desc");
+            addCriterion("`desc` not between", value1, value2, "desc");
             return (Criteria) this;
         }
 

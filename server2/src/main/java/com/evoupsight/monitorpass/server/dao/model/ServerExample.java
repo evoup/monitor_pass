@@ -483,17 +483,17 @@ public class ServerExample {
         }
 
         public Criteria andNameIsNull() {
-            addCriterion("name is null");
+            addCriterion("`name` is null");
             return (Criteria) this;
         }
 
         public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+            addCriterion("`name` is not null");
             return (Criteria) this;
         }
 
         public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+            addCriterion("`name` =", value, "name");
             return (Criteria) this;
         }
 
@@ -504,12 +504,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+            addCriterion("`name` <>", value, "name");
             return (Criteria) this;
         }
 
@@ -520,12 +520,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameNotEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+            addCriterion("`name` >", value, "name");
             return (Criteria) this;
         }
 
@@ -536,12 +536,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+            addCriterion("`name` >=", value, "name");
             return (Criteria) this;
         }
 
@@ -552,12 +552,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameGreaterThanOrEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+            addCriterion("`name` <", value, "name");
             return (Criteria) this;
         }
 
@@ -568,12 +568,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+            addCriterion("`name` <=", value, "name");
             return (Criteria) this;
         }
 
@@ -584,37 +584,37 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andNameLessThanOrEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("name <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`name` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+            addCriterion("`name` like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+            addCriterion("`name` not like", value, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+            addCriterion("`name` in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+            addCriterion("`name` not in", values, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+            addCriterion("`name` between", value1, value2, "name");
             return (Criteria) this;
         }
 
         public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+            addCriterion("`name` not between", value1, value2, "name");
             return (Criteria) this;
         }
 
@@ -755,17 +755,17 @@ public class ServerExample {
         }
 
         public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+            addCriterion("`status` is null");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+            addCriterion("`status` is not null");
             return (Criteria) this;
         }
 
         public Criteria andStatusEqualTo(Integer value) {
-            addCriterion("status =", value, "status");
+            addCriterion("`status` =", value, "status");
             return (Criteria) this;
         }
 
@@ -776,12 +776,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status = ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusNotEqualTo(Integer value) {
-            addCriterion("status <>", value, "status");
+            addCriterion("`status` <>", value, "status");
             return (Criteria) this;
         }
 
@@ -792,12 +792,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusNotEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status <> ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThan(Integer value) {
-            addCriterion("status >", value, "status");
+            addCriterion("`status` >", value, "status");
             return (Criteria) this;
         }
 
@@ -808,12 +808,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusGreaterThanColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status > ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("status >=", value, "status");
+            addCriterion("`status` >=", value, "status");
             return (Criteria) this;
         }
 
@@ -824,12 +824,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusGreaterThanOrEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status >= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThan(Integer value) {
-            addCriterion("status <", value, "status");
+            addCriterion("`status` <", value, "status");
             return (Criteria) this;
         }
 
@@ -840,12 +840,12 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusLessThanColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status < ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("status <=", value, "status");
+            addCriterion("`status` <=", value, "status");
             return (Criteria) this;
         }
 
@@ -856,27 +856,27 @@ public class ServerExample {
          * @mbg.generated
          */
         public Criteria andStatusLessThanOrEqualToColumn(Server.Column column) {
-            addCriterion(new StringBuilder("status <= ").append(column.getEscapedColumnName()).toString());
+            addCriterion(new StringBuilder("`status` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
         public Criteria andStatusIn(List<Integer> values) {
-            addCriterion("status in", values, "status");
+            addCriterion("`status` in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotIn(List<Integer> values) {
-            addCriterion("status not in", values, "status");
+            addCriterion("`status` not in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusBetween(Integer value1, Integer value2) {
-            addCriterion("status between", value1, value2, "status");
+            addCriterion("`status` between", value1, value2, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("status not between", value1, value2, "status");
+            addCriterion("`status` not between", value1, value2, "status");
             return (Criteria) this;
         }
 
