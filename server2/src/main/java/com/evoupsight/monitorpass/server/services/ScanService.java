@@ -108,6 +108,7 @@ public class ScanService {
         List<Trigger> triggers = triggerCache.fetchAll();
         triggers.stream().filter(Objects::nonNull).forEach(x -> {
             System.out.println(x.getTemplateId());
+            Long templateId = x.getTemplateId();
         });
         List<Server> servers = serverCache.fetchAll();
         System.out.println("");

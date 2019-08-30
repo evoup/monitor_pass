@@ -52,6 +52,8 @@
         <table schema="" tableName="trigger" domainObjectName="Trigger" delimitIdentifiers="true" />
         <table schema="" tableName="template" domainObjectName="Template" />
         <table schema="" tableName="server" domainObjectName="Server" />
+        <table schema="" tableName="r_template_server_group" domainObjectName="RelationTemplateServerGroup" />
+        <table schema="" tableName="r_server_server_group" domainObjectName="RelationServerServerGroup" />
         <!--<columnOverride column="online" jdbcType="INTEGER" javaType="Boolean"/>-->
         <!--</table>-->
 
