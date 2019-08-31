@@ -138,7 +138,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
-        <div v-for="(v,i) in all_diagrams" :key="shit_key + i" v-html="v"/>
+        <div :key="shit_key + 1" v-html="all_diagrams"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -157,7 +157,7 @@ export default {
         ip: '',
         server_groups: null
       },
-      all_diagrams: [],
+      all_diagrams: '',
       shit_key: 0
     }
   },
@@ -183,14 +183,7 @@ export default {
       })
       // 加载图表
       server_diagram_list({ id: this.$route.query.id }).then(response => {
-        const ts = Date.parse(new Date())
-        for (const i in response.data.items) {
-          const diagram_name = response.data.items[i].dname
-          const width = response.data.items[i].width
-          const height = response.data.items[i].height
-          /* eslint-disable */
-          this.all_diagrams.push(`<!--${diagram_name}--><iframe src="http://${document.domain}/${response.data.items[i].url}${ts}" width="${width}" height="${height}" frameborder="0" />`)
-        }
+        this.all_diagrams = response.data.item
       })
     },
     genGrafana() {

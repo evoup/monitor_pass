@@ -1,3 +1,5 @@
+import time
+
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -72,19 +74,16 @@ class ServerDiagramList(APIView):
         server = models.Server.objects.filter(id=server_id).get()
         server_name = server.name.lower()
         dashboards = models.GrafanaDashboard.objects.filter(device_id=server_id, device_type=1).all()
-        ret_urls = []
+        ret_iframes = ''
         if dashboards.count() > 0:
             for d in dashboards:
                 # 图表id，暂时没用
                 did = d.diagram_id
-                dname = models.Diagram.objects.filter(id=did).get().name
-                url = '/grafana/d-solo/%s/dashboard-%s?&panelId=%s&to=' % (d.dashboard_uid, server_name, d.diagram_id)
-                ret_urls.append(
-                    {'dname': dname, 'did': did, 'url': url, 'width': d.diagram.width, 'height': d.diagram.height})
+                ret_iframes = ret_iframes + '<iframe src="http://localhost/grafana/d-solo/%s/dashboard-%s?&panelId=%s&to=%s" width="%s" height="%s" frameborder=0 ></iframe>' % (d.dashboard_uid, server_name, d.diagram_id, time.time()*1000, d.diagram.width, d.diagram.height)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
-                "items": ret_urls
+                "item": ret_iframes
             }
         }
         return JsonResponse(ret, safe=False)
