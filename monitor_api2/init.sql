@@ -44,6 +44,8 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Processor load (5 min average per core)', '0', '60', 'The processor load is calculated as system CPU load divided by number of CPU cores.', '', 'system.cpu.load[percpu,avg5]', '0', '', '0','1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Processor load (15 min average per core)', '0', '60', 'The processor load is calculated as system CPU load divided by number of CPU cores.', '', 'system.cpu.load[percpu,avg15]', '0', '', '0','1', '0');
 
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`, `template_id`, `delta`) VALUES ('Used disk space on $1', '0', '60', 'Used disk space on $1', '', 'vfs.fs.size[{#FSNAME},pused]', '0', '%', '0', '1', '0');
+
 
 INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Too many processes on {HOST.NAME}', '{1}>300', '1');
 INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Processor load is too high on {HOST.NAME}', '{2}>5', '1');

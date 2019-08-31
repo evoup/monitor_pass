@@ -668,6 +668,23 @@
     }
   },
   {
+    "model": "monitor_web.monitoritem",
+    "pk": 28,
+    "fields": {
+      "name": "Used disk space on $1",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "Used disk space on $1",
+      "error": "",
+      "key": "vfs.fs.size[{#FSNAME},pused]",
+      "multiplier": 0.0,
+      "unit": "%",
+      "host_id": 0,
+      "template_id": 1,
+      "delta": 0
+    }
+  },
+  {
     "model": "monitor_web.diagram",
     "pk": 1,
     "fields": {
