@@ -174,7 +174,7 @@ func dfstat() {
             inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.percentused %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
             inc.MsgQueue <- fmt.Sprintf("dfstat %vdf.bytes.free %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
             if devices[i].fsFile == "/" {
-                inc.MsgQueue <- fmt.Sprintf("dfstat %vvfs.fs.size[/,used] %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, uint64(fs.Frsize)*fs.Bfree, devices[i].fsFile, devices[i].fsVfstype)
+                inc.MsgQueue <- fmt.Sprintf("dfstat %vvfs.fs.size[/,used] %v %v mount=%v fstype=%v\n", metricPrefix, timestamp, percentUsed, devices[i].fsFile, devices[i].fsVfstype)
             }
 
             used = fs.Files - fs.Ffree
