@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_MANAGER_GUAVA;
+import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_MANAGER_GUAVA_EVENT;
 
 /**
  * @author evoup
@@ -69,5 +70,19 @@ public class ServerCacheImpl implements ServerCache {
             });
         });
         return new ArrayList<>(serverSets);
+    }
+
+    /**
+     * 设置宕机
+     */
+    @Override
+    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-'+ #hostId", unless = "#result == null",
+            condition = "#hostId != null", cacheManager = CACHE_MANAGER_GUAVA_EVENT)
+    public String makeDown(Integer hostId) {
+        Server server = new Server();
+        server.setId(hostId);
+        server.setStatus(Constants.ServerStatus.DOWN.ordinal());
+        serverMapper.updateByPrimaryKeySelective(server);
+        return "ok";
     }
 }

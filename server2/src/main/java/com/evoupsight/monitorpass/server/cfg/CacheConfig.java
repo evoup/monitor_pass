@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_MANAGER_CONCURRENTMAP;
-import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_MANAGER_GUAVA;
+import static com.evoupsight.monitorpass.server.constants.CacheConstants.*;
 
 
 /**
@@ -33,6 +32,14 @@ public class CacheConfig {
     GuavaCacheManager guavaCacheManager() {
         GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
         guavaCacheManager.setCacheSpecification("maximumSize=50000,expireAfterWrite=2m");
+        return guavaCacheManager;
+    }
+
+    @Bean
+    @Qualifier(CACHE_MANAGER_GUAVA_EVENT)
+    GuavaCacheManager guavaCacheManagerEvent() {
+        GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
+        guavaCacheManager.setCacheSpecification("maximumSize=50000, expireAfterWrite=1m");
         return guavaCacheManager;
     }
 }

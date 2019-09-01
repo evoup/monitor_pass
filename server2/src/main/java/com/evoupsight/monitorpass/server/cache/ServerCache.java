@@ -1,5 +1,6 @@
 package com.evoupsight.monitorpass.server.cache;
 
+import com.evoupsight.monitorpass.server.constants.Constants;
 import com.evoupsight.monitorpass.server.dao.model.Server;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public interface ServerCache {
      * @return
      */
     List<Server> getByTemplate(Long id);
+
+    /**
+     * 设置宕机
+     */
+    String makeDown(Integer hostId);
 }

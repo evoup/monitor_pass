@@ -6,6 +6,7 @@ import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
+import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.server.dao.model.*;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
@@ -54,7 +55,7 @@ import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus
 /**
  * @author evoup
  */
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
 @Service
 public class ScanService {
 
@@ -88,6 +89,8 @@ public class ScanService {
     RelationServerServerGroupMapper relationServerServerGroupMapper;
     @Autowired
     RelationTemplateServerGroupMapper relationTemplateServerGroupMapper;
+    @Autowired
+    ServerMapper serverMapper;
 
     /**
      * 执行所有工作
@@ -118,7 +121,10 @@ public class ScanService {
     }
 
 
-    private String getOpentsdbValue(String functionId, String hostName) {
+    /**
+     * 返回opentsdb的数值
+     */
+    private String getOpentsdbValue(String functionId, Server server) {
         System.out.println("functionId:" + functionId);
         String dbValue = "";
         Function f = functionCache.get(new Long(functionId));
@@ -128,13 +134,13 @@ public class ScanService {
                 Integer itemId = f.getItemId();
                 Item item = itemCache.get(itemId);
                 String key = item.getKey();
-                String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + hostName + "." + key;
+                String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + server.getName() + "." + key;
                 HttpGet httpGet = new HttpGet(apiUrl);
                 try {
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity entity = httpResponse.getEntity();
-                        //将entity当中的数据转换为字符串
+                        // 将entity当中的数据转换为字符串
                         String response = EntityUtils.toString(entity, "utf-8");
                         ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                         }.getType());
@@ -144,8 +150,10 @@ public class ScanService {
                                 dbValue = entry.getValue().toString();
                                 break;
                             }
-//                                String hostStatus = HOST_STATUS_UP;
                             return dbValue;
+                        } else {
+                            // 宕机
+                            serverCache.makeDown(server.getId());
                         }
                     }
                 } catch (IOException e) {
@@ -155,6 +163,7 @@ public class ScanService {
         }
         return "";
     }
+
 
     /**
      * 检查主机
@@ -184,7 +193,7 @@ public class ScanService {
                                     Matcher m = p.matcher(expression);
                                     StringBuffer sb = new StringBuffer();
                                     while (m.find()) {
-                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s.getName()));
+                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s));
                                     }
                                     m.appendTail(sb);
                                     System.out.println("key是：" + trigger.getExpression());
@@ -260,6 +269,7 @@ public class ScanService {
         }
 
     }
+
     /**
      * 返回指定trigger对应的服务器
      *
