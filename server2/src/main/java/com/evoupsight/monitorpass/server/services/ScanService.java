@@ -128,7 +128,6 @@ public class ScanService {
                 Integer itemId = f.getItemId();
                 Item item = itemCache.get(itemId);
                 String key = item.getKey();
-                Long triggerId = f.getTriggerId();
                 String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + hostName + "." + key;
                 HttpGet httpGet = new HttpGet(apiUrl);
                 try {
@@ -194,7 +193,7 @@ public class ScanService {
                                         m.appendReplacement(sb, getOpentsdbValue(m.group(1), s.getName()));
                                     }
                                     m.appendTail(sb);
-                                    System.out.println(sb.toString());
+                                    System.out.println("最终表达式是：" + sb.toString());
                                 }
                             }
                         }
