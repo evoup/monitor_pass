@@ -120,31 +120,40 @@ public class ScanService {
 
     private String getOpentsdbValue(String functionId, String hostName) {
         System.out.println("functionId:" + functionId);
-        Optional.ofNullable(functionCache.get(new Long(functionId)))
-                .ifPresent(f -> {
-                    // 获取监控项的数值
-                    Integer itemId = f.getItemId();
-                    Item item = itemCache.get(itemId);
-                    String key = item.getKey();
-                    Long triggerId = f.getTriggerId();
-                    String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + hostName + "." + key;
-                    HttpGet httpGet = new HttpGet(apiUrl);
-                    try {
-                        HttpResponse httpResponse = httpClient.execute(httpGet);
-                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
-                            HttpEntity entity = httpResponse.getEntity();
-                            //将entity当中的数据转换为字符串
-                            String response = EntityUtils.toString(entity, "utf-8");
-                            ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
-                            }.getType());
-                            if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
-                                String hostStatus = HOST_STATUS_UP;
+        String dbValue = "";
+        Function f = functionCache.get(new Long(functionId));
+        if (f != null) {
+            {
+                // 获取监控项的数值
+                Integer itemId = f.getItemId();
+                Item item = itemCache.get(itemId);
+                String key = item.getKey();
+                Long triggerId = f.getTriggerId();
+                String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + hostName + "." + key;
+                HttpGet httpGet = new HttpGet(apiUrl);
+                try {
+                    HttpResponse httpResponse = httpClient.execute(httpGet);
+                    if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
+                        HttpEntity entity = httpResponse.getEntity();
+                        //将entity当中的数据转换为字符串
+                        String response = EntityUtils.toString(entity, "utf-8");
+                        ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
+                        }.getType());
+                        if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
+                            HashMap<String, Object> dataPoints = queryDtos.get(0).getDps();
+                            for (Map.Entry<String, Object> entry : dataPoints.entrySet()) {
+                                dbValue = entry.getValue().toString();
+                                break;
                             }
+//                                String hostStatus = HOST_STATUS_UP;
+                            return dbValue;
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return "";
     }
 
