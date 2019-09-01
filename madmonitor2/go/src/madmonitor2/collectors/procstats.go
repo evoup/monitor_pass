@@ -247,11 +247,8 @@ func procstats() {
 				inc.MsgQueue <- fmt.Sprintf("procstats %vproc.stat.ctxt %v %v\n", metricPrefix, ts, m[0][2])
 			} else if m[0][1] == "processes" {
 				//print "proc.stat.processes %d %s" % (ts, m.group(2))
-				//fmt.Printf("procstats proc.stat.processes %v %v\n", ts, m[0][2])
-				//inc.MsgQueue <- fmt.Sprintf("procstats %vproc.stat.processes %v %v\n", metricPrefix, ts, m[0][2])
-				// same as zabbix
-				fmt.Printf("procstats proc.num[] %v %v\n", ts, m[0][2])
-				inc.MsgQueue <- fmt.Sprintf("procstats %vproc.num[] %v %v\n", metricPrefix, ts, m[0][2])
+				fmt.Printf("procstats proc.stat.processes %v %v\n", ts, m[0][2])
+				inc.MsgQueue <- fmt.Sprintf("procstats %vproc.stat.processes %v %v\n", metricPrefix, ts, m[0][2])
 			} else if m[0][1] == "procs_blocked" {
 				//print "proc.stat.procs_blocked %d %s" % (ts, m.group(2))
 				fmt.Printf("procstats proc.stat.procs_blocked %v %v\n", ts, m[0][2])
