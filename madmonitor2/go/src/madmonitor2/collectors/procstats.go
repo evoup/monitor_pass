@@ -63,6 +63,7 @@ func procstats() {
 
     ts := time.Now().Unix()
     var psCountInt, _ = strconv.Atoi(strings.TrimSuffix(b2.String(), "\n"))
+    fmt.Println("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
     inc.MsgQueue <- fmt.Sprintf("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
 
     //f_uptime = open("/proc/uptime", "r")
