@@ -76,7 +76,7 @@ public class ServerCacheImpl implements ServerCache {
      * 设置宕机
      */
     @Override
-    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-'+ #hostId", unless = "#result == null",
+    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_on_down-'+ #hostId", unless = "#result == null",
             condition = "#hostId != null", cacheManager = CACHE_MANAGER_GUAVA_EVENT)
     public String makeDown(Integer hostId) {
         Server server = new Server();
