@@ -5,6 +5,7 @@ import com.evoupsight.monitorpass.server.cache.ItemCache;
 import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
+import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.model.*;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
@@ -53,6 +54,7 @@ import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus
 /**
  * @author evoup
  */
+@SuppressWarnings("Duplicates")
 @Service
 public class ScanService {
 
@@ -84,6 +86,8 @@ public class ScanService {
     private ItemCache itemCache;
     @Autowired
     RelationServerServerGroupMapper relationServerServerGroupMapper;
+    @Autowired
+    RelationTemplateServerGroupMapper relationTemplateServerGroupMapper;
 
     /**
      * 执行所有工作
@@ -114,7 +118,7 @@ public class ScanService {
     }
 
 
-    private String getOpentsdbValue(String functionId) {
+    private String getOpentsdbValue(String functionId, String hostName) {
         System.out.println("functionId:" + functionId);
         Optional.ofNullable(functionCache.get(new Long(functionId)))
                 .ifPresent(f -> {
@@ -123,7 +127,23 @@ public class ScanService {
                     Item item = itemCache.get(itemId);
                     String key = item.getKey();
                     Long triggerId = f.getTriggerId();
-                    List<Server> triggerBelongServers = getTriggerBelongServers(triggerId.intValue());
+                    String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + hostName + "." + key;
+                    HttpGet httpGet = new HttpGet(apiUrl);
+                    try {
+                        HttpResponse httpResponse = httpClient.execute(httpGet);
+                        if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
+                            HttpEntity entity = httpResponse.getEntity();
+                            //将entity当中的数据转换为字符串
+                            String response = EntityUtils.toString(entity, "utf-8");
+                            ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
+                            }.getType());
+                            if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
+                                String hostStatus = HOST_STATUS_UP;
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 });
         return "";
     }
@@ -146,8 +166,30 @@ public class ScanService {
             List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(example);
             if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
                 for (RelationServerServerGroup relation : relationServerServerGroups) {
-                    relation.getServerId();
-
+                    if (s.getId().equals(relation.getServerId())) {
+                        Integer servergroupId = relation.getServergroupId();
+                        RelationTemplateServerGroupExample example1 = new RelationTemplateServerGroupExample();
+                        example1.createCriteria().andServergroupIdEqualTo(servergroupId);
+                        List<RelationTemplateServerGroup> relationTemplateServerGroup = relationTemplateServerGroupMapper.selectByExample(example1);
+                        for (RelationTemplateServerGroup relation1 : relationTemplateServerGroup) {
+                            Long templateId = relation1.getTemplateId();
+                            List<Trigger> triggers = triggerCache.getByTemplate(templateId);
+                            if (CollectionUtils.isNotEmpty(triggers)) {
+                                for (Trigger trigger : triggers) {
+                                    String expression = trigger.getExpression();
+                                    // 找出表达式中的function，进行演算
+                                    Pattern p = Pattern.compile("\\{([^}]*)\\}");
+                                    Matcher m = p.matcher(expression);
+                                    StringBuffer sb = new StringBuffer();
+                                    while (m.find()) {
+                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s.getName()));
+                                    }
+                                    m.appendTail(sb);
+                                    System.out.println(sb.toString());
+                                }
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -162,14 +204,14 @@ public class ScanService {
         triggers.stream().filter(Objects::nonNull).forEach(t -> {
             String expression = t.getExpression();
             // 找出表达式中的function，进行演算
-            Pattern p = Pattern.compile("\\{([^}]*)\\}");
-            Matcher m = p.matcher(expression);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                m.appendReplacement(sb, getOpentsdbValue(m.group(1)));
-            }
-            m.appendTail(sb);
-            System.out.println(sb.toString());
+//            Pattern p = Pattern.compile("\\{([^}]*)\\}");
+//            Matcher m = p.matcher(expression);
+//            StringBuffer sb = new StringBuffer();
+//            while (m.find()) {
+//                m.appendReplacement(sb, getOpentsdbValue(m.group(1)));
+//            }
+//            m.appendTail(sb);
+//            System.out.println(sb.toString());
 
 //            CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
 //            TriggerLexer lexer = new TriggerLexer(input);

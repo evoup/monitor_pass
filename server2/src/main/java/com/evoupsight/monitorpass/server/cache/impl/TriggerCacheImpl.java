@@ -28,4 +28,12 @@ public class TriggerCacheImpl implements TriggerCache {
         example.createCriteria().andIdGreaterThan(0L);
         return triggerMapper.selectByExample(example);
     }
+
+    @Override
+    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-tempalte_id-'+ #templateId", unless = "#result == null", condition = "#templateId != null", cacheManager = CACHE_MANAGER_GUAVA)
+    public List<Trigger> getByTemplate(Long templateId) {
+        TriggerExample example = new TriggerExample();
+        example.createCriteria().andTemplateIdEqualTo(templateId);
+        return triggerMapper.selectByExample(example);
+    }
 }

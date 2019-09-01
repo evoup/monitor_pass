@@ -13,4 +13,11 @@ public interface TriggerCache {
      * @return List<Trigger>
      */
     List<Trigger> fetchAll();
+
+    /**
+     * 根据templateId返回triggers
+     * @param templateId
+     * @return
+     */
+    List<Trigger> getByTemplate(Long templateId);
 }
