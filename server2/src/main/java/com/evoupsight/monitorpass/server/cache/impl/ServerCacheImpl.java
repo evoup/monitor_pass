@@ -18,6 +18,7 @@ import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_M
 /**
  * @author evoup
  */
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Repository
 public class ServerCacheImpl implements ServerCache {
     private static final String CACHE_NAME = "com.evoupsight.monitorpass.server.cache.impl.ServerCacheImpl";

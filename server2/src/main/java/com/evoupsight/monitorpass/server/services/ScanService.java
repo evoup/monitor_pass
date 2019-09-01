@@ -1,7 +1,9 @@
 package com.evoupsight.monitorpass.server.services;
 
+import com.evoupsight.monitorpass.server.cache.FunctionCache;
 import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
+import com.evoupsight.monitorpass.server.dao.model.Function;
 import com.evoupsight.monitorpass.server.dao.model.Server;
 import com.evoupsight.monitorpass.server.dao.model.Trigger;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
@@ -74,6 +76,8 @@ public class ScanService {
     private TriggerCache triggerCache;
     @Autowired
     private ServerCache serverCache;
+    @Autowired
+    private FunctionCache functionCache;
 
     /**
      * 执行所有工作
@@ -106,11 +110,17 @@ public class ScanService {
 
     private String getOpentsdbValue(String functionId) {
         System.out.println("functionId:" + functionId);
+        Optional.ofNullable(functionCache.get(new Long(functionId)))
+                .ifPresent(f -> {
+                    // 获取监控项的数值
+                    Integer itemId = f.getItemId();
+                });
         return "";
     }
 
     private String myFun(String x) {
         System.out.println("functionId:" + x);
+
         return "x" + x;
     }
 
@@ -122,9 +132,14 @@ public class ScanService {
         triggers.stream().filter(Objects::nonNull).forEach(t -> {
             String expression = t.getExpression();
             // 找出表达式中的function，进行演算
-            String regex = "\\{([^}]*)\\}";
-            String expressionNormal = expression.replaceAll(regex, myFun("$1"));
-            System.out.println(expressionNormal);
+            Pattern p = Pattern.compile("\\{([^}]*)\\}");
+            Matcher m = p.matcher(expression);
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) {
+                m.appendReplacement(sb, getOpentsdbValue(m.group(1)));
+            }
+            m.appendTail(sb);
+            System.out.println(sb.toString());
 
 //            CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
 //            TriggerLexer lexer = new TriggerLexer(input);
