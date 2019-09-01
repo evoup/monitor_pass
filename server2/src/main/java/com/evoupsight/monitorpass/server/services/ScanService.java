@@ -1,11 +1,11 @@
 package com.evoupsight.monitorpass.server.services;
 
 import com.evoupsight.monitorpass.server.cache.FunctionCache;
+import com.evoupsight.monitorpass.server.cache.ItemCache;
 import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
-import com.evoupsight.monitorpass.server.dao.model.Function;
-import com.evoupsight.monitorpass.server.dao.model.Server;
-import com.evoupsight.monitorpass.server.dao.model.Trigger;
+import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
+import com.evoupsight.monitorpass.server.dao.model.*;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
 import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
@@ -46,6 +47,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
+import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus.NOT_MONITORING;
 
 
 /**
@@ -78,6 +80,10 @@ public class ScanService {
     private ServerCache serverCache;
     @Autowired
     private FunctionCache functionCache;
+    @Autowired
+    private ItemCache itemCache;
+    @Autowired
+    RelationServerServerGroupMapper relationServerServerGroupMapper;
 
     /**
      * 执行所有工作
@@ -114,6 +120,10 @@ public class ScanService {
                 .ifPresent(f -> {
                     // 获取监控项的数值
                     Integer itemId = f.getItemId();
+                    Item item = itemCache.get(itemId);
+                    String key = item.getKey();
+                    Long triggerId = f.getTriggerId();
+                    List<Server> triggerBelongServers = getTriggerBelongServers(triggerId.intValue());
                 });
         return "";
     }
@@ -128,6 +138,26 @@ public class ScanService {
      * 检查主机
      */
     private void checkHosts() {
+        // server -> server_group -> template -> trigger -> function -> 计算function数值 -> 返回function表达式 -> 判断真假
+        List<Server> servers = serverCache.fetchAll();
+        servers.stream().filter(Objects::nonNull).filter(s -> !new Integer(NOT_MONITORING.ordinal()).equals(s.getStatus())).forEach(s -> {
+            RelationServerServerGroupExample example = new RelationServerServerGroupExample();
+            example.createCriteria().andServerIdEqualTo(s.getId());
+            List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(example);
+            if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
+                for (RelationServerServerGroup relation : relationServerServerGroups) {
+                    relation.getServerId();
+
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 检查主机
+     */
+    private void checkHosts1() {
         List<Trigger> triggers = triggerCache.fetchAll();
         triggers.stream().filter(Objects::nonNull).forEach(t -> {
             String expression = t.getExpression();
@@ -150,16 +180,6 @@ public class ScanService {
 //            Object visit = eval.visit(tree);
 //            LOG.info("Trigger result:" + visit);
         });
-        Set<Server> checkServers = new HashSet<>();
-        triggers.stream().filter(Objects::nonNull).forEach(x -> {
-            System.out.println(x.getTemplateId());
-            Long templateId = x.getTemplateId();
-            List<Server> servers = serverCache.getByTemplate(templateId);
-            servers.stream().filter(Objects::nonNull).forEach(checkServers::add);
-        });
-        checkServers.stream().filter(Objects::nonNull).forEach(s -> {
-            LOG.info("server:{} will be checked", s.getName());
-        });
         //
         Double average = 1.10;
         CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
@@ -171,6 +191,27 @@ public class ScanService {
         Object visit = eval.visit(tree);
         LOG.info("Trigger result:" + visit);
         System.out.println("check done");
+    }
+
+    /**
+     * 返回指定trigger对应的服务器
+     *
+     * @param triggerId
+     * @return
+     */
+    private List<Server> getTriggerBelongServers(Integer triggerId) {
+        List<Trigger> triggers = triggerCache.fetchAll();
+        Set<Server> checkServers = new HashSet<>();
+        triggers.stream().filter(Objects::nonNull).filter(t -> triggerId.equals(t.getId().intValue())).forEach(x -> {
+            System.out.println(x.getTemplateId());
+            Long templateId = x.getTemplateId();
+            List<Server> servers = serverCache.getByTemplate(templateId);
+            servers.stream().filter(Objects::nonNull).forEach(checkServers::add);
+        });
+        checkServers.stream().filter(Objects::nonNull).forEach(s -> {
+            LOG.info("server:{} will be checked", s.getName());
+        });
+        return new ArrayList<>(checkServers);
     }
 
     /**

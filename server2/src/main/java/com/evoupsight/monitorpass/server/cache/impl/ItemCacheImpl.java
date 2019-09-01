@@ -5,12 +5,14 @@ import com.evoupsight.monitorpass.server.dao.mapper.ItemMapper;
 import com.evoupsight.monitorpass.server.dao.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 
 import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_MANAGER_GUAVA;
 
 /**
  * @author evoup
  */
+@Component
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class ItemCacheImpl implements ItemCache {
     private static final String CACHE_NAME = "com.evoupsight.monitorpass.server.cache.impl.ItemCacheImpl";
