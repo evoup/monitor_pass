@@ -156,12 +156,6 @@ public class ScanService {
         return "";
     }
 
-    private String myFun(String x) {
-        System.out.println("functionId:" + x);
-
-        return "x" + x;
-    }
-
     /**
      * 检查主机
      */
@@ -193,7 +187,11 @@ public class ScanService {
                                         m.appendReplacement(sb, getOpentsdbValue(m.group(1), s.getName()));
                                     }
                                     m.appendTail(sb);
+                                    System.out.println("key是：" + trigger.getExpression());
                                     System.out.println("最终表达式是：" + sb.toString());
+                                    if (antlrTrueFalse(sb.toString())) {
+                                        System.out.println("条件成立，触发阈值+1");
+                                    }
                                 }
                             }
                         }
@@ -243,6 +241,25 @@ public class ScanService {
         System.out.println("check done");
     }
 
+
+    private Boolean antlrTrueFalse(String expression) {
+        try {
+            CharStream input = new ANTLRInputStream(expression);
+            TriggerLexer lexer = new TriggerLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            TriggerParser parser = new TriggerParser(tokens);
+            ParseTree tree = parser.expr();
+            MainVisitor.Visitor eval = new MainVisitor.Visitor();
+            Object visit = eval.visit(tree);
+            LOG.info("Trigger result:" + visit);
+            System.out.println("check done");
+            return Boolean.valueOf(visit.toString());
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            return false;
+        }
+
+    }
     /**
      * 返回指定trigger对应的服务器
      *
