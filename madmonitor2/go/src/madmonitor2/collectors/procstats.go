@@ -44,27 +44,7 @@ func procstats() {
     metricPrefix := "apps.backend." + host + "."
     collectionInterval := PROCSTATS_DEFAULT_COLLECTION_INTERVAL
 
-    // tcollector中不含有统计进程总数的命令
-    c1 := exec.Command("ps", "-A", "--no-headers")
-    c2 := exec.Command("wc", "-l")
 
-    r, w := io.Pipe()
-    c1.Stdout = w
-    c2.Stdin = r
-
-    var b2 bytes.Buffer
-    c2.Stdout = &b2
-
-    c1.Start()
-    c2.Start()
-    c1.Wait()
-    w.Close()
-    c2.Wait()
-
-    ts := time.Now().Unix()
-    var psCountInt, _ = strconv.Atoi(strings.TrimSuffix(b2.String(), "\n"))
-    fmt.Println("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
-    inc.MsgQueue <- fmt.Sprintf("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
 
     //f_uptime = open("/proc/uptime", "r")
     //f_meminfo = open("/proc/meminfo", "r")
@@ -309,6 +289,28 @@ func procstats() {
             fmt.Printf("procstats proc.kernel.entropy_avail %v %v\n", ts, line)
             inc.MsgQueue <- fmt.Sprintf("procstats %vproc.kernel.entropy_avail %v %v\n", metricPrefix, ts, line)
         }
+
+        // tcollector中不含有统计进程总数的命令
+        c1 := exec.Command("ps", "-A", "--no-headers")
+        c2 := exec.Command("wc", "-l")
+
+        r, w := io.Pipe()
+        c1.Stdout = w
+        c2.Stdin = r
+
+        var b2 bytes.Buffer
+        c2.Stdout = &b2
+
+        c1.Start()
+        c2.Start()
+        c1.Wait()
+        w.Close()
+        c2.Wait()
+
+        var psCountInt, _ = strconv.Atoi(strings.TrimSuffix(b2.String(), "\n"))
+        fmt.Println("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
+        inc.MsgQueue <- fmt.Sprintf("procstats %vproc.num[] %v %v\n", metricPrefix, ts, psCountInt)
+
         time.Sleep(time.Second * time.Duration(collectionInterval))
     }
 
