@@ -1,11 +1,8 @@
 package main
 
 import (
-	//"os"
-	//"madmonitor2/utils"
 	"path/filepath"
 	"regexp"
-	//"fmt"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -15,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+    "os/exec"
 )
 
 var NUMADIR = "/sys/devices/system/node"
@@ -43,6 +41,17 @@ func procstats() {
 	//host = s.Replace(host, "-", "", -1)
 	metricPrefix := "apps.backend." + host + "."
 	collectionInterval := PROCSTATS_DEFAULT_COLLECTION_INTERVAL
+
+
+	// tcollector中不含有统计进程总数的命令
+    out, err := exec.Command("ps", "-A", "--no-headers", "wc", "-l").Output()
+    if err != nil {
+        utils.Log(utils.GetLogger(), "procstats][err:"+err.Error(), 2, 1)
+    } else {
+        ts := time.Now().Unix()
+        inc.MsgQueue <- fmt.Sprintf("procstats %vproc.num[] %v %v\n", metricPrefix, ts, out)
+    }
+
 	//f_uptime = open("/proc/uptime", "r")
 	//f_meminfo = open("/proc/meminfo", "r")
 	//f_vmstat = open("/proc/vmstat", "r")

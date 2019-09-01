@@ -2,6 +2,7 @@
 =======
 
 监控代理2.0说明README.md文档
+本项目给予opentsdb客户端tcollector改写而成
 
 ### 安装依赖
 ```bash
