@@ -40,6 +40,7 @@ import redis.clients.jedis.JedisPool;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
@@ -102,6 +103,17 @@ public class ScanService {
         }
     }
 
+
+    private String getOpentsdbValue(String functionId) {
+        System.out.println("functionId:" + functionId);
+        return "";
+    }
+
+    private String myFun(String x) {
+        System.out.println("functionId:" + x);
+        return "x" + x;
+    }
+
     /**
      * 检查主机
      */
@@ -110,7 +122,10 @@ public class ScanService {
         triggers.stream().filter(Objects::nonNull).forEach(t -> {
             String expression = t.getExpression();
             // 找出表达式中的function，进行演算
-//            Pattern pattern = Pattern.compile("{}");
+            String regex = "\\{([^}]*)\\}";
+            String expressionNormal = expression.replaceAll(regex, myFun("$1"));
+            System.out.println(expressionNormal);
+
 //            CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
 //            TriggerLexer lexer = new TriggerLexer(input);
 //            CommonTokenStream tokens = new CommonTokenStream(lexer);
