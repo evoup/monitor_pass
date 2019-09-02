@@ -8,6 +8,12 @@ from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, Us
     Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig
 
 
+class DashboardServersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Server
+        fields = ('name', 'status')
+
+
 class DataCollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataCollector

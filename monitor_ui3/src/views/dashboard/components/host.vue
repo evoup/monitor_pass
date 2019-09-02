@@ -16,10 +16,10 @@
         />
         <el-table-column label="数目" min-width="50%">
           <template slot-scope="scope">
-            <a v-if="scope.row.num==0" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='宕机'" class="warn" @click="jumpServerList(1)">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='在线'" target="_blank" class="online" @click="jumpServerList(2)">{{ scope.row.num }}</a>
-            <a v-if="scope.row.num>0 && scope.row.name=='未监控'" target="_blank" @click="jumpServerList(3)">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num===0" :href="scope.row.num" target="_blank">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name==='宕机'" class="warn" @click="jumpServerList(1)">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name==='在线'" target="_blank" class="online" @click="jumpServerList(2)">{{ scope.row.num }}</a>
+            <a v-if="scope.row.num>0 && scope.row.name==='未监控'" target="_blank" @click="jumpServerList(3)">{{ scope.row.num }}</a>
           </template>
         </el-table-column>
       </el-table-column>
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { dashboard_server_list } from '../../../api/dashboard'
+
 export default {
   name: 'Host',
   data() {
@@ -48,7 +50,18 @@ export default {
       ]
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      dashboard_server_list().then(response => {
+        // this.dataList = response.data.items
+        // this.pageList = response.data.page
+        // this.listLoading = false
+        // this.total = response.data.count
+      })
+    },
     jumpServerList(type) {
       this.$router.push({ path: '/server_list?type=' + type })
     },

@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
-    diagram_view, general_config_view
+    diagram_view, general_config_view, dashboard_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -95,5 +95,7 @@ urlpatterns = [
         url(r'^general_config/info', general_config_view.GeneralConfig.as_view()),
         # grafana图表
         url(r'^server_diagram/list', diagram_view.ServerDiagramList.as_view()),
+        # 概览
+        url(r'^dashboard/server/list', dashboard_view.DashboardServerList.as_view()),
     ]))
 ]
