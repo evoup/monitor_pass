@@ -50,9 +50,10 @@ public class ScanEventTask {
             InterProcessLock lock = new InterProcessMutex(cfClient, LOCK_PATH);
             if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
                 try {
-                    LOG.info("server loop");
+                    LOG.info("server ready to work");
                     scanService.doAllJobs();
                     Thread.sleep(15000);
+                    LOG.info("server job done");
                 } finally {
                     lock.release();
                 }
