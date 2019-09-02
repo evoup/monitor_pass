@@ -211,46 +211,6 @@ public class ScanService {
     }
 
 
-    /**
-     * 检查主机
-     */
-    private void checkHosts1() {
-        List<Trigger> triggers = triggerCache.fetchAll();
-        triggers.stream().filter(Objects::nonNull).forEach(t -> {
-            String expression = t.getExpression();
-            // 找出表达式中的function，进行演算
-//            Pattern p = Pattern.compile("\\{([^}]*)\\}");
-//            Matcher m = p.matcher(expression);
-//            StringBuffer sb = new StringBuffer();
-//            while (m.find()) {
-//                m.appendReplacement(sb, getOpentsdbValue(m.group(1)));
-//            }
-//            m.appendTail(sb);
-//            System.out.println(sb.toString());
-
-//            CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
-//            TriggerLexer lexer = new TriggerLexer(input);
-//            CommonTokenStream tokens = new CommonTokenStream(lexer);
-//            TriggerParser parser = new TriggerParser(tokens);
-//            ParseTree tree = parser.expr();
-//            MainVisitor.Visitor eval = new MainVisitor.Visitor();
-//            Object visit = eval.visit(tree);
-//            LOG.info("Trigger result:" + visit);
-        });
-        //
-        Double average = 1.10;
-        CharStream input = new ANTLRInputStream("{" + average + "}>0.82 AND TRUE");
-        TriggerLexer lexer = new TriggerLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        TriggerParser parser = new TriggerParser(tokens);
-        ParseTree tree = parser.expr();
-        MainVisitor.Visitor eval = new MainVisitor.Visitor();
-        Object visit = eval.visit(tree);
-        LOG.info("Trigger result:" + visit);
-        System.out.println("check done");
-    }
-
-
     private Boolean antlrTrueFalse(String expression) {
         try {
             CharStream input = new ANTLRInputStream(expression);

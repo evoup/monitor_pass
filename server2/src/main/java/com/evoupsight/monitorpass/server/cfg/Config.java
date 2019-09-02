@@ -20,7 +20,8 @@ import java.time.Duration;
  */
 @Configuration
 @PropertySources({
-        @PropertySource({"server.properties", "redis.properties"})
+        @PropertySource("file:${spring.config.location:./}/server.properties"),
+        @PropertySource("file:${spring.config.location:./}/redis.properties")
 })
 public class Config {
 
