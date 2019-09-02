@@ -343,6 +343,17 @@ class GrafanaDashboard(models.Model):
         db_table = 'grafana_dashboard'
         unique_together = ('device_id', 'device_type', 'diagram')
 
+
+class DashBoard(models.Model):
+    """
+    首页dashboard
+    """
+    id = models.BigAutoField(primary_key=True)
+
+    class Meta:
+        verbose_name_plural = 'Grafana仪表盘表'
+        db_table = 'grafana_dashboard'
+
 class Function(models.Model):
     """
     函数

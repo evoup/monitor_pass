@@ -2,9 +2,6 @@ package com.evoupsight.monitorpass.datacollector.cfg;
 
 
 import com.evoupsight.monitorpass.datacollector.handlers.StringProtocolInitalizer;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,7 +30,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -52,8 +48,8 @@ import java.util.concurrent.TimeUnit;
 @ComponentScan("com.evoupsight")
 @PropertySources({
         @PropertySource(value = {"classpath:netty-server.properties", "file:${external_conf}/netty-server.properties"}, ignoreResourceNotFound = true),
-        @PropertySource(value={"data-collector.properties","file:${external_conf}/data-collector.properties"}, ignoreResourceNotFound = true),
-        @PropertySource(value= {"kafka-client.properties","file:${external_conf}/kafka-client.properties"}, ignoreResourceNotFound = true)
+        @PropertySource(value = {"data-collector.properties", "file:${external_conf}/data-collector.properties"}, ignoreResourceNotFound = true),
+        @PropertySource(value = {"kafka-client.properties", "file:${external_conf}/kafka-client.properties"}, ignoreResourceNotFound = true)
 })
 public class SpringConfig {
 
@@ -214,24 +210,5 @@ public class SpringConfig {
     }
 
 
-    /**
-     * netty自动注入失败，获取bean的方式没有成功，只能用变通方案
-     * @See com.evoupsight.monitorpass.datacollector.sender.Sender#init()
-     */
-    //
-//    @Bean(name = "guava_cache")
-//    public LoadingCache<String, String> guavaCacheBean() {
-//        CacheLoader<String, String> loader;
-//        loader = new CacheLoader<String, String>() {
-//            @Override
-//            public String load(String key) {
-//                return key.toUpperCase();
-//            }
-//        };
-//        return CacheBuilder.newBuilder()
-//                .maximumSize(10000)
-//                .expireAfterAccess(30L, TimeUnit.SECONDS)
-//                .build(loader);
-//    }
 
 }
