@@ -123,6 +123,18 @@
             <version>23.6-jre</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>http://nexus:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://nexus:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <!--自动生成代码工具generator，支持原生和三方插件两种模式-->
     <profiles>
         <!-- 不影响个人使用习惯，默认用官方生成插件，生成方式采用默认，或者如下:
