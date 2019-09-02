@@ -93,10 +93,15 @@ public class ServerCacheImpl implements ServerCache {
     @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_down-'+ #hostId", unless = "#result == null",
             condition = "#hostId != null", cacheManager = CACHE_MANAGER_GUAVA_EVENT)
     public String makeDown(Integer hostId) {
-        Server server = new Server();
-        server.setId(hostId);
-        server.setStatus(Constants.ServerStatus.DOWN.ordinal());
-        serverMapper.updateByPrimaryKeySelective(server);
+        Server record = serverMapper.selectByPrimaryKey(hostId);
+        if (record != null) {
+            if (System.currentTimeMillis() - record.getLastOnline().getTime() > 300000) {
+                Server server = new Server();
+                server.setId(hostId);
+                server.setStatus(Constants.ServerStatus.DOWN.ordinal());
+                serverMapper.updateByPrimaryKeySelective(server);
+            }
+        }
         return "ok";
     }
 }
