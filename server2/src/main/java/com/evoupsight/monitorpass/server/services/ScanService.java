@@ -98,9 +98,6 @@ public class ScanService {
     void doAllJobs() {
         // TODO写入扫描时间
 
-        // 检查宕机
-        // scanHostDownOld();
-
         checkHosts();
     }
 
