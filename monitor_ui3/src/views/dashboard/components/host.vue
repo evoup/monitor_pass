@@ -39,10 +39,10 @@ export default {
       dataList: [
         {
           name: '宕机',
-          num: 3
+          num: 0
         }, {
           name: '在线',
-          num: 31
+          num: 0
         }, {
           name: '未监控',
           num: 0
@@ -56,10 +56,15 @@ export default {
   methods: {
     fetchData() {
       dashboard_server_list().then(response => {
-        // this.dataList = response.data.items
-        // this.pageList = response.data.page
-        // this.listLoading = false
-        // this.total = response.data.count
+        for (let i in response.data.items) {
+          if (response.data.items[i].status === 0) {
+            this.dataList[0].num++
+          } else if (response.data.items[i].status === 1) {
+            this.dataList[1].num++
+          } else if (response.data.items[i].status === 2) {
+            this.dataList[2].num++
+          }
+        }
       })
     },
     jumpServerList(type) {
