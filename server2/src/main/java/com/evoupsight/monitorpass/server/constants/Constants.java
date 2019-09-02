@@ -16,9 +16,11 @@ public class Constants {
     public static final String MDB_COL_SCAN_DURATION = "scan:duration";
 
     public static final String MDB_TAB_HOST = "monitor_host";
-
+    @Deprecated
     public static final String HOST_STATUS_UP = "1";
+    @Deprecated
     public static final String HOST_STATUS_DOWN = "0";
+    @Deprecated
     public static final String HOST_STATUS_UNKNOWN = "5";
 
 
