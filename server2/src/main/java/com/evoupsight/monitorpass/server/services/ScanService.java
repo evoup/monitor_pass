@@ -148,6 +148,8 @@ public class ScanService {
                             HashMap<String, Object> dataPoints = queryDtos.get(0).getDps();
                             for (Map.Entry<String, Object> entry : dataPoints.entrySet()) {
                                 dbValue = entry.getValue().toString();
+                                // 在线
+                                serverCache.makeUp(server.getId());
                                 break;
                             }
                             return dbValue;

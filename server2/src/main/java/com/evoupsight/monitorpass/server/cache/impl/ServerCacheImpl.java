@@ -48,7 +48,7 @@ public class ServerCacheImpl implements ServerCache {
         templateExample.createCriteria().andIdEqualTo(id);
         List<Template> templates = templateMapper.selectByExample(templateExample);
         List<RelationTemplateServerGroup> relationTemplateServerGroups = new ArrayList<>();
-        templates.stream().filter(Objects::nonNull).forEach( t-> {
+        templates.stream().filter(Objects::nonNull).forEach(t -> {
             // 根据templates找对应的服务器组
             RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
             relationTemplateServerGroupExample.createCriteria().andIdEqualTo(t.getId().intValue());
@@ -76,7 +76,21 @@ public class ServerCacheImpl implements ServerCache {
      * 设置宕机
      */
     @Override
-    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_on_down-'+ #hostId", unless = "#result == null",
+    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_on-'+ #hostId", unless = "#result == null",
+            condition = "#hostId != null", cacheManager = CACHE_MANAGER_GUAVA_EVENT)
+    public String makeUp(Integer hostId) {
+        Server server = new Server();
+        server.setId(hostId);
+        server.setStatus(Constants.ServerStatus.ON.ordinal());
+        serverMapper.updateByPrimaryKeySelective(server);
+        return "ok";
+    }
+
+    /**
+     * 设置宕机
+     */
+    @Override
+    @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_down-'+ #hostId", unless = "#result == null",
             condition = "#hostId != null", cacheManager = CACHE_MANAGER_GUAVA_EVENT)
     public String makeDown(Integer hostId) {
         Server server = new Server();
