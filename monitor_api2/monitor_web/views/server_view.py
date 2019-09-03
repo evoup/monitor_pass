@@ -52,7 +52,9 @@ class ServerInfo(APIView):
             'message': '创建服务器失败'
         }
         try:
-            i, _ = IDC.objects.get_or_create(name=data['idc'])
+            i = None
+            if data['idc'] is not None:
+                i, _ = IDC.objects.get_or_create(name=data['idc'])
             a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, host_name=data['name'])
             if not data['data_collector']:
                 ret['message'] = ret['message'] + ":需要先创建数据收集器"
