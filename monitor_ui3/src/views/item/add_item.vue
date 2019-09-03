@@ -68,7 +68,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addItem(form.name, form.key, form.multiplier, dataShowOptionModel, form.unit, form.desc)">创建</el-button>
+        <el-button type="primary" @click="addItem(form.name, form.key, form.multiplier, form.interval, dataShowOptionModel, form.unit, form.desc)">创建</el-button>
         <el-button @click="$router.back(-1)">取消</el-button>
       </el-form-item>
     </el-form>
@@ -129,7 +129,7 @@ export default {
         name: '',
         key: '',
         multiplier: '1',
-        interval: null,
+        interval: '60',
         dataShowOptionModel: '',
         unit: '',
         desc: ''
@@ -137,8 +137,8 @@ export default {
     }
   },
   methods: {
-    addItem(a, b, c, d, e, f) {
-      add_item(a, b, c, d, e, f, this.$route.query.template_id)
+    addItem(a, b, c, d, e, f, g) {
+      add_item(a, b, c, d, e, f, g, this.$route.query.template_id)
     }
   }
 }

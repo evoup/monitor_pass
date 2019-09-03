@@ -78,7 +78,7 @@ class ItemInfo(APIView):
             return JsonResponse(ret, safe=False)
         else:
             try:
-                MonitorItem.objects.create(name=data['name'], key=data['key'], desc=data['desc'],
+                MonitorItem.objects.create(name=data['name'], delay=data['interval'], key=data['key'], desc=data['desc'],
                                            multiplier=data['multiplier'], unit=data['unit'],
                                            template_id=data['template_id'], host_id=0)
             except:
