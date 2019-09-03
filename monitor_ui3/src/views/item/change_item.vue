@@ -80,11 +80,11 @@ export default {
       dataTypeOptions: [
         {
           value: '1',
-          label: '无符号数字'
+          label: '整数'
         },
         {
           value: '2',
-          label: '浮点数字'
+          label: '浮点数'
         },
         {
           value: '3',
