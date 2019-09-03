@@ -37,7 +37,10 @@ export GOPATH=~/go/
 systemd重启服务设置
 http://www.voidcn.com/article/p-esmremgn-btw.html
 
-
+UserScripts
+```bash
+"script.crawl.store_url.percent[*],~/shell/monitor/crawl_store_url_percent.sh $1"
+```
 
 ### 开发说明
 

@@ -61,7 +61,8 @@ func GetDefaultsJson() inc.DefaultConf {
 	hostname, _ := os.Hostname()
 	jsonBlob := []byte("{\"servername\":\"" + hostname + "\",\"proclife\":\"" + inc.PROC_LIFE + "\",\"sleep\":\"" +
 		inc.SLEEP + "\",\"sendport\":\"" + inc.SEND_PORT + "\",\"sendhosts\":\"" + inc.SEND_HOSTS + "\", " +
-		"\"evictinterval\":\"" + inc.EVICTINTERVAL + "\", \"dedupinterval\":\"" + inc.DEDUPINTERVAL + "\", \"getCheckListInterval\":\"120\"}")
+		"\"evictinterval\":\"" + inc.EVICTINTERVAL + "\", \"dedupinterval\":\"" + inc.DEDUPINTERVAL +
+	    "\", \"getCheckListInterval\":\"120\", \"UserScripts\":[]}")
 	defaultConf := inc.DefaultConf{}
 	err := json.Unmarshal(jsonBlob, &defaultConf)
 	if err != nil {

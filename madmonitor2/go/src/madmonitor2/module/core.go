@@ -106,6 +106,8 @@ func Init() (*log.Logger, *jason.Object) {
 	dp1, _ := strconv.Atoi(dp)
 	readChannel := NewReadChannel(ev1, dp1)
 	reconnectChannel := NewConnectChannel()
+	userScripts, _ := object.GetStringArray("UserScripts")
+	fmt.Print(userScripts)
 
 	var dependencies []string
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
