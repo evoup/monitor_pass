@@ -51,6 +51,7 @@ type DefaultConf struct {
 	SendHosts     string
 	EvictInterval string
 	DedupInterval string
+    UserScripts   []string
 }
 
 type Conf DefaultConf
