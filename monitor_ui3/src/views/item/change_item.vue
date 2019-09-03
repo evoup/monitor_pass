@@ -155,6 +155,7 @@ export default {
         this.form.multiplier = response.data.item.multiplier
         this.form.unit = response.data.item.unit
         this.form.desc = response.data.item.desc
+        this.form.interval = response.data.item.delay
       })
     }
   }
