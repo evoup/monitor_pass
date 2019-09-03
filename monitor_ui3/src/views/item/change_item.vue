@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
+    <el-form ref="form" :model="form" label-width="140px">
       <el-form-item label="名称">
         <el-col :span="8">
           <el-input v-model="form.name" placeholder="请输入名称"/>
@@ -26,6 +26,11 @@
       <el-form-item label="数据倍率">
         <el-col :span="8">
           <el-input v-model="form.multiplier" placeholder="数据倍率"/>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="数据收集间隔秒数">
+        <el-col :span="8">
+          <el-input v-model="form.interval" placeholder="数据收集间隔秒数"/>
         </el-col>
       </el-form-item>
       <el-form-item label="数据存储">
@@ -125,6 +130,7 @@ export default {
       form: {
         client: '',
         name: '',
+        interval: null,
         jmx: '',
         snmp: '',
         idc: '',
