@@ -368,7 +368,6 @@ func run_get_config(sc *ServerConn) {
 
 func process_line(readChannel inc.ReaderChannel, line string) {
 	// msg的第一位是sysload是模块名
-	// fmt.Println("process_line: " + msg)
 	readChannel.AddLinesCollected()
 	// 解析消息
 	r := regexp.MustCompile(`^([a-zA-Z0-9]+)\s+([.a-zA-Z0-9,_/\-\[\]]+)\s+(\d+\.?\d+)\s+(\S+?)((?:\s+[-_./a-zA-Z0-9]+=[-_./a-zA-Z0-9]+)*)\n$`)

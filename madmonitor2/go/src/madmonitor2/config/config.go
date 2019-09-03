@@ -17,44 +17,11 @@ package config
 
 import "os"
 import (
-	"bufio"
-	"encoding/json"
-	"fmt"
-	"madmonitor2/inc"
+    "encoding/json"
+    "fmt"
+    "madmonitor2/inc"
 )
 
-// Configuration values to use as defaults in the code
-func GetDefaults() map[string]string {
-	hostname, _ := os.Hostname()
-	var defaultConf = map[string]string{
-		"server_name":    hostname,
-		"proc_life":      inc.PROC_LIFE,
-		"sleep":          inc.SLEEP,
-		"send_port":      inc.SEND_PORT,
-		"upload_url":     "",
-		"upload_host":    "172.18.0.30",
-		"upload_port":    "80",
-		"upload_version": "monitor_server2r1_1",
-		"upload_suffix":  "m1",
-		"send_hosts":     "172.18.0.1,172.18.0.2",
-		"getCheckListInterval": "120",
-	}
-	return defaultConf
-}
-
-func WriteConf(confFileIn string) error {
-	conf := GetDefaults()
-	file, err := os.Create(confFileIn)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	w := bufio.NewWriter(file)
-	for k, v := range conf {
-		fmt.Fprintln(w, k+"="+v)
-	}
-	return w.Flush()
-}
 
 // Configuration values to use as defaults in the code
 func GetDefaultsJson() inc.DefaultConf {
