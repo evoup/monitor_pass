@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -60,6 +61,7 @@ class ItemInfo(APIView):
         """
         在指定模板下添加监控项
         """
+        data = JSONParser().parse(self.request)
         pass
 
 

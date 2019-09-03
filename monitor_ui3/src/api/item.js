@@ -23,3 +23,18 @@ export function read_item(param) {
     params: param
   })
 }
+
+export function add_item(name, key, multiplier, show, unit, desc) {
+  return request({
+    url: '/item/info',
+    method: 'post',
+    data: {
+      name,
+      key,
+      multiplier,
+      show,
+      unit,
+      desc
+    }
+  })
+}

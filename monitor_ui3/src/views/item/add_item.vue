@@ -63,7 +63,7 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addServer(form.name,form.client, form.jmx, form.snmp, form.idc)">创建</el-button>
+        <el-button type="primary" @click="addItem(form.name, form.key, form.multiplier, dataShowOptionModel, form.unit, form.desc)">创建</el-button>
         <el-button @click="$router.back(-1)">取消</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { add_server } from '../../api/server'
+import { add_item } from '../../api/item'
 export default {
   data() {
     return {
@@ -137,8 +137,8 @@ export default {
     }
   },
   methods: {
-    addServer(a, b, c, d, e) {
-      add_server(a, b, c, d, e)
+    addItem(a, b, c, d, e, f) {
+      add_item(a, b, c, d, e, f)
     }
   }
 }
