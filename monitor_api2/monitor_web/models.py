@@ -44,7 +44,6 @@ class UserGroup(models.Model):
     Overwrites original Django Group.
     用户组表 扩展自django auth_group
     """
-    # name = models.CharField(u'用户组名', max_length=40, null=False)
     group = models.OneToOneField('auth.Group', unique=True, on_delete=models.CASCADE)
     profile = models.ManyToManyField('Profile', db_table='r_usergroup_profile', blank=True)
     desc = models.CharField(max_length=512, blank=True, default="")
@@ -143,7 +142,6 @@ class DataCollector(models.Model):
     port = models.IntegerField(u'端口号')
 
     class Meta:
-        # ordering = ('id',)
         verbose_name_plural = '数据收集器表'
         db_table = 'data_collector'
 
@@ -168,7 +166,6 @@ class Event(models.Model):
     acknowledge = models.CharField(u'确认文字', max_length=200, default='')
 
     class Meta:
-        # ordering = ('id',)
         verbose_name_plural = '监控事件表'
         db_table = 'event'
 
@@ -220,7 +217,6 @@ class MonitorSet(models.Model):
     name = models.CharField(u'监控集名', max_length=40, null=False)
 
     class Meta:
-        # ordering = ('id',)
         verbose_name_plural = '监控集表'
         db_table = 'set'
 
@@ -275,7 +271,7 @@ class RelationUserItem(models.Model):
         db_table = 'r_user_item'
 
     def __str__(self):
-        return self.user_id + ":" + self.template + ":" + self.item_id
+        return '%s:%s:%s' % (self.user_id, self.template, self.item_id)
 
 
 class Trigger(models.Model):
