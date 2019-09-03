@@ -30,7 +30,8 @@ import (
 	"os/signal"
 	"regexp"
 	"strconv"
-	"syscall"
+    "strings"
+    "syscall"
 	"time"
 	"encoding/json"
     "net"
@@ -107,7 +108,11 @@ func Init() (*log.Logger, *jason.Object) {
 	readChannel := NewReadChannel(ev1, dp1)
 	reconnectChannel := NewConnectChannel()
 	userScripts, _ := object.GetStringArray("UserScripts")
-	fmt.Print(userScripts)
+    for _, userScript := range userScripts {
+        keyCmd := strings.Split(userScript, ",")
+        fmt.Println(keyCmd[0])
+        fmt.Println(keyCmd[1])
+    }
 
 	var dependencies []string
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
