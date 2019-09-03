@@ -121,24 +121,18 @@ export default {
       ],
       dataShowOptionModel: '1',
       form: {
-        client: '',
         name: '',
-        jmx: '',
-        snmp: '',
-        idc: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
+        key: '',
+        multiplier: '1',
+        dataShowOptionModel: '',
+        unit: '',
         desc: ''
       }
     }
   },
   methods: {
     addItem(a, b, c, d, e, f) {
-      add_item(a, b, c, d, e, f)
+      add_item(a, b, c, d, e, f, this.$route.query.template_id)
     }
   }
 }
