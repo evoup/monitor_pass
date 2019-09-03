@@ -39,7 +39,7 @@ http://www.voidcn.com/article/p-esmremgn-btw.html
 
 UserScripts的配置，UserScripts是用户脚本，格式为<key>:<command>，语法和zabbix完全一样
 ```bash
-"script.crawl.store_url.percent[*],~/shell/monitor/crawl_store_url_percent.sh $1"
+"script.crawl.store_url.percent[*],/services/monitor2_deal/script/crawl_store_url_percent.sh $1"
 ```
 其中key为script.crawl.store_url.percent，[*]为参数，*对应$1-$9共九个参数
 
