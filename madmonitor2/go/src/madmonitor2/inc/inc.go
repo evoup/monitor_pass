@@ -28,6 +28,7 @@ const (
 	CONF_FILE      = "madmonitor2.ini"
 	CONF_SUBPATH   = "conf/"
 	WORK_SUBPATH   = "work/"
+	SCRIPT_SUBPATH   = "script/"
 	PROC_LIFE      = "3600"
 	SLEEP          = "10"
 	SEND_PORT      = "8090"
