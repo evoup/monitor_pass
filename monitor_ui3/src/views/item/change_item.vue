@@ -24,12 +24,12 @@
         </el-col>
       </el-form-item>
       <el-form-item label="数据倍率">
-        <el-col :span="8">
+        <el-col :span="2">
           <el-input v-model="form.multiplier" placeholder="数据倍率"/>
         </el-col>
       </el-form-item>
       <el-form-item label="数据收集间隔秒数">
-        <el-col :span="8">
+        <el-col :span="4">
           <el-input v-model="form.interval" placeholder="数据收集间隔秒数"/>
         </el-col>
       </el-form-item>
@@ -58,7 +58,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="数据单位">
-        <el-col :span="8">
+        <el-col :span="2">
           <el-input v-model="form.unit" placeholder="请输入数据单位"/>
         </el-col>
       </el-form-item>
