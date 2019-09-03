@@ -1,3 +1,5 @@
+import traceback
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -8,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import models
+from monitor_web.models import MonitorItem
 from monitor_web.serializers import ItemSerializer
 from web.common import constant
 from web.common.paging import paging_request
@@ -61,8 +64,31 @@ class ItemInfo(APIView):
         """
         在指定模板下添加监控项
         """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建监控项失败'
+        }
         data = JSONParser().parse(self.request)
-        pass
+        item = MonitorItem.objects.filter(key=data['key'])
+        if item.count() > 0:
+            ret = {
+                'code': constant.BACKEND_CODE_OPT_FAIL,
+                'message': '创建监控项失败，已经存在'
+            }
+            return JsonResponse(ret, safe=False)
+        else:
+            try:
+                MonitorItem.objects.create(name=data['name'], key=data['key'], desc=data['desc'],
+                                           multiplier=data['multiplier'], unit=data['unit'],
+                                           template_id=data['template_id'], host_id=0)
+            except:
+                print(traceback.format_exc())
+                return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '创建监控项成功'
+        }
+        return JsonResponse(ret, safe=False)
 
 
 @permission_classes((IsAuthenticated,))

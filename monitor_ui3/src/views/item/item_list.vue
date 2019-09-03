@@ -155,7 +155,7 @@ export default {
     },
     // 跳转到监控项添加页面
     jumpAddItem() {
-      this.$router.push({ path: '/add_item' })
+      this.$router.push({ path: '/add_item?template_id=' + this.$route.query.template_id })
     },
     // 跳转到监控项修改页面
     jumpChangeItem(id) {
