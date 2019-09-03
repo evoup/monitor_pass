@@ -243,7 +243,7 @@ class MonitorItem(models.Model):
     delay = models.IntegerField(u'轮询间隔秒数', default=1)
     desc = models.CharField(u'描述', max_length=512, default='')
     error = models.CharField(u'错误', max_length=128, default='')
-    key = models.CharField(u'opentsdb指标名', max_length=128, default='')
+    key = models.CharField(u'opentsdb指标名', max_length=128, default='', unique=True)
     multiplier = models.FloatField(u'自定义乘子', default=1.0)
     unit = models.CharField(u'单位', max_length=12, default='')
     # 0代表不属于任何
@@ -351,8 +351,9 @@ class DashBoard(models.Model):
     id = models.BigAutoField(primary_key=True)
 
     class Meta:
-        verbose_name_plural = 'Grafana仪表盘表'
-        db_table = 'grafana_dashboard'
+        verbose_name_plural = '首页仪表盘表'
+        db_table = 'dashboard'
+
 
 class Function(models.Model):
     """

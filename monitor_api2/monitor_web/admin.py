@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
 from django.contrib.auth.models import Group
 
 from monitor_web import models
@@ -29,6 +28,8 @@ admin.site.register(models.Diagram)
 admin.site.register(models.DiagramItem)
 admin.site.register(models.GeneralConfig)
 admin.site.register(models.GrafanaDashboard)
+admin.site.register(models.DashBoard)
+
 
 # ----------扩展django用户组开始-----------------
 class GroupInline(admin.StackedInline):
@@ -38,11 +39,10 @@ class GroupInline(admin.StackedInline):
 
 
 class GroupAdmin(BaseGroupAdmin):
-    inlines = (GroupInline, )
+    inlines = (GroupInline,)
+
 
 # Re-register GroupAdmin
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 # ----------扩展django用户组结束-----------------
-
-

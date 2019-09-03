@@ -55,6 +55,13 @@ class ItemInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.add_monitoritem', raise_exception=True))
+    def post(self, request, pk=None, format=None):
+        """
+        在指定模板下添加监控项
+        """
+        pass
+
 
 @permission_classes((IsAuthenticated,))
 class ItemStatus(APIView):
