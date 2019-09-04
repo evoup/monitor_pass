@@ -37,10 +37,12 @@ public class ItemCacheImpl implements ItemCache {
         if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
             RelationServerServerGroup relationServerServerGroup = relationServerServerGroups.get(0);
             Integer servergroupId = relationServerServerGroup.getServergroupId();
-            ServerGroup serverGroup = serverGroupMapper.selectByPrimaryKey(servergroupId);
-            if (serverGroup != null) {
+            ServerGroupExample serverGroupExample = new ServerGroupExample();
+            serverGroupExample.createCriteria().andIdEqualTo(servergroupId);
+            List<ServerGroup> serverGroups = serverGroupMapper.selectByExample(serverGroupExample);
+            if (CollectionUtils.isNotEmpty(serverGroups)) {
                 RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
-                relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(serverGroup.getId());
+                relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(serverGroups.get(0).getId());
                 List<RelationTemplateServerGroup> relationTemplateServerGroups = relationTemplateServerGroupMapper.selectByExample(relationTemplateServerGroupExample);
                 List<Integer> templateIds = relationTemplateServerGroups.stream().filter(Objects::nonNull).map(r -> r.getTemplateId().intValue()).collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(templateIds)) {
