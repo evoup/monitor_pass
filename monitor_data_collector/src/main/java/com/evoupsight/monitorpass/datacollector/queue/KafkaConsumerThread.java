@@ -46,8 +46,8 @@ public class KafkaConsumerThread extends Thread {
             LOG.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
-            LOG.error("close kafka consumer");
-            consumer.close();
+//            LOG.error("close kafka consumer");
+//            consumer.close();
         }
     }
 }
