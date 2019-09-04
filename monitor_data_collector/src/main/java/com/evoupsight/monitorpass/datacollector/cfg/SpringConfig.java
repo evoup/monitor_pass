@@ -209,6 +209,9 @@ public class SpringConfig {
         return Executors.newFixedThreadPool(5);
     }
 
-
+    @Bean(name = "monitorItemConfigExecutorServiceThreadPool")
+    public ExecutorService monitorItemConfigExecutorServiceThreadPool() {
+        return Executors.newFixedThreadPool(5);
+    }
 
 }
