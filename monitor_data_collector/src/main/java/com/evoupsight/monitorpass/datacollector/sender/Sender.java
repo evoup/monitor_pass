@@ -1,7 +1,7 @@
 package com.evoupsight.monitorpass.datacollector.sender;
 
 
-import com.evoupsight.monitorpass.constants.ServerStatusEnum;
+import com.evoupsight.monitorpass.datacollector.constants.ServerStatusEnum;
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.DataCollector;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;

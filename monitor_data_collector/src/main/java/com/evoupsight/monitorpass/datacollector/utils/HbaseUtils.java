@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 
-import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_HOST;
-import static com.evoupsight.monitorpass.constants.Constants.MDB_TAB_HOSTS;
+import static com.evoupsight.monitorpass.datacollector.constants.Constants.MDB_TAB_HOST;
+import static com.evoupsight.monitorpass.datacollector.constants.Constants.MDB_TAB_HOSTS;
 
 /**
  * @author evoup

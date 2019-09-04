@@ -1,4 +1,4 @@
-package com.evoupsight.monitorpass.constants;
+package com.evoupsight.monitorpass.datacollector.constants;
 
 /**
  * 服务器状态的常量

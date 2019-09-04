@@ -1,5 +1,6 @@
-package com.evoupsight.monitorpass.constants;
+package com.evoupsight.monitorpass.datacollector.constants;
 
+@Deprecated
 public class Constants {
     public static final String MDB_TAB_HOSTS = "monitor_hosts";
     public static final String MDB_TAB_HOST = "monitor_host";
