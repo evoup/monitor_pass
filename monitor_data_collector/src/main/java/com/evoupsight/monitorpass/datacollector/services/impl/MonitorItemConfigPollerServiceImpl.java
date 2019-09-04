@@ -1,9 +1,12 @@
 package com.evoupsight.monitorpass.datacollector.services.impl;
 
+import com.evoupsight.monitorpass.datacollector.cache.ItemCache;
 import com.evoupsight.monitorpass.datacollector.constants.RpcConstant;
+import com.evoupsight.monitorpass.datacollector.dao.model.MonitorItem;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import com.evoupsight.monitorpass.datacollector.services.SnmpPollerService;
+import com.google.gson.Gson;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -30,6 +33,8 @@ public class MonitorItemConfigPollerServiceImpl {
     protected ExecutorService es;
     @Autowired
     private ServerService serverService;
+    @Autowired
+    private ItemCache itemCache;
 
     private static final Logger LOG = Logger.getLogger(SnmpPollerService.class);
 
@@ -67,7 +72,7 @@ public class MonitorItemConfigPollerServiceImpl {
      */
     public void configUpdatePoll(Server server) {
         LOG.info(server.getName() + " will be dispatch config throw json rpc");
-
+        List<MonitorItem> monitorItems = itemCache.findMonitorItems(server);
         Socket socket = null;
         try {
             if (StringUtils.isNotEmpty(server.getAgentAddress())) {
@@ -77,7 +82,7 @@ public class MonitorItemConfigPollerServiceImpl {
 
                 InputStream ips = socket.getInputStream();
                 OutputStream ops = socket.getOutputStream();
-                int reply = client.invokeAndReadResponse("MonitorItemConfig.Update", new Object[]{"memeda"}, int.class, ops, ips);
+                int reply = client.invokeAndReadResponse("MonitorItemConfig.Update", new Object[]{new Gson().toJson(monitorItems)}, int.class, ops, ips);
                 System.out.println("reply: " + reply);
                 if (RpcConstant.SERVER_OK.code.equals(reply)) {
                     System.out.println("调用服务成功");
