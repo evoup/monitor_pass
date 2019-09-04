@@ -187,7 +187,6 @@ export default {
       })
     },
     genGrafana() {
-      this.y = this.x + Date.parse(new Date())
       this.shit_key = this.shit_key + 1
     },
     // 删除服务器

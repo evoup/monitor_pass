@@ -149,6 +149,7 @@ public class Sender {
                                 server.setCreateAt(new Date());
                                 server.setIp(map.get("ip"));
                                 server.setLastOnline(new Date());
+                                server.setConfigUpdated(true);
                                 sender.serverMapper.insert(server);
                             }
                         } else {

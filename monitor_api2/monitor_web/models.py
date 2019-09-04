@@ -100,6 +100,8 @@ class Server(models.Model):
     snmp_address = models.CharField('SNMP地址', max_length=50, default='', null=True)
     data_collector = models.ForeignKey('DataCollector', verbose_name='数据收集器', null=True, blank=True,
                                        on_delete=models.SET_NULL)
+    # 数据收集器会扫描这个字段，如果未更新则会触发rpc调用监控代理的更新
+    config_updated = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = '服务器表'
