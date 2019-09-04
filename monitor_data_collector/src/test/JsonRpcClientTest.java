@@ -10,8 +10,8 @@ public class JsonRpcClientTest {
     public void aTest() {
         try {
             Server server = new Server();
-            server.setName("testServer");
-            server.setHostname("testServer");
+            server.setName("evoup-Inspiron-3443");
+            server.setHostname("evoup-Inspiron-3443");
             server.setAgentAddress("192.168.2.194:8338");
             new MonitorItemConfigPollerServiceImpl().configUpdatePoll(server);
         } catch (Throwable throwable) {
