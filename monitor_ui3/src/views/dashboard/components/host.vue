@@ -56,7 +56,7 @@ export default {
   methods: {
     fetchData() {
       dashboard_server_list().then(response => {
-        for (let i in response.data.items) {
+        for (const i in response.data.items) {
           if (response.data.items[i].status === 0) {
             this.dataList[0].num++
           } else if (response.data.items[i].status === 1) {
