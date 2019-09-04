@@ -19,8 +19,6 @@ import (
 	"github.com/antonholmquist/jason"
 	"log"
 	"sync"
-    "github.com/patrickmn/go-cache"
-    "time"
 )
 
 const (
@@ -43,6 +41,8 @@ const (
 	MAX_READQ_SIZE = 100000
 	MAX_MSGQ_SIZE  = 100000
 	MAX_CONNQ_SIZE = 1
+	RPC_SERVER_OK = 20000
+	RPC_SERVER_FAIL = 40000
 )
 
 type DefaultConf struct {
@@ -199,4 +199,4 @@ type ItemConf struct {
 	Delta string `json:"multiplier"`
 }
 
-var Cache = cache.New(5*time.Minute, 10*time.Minute)
+

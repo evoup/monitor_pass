@@ -6,11 +6,11 @@ import (
     "net"
     "net/rpc/jsonrpc"
     "strings"
-    "github.com/patrickmn/go-cache"
     "madmonitor2/inc"
 )
 
 // 本地jsonrpc服务结构
+// sample
 type Counter struct {
     Sum               int
     monitorItemConfig string
@@ -23,10 +23,23 @@ func (this *Counter) Add(i int, r *int) error {
     return nil
 }
 
+type MonitorItemConfig struct {
+    monitorItemConfig string
+}
+
+func (this *MonitorItemConfig) Update(configStr string, r *int) error {
+    this.monitorItemConfig = configStr
+    fmt.Printf("configStr: %vpong", configStr)
+    *r = inc.RPC_SERVER_OK
+    return nil
+}
+
+
 //NewUpdateConfigServer jsonRpc服务，接收来自数据收集器发送的监控项配置，并写入缓存，供collector获取，按照系统的设置工作
 func NewUpdateConfigServer() {
-
-    rpc.Register(new(Counter))
+    // sample
+    //rpc.Register(new(Counter))
+    rpc.Register(new(MonitorItemConfig))
 
     l, err := net.Listen("tcp", ":8338")
     if err != nil {
@@ -34,7 +47,6 @@ func NewUpdateConfigServer() {
         return
     }
     fmt.Println("open local update config service")
-    inc.Cache.Set("monitor_item_config", "", cache.NoExpiration)
     for {
         fmt.Println("wating...")
         conn, err := l.Accept()
