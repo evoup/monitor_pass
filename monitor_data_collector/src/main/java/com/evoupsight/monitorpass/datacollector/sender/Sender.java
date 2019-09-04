@@ -152,7 +152,11 @@ public class Sender {
                                     server.setIp(map.get("ip"));
                                     server.setLastOnline(new Date());
                                     server.setConfigUpdated(true);
-                                    sender.serverMapper.insert(server);
+                                    try {
+                                        sender.serverMapper.insert(server);
+                                    } catch (Exception e) {
+                                        LOG.warn(e.getMessage(), e);
+                                    }
                                 }
                             } else {
                                 // 老朋友了，只更新时间
