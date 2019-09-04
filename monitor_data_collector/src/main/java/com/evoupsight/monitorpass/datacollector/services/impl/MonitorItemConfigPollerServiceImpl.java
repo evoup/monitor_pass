@@ -5,6 +5,7 @@ import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import com.evoupsight.monitorpass.datacollector.services.SnmpPollerService;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -68,17 +69,20 @@ public class MonitorItemConfigPollerServiceImpl {
         LOG.info(server.getName() + " will be dispatch config throw json rpc");
         Socket socket = null;
         try {
-            socket = new Socket("127.0.0.1", 8338);
-            JsonRpcClient client = new JsonRpcClient();
+            if (StringUtils.isNotEmpty(server.getAgentAddress())) {
+                String[] str = server.getAgentAddress().split(":");
+                socket = new Socket(str[0], Integer.valueOf(str[1]));
+                JsonRpcClient client = new JsonRpcClient();
 
-            InputStream ips = socket.getInputStream();
-            OutputStream ops = socket.getOutputStream();
-            int reply = client.invokeAndReadResponse("MonitorItemConfig.Update", new Object[]{"memeda"}, int.class, ops, ips);
-            System.out.println("reply: " + reply);
-            if (RpcConstant.SERVER_OK.code.equals(reply)) {
-                System.out.println("调用服务成功");
-            } else {
-                System.out.println("调用服务失败");
+                InputStream ips = socket.getInputStream();
+                OutputStream ops = socket.getOutputStream();
+                int reply = client.invokeAndReadResponse("MonitorItemConfig.Update", new Object[]{"memeda"}, int.class, ops, ips);
+                System.out.println("reply: " + reply);
+                if (RpcConstant.SERVER_OK.code.equals(reply)) {
+                    System.out.println("调用服务成功");
+                } else {
+                    System.out.println("调用服务失败");
+                }
             }
         } catch (Throwable throwable) {
             LOG.error(throwable.getMessage(), throwable);
