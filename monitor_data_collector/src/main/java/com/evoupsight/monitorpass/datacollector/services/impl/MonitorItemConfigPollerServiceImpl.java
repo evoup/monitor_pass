@@ -1,6 +1,8 @@
 package com.evoupsight.monitorpass.datacollector.services.impl;
 
 import com.evoupsight.monitorpass.datacollector.constants.RpcConstant;
+import com.evoupsight.monitorpass.datacollector.dao.model.Server;
+import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import com.evoupsight.monitorpass.datacollector.services.SnmpPollerService;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import org.apache.log4j.Logger;
@@ -25,10 +27,17 @@ public class MonitorItemConfigPollerServiceImpl {
     @Autowired
     @Qualifier("monitorItemConfigExecutorServiceThreadPool")
     protected ExecutorService es;
+    @Autowired
+    private ServerService serverService;
+
     private static final Logger LOG = Logger.getLogger(SnmpPollerService.class);
 
     public void poll() {
-        int totalTaskNum = 10;
+        // 每个被监控主机作为一个任务
+        LOG.info(serverService);
+        List<Server> servers = serverService.fetchAllMonitoringServer();
+        int totalTaskNum = servers.size();
+        LOG.info("there`re " + totalTaskNum + "servers to be dispatch config");
 
         List<Callable<Boolean>> callableTasks = new ArrayList<>();
         for (int i = 0; i < totalTaskNum; i++) {

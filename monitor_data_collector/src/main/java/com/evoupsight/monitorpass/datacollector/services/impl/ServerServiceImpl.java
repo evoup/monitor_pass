@@ -1,5 +1,6 @@
 package com.evoupsight.monitorpass.datacollector.services.impl;
 
+import com.evoupsight.monitorpass.datacollector.constants.ServerStatusEnum;
 import com.evoupsight.monitorpass.datacollector.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.dao.model.ServerExample;
@@ -28,5 +29,12 @@ public class ServerServiceImpl implements ServerService {
             return servers.get(0);
         }
         return null;
+    }
+
+    @Override
+    public List<Server> fetchAllMonitoringServer() {
+        ServerExample example = new ServerExample();
+        example.createCriteria().andStatusNotEqualTo(ServerStatusEnum.UNMONTORING.ordinal());
+        return serverMapper.selectByExample(example);
     }
 }
