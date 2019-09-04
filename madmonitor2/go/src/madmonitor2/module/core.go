@@ -37,22 +37,19 @@ import (
     "net"
 )
 
-// start unix timestamp
-var StartTime = time.Now().Unix()
-
 var errlog *log.Logger
 
 // flag define
 var version = flag.Bool("version", false, "")
-var Debug_level = flag.Int("d", 4, "-d=4")
+var DebugLevel = flag.Int("d", 4, "-d=4")
 var Pidfile = flag.String("pidfile", "/var/run/madmonitor2.pid", "Write our pidfile")
 var daemonize = flag.Bool("daemonize", false, "Run as a background daemon.")
 var daemonizeShort = flag.Bool("D", false, "Run as a background daemon.")
-var Service_install = flag.Bool("service_install", false, "")
-var Service_remove = flag.Bool("service_remove", false, "")
-var Service_start = flag.Bool("service_start", false, "")
-var Service_stop = flag.Bool("service_stop", false, "")
-var Service_status = flag.Bool("service_status", false, "")
+var ServiceInstall = flag.Bool("service_install", false, "")
+var ServiceRemove = flag.Bool("service_remove", false, "")
+var ServiceStart = flag.Bool("service_start", false, "")
+var ServiceStop = flag.Bool("service_stop", false, "")
+var ServiceStatus = flag.Bool("service_status", false, "")
 
 // Service has embedded daemon
 type Service struct {
@@ -76,15 +73,15 @@ func Init() (*log.Logger, *jason.Object) {
 		os.Exit(0)
 	}
 
-	utils.Debug_level = *Debug_level
+	utils.Debug_level = *DebugLevel
 
 	logger := utils.GetLogger()
-	utils.Log(logger, "core.Init][Initiating server........................", 4, *Debug_level)
+	utils.Log(logger, "core.Init][Initiating server........................", 4, *DebugLevel)
 	/** make sure only one process running **/
-	var pid_file = *Pidfile
-	pid := utils.FileGetContent(pid_file)
+	var pidFile = *Pidfile
+	pid := utils.FileGetContent(pidFile)
 	if pid == "" {
-		utils.FilePutContent(pid_file, fmt.Sprintf("%d", os.Getpid()))
+		utils.FilePutContent(pidFile, fmt.Sprintf("%d", os.Getpid()))
 	}
 	/*if false == utils.SingleProc(pid_file) {
 		utils.Log(logger, "core.Init][last upload process exists", 4, *Debug_level)
@@ -117,14 +114,14 @@ func Init() (*log.Logger, *jason.Object) {
 	var dependencies []string
 	srv, err := daemon.New(inc.SERVICE_NAME, inc.SERVICE_DESC, dependencies...)
 	if err != nil {
-		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *Debug_level)
+		utils.Log(logger, "core.Init][err:"+err.Error(), 1, *DebugLevel)
 		errlog.Println("Error: ", err)
 		os.Exit(1)
 	}
 	service := &Service{srv}
 	status, err := service.Manage(*readChannel, reconnectChannel)
 	if err != nil {
-		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *Debug_level)
+		utils.Log(logger, "core.Init][status:"+status+"][err:"+err.Error(), 1, *DebugLevel)
 		errlog.Println(status, "\nError: ", err)
 		os.Exit(1)
 	}
@@ -137,17 +134,17 @@ func Init() (*log.Logger, *jason.Object) {
 func buildConf(logger *log.Logger) {
 	confExists := utils.FileExists(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
 	if confExists {
-		utils.Log(logger, "core.Init][conf and work dir existed", 4, *Debug_level)
+		utils.Log(logger, "core.Init][conf and work dir existed", 4, *DebugLevel)
 	} else {
-		utils.Log(logger, "core.Init][conf and work dir not existed", 4, *Debug_level)
+		utils.Log(logger, "core.Init][conf and work dir not existed", 4, *DebugLevel)
 		wd, _ := os.Getwd()
-		utils.Log(logger, "core.Init][current dir:"+wd, 4, *Debug_level)
+		utils.Log(logger, "core.Init][current dir:"+wd, 4, *DebugLevel)
 		utils.MakeDir(inc.PROC_ROOT, "0755")
 		utils.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
 		utils.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
 		utils.MakeDir(inc.PROC_ROOT+"/"+inc.SCRIPT_SUBPATH, "0755")
 		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
-		utils.Log(logger, "core.Init][build configuration file,done. run again", 4, *Debug_level)
+		utils.Log(logger, "core.Init][build configuration file,done. run again", 4, *DebugLevel)
 		os.Exit(0)
 	}
 }
@@ -171,20 +168,20 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	// if received any kind of command, do it
-	if *Service_install {
+	if *ServiceInstall {
 		return service.Install()
 	}
-	if *Service_remove {
+	if *ServiceRemove {
 		return service.Remove()
 	}
-	if *Service_start {
+	if *ServiceStart {
 		return service.Start()
 	}
-	if *Service_stop {
+	if *ServiceStop {
 		fmt.Println("stop")
 		return service.Stop()
 	}
-	if *Service_status {
+	if *ServiceStatus {
 		return service.Status()
 	}
     // Listen for monitor server incoming connections.
@@ -198,22 +195,22 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
     go LocalService(l)
 	// because system network maybe not ready after reboot, when as a systemd service called, so wait a few seconds
 	time.Sleep(time.Second*1)
-	go run_read(readChannel)
+	go runRead(readChannel)
 
 	// we must open connection to server before send data
 	//cName, foundServer, serverConn := ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
 	ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
 	//go run_reconnect(ServerConnection, readChannel, reconnectChannel)
-	go run_get_config(ServerConnection)
+	go runGetConfig(ServerConnection)
 	//auth(serverConn, cName, foundServer, readChannel, reconnectChannel)
 
-	go main_loop()
+	go mainLoop()
 
 	for {
 		select {
 		case killSignal := <-interrupt:
 			fmt.Println("Got signal:", killSignal)
-			utils.Log(HLog, "core.Init][last upload process exists", 1, *Debug_level)
+			utils.Log(HLog, "core.Init][last upload process exists", 1, *DebugLevel)
 			if killSignal == os.Interrupt {
 				return "Daemon was interrupted by system signal", nil
 			}
@@ -245,7 +242,7 @@ func auth(serverConn *ServerConn, cName string, foundServer bool, readChannel in
 		serverSignature := submatch[0][1]
 		decodeBytes, err := base64.StdEncoding.DecodeString(serverSignature)
 		if err != nil {
-			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *DebugLevel)
 			os.Exit(1)
 		}
 		fmt.Println("decodeBytes:" + string(decodeBytes))
@@ -253,30 +250,30 @@ func auth(serverConn *ServerConn, cName string, foundServer bool, readChannel in
 		cHeader := ClientHeader
 		if !isValidServer(cName, cPass, cNonce, []byte(sNonce), salt, cHeader, decodeBytes, iter,
 			string(serverFirstMessageData)) {
-			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+			utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *DebugLevel)
 			os.Exit(1)
 		}
 	} else {
-		utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *Debug_level)
+		utils.Log(utils.GetLogger(), "core.Init][error:auth invalid", 1, *DebugLevel)
 		os.Exit(1)
 	}
 	if foundServer {
-		go run_send(readChannel, serverConn, reconnectChannel)
+		go runSend(readChannel, serverConn, reconnectChannel)
 	} else {
-		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *Debug_level)
+		utils.Log(utils.GetLogger(), "core.Init][all data collector servers down!", 1, *DebugLevel)
 		os.Exit(1)
 	}
 }
 
 // run_send like tcollector`s sender_thread
-func run_send(readChannel inc.ReaderChannel, sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
+func runSend(readChannel inc.ReaderChannel, sc *ServerConn, reconnectChannel *inc.ReconnectChannel) {
 	for {
 		select {
 		case msg := <-readChannel.Readerq:
 			_, err := sc.conn.Write([]byte(msg))
 			if err != nil {
 				fmt.Printf(err.Error())
-				utils.Log(HLog, "send fail, exit program", 1, *Debug_level)
+				utils.Log(HLog, "send fail, exit program", 1, *DebugLevel)
                 os.Exit(1)
 				reconnectChannel.ReconnectQueue <- "broken pipe"
 			}
@@ -286,7 +283,7 @@ func run_send(readChannel inc.ReaderChannel, sc *ServerConn, reconnectChannel *i
 }
 
 // read channel maintain
-func run_read(readChannel inc.ReaderChannel) {
+func runRead(readChannel inc.ReaderChannel) {
 	for {
 		select {
 		case msg := <-inc.MsgQueue:
@@ -294,10 +291,10 @@ func run_read(readChannel inc.ReaderChannel) {
 
 			if len(msg) > 1024 {
 				// todo check which collector produce this msg
-				utils.Log(HLog, "line to long", 1, *Debug_level)
+				utils.Log(HLog, "line to long", 1, *DebugLevel)
 				continue
 			}
-			process_line(readChannel, msg)
+			processLine(readChannel, msg)
 		}
 	}
 }
@@ -334,7 +331,7 @@ func run_reconnect(sc *ServerConn, readChannel inc.ReaderChannel, reconnectChann
 }
 
 // get conf from server
-func run_get_config(sc *ServerConn) {
+func runGetConfig(sc *ServerConn) {
 	for {
 		time.Sleep(time.Second*120)
 		//cName, _ := inc.ConfObject.GetString("ServerName")
@@ -366,12 +363,12 @@ func run_get_config(sc *ServerConn) {
 			fmt.Println("err:" + err.Error())
 		}
 		if err != nil {
-			utils.Log(HLog, "get conf error:" + err.Error(), 1, *Debug_level)
+			utils.Log(HLog, "get conf error:" + err.Error(), 1, *DebugLevel)
 		}
 	}
 }
 
-func process_line(readChannel inc.ReaderChannel, line string) {
+func processLine(readChannel inc.ReaderChannel, line string) {
 	// msg的第一位是sysload是模块名
 	readChannel.AddLinesCollected()
 	// 解析消息
@@ -409,17 +406,17 @@ func process_line(readChannel inc.ReaderChannel, line string) {
 }
 
 // 执行我们模块的收集方法
-func main_loop() {
+func mainLoop() {
 	// 检查collector的心跳，每10分钟一次
-	next_heartbeat := int(time.Now().Unix() + 600)
+	nextHeartbeat := int(time.Now().Unix() + 600)
 	for {
 		populate_collectors()
 		spawn_children()
 		time.Sleep(time.Second * 15)
-		utils.Log(utils.GetLogger(), "core.Init][main loop next iter", 2, *Debug_level)
+		utils.Log(utils.GetLogger(), "core.Init][main loop next iter", 2, *DebugLevel)
 		now := int(time.Now().Unix())
-		if now > next_heartbeat {
-			next_heartbeat = now + 600
+		if now > nextHeartbeat {
+			nextHeartbeat = now + 600
 		}
 	}
 }
