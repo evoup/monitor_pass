@@ -62,6 +62,7 @@ public class MonitorItemConfigPollerServiceImpl {
                 System.out.println("调用服务失败");
             }
         } catch (Throwable throwable) {
+            LOG.error(throwable.getMessage(), throwable);
             throwable.printStackTrace();
         } finally {
             try {
