@@ -73,6 +73,7 @@ public class MonitorItemConfigPollerServiceImpl {
     public void configUpdatePoll(Server server) {
         LOG.info(server.getName() + " will be dispatch config throw json rpc");
         List<MonitorItem> monitorItems = itemCache.findMonitorItems(server);
+        LOG.info("monitorItems:" + new Gson().toJson(monitorItems));
         Socket socket = null;
         try {
             if (StringUtils.isNotEmpty(server.getAgentAddress())) {

@@ -1,10 +1,15 @@
 import com.evoupsight.monitorpass.datacollector.dao.model.Server;
 import com.evoupsight.monitorpass.datacollector.services.impl.MonitorItemConfigPollerServiceImpl;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * https://www.cnblogs.com/geomantic/p/4751859.html
  */
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class JsonRpcClientTest {
     @Test
     public void aTest() {
