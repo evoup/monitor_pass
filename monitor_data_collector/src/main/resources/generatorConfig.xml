@@ -13,8 +13,11 @@
     
 
     <!--<table schema="" tableName="server" domainObjectName="Server">-->
-    <table schema="" tableName="template" domainObjectName="Template" />
-    <table schema="" tableName="item" domainObjectName="MonitorItem" />
+    <!--<table schema="" tableName="template" domainObjectName="Template" />-->
+    <!--<table schema="" tableName="item" domainObjectName="MonitorItem" />-->
+    <table schema="" tableName="server_group" domainObjectName="ServerGroup" />
+    <table schema="" tableName="r_server_server_group" domainObjectName="RelationServerServerGroup" />
+    <table schema="" tableName="r_template_server_group" domainObjectName="RelationTemplateServerGroup" />
 
       <!--<columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>-->
     <!--</table>-->

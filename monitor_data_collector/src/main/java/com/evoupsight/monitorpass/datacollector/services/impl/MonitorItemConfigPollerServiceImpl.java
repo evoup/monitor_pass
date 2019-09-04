@@ -67,6 +67,7 @@ public class MonitorItemConfigPollerServiceImpl {
      */
     public void configUpdatePoll(Server server) {
         LOG.info(server.getName() + " will be dispatch config throw json rpc");
+
         Socket socket = null;
         try {
             if (StringUtils.isNotEmpty(server.getAgentAddress())) {

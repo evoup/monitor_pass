@@ -73,7 +73,7 @@ public class ServerCacheImpl implements ServerCache {
     }
 
     /**
-     * 设置宕机
+     * 设置在线
      */
     @Override
     @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-host_on-'+ #hostId", unless = "#result == null",
