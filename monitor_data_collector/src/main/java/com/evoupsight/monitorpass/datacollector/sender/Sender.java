@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 发送数据到opentsdb
- *
+ * <p>
  * 加component是注入失败，要么从spring的上下文获取bean，要么采用本类做成组件，定义构造函数，在初始化该类的时候，
  * 预先加载到本类的成员变量里的变通方式
  *
@@ -134,33 +134,36 @@ public class Sender {
             if (StringUtils.isNotEmpty(host)) {
                 try {
                     if (sender.loadingCache.getIfPresent(host) == null) {
-                        LOG.info("host not in cache");
-                        if (sender.serverService.findServer(host) == null) {
-                            LOG.info("find new server:" + host);
-                            DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
-                            // 需要找到数据收集器的IP，要求部署的IP
-                            if (dataCollector != null) {
-                                // 新服务器，设置状态为没有监控
+                        // 同步避免插入重复
+                        synchronized (this) {
+                            LOG.info("host not in cache");
+                            if (sender.serverService.findServer(host) == null) {
+                                LOG.info("find new server:" + host);
+                                DataCollector dataCollector = sender.dataCollectorService.findDataCollector(dataCollectorServerName);
+                                // 需要找到数据收集器的IP，要求部署的IP
+                                if (dataCollector != null) {
+                                    // 新服务器，设置状态为没有监控
+                                    Server server = new Server();
+                                    server.setHostname(host);
+                                    server.setName(host);
+                                    server.setDataCollectorId(dataCollector.getId());
+                                    server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
+                                    server.setCreateAt(new Date());
+                                    server.setIp(map.get("ip"));
+                                    server.setLastOnline(new Date());
+                                    server.setConfigUpdated(true);
+                                    sender.serverMapper.insert(server);
+                                }
+                            } else {
+                                // 老朋友了，只更新时间
+                                ServerExample example = new ServerExample();
+                                example.createCriteria().andHostnameEqualTo(host);
                                 Server server = new Server();
-                                server.setHostname(host);
-                                server.setName(host);
-                                server.setDataCollectorId(dataCollector.getId());
-                                server.setStatus(ServerStatusEnum.UNMONTORING.ordinal());
-                                server.setCreateAt(new Date());
-                                server.setIp(map.get("ip"));
                                 server.setLastOnline(new Date());
-                                server.setConfigUpdated(true);
-                                sender.serverMapper.insert(server);
+                                sender.serverMapper.updateByExampleSelective(server, example);
                             }
-                        } else {
-                            // 老朋友了，只更新时间
-                            ServerExample example = new ServerExample();
-                            example.createCriteria().andHostnameEqualTo(host);
-                            Server server = new Server();
-                            server.setLastOnline(new Date());
-                            sender.serverMapper.updateByExampleSelective(server, example);
+                            sender.loadingCache.getUnchecked(host);
                         }
-                        sender.loadingCache.getUnchecked(host);
                     }
                 } catch (Exception e) {
                     LOG.error(e.getMessage(), e);
