@@ -32,6 +32,9 @@ public class MonitorItemConfigPollerServiceImpl {
 
     private static final Logger LOG = Logger.getLogger(SnmpPollerService.class);
 
+    /**
+     * 轮询主机分发配置
+     */
     public void poll() {
         // 每个被监控主机作为一个任务
         LOG.info(serverService);
@@ -40,8 +43,10 @@ public class MonitorItemConfigPollerServiceImpl {
         LOG.info("there`re " + totalTaskNum + " servers to be dispatch config");
 
         List<ConfigUpdateTask> tasks = new ArrayList<>();
-        for (int i = 0; i < totalTaskNum; i++) {
-            tasks.add(new ConfigUpdateTask(servers.get(i)));
+        for (Server server : servers) {
+            if (!server.getConfigUpdated()) {
+                tasks.add(new ConfigUpdateTask(server));
+            }
         }
 
         try {
@@ -54,9 +59,13 @@ public class MonitorItemConfigPollerServiceImpl {
         }
     }
 
+    /**
+     * 调用jsonrpc服务去更新监控代理配置
+     *
+     * @param server 被监控服务器
+     */
     public void configUpdatePoll(Server server) {
-        LOG.info(server.getName() + "will be dispatch config");
-        LOG.info("monitor item rpc client updater");
+        LOG.info(server.getName() + " will be dispatch config throw json rpc");
         Socket socket = null;
         try {
             socket = new Socket("127.0.0.1", 8338);
@@ -86,12 +95,14 @@ public class MonitorItemConfigPollerServiceImpl {
 
     }
 
-    public class ConfigUpdateTask implements Callable<Server>{
+    public class ConfigUpdateTask implements Callable<Server> {
         Server server;
+
         public ConfigUpdateTask(Server server) {
             configUpdatePoll(server);
             this.server = server;
         }
+
         @Override
         public Server call() {
             return server;
