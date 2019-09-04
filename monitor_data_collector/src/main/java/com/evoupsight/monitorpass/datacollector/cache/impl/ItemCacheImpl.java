@@ -37,18 +37,20 @@ public class ItemCacheImpl implements ItemCache {
         if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
             RelationServerServerGroup relationServerServerGroup = relationServerServerGroups.get(0);
             Integer servergroupId = relationServerServerGroup.getServergroupId();
-            ServerGroupExample serverGroupExample = new ServerGroupExample();
-            serverGroupExample.createCriteria().andIdEqualTo(servergroupId);
-            List<ServerGroup> serverGroups = serverGroupMapper.selectByExample(serverGroupExample);
-            if (CollectionUtils.isNotEmpty(serverGroups)) {
-                RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
-                relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(serverGroups.get(0).getId());
-                List<RelationTemplateServerGroup> relationTemplateServerGroups = relationTemplateServerGroupMapper.selectByExample(relationTemplateServerGroupExample);
-                List<Integer> templateIds = relationTemplateServerGroups.stream().filter(Objects::nonNull).map(r -> r.getTemplateId().intValue()).collect(Collectors.toList());
-                if (CollectionUtils.isNotEmpty(templateIds)) {
-                    MonitorItemExample monitorItemExample = new MonitorItemExample();
-                    monitorItemExample.createCriteria().andTemplateIdIn(templateIds);
-                    return monitorItemMapper.selectByExample(monitorItemExample);
+            if (servergroupId != null) {
+                ServerGroupExample serverGroupExample = new ServerGroupExample();
+                serverGroupExample.createCriteria().andIdEqualTo(servergroupId);
+                List<ServerGroup> serverGroups = serverGroupMapper.selectByExample(serverGroupExample);
+                if (CollectionUtils.isNotEmpty(serverGroups)) {
+                    RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
+                    relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(serverGroups.get(0).getId());
+                    List<RelationTemplateServerGroup> relationTemplateServerGroups = relationTemplateServerGroupMapper.selectByExample(relationTemplateServerGroupExample);
+                    List<Integer> templateIds = relationTemplateServerGroups.stream().filter(Objects::nonNull).map(r -> r.getTemplateId().intValue()).collect(Collectors.toList());
+                    if (CollectionUtils.isNotEmpty(templateIds)) {
+                        MonitorItemExample monitorItemExample = new MonitorItemExample();
+                        monitorItemExample.createCriteria().andTemplateIdIn(templateIds);
+                        return monitorItemMapper.selectByExample(monitorItemExample);
+                    }
                 }
             }
         }
