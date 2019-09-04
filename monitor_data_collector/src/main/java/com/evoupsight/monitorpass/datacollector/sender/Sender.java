@@ -133,9 +133,8 @@ public class Sender {
             // 写入服务器到数据库，主要为了显示到服务器列表
             if (StringUtils.isNotEmpty(host)) {
                 try {
-                    if (sender.loadingCache.getIfPresent(host) == null) {
-                        // 同步避免插入重复
-                        synchronized (this) {
+                    synchronized (this) {
+                        if (sender.loadingCache.getIfPresent(host) == null) {
                             LOG.info("host not in cache");
                             if (sender.serverService.findServer(host) == null) {
                                 LOG.info("find new server:" + host);
