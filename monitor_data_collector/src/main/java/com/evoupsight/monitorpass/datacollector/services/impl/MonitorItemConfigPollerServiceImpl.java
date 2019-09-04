@@ -37,15 +37,15 @@ public class MonitorItemConfigPollerServiceImpl {
         LOG.info(serverService);
         List<Server> servers = serverService.fetchAllMonitoringServer();
         int totalTaskNum = servers.size();
-        LOG.info("there`re " + totalTaskNum + "servers to be dispatch config");
+        LOG.info("there`re " + totalTaskNum + " servers to be dispatch config");
 
-        List<Callable<Boolean>> callableTasks = new ArrayList<>();
+        List<ConfigUpdateTask> tasks = new ArrayList<>();
         for (int i = 0; i < totalTaskNum; i++) {
-            callableTasks.add(callableTask);
+            tasks.add(new ConfigUpdateTask(servers.get(i)));
         }
 
         try {
-            es.invokeAll(callableTasks);
+            es.invokeAll(tasks);
             LOG.info("config update poll done");
             System.out.println("config update poll done");
         } catch (InterruptedException e) {
@@ -54,7 +54,8 @@ public class MonitorItemConfigPollerServiceImpl {
         }
     }
 
-    public void configUpdatePoll() {
+    public void configUpdatePoll(Server server) {
+        LOG.info(server.getName() + "will be dispatch config");
         LOG.info("monitor item rpc client updater");
         Socket socket = null;
         try {
@@ -85,8 +86,15 @@ public class MonitorItemConfigPollerServiceImpl {
 
     }
 
-    private Callable<Boolean> callableTask = () -> {
-        configUpdatePoll();
-        return Boolean.TRUE;
-    };
+    public class ConfigUpdateTask implements Callable<Server>{
+        Server server;
+        public ConfigUpdateTask(Server server) {
+            configUpdatePoll(server);
+            this.server = server;
+        }
+        @Override
+        public Server call() {
+            return server;
+        }
+    }
 }
