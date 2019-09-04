@@ -19,6 +19,8 @@ import (
 	"github.com/antonholmquist/jason"
 	"log"
 	"sync"
+    "github.com/patrickmn/go-cache"
+    "time"
 )
 
 const (
@@ -196,3 +198,5 @@ type ItemConf struct {
 	//	"delta": "0"
 	Delta string `json:"multiplier"`
 }
+
+var Cache = cache.New(5*time.Minute, 10*time.Minute)
