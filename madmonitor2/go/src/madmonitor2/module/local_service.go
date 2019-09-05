@@ -48,7 +48,7 @@ func NewUpdateConfigServer() {
     }
     fmt.Println("open local update config service")
     for {
-        fmt.Println("wating...")
+        fmt.Println("rpc client incoming...")
         conn, err := l.Accept()
         // TODO 需要限制只能对一个ip只允许一个连接
         //hostPort is 127.0.0.1:37302

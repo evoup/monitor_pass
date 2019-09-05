@@ -5,16 +5,22 @@
   <!--<classPathEntry-->
           <!--location="/opt/maven-local-repository/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar"/>-->
   <context id="context1" >
-  
+
+    <!-- 数据库关键字冲突,自动处理 -->
+    <property name="autoDelimitKeywords" value="true"/>
+    <!-- 用反引号`包裹,默认是双引号"-->
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://lab4:3307/monitor" userId="dba" password="123456" />
     <javaModelGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.model" targetProject="src/main/java" />
     <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources" />
     <javaClientGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.mapper" targetProject="src/main/java" type="XMLMAPPER" />
     
 
-    <!--<table schema="" tableName="server" domainObjectName="Server">-->
-    <!--<table schema="" tableName="template" domainObjectName="Template" />-->
-    <!--<table schema="" tableName="item" domainObjectName="MonitorItem" />-->
+    <table schema="" tableName="server" domainObjectName="Server" />
+    <table schema="" tableName="template" domainObjectName="Template" />
+    <table schema="" tableName="item" domainObjectName="MonitorItem" />
     <table schema="" tableName="server_group" domainObjectName="ServerGroup" />
     <table schema="" tableName="r_server_server_group" domainObjectName="RelationServerServerGroup" />
     <table schema="" tableName="r_template_server_group" domainObjectName="RelationTemplateServerGroup" />
