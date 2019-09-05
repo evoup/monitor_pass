@@ -149,7 +149,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
             // 服务端最后一次通过，此时让配置文件处理待更新的状态
-            serverService.notifyServerNeedConfig(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
+            serverService.notifyServerNeedConfig(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString(), false);
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {

@@ -42,12 +42,12 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public void notifyServerNeedConfig(String name) {
+    public void notifyServerNeedConfig(String name, boolean configUpdated) {
         try {
             ServerExample example = new ServerExample();
             example.createCriteria().andNameEqualTo(name);
             Server server = new Server();
-            server.setConfigUpdated(false);
+            server.setConfigUpdated(configUpdated);
             serverMapper.updateByExampleSelective(server, example);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);

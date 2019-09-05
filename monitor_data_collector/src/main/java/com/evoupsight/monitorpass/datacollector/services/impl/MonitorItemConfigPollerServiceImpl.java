@@ -50,6 +50,7 @@ public class MonitorItemConfigPollerServiceImpl {
 
         List<ConfigUpdateTask> tasks = new ArrayList<>();
         for (Server server : servers) {
+            // 需要下发监控项的配置
             if (!server.getConfigUpdated()) {
                 tasks.add(new ConfigUpdateTask(server));
             }
@@ -86,6 +87,7 @@ public class MonitorItemConfigPollerServiceImpl {
                 int reply = client.invokeAndReadResponse("MonitorItemsConfig.Update", new Object[]{new Gson().toJson(monitorItems)}, int.class, ops, ips);
                 System.out.println("reply: " + reply);
                 if (RpcConstant.SERVER_OK.code.equals(reply)) {
+                    serverService.notifyServerNeedConfig(server.getName(), true);
                     System.out.println("调用服务成功");
                 } else {
                     System.out.println("调用服务失败");

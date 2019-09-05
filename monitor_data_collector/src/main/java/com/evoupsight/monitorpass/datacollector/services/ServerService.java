@@ -18,13 +18,16 @@ public interface ServerService {
 
     /**
      * 返回所有被监控的主机
+     *
      * @return List<Server>
      */
     List<Server> fetchAllMonitoringServer();
 
     /**
      * 通知被监控主机的配置需要被更新
+     *
      * @param name
+     * @param configUpdated
      */
-    void notifyServerNeedConfig(String name);
+    void notifyServerNeedConfig(String name, boolean configUpdated);
 }
