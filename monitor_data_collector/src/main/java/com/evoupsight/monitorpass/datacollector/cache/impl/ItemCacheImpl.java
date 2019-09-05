@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,29 +32,29 @@ public class ItemCacheImpl implements ItemCache {
     @Override
     public List<MonitorItem> findMonitorItems(Server server) {
         // server -> server group -> template -> item
+        List<MonitorItem> ret = new ArrayList<>();
         RelationServerServerGroupExample relationServerServerGroupExample = new RelationServerServerGroupExample();
         relationServerServerGroupExample.createCriteria().andServerIdEqualTo(server.getId());
         List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(relationServerServerGroupExample);
         if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
-            RelationServerServerGroup relationServerServerGroup = relationServerServerGroups.get(0);
-            Integer servergroupId = relationServerServerGroup.getServergroupId();
-            if (servergroupId != null) {
-                ServerGroupExample serverGroupExample = new ServerGroupExample();
-                serverGroupExample.createCriteria().andIdEqualTo(servergroupId);
-                List<ServerGroup> serverGroups = serverGroupMapper.selectByExample(serverGroupExample);
-                if (CollectionUtils.isNotEmpty(serverGroups)) {
-                    RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
-                    relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(serverGroups.get(0).getId());
-                    List<RelationTemplateServerGroup> relationTemplateServerGroups = relationTemplateServerGroupMapper.selectByExample(relationTemplateServerGroupExample);
-                    List<Integer> templateIds = relationTemplateServerGroups.stream().filter(Objects::nonNull).map(r -> r.getTemplateId().intValue()).collect(Collectors.toList());
-                    if (CollectionUtils.isNotEmpty(templateIds)) {
-                        MonitorItemExample monitorItemExample = new MonitorItemExample();
-                        monitorItemExample.createCriteria().andTemplateIdIn(templateIds);
-                        return monitorItemMapper.selectByExample(monitorItemExample);
+            relationServerServerGroups.stream().filter(Objects::nonNull).forEach(r0 -> {
+                Integer servergroupId = r0.getServergroupId();
+                if (servergroupId != null) {
+                    ServerGroup serverGroup = serverGroupMapper.selectByPrimaryKey(servergroupId);
+                    if (serverGroup != null) {
+                        RelationTemplateServerGroupExample relationTemplateServerGroupExample = new RelationTemplateServerGroupExample();
+                        relationTemplateServerGroupExample.createCriteria().andServergroupIdEqualTo(servergroupId);
+                        List<RelationTemplateServerGroup> relationTemplateServerGroups = relationTemplateServerGroupMapper.selectByExample(relationTemplateServerGroupExample);
+                        List<Integer> templateIds = relationTemplateServerGroups.stream().filter(Objects::nonNull).map(r1 -> r1.getTemplateId().intValue()).collect(Collectors.toList());
+                        if (CollectionUtils.isNotEmpty(templateIds)) {
+                            MonitorItemExample monitorItemExample = new MonitorItemExample();
+                            monitorItemExample.createCriteria().andTemplateIdIn(templateIds);
+                            ret.addAll(monitorItemMapper.selectByExample(monitorItemExample));
+                        }
                     }
                 }
-            }
+            });
         }
-        return null;
+        return ret;
     }
 }
