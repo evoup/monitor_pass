@@ -16,9 +16,11 @@
 package inc
 
 import (
-	"github.com/antonholmquist/jason"
-	"log"
-	"sync"
+    "github.com/antonholmquist/jason"
+    "github.com/patrickmn/go-cache"
+    "log"
+    "sync"
+    "time"
 )
 
 const (
@@ -200,3 +202,19 @@ type ItemConf struct {
 }
 
 
+// config cache
+var ConfigCache = cache.New(5*time.Minute, 10*time.Minute)
+
+// 服务端传递过来的消息，不需要的小写
+type MonitorItem struct {
+    Id         int
+    Name       string
+    dateType   int
+    desc       string
+    error      string
+    Key        string
+    Multiplier float32
+    hostId     int
+    templateId int
+    Delta      int
+}
