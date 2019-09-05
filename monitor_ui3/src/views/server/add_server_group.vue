@@ -152,7 +152,7 @@ export default {
   methods: {
     // 获取所有模板列表
     fetchTemplateListData() {
-      template_list().then(response => {
+      template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
         this.templateData = response.data.items
       })
     },
