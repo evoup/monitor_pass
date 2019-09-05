@@ -21,7 +21,6 @@ import (
     "log"
     "madmonitor2/inc"
     "madmonitor2/utils"
-    "net"
     "os"
     "plugin"
     "strconv"
@@ -86,9 +85,9 @@ func spawnChildren() {
 	// Iterates over our defined collectors and performs the logic to
 	// determine if we need to spawn, kill, or otherwise take some
 	// action on them.
-	for key_server, _ := range allValidCollectors() {
+	for keyServer := range allValidCollectors() {
 		now := int(time.Now().Unix())
-		col, ok := COLLECTORS[key_server]
+		col, ok := COLLECTORS[keyServer]
 		if ok {
 			spawnCollector(col)
 		}
@@ -168,31 +167,4 @@ func DoCollect(col inc.ICollector) {
 	col.Collect()
 }
 
-func LocalService(l net.Listener) {
-    fmt.Println("open local service")
-    for {
-        // Listen for an incoming connection.
-        conn, err := l.Accept()
-        if err != nil {
-            fmt.Println("Error accepting: ", err.Error())
-            os.Exit(1)
-        }
-        // Handle connections in a new goroutine.
-        go handleRequest(conn)
-    }
-}
 
-// Handles incoming requests. Return pong from server`s ping
-func handleRequest(conn net.Conn) {
-    // Make a buffer to hold incoming data.
-    buf := make([]byte, 1024)
-    // Read the incoming connection into the buffer.
-    _, err := conn.Read(buf)
-    if err != nil {
-        fmt.Println("Error reading:", err.Error())
-    }
-    // Send a response back to person contacting us.
-    conn.Write([]byte("pong."))
-    // Close the connection when you're done with it.
-    conn.Close()
-}
