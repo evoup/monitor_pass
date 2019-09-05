@@ -42,7 +42,6 @@ func scripts() {
                 cmdArr := strings.Split(line, ",")
                 key := cmdArr[0]
                 shell := cmdArr[1]
-                fmt.Println(key)
                 fmt.Println(shell)
                 // 有缓存的从缓存拿
                 foo, found := inc.ConfigCache.Get("monitorItems")
@@ -52,6 +51,16 @@ func scripts() {
                     // 没有就直接解析，调试单个程序时应该会走到这里
                     keys := make([]inc.MonitorItem, 0)
                     json.Unmarshal([]byte(file1), &keys)
+                    for i := range keys {
+                        // keys[i].Key为监控项的key
+                        if keys[i].Key == key {
+                            fmt.Printf("key: %v", key)
+                            // key之后要发消息到channel
+                            // shell是要用来执行的
+                        }
+                        // 另外一种情况，统配
+
+                    }
                     fmt.Println(keys)
                 }
             }
