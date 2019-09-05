@@ -37,8 +37,6 @@ func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
 
 // NewUpdateConfigServer jsonRpc服务，接收来自数据收集器发送的监控项配置，并写入缓存，供collector获取，按照系统的设置工作
 func NewUpdateConfigServer() {
-    // sample
-    // rpc.Register(new(Counter))
     err := rpc.Register(new(MonitorItemsConfig))
     if err != nil {
         fmt.Printf("rpc register err: %s", err)
