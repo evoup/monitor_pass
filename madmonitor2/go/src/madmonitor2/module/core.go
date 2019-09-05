@@ -140,9 +140,9 @@ func buildConf(logger *log.Logger) {
 		utils.Log(logger, "core.Init][current dir:"+wd, 4, *DebugLevel)
 		utils.MakeDir(inc.PROC_ROOT, "0755")
 		utils.MakeDir(inc.PROC_ROOT+"/"+inc.CONF_SUBPATH, "0755")
-		utils.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0755")
+		utils.MakeDir(inc.PROC_ROOT+"/"+inc.WORK_SUBPATH, "0777")
 		utils.MakeDir(inc.PROC_ROOT+"/"+inc.SCRIPT_SUBPATH, "0755")
-		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
+		config.WriteDefaultsJson(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE)
 		utils.Log(logger, "core.Init][build configuration file,done. run again", 4, *DebugLevel)
 		os.Exit(0)
 	}

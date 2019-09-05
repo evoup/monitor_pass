@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "fmt"
     "github.com/patrickmn/go-cache"
+    "madmonitor2/config"
     "madmonitor2/inc"
     "net"
     "net/rpc"
@@ -26,6 +27,11 @@ func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
     } else {
         fmt.Printf("items: %v", &keys)
         inc.ConfigCache.Set("monitorItems", keys, cache.NoExpiration)
+        // 写入本地监控项配置文件
+        err = config.WriteJson(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE, configStr)
+        if err != nil {
+            fmt.Println(err)
+        }
         //foo, found := inc.ConfigCache.Get("monitorItems")
         //if found {
         //    fmt.Println(foo)

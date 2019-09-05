@@ -15,7 +15,10 @@
 
 package config
 
-import "os"
+import (
+    "io/ioutil"
+    "os"
+)
 import (
     "encoding/json"
     "fmt"
@@ -49,4 +52,13 @@ func WriteDefaultsJson(confFileIn string) error {
 		return err
 	}
 	return nil
+}
+
+func WriteJson(confFileIn string, jsonStr string) error {
+    d1 := []byte(jsonStr)
+    err := ioutil.WriteFile(confFileIn, d1, 0644)
+    if err != nil {
+        return err
+    }
+    return nil
 }
