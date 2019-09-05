@@ -71,6 +71,11 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.log4jdbc</groupId>
+            <artifactId>log4jdbc</artifactId>
+            <version>1.2</version>
+        </dependency>
 
         <!-- Application Context (depends on spring-core, spring-expression, spring-aop,
             spring-beans) This is the central artifact for Spring's Dependency Injection
