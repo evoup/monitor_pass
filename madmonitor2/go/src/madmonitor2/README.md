@@ -43,6 +43,8 @@ UserScripts的配置，UserScripts是用户脚本，格式为<key>:<command>，�
 ```
 其中key为script.crawl.store_url.percent，[*]为参数，*对应$1-$9共九个参数
 
+**端口号的说明**：监控代理会在本地启动8338端口，接收数据收集器配置文件的下发
+
 ### 开发说明
 
 调试环境采用build_debug.sh编译出插件，当前首先要创建好插件目录/usr/local/lib/madmonitor2/，并且保证目录有写入权限。
