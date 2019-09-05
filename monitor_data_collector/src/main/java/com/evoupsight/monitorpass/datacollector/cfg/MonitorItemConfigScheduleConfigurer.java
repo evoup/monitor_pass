@@ -28,6 +28,6 @@ public class MonitorItemConfigScheduleConfigurer implements SchedulingConfigurer
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setTaskScheduler(taskSchedulerSnmp());
-        taskRegistrar.addFixedDelayTask(() -> monitorItemConfigPollerServiceImpl.poll(), 10000);
+        taskRegistrar.addFixedDelayTask(() -> monitorItemConfigPollerServiceImpl.poll(), 5000);
     }
 }
