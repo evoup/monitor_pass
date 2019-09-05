@@ -1,12 +1,13 @@
 package module
 
 import (
+    "encoding/json"
     "fmt"
-    "net/rpc"
+    "madmonitor2/inc"
     "net"
+    "net/rpc"
     "net/rpc/jsonrpc"
     "strings"
-    "madmonitor2/inc"
 )
 
 // 本地jsonrpc服务结构
@@ -23,17 +24,37 @@ func (this *Counter) Add(i int, r *int) error {
     return nil
 }
 
+//
 type MonitorItemConfig struct {
     monitorItemConfig string
 }
 
+// 服务端传递过来的消息，不需要的小写
+type MonitorItem struct {
+   Id         int
+   Name       string
+   dateType   int
+   desc       string
+   error      string
+   Key        string
+   Multiplier int
+   hostId     int
+   templateId int
+   Delta      int
+}
+
 func (this *MonitorItemConfig) Update(configStr string, r *int) error {
+    // 服务端传来的是对象数组
+    keys := make([]MonitorItem, 0)
+    err := json.Unmarshal([]byte(configStr), &keys)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Printf("items: %v", &keys)
     this.monitorItemConfig = configStr
-    fmt.Printf("configStr: %vpong", configStr)
     *r = inc.RPC_SERVER_OK
     return nil
 }
-
 
 //NewUpdateConfigServer jsonRpc服务，接收来自数据收集器发送的监控项配置，并写入缓存，供collector获取，按照系统的设置工作
 func NewUpdateConfigServer() {
