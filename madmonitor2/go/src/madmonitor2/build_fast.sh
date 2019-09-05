@@ -1,4 +1,5 @@
 #!/bin/bash
+#这个脚本最好不要去使用
 go build madmonitor2.go
 #go build --buildmode=plugin -o /usr/local/lib/madmonitor2/sysload.so collectors/sysload.go                                    
 #go build --buildmode=plugin -o /usr/local/lib/madmonitor2/ifstat.so collectors/ifstat.go                                      
