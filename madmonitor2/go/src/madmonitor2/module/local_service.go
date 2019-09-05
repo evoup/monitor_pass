@@ -11,12 +11,10 @@ import (
     "strings"
 )
 
-// 本地jsonrpc服务结构，必须有，不然不能注册
+// 本地json rpc服务结构，必须有，不然不能注册
 type MonitorItemsConfig struct {
     json string // 这里面其实是json
 }
-
-
 
 func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
     // 服务端传来的是对象数组
@@ -24,14 +22,16 @@ func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
     err := json.Unmarshal([]byte(configStr), &keys)
     if err != nil {
         fmt.Println(err)
+        *r = inc.RPC_SERVER_FAIL
+    } else {
+        fmt.Printf("items: %v", &keys)
+        inc.ConfigCache.Set("monitorItems", keys, cache.NoExpiration)
+        //foo, found := inc.ConfigCache.Get("monitorItems")
+        //if found {
+        //    fmt.Println(foo)
+        //}
+        *r = inc.RPC_SERVER_OK
     }
-    fmt.Printf("items: %v", &keys)
-    inc.ConfigCache.Set("monitorItems", keys, cache.NoExpiration)
-    //foo, found := inc.ConfigCache.Get("monitorItems")
-    //if found {
-    //    fmt.Println(foo)
-    //}
-    *r = inc.RPC_SERVER_OK
     return nil
 }
 

@@ -30,6 +30,7 @@ const (
 	CONF_FILE      = "madmonitor2.ini"
 	CONF_SUBPATH   = "conf/"
 	WORK_SUBPATH   = "work/"
+	MONITOR_ITEMS_CONF_FILE = "monitoritems.json"
 	SCRIPT_SUBPATH   = "script/"
 	PROC_LIFE      = "3600"
 	SLEEP          = "10"

@@ -16,18 +16,17 @@
 package module
 
 import (
-	"io/ioutil"
-	"log"
-	"madmonitor2/inc"
-	"madmonitor2/utils"
-	"os"
-	"time"
-
-	"fmt"
-	"plugin"
-	"strconv"
-	"strings"
+    "io/ioutil"
+    "log"
+    "madmonitor2/inc"
+    "madmonitor2/utils"
+    "os"
+    "time"
+    "fmt"
     "net"
+    "plugin"
+    "strconv"
+    "strings"
 )
 
 var GENERATION = inc.GERERATION
