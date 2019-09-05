@@ -6,6 +6,7 @@ import com.evoupsight.monitorpass.datacollector.auth.exception.InvalidProtocolEx
 import com.evoupsight.monitorpass.datacollector.domain.*;
 import com.evoupsight.monitorpass.datacollector.queue.KafkaProducerThread;
 import com.evoupsight.monitorpass.datacollector.server.ServerState;
+import com.evoupsight.monitorpass.datacollector.services.ServerService;
 import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.netty.buffer.Unpooled;
@@ -58,6 +59,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     String topic;
     @Autowired
     protected JedisPool jedisPool;
+    @Autowired
+    ServerService serverService;
 
     private static final Pattern
             CLIENT_FIRST_MESSAGE = Pattern.compile("^(([pny])=?([^,]*),([^,]*),)(m?=?[^,]*,?n=([^,]*),r=([^,]*),?.*)$");
@@ -145,7 +148,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.ENDED);
-
+            // 服务端最后一次通过，此时让配置文件处理待更新的状态
+            serverService.notifyServerNeedConfig(ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString());
             return;
         }
         if (ctx.channel().attr(AttributeKey.valueOf("serverState")).get().equals(ServerState.ENDED)) {
@@ -159,7 +163,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     for (String s : m) {
                         if (StringUtils.isNotEmpty(s)) {
                             s = s + " host=" + ctx.channel().attr(AttributeKey.valueOf("clientId")).get().toString()
-                                    + " ip=" + ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
+                                    + " ip=" + ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
                             record = new ProducerRecord<>(topic, s);
                             kafkaProducerPool.submit(new KafkaProducerThread(kafkaProducer, record));
                         }
