@@ -15,12 +15,12 @@
 package module
 
 import (
-	"net"
-	"time"
-	"madmonitor2/inc"
-	"fmt"
-	"os"
-	"strings"
+    "fmt"
+    "madmonitor2/inc"
+    "net"
+    "os"
+    "strings"
+    "time"
 )
 
 type ServerConn struct {

@@ -16,24 +16,24 @@
 package module
 
 import (
+    "fmt"
     "io/ioutil"
     "log"
     "madmonitor2/inc"
     "madmonitor2/utils"
-    "os"
-    "time"
-    "fmt"
     "net"
+    "os"
     "plugin"
     "strconv"
     "strings"
+    "time"
 )
 
 var GENERATION = inc.GERERATION
 var COLLECTORS = inc.COLLECTORS
 var HLog = inc.HLog
 
-func Register_collector(name string, interval int, filename string, generation int) {
+func RegisterCollector(name string, interval int, filename string, generation int) {
 	mtime := utils.GetMtime(filename)
 	lastspawn := 0
 	// initialize values map
@@ -43,7 +43,7 @@ func Register_collector(name string, interval int, filename string, generation i
 	COLLECTORS[name] = collector
 }
 
-func populate_collectors() {
+func populateCollectors() {
 	//dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	//if err != nil {
 	//	utils.Log(HLog, "populate_collectors][err:"+err.Error(), 1, 2)
@@ -77,20 +77,20 @@ func populate_collectors() {
 				os.Exit(1)
 			}
 		} else {
-			Register_collector(file.Name(), 0, dirname+file.Name(), GENERATION)
+			RegisterCollector(file.Name(), 0, dirname+file.Name(), GENERATION)
 		}
 	}
 }
 
-func spawn_children() {
+func spawnChildren() {
 	// Iterates over our defined collectors and performs the logic to
 	// determine if we need to spawn, kill, or otherwise take some
 	// action on them.
-	for key_server, _ := range all_valid_collectors() {
+	for key_server, _ := range allValidCollectors() {
 		now := int(time.Now().Unix())
 		col, ok := COLLECTORS[key_server]
 		if ok {
-			spawn_collector(col)
+			spawnCollector(col)
 		}
 		// I'm not very satisfied with this path.  It seems fragile and
 		// overly complex, maybe we should just reply on the asyncproc
@@ -104,9 +104,9 @@ func spawn_children() {
 }
 
 // collectors that are not marked dead
-func all_valid_collectors() map[string]inc.Collector {
+func allValidCollectors() map[string]inc.Collector {
 	var valid_cols = map[string]inc.Collector{}
-	for key_col, value_col := range all_collectors() {
+	for key_col, value_col := range allCollectors() {
 		now := int(time.Now().Unix())
 		if !COLLECTORS[key_col].Dead || (now-COLLECTORS[key_col].LastSpawn > 3600) {
 			valid_cols[key_col] = value_col
@@ -115,12 +115,12 @@ func all_valid_collectors() map[string]inc.Collector {
 	return valid_cols
 }
 
-func all_collectors() map[string]inc.Collector {
+func allCollectors() map[string]inc.Collector {
 	// Generator to return all collectors.
 	return COLLECTORS
 }
 
-func spawn_collector(collector inc.Collector) {
+func spawnCollector(collector inc.Collector) {
 	if collector.Dead == false {
 		return
 	}

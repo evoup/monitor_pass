@@ -401,8 +401,8 @@ func mainLoop() {
 	// 检查collector的心跳，每10分钟一次
 	nextHeartbeat := int(time.Now().Unix() + 600)
 	for {
-		populate_collectors()
-		spawn_children()
+		populateCollectors()
+		spawnChildren()
 		time.Sleep(time.Second * 15)
 		utils.Log(utils.GetLogger(), "core.Init][main loop next iter", 2, *DebugLevel)
 		now := int(time.Now().Unix())
