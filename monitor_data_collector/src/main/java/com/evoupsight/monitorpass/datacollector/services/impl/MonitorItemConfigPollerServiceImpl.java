@@ -72,12 +72,12 @@ public class MonitorItemConfigPollerServiceImpl {
      * @param server 被监控服务器
      */
     public void configUpdatePoll(Server server) {
-        LOG.info(server.getName() + " will be dispatch config throw json rpc");
+        LOG.info("host:" + server.getHostname() + " will be dispatch config throw json rpc");
         List<MonitorItem> monitorItems = itemCache.findMonitorItems(server);
         LOG.info("monitorItems:" + new Gson().toJson(monitorItems));
         Socket socket = null;
         try {
-            if (StringUtils.isNotEmpty(server.getAgentAddress())) {
+            if (StringUtils.isNotEmpty(server.getAgentAddress()) && StringUtils.isNotEmpty(server.getHostname())) {
                 String[] str = server.getAgentAddress().split(":");
                 socket = new Socket(str[0], Integer.valueOf(str[1]));
                 JsonRpcClient client = new JsonRpcClient();
@@ -87,7 +87,7 @@ public class MonitorItemConfigPollerServiceImpl {
                 int reply = client.invokeAndReadResponse("MonitorItemsConfig.Update", new Object[]{new Gson().toJson(monitorItems)}, int.class, ops, ips);
                 System.out.println("reply: " + reply);
                 if (RpcConstant.SERVER_OK.code.equals(reply)) {
-                    serverService.notifyServerNeedConfig(server.getName(), true);
+                    serverService.notifyServerNeedConfig(server.getHostname(), true);
                     System.out.println("调用服务成功");
                 } else {
                     System.out.println("调用服务失败");
