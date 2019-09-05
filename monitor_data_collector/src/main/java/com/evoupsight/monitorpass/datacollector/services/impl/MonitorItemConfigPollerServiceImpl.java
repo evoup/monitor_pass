@@ -83,7 +83,7 @@ public class MonitorItemConfigPollerServiceImpl {
 
                 InputStream ips = socket.getInputStream();
                 OutputStream ops = socket.getOutputStream();
-                int reply = client.invokeAndReadResponse("MonitorItemConfig.Update", new Object[]{new Gson().toJson(monitorItems)}, int.class, ops, ips);
+                int reply = client.invokeAndReadResponse("MonitorItemsConfig.Update", new Object[]{new Gson().toJson(monitorItems)}, int.class, ops, ips);
                 System.out.println("reply: " + reply);
                 if (RpcConstant.SERVER_OK.code.equals(reply)) {
                     System.out.println("调用服务成功");
