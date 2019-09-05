@@ -49,6 +49,8 @@ UserScripts的配置，UserScripts是用户脚本，格式为<key>:<command>，�
 
 开发插件的话，插件的代码里有main函数，可以直接调试， 插件模式go不能加载断点需要注意。
 
+**监控项配置文件的说明**：数据收集器通过扫描server表的字段configUpdated是否为0，判断是否要通过json rpc下发配置文件到客户端。客户端在完成和服务端的scram-sha1认证后，数据收集器将会设置configUpdated字段为0，当rpc更新返回成功后,configUdated字段将设置为1。
+
 * * *
 *Developed by evoup(evoex123@gmail.com)*
 
