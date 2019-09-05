@@ -6,29 +6,27 @@ import (
     "encoding/json"
     "io/ioutil"
     "strings"
-    "time"
 )
 
-type userScriptsPlugin string
+type scriptsPlugin string
 
 func main() {
-    userScripts()
+    scripts()
 }
 
-func (p userScriptsPlugin) Collect() {
+func (p scriptsPlugin) Collect() {
     defer inc.Wg.Done()
     select {
     case _ = <-inc.Shutdown:
         //We're done!
         return
     default:
-        userScripts()
+        scripts()
     }
 }
 
-func userScripts() {
+func scripts() {
     // 读取配置文件中的UserScripts上下文
-    time.Sleep(time.Second * time.Duration(5))
     file, err := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
     file1, err1 := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE)
     // 都有才能继续执行，不然都没有下发汇报啥？
@@ -64,4 +62,4 @@ func userScripts() {
     fmt.Println("ok")
 }
 
-var userScriptsSo userScriptsPlugin
+var ScriptsSo scriptsPlugin
