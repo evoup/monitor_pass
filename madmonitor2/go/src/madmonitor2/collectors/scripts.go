@@ -5,8 +5,10 @@ import (
     "fmt"
     "github.com/patrickmn/go-cache"
     "io/ioutil"
+    "log"
     "madmonitor2/inc"
     "madmonitor2/utils"
+    "os/exec"
     "regexp"
     "strconv"
     "strings"
@@ -39,6 +41,10 @@ func foreverRun() {
 }
 
 func scripts() {
+    host, _ := inc.ConfObject.GetString("ServerName")
+    //host = s.Replace(host, ".", "", -1)
+    //host = s.Replace(host, "-", "", -1)
+    metricPrefix := "apps.backend." + host + "."
     // 5秒重新获取和运行一次
     time.Sleep(time.Second * 5)
     // 读取配置文件中的UserScripts上下文
@@ -92,7 +98,7 @@ func scripts() {
                             //fmt.Printf("userScriptKey: %v", userScriptKey)
                             // key之后要发消息到channel
                             // shell是要用来执行的
-                            runSingleScript(userScriptKey, monitorItemDelay, shell)
+                            runSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
                         } else {
                             // 另外一种情况，统配
                             reg := regexp.MustCompile(`(.*)\[(.*)\]`)
@@ -128,7 +134,7 @@ func scripts() {
                                     }
                                 }
                                 // 填充对应位置参数值
-                                runSingleScript(monitorItemKey, monitorItemDelay, lastShell)
+                                runSingleScript(monitorItemKey, monitorItemDelay, lastShell, metricPrefix)
                             }
                         }
                     }
@@ -139,7 +145,7 @@ func scripts() {
     }
 }
 
-func runSingleScript(key string, interval int, shell string) {
+func runSingleScript(key string, interval int, shell string, metricPfx string) {
     // 判断是否在interval内
     foo, found := ScriptItemCache.Get(key)
     if found {
@@ -149,6 +155,16 @@ func runSingleScript(key string, interval int, shell string) {
     }
     // TOOD 进行脚本执行
     fmt.Println(shell)
+    sliceA := strings.Fields(shell)
+    timestamp := time.Now().Unix()
+    out, err := exec.Command(sliceA[0], sliceA[1:]...).Output()
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf("%s", out)
+    fmt.Printf("%v %v %v\n", key, timestamp, out)
+    // 第一列为具体的收集器名
+    inc.MsgQueue <- fmt.Sprintf("%v %v%v %v %v\n", "scripts", metricPfx, key, timestamp, out)
     // 完成，设置一个缓存，这样进来后就不执行了
     // TODO 可能有的问题，就是一个进程没有执行完，最好还有锁的支持
     ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
