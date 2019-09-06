@@ -1,10 +1,11 @@
 package main
 
 import (
-    "madmonitor2/inc"
-    "fmt"
     "encoding/json"
+    "fmt"
     "io/ioutil"
+    "madmonitor2/inc"
+    "regexp"
     "strings"
 )
 
@@ -40,35 +41,59 @@ func scripts() {
                 line := conf.UserScripts[i]
                 fmt.Println(line)
                 cmdArr := strings.Split(line, ",")
-                key := cmdArr[0]
+                userScriptKey := cmdArr[0]
                 shell := cmdArr[1]
+                reg := regexp.MustCompile(`(.*)\[(.*)\]`)
+                m := reg.FindAllStringSubmatch(userScriptKey, -1)
+                hasParam := false
+                functionName := ""
+                if len(m) > 0 && len(m[0]) == 3 {
+                    fmt.Println(m)
+                    hasParam = true
+                    functionName = m[0][1]
+                }
+                fmt.Println(hasParam)
+                fmt.Println(functionName)
                 fmt.Println(shell)
                 // 有缓存的从缓存拿
                 foo, found := inc.ConfigCache.Get("monitorItems")
                 if found {
-                   fmt.Println(foo)
+                    fmt.Println(foo)
                 } else {
                     // 没有就直接解析，调试单个程序时应该会走到这里
                     keys := make([]inc.MonitorItem, 0)
                     json.Unmarshal([]byte(file1), &keys)
                     for i := range keys {
-                        // keys[i].Key为监控项的key
-                        if keys[i].Key == key {
-                            fmt.Printf("key: %v", key)
+                        monitorItemKey := keys[i].Key
+                        // userScriptKey为用户脚本的key
+                        if monitorItemKey == userScriptKey {
+                            fmt.Printf("userScriptKey: %v", userScriptKey)
                             // key之后要发消息到channel
                             // shell是要用来执行的
+                            runSingleScript(userScriptKey, 60, shell)
+                        } else {
+                            // 另外一种情况，统配
+                            reg := regexp.MustCompile(`(.*)\[(.*)\]`)
+                            m := reg.FindAllStringSubmatch(monitorItemKey, -1)
+                            if len(m) > 0 && len(m[0]) == 3 && functionName == m[0][1] {
+                                // 配置里
+                                fmt.Println(m)
+                                runSingleScript(userScriptKey, 60, shell)
+                            }
                         }
-                        // 另外一种情况，统配
-
                     }
                     fmt.Println(keys)
                 }
             }
         }
-    } else {
     }
 
     fmt.Println("ok")
+}
+
+func runSingleScript(key string, interval int, shell string) {
+    // TOOD 进行脚本执行
+    // 完成，再次确定key是不是还需要监控，interval是多少，shell是什么
 }
 
 var ScriptsSo scriptsPlugin
