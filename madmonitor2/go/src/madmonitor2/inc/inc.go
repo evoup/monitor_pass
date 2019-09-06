@@ -27,7 +27,7 @@ const (
 	LOG_SUFFIX     = "madmonitor2"
 	CLIENT_VERSION = "2.0.0.1"
 	PROC_ROOT      = "/services/monitor2_deal"
-	CONF_FILE      = "madmonitor2.ini"
+	CONF_FILE      = "madmonitor2.json"
 	CONF_SUBPATH   = "conf/"
 	WORK_SUBPATH   = "work/"
 	MONITOR_ITEMS_CONF_FILE = "monitoritems.json"
