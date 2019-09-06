@@ -3,6 +3,7 @@ package main
 import (
     "encoding/json"
     "fmt"
+    "github.com/patrickmn/go-cache"
     "io/ioutil"
     "madmonitor2/inc"
     "madmonitor2/utils"
@@ -14,8 +15,10 @@ import (
 
 type scriptsPlugin string
 
+var ScriptItemCache = cache.New(5*time.Minute, 10*time.Minute)
+
 func main() {
-    scripts()
+    foreverRun()
 }
 
 func (p scriptsPlugin) Collect() {
@@ -25,12 +28,19 @@ func (p scriptsPlugin) Collect() {
         //We're done!
         return
     default:
+        foreverRun()
+    }
+}
+
+func foreverRun() {
+    for {
         scripts()
     }
 }
 
 func scripts() {
-    time.Sleep(time.Second * 1)
+    // 5秒重新获取和运行一次
+    time.Sleep(time.Second * 5)
     // 读取配置文件中的UserScripts上下文
     file, err := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
     file1, err1 := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE)
@@ -38,43 +48,48 @@ func scripts() {
     if err == nil && err1 == nil {
         conf := inc.Conf{}
         err = json.Unmarshal([]byte(file), &conf)
-        fmt.Println(conf)
+        //fmt.Println(conf)
         if err == nil {
-            fmt.Println(conf)
+            //fmt.Println(conf)
             for i := range conf.UserScripts {
                 line := conf.UserScripts[i]
-                fmt.Println(line)
+                //fmt.Println(line)
                 cmdArr := strings.Split(line, ",")
                 userScriptKey := cmdArr[0]
                 shell := cmdArr[1]
                 reg := regexp.MustCompile(`(.*)\[(.*)\]`)
                 m := reg.FindAllStringSubmatch(userScriptKey, -1)
-                hasParam := false
+                //hasParam := false
                 functionName := ""
                 if len(m) > 0 && len(m[0]) == 3 {
-                    fmt.Println(m)
-                    hasParam = true
+                    //fmt.Println(m)
+                    //hasParam = true
                     functionName = m[0][1]
                 }
-                fmt.Println(hasParam)
-                fmt.Println(functionName)
-                fmt.Println(shell)
+                //fmt.Println(hasParam)
+                //fmt.Println(functionName)
+                //fmt.Println(shell)
                 // 合法的形式参数
                 validStyleParam := []string{"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$7", "$8", "$9"}
                 // 有缓存的从缓存拿
-                foo, found := inc.ConfigCache.Get("monitorItems")
+                _, found := inc.ConfigCache.Get("monitorItems")
                 if found {
-                    fmt.Println(foo)
+                    // TODO 没有参数的也需要被实现
+                    //fmt.Println(foo)
                 } else {
                     // 没有就直接解析，调试单个程序时应该会走到这里
                     keys := make([]inc.MonitorItem, 0)
                     json.Unmarshal([]byte(file1), &keys)
                     for i := range keys {
                         monitorItemKey := keys[i].Key
-                        monitorItemDelay := keys[i].Delay
+                        monitorItemDelay := 60
+                        // 如果监控项里间隔为0，那就是60秒
+                        if keys[i].Delay > 0 {
+                            monitorItemDelay = keys[i].Delay
+                        }
                         // userScriptKey为用户脚本的key
                         if monitorItemKey == userScriptKey {
-                            fmt.Printf("userScriptKey: %v", userScriptKey)
+                            //fmt.Printf("userScriptKey: %v", userScriptKey)
                             // key之后要发消息到channel
                             // shell是要用来执行的
                             runSingleScript(userScriptKey, monitorItemDelay, shell)
@@ -85,14 +100,14 @@ func scripts() {
                             if len(m) > 0 && len(m[0]) == 3 && functionName == m[0][1] {
                                 // 配置里
                                 monitorItemParam := m[0][2]
-                                fmt.Println(monitorItemParam)
+                                //fmt.Println(monitorItemParam)
                                 var splitParam []string
                                 if monitorItemParam != "" {
                                     splitParam = strings.Split(monitorItemParam, ",")
                                 }
                                 // 匹配参数位置
                                 s := strings.Split(shell, " ")
-                                fmt.Println(s)
+                                //fmt.Println(s)
                                 // shell后面有参数$1-$9
                                 lastShell := ""
                                 if len(s) > 0 {
@@ -117,18 +132,26 @@ func scripts() {
                             }
                         }
                     }
-                    fmt.Println(keys)
+                    //fmt.Println(keys)
                 }
             }
         }
     }
-
-    fmt.Println("ok")
 }
 
 func runSingleScript(key string, interval int, shell string) {
+    // 判断是否在interval内
+    foo, found := ScriptItemCache.Get(key)
+    if found {
+        fmt.Printf("%v cache\n", foo)
+        // 在时间内，不用操作
+        return
+    }
     // TOOD 进行脚本执行
-    // 完成，再次确定key是不是还需要监控，interval是多少，shell是什么
+    fmt.Println(shell)
+    // 完成，设置一个缓存，这样进来后就不执行了
+    // TODO 可能有的问题，就是一个进程没有执行完，最好还有锁的支持
+    ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
 }
 
 var ScriptsSo scriptsPlugin
