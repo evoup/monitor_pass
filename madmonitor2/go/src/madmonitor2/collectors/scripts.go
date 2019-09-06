@@ -153,18 +153,19 @@ func runSingleScript(key string, interval int, shell string, metricPfx string) {
         // 在时间内，不用操作
         return
     }
-    // TOOD 进行脚本执行
+    // 进行脚本执行
     fmt.Println(shell)
-    sliceA := strings.Fields(shell)
+    args := strings.Fields(shell)
     timestamp := time.Now().Unix()
-    out, err := exec.Command(sliceA[0], sliceA[1:]...).Output()
+    out, err := exec.Command(args[0], args[1:]...).Output()
     if err != nil {
         log.Fatal(err)
     }
-    fmt.Printf("%s", out)
-    fmt.Printf("%v %v %v\n", key, timestamp, out)
+    //fmt.Printf("%s", out)
+    value := strings.TrimSuffix(fmt.Sprintf("%s", out), "\n")
+    fmt.Printf("%v %v %v\n", key, timestamp, value)
     // 第一列为具体的收集器名
-    inc.MsgQueue <- fmt.Sprintf("%v %v%v %v %v\n", "scripts", metricPfx, key, timestamp, out)
+    inc.MsgQueue <- fmt.Sprintf("%v %v%v %v %v\n", "scripts", metricPfx, key, timestamp, value)
     // 完成，设置一个缓存，这样进来后就不执行了
     // TODO 可能有的问题，就是一个进程没有执行完，最好还有锁的支持
     ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
