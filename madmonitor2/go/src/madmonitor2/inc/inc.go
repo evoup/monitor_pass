@@ -210,6 +210,7 @@ var ConfigCache = cache.New(5*time.Minute, 10*time.Minute)
 type MonitorItem struct {
     Id         int
     Name       string
+    Delay      int
     dateType   int
     desc       string
     error      string
