@@ -5,9 +5,11 @@ import (
     "fmt"
     "io/ioutil"
     "madmonitor2/inc"
+    "madmonitor2/utils"
     "regexp"
     "strconv"
     "strings"
+    "time"
 )
 
 type scriptsPlugin string
@@ -28,6 +30,7 @@ func (p scriptsPlugin) Collect() {
 }
 
 func scripts() {
+    time.Sleep(time.Second * 1)
     // 读取配置文件中的UserScripts上下文
     file, err := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.CONF_SUBPATH + inc.CONF_FILE)
     file1, err1 := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE)
@@ -99,7 +102,7 @@ func scripts() {
                                             lastShell = s[0]
                                             continue
                                         }
-                                        if stringInSlice(s[i], validStyleParam) {
+                                        if utils.StringInSlice(s[i], validStyleParam) {
                                             s[i] = strings.Replace(s[i], "$", "", -1)
                                             // -1是因为下发监控项参数解析成数组从0开始，而用户配置的$1从1开始
                                             atoi, err := strconv.Atoi(s[i])
@@ -126,15 +129,6 @@ func scripts() {
 func runSingleScript(key string, interval int, shell string) {
     // TOOD 进行脚本执行
     // 完成，再次确定key是不是还需要监控，interval是多少，shell是什么
-}
-
-func stringInSlice(a string, list []string) bool {
-    for _, b := range list {
-        if b == a {
-            return true
-        }
-    }
-    return false
 }
 
 var ScriptsSo scriptsPlugin

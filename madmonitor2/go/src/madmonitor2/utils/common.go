@@ -194,3 +194,13 @@ func GetMtime(filename string) int {
 	mtime := int(file.ModTime().Unix())
 	return mtime
 }
+
+// 判断是a是否包含在list中
+func StringInSlice(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
+}
