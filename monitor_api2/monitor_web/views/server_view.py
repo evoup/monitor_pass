@@ -271,7 +271,7 @@ class ServerInfo(APIView):
                 }
                 """ % (srv.name, ','.join(panes))
             dashboard = re.sub('\s+', ' ', dashboard)
-            r = requests.post(grafana_url, data=dashboard, headers=headers)
+            r = requests.post(grafana_url, data=dashboard.encode(), headers=headers)
             if r.status_code == 502:
                 ret['message'] = "grafana异常信息：502错误的网关"
                 return JsonResponse(ret, safe=False)
