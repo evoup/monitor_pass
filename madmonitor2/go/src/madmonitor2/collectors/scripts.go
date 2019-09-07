@@ -43,8 +43,6 @@ func foreverRun() {
 func scripts() {
     host, _ := inc.ConfObject.GetString("ServerName")
     fmt.Println("test_scripts.................................................................")
-    //host = s.Replace(host, ".", "", -1)
-    //host = s.Replace(host, "-", "", -1)
     metricPrefix := "apps.backend." + host + "."
     // 5秒重新获取和运行一次
     time.Sleep(time.Second * 5)
@@ -56,41 +54,27 @@ func scripts() {
         fmt.Println("test_scripts.................................................................0")
         conf := inc.Conf{}
         err = json.Unmarshal([]byte(file), &conf)
-        //fmt.Println(conf)
         if err == nil {
-            fmt.Println("test_scripts.................................................................1")
-            //fmt.Println(conf)
             for i := range conf.UserScripts {
                 line := conf.UserScripts[i]
-                //fmt.Println(line)
                 cmdArr := strings.Split(line, ",")
                 userScriptKey := cmdArr[0]
                 shell := cmdArr[1]
                 reg := regexp.MustCompile(`(.*)\[(.*)\]`)
                 m := reg.FindAllStringSubmatch(userScriptKey, -1)
-                //hasParam := false
                 functionName := ""
                 if len(m) > 0 && len(m[0]) == 3 {
-                    //fmt.Println(m)
                     //hasParam = true
                     functionName = m[0][1]
                 }
-                //fmt.Println(hasParam)
-                //fmt.Println(functionName)
-                //fmt.Println(shell)
                 // 合法的形式参数
                 validStyleParam := []string{"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$7", "$8", "$9"}
                 // 有缓存的从缓存拿
                 monitorItems, found := inc.ConfigCache.Get("monitorItems")
-                fmt.Println("test_scripts.................................................................2")
                 keys := make([]inc.MonitorItem, 0)
                 if found {
-                    fmt.Println("test_scripts.................................................................3.1")
-                    fmt.Printf("test_scripts %v\n", monitorItems)
                     json.Unmarshal([]byte((monitorItems.(string))), &keys)
-                    fmt.Printf("test_scripts keys %v\n", keys)
                 } else {
-                    fmt.Println("test_scripts.................................................................3.2")
                     // 没有就直接解析，调试单个程序时应该会走到这里
                     json.Unmarshal([]byte(file1), &keys)
                 }
@@ -101,10 +85,8 @@ func scripts() {
                     if keys[i].Delay > 0 {
                         monitorItemDelay = keys[i].Delay
                     }
-                    fmt.Println("test_scripts.................................................................4")
                     // userScriptKey为用户脚本的key
                     if monitorItemKey == userScriptKey {
-                        //fmt.Printf("userScriptKey: %v", userScriptKey)
                         // key之后要发消息到channel
                         // shell是要用来执行的
                         runSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
@@ -115,7 +97,6 @@ func scripts() {
                         if len(m) > 0 && len(m[0]) == 3 && functionName == m[0][1] {
                             // 配置里
                             monitorItemParam := m[0][2]
-                            //fmt.Println(monitorItemParam)
                             var splitParam []string
                             if monitorItemParam != "" {
                                 splitParam = strings.Split(monitorItemParam, ",")
@@ -123,7 +104,6 @@ func scripts() {
                             }
                             // 匹配参数位置
                             s := strings.Split(shell, " ")
-                            //fmt.Println(s)
                             // shell后面有参数$1-$9
                             lastShell := ""
                             if len(s) > 0 {
@@ -155,23 +135,11 @@ func scripts() {
 }
 
 
-func runSingleScript_test(key string, interval int, shell string, metricPfx string) {
-    fmt.Println("test_scripts runSingleScript")
-    foo, found := ScriptItemCache.Get(key)
-    if found {
-        fmt.Printf("test_scripts%v %v cache\n", key, foo)
-        // 在时间内，不用操作
-        return
-    }
-    fmt.Printf("test_scripts set %v cache\n", key)
-    ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
-}
 
 func runSingleScript(key string, interval int, shell string, metricPfx string) {
     // 判断是否在interval内
-    foo, found := ScriptItemCache.Get(key)
+    _, found := ScriptItemCache.Get(key)
     if found {
-        fmt.Printf("%v cache\n", foo)
         // 在时间内，不用操作
         return
     }
@@ -183,14 +151,12 @@ func runSingleScript(key string, interval int, shell string, metricPfx string) {
     if err != nil {
         log.Fatal(err)
     }
-    //fmt.Printf("%s", out)
     value := strings.TrimSuffix(fmt.Sprintf("%s", out), "\n")
-    fmt.Printf("%v %v %v\n", key, timestamp, value)
     // 第一列为具体的收集器名
     inc.MsgQueue <- fmt.Sprintf("%v %v%v %v %v\n", "scripts", metricPfx, key, timestamp, value)
     // 完成，设置一个缓存，这样进来后就不执行了
     // TODO 可能有的问题，就是一个进程没有执行完，最好还有锁的支持
-    ScriptItemCache.Set(key, "hit", time.Duration(5)*time.Second)
+    ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
 }
 
 var ScriptsSo scriptsPlugin
