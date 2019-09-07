@@ -6,11 +6,6 @@
           <el-input v-model="form.name" placeholder="请输入图表名称"/>
         </el-col>
       </el-form-item>
-      <el-form-item label="别名">
-        <el-col :span="8">
-          <el-input v-model="form.alias" placeholder="请输入别名(可选)"/>
-        </el-col>
-      </el-form-item>
       <el-form-item label="宽度">
         <el-col :span="3">
           <el-input v-model="form.width" placeholder="请输入宽度"/>
@@ -50,8 +45,8 @@
           </el-table-column>
           <el-table-column label="操作" min-width="20%">
             <template slot-scope="prop">
-              <el-button size="small" type="primary" @click="jumpChangeUser(prop.row.id)">编辑</el-button>
-              <el-button size="small" type="danger" @click="deleteUser(prop.row.id, prop.$index)">删除</el-button>
+              <el-button size="small" type="primary">编辑</el-button>
+              <el-button size="small" type="danger">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -62,7 +57,6 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="x"
         >更新
         </el-button
         >
@@ -81,7 +75,6 @@ export default {
     return {
       form: {
         name: '',
-        alias: '',
         width: 900,
         height: 200
       },
@@ -99,13 +92,13 @@ export default {
   },
   methods: {
     getData() {
-      diagram_list({ id: 1 }).then(
+      diagram_list({ id: this.$route.query.id }).then(
         response => {
           this.form.name = response.data.items[0].name
           this.form.width = response.data.items[0].width
           this.form.height = response.data.items[0].height
         })
-      diagram_info({ id: 1 }).then(response => {
+      diagram_info({ id: this.$route.query.id }).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
         this.listLoading = false

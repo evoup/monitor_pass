@@ -24,6 +24,9 @@ class DiagramList(APIView):
         if self.request.query_params.__contains__('templateId'):
             page_data, count = paging_request(request, models.Diagram, self,
                                               filter={'template__in': [request.query_params['templateId']]})
+        elif self.request.query_params.__contains__('id'):
+            page_data, count = paging_request(request, models.Diagram, self,
+                                              filter={'id__in': [request.query_params['id']]})
         else:
             page_data, count = paging_request(request, models.Diagram, self)
         # 对数据进行序列化
