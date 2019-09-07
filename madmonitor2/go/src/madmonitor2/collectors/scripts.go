@@ -110,6 +110,7 @@ func scripts() {
                                 var splitParam []string
                                 if monitorItemParam != "" {
                                     splitParam = strings.Split(monitorItemParam, ",")
+                                    // TODO 参数不能包含\ ‘ ” ` * ? [ ] { } ~ $ ! & ; ( ) <> | # @
                                 }
                                 // 匹配参数位置
                                 s := strings.Split(shell, " ")
