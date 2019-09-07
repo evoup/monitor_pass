@@ -52,7 +52,7 @@
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-link :underline="false" type="primary">添加监控项到图表</el-link>
+        <el-link :underline="false" type="primary" @click="addItemToDiagram">添加监控项到图表</el-link>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -63,6 +63,19 @@
         <el-button @click="jumpDiagramList">取消</el-button>
       </el-form-item>
     </el-form>
+
+    <el-dialog :visible.sync="dialogFormVisible" title="添加监控项到图表">
+      <el-form :model="form">
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+          >确 定
+          </el-button
+          >
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -84,7 +97,8 @@ export default {
       }]],
       functionSelectModel: 'avg',
       listLoading: true,
-      dataList: []
+      dataList: [],
+      dialogFormVisible: false
     }
   },
   created() {
@@ -104,6 +118,10 @@ export default {
         this.listLoading = false
         this.total = response.data.count
       })
+    },
+    addItemToDiagram() {
+      this.dialogFormVisible = true
+      // this.fetchData()
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
