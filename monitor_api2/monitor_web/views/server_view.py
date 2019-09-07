@@ -1,4 +1,3 @@
-import json
 import logging
 import re
 import traceback
@@ -112,7 +111,7 @@ class ServerInfo(APIView):
                                                         ssh_address=data['ssh_addr'],
                                                         jmx_address=data['jmx_addr'],
                                                         snmp_address=data['snmp_addr'],
-                                                        asset=a, data_collector=d,
+                                                        asset=a, data_collector=d, config_updated=False,
                                                         status=3 if data['monitoring'] else 2)
             match_monitor_items = {}
             srv = Server.objects.get(id=data['id'])
@@ -258,7 +257,7 @@ class ServerInfo(APIView):
                 	}
                 }
                                     """ % (
-                diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
+                    diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
                 panes.append(pane)
             dashboard = """
                 {
