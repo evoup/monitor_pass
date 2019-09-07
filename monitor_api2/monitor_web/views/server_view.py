@@ -243,7 +243,7 @@ class ServerInfo(APIView):
                 			"show": true
                 		},
                 		{
-                			"format": "short",
+                			"format": "%s",
                 			"label": null,
                 			"logBase": 1,
                 			"max": null,
@@ -257,7 +257,7 @@ class ServerInfo(APIView):
                 	}
                 }
                                     """ % (
-                    diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
+                    diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
                 panes.append(pane)
             dashboard = """
                 {

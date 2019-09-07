@@ -6,6 +6,11 @@
           <el-input v-model="form.name" placeholder="请输入图表名称"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="别名">
+        <el-col :span="8">
+          <el-input v-model="form.alias" placeholder="请输入别名(可选)"/>
+        </el-col>
+      </el-form-item>
       <el-form-item label="宽度">
         <el-col :span="3">
           <el-input v-model="form.width" placeholder="请输入宽度"/>
@@ -76,6 +81,7 @@ export default {
     return {
       form: {
         name: '',
+        alias: '',
         width: 900,
         height: 200
       },
