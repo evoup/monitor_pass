@@ -411,5 +411,6 @@ PERMISSIONS = {
 GRAFANA_UNIT_MAP = {
     None: "short",
     "": "short",
-    "B": "decbytes"
+    "B": "decbytes",
+    "%": "percent"
 }
