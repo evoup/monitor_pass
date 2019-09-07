@@ -69,6 +69,7 @@
         v-model="templateSelectModel"
         placeholder="请选择模板（可选）"
         style="width: 80%"
+        @change="fetchItemData"
       >
         <el-option
           v-for="item in templateData"
@@ -95,6 +96,7 @@
 <script>
 import { diagram_info, diagram_list } from '../../api/diagram'
 import { template_list } from '../../api/template'
+import { item_list } from '../../api/item'
 
 export default {
   name: 'ChangeDiagram',
@@ -114,7 +116,8 @@ export default {
       dataList: [],
       dialogFormVisible: false,
       templateSelectModel: [],
-      templateData: []
+      templateData: [],
+      dataList2: [],
     }
   },
   created() {
@@ -135,16 +138,25 @@ export default {
         this.total = response.data.count
       })
       this.fetchTemplateListData()
+      this.fetchItemData()
     },
     addItemToDiagram() {
       this.dialogFormVisible = true
-      // this.fetchData()
     },
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
         this.templateData = response.data.items
       })
+    },
+    fetchItemData() {
+      item_list(Object.assign({ size: 99999 }, { template_id: this.templateSelectModel })).then(
+        response => {
+          this.dataList2 = response.data.items
+          this.listLoading = false
+          this.total = response.data.count
+        }
+      )
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })

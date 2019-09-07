@@ -23,8 +23,10 @@ class ItemList(APIView):
         """
         获取指定模板下的监控项列表
         """
+        # 没有指定就是1，不能全部查询太慢了
+        cond = {'template_id': request.GET['template_id']} if 'template_id' in request.GET else {'template_id': 1}
         page_data, count = paging_request(request, models.MonitorItem, self,
-                                          filter={'template_id': request.GET['template_id']})
+                                          filter=cond)
         # 对数据进行序列化
         serializer = ItemSerializer(instance=page_data, many=True, context={'user_id': request.user.id})
         ret = {
