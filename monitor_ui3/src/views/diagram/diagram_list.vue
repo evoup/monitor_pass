@@ -131,7 +131,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      diagram_list(Object.assign(this.pageHelp, this.sortHelp)).then(
+      diagram_list(Object.assign(this.pageHelp, this.sortHelp, { templateId: this.$route.query.template_id })).then(
         response => {
           this.dataList = response.data.items
           this.pageList = response.data.page

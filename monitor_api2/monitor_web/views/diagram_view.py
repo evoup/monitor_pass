@@ -21,9 +21,9 @@ class DiagramList(APIView):
         【模板下的】获取图表列表
         """
         from monitor_web import models
-        if self.request.query_params.__contains__('id'):
+        if self.request.query_params.__contains__('templateId'):
             page_data, count = paging_request(request, models.Diagram, self,
-                                              filter={'id__in': request.query_params['id']})
+                                              filter={'template__in': [request.query_params['templateId']]})
         else:
             page_data, count = paging_request(request, models.Diagram, self)
         # 对数据进行序列化
