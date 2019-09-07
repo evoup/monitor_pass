@@ -61,8 +61,8 @@ INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) 
 INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) VALUES ('last', '0', '16', '5');
 
 
-INSERT INTO `diagram` (`id`,`name`,`width`,`height`) VALUES (1,'cpu load','100%','230');
-INSERT INTO `diagram` (`id`,`name`,`width`,`height`) VALUES (2,'memory usage','100%','230');
+INSERT INTO `diagram` (`id`,`name`,`width`,`height`,`template_id`) VALUES (1,'cpu load','100%','230','1');
+INSERT INTO `diagram` (`id`,`name`,`width`,`height`,`template_id`) VALUES (2,'memory usage','100%','230','1');
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (1,1,2);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (2,1,26);
 INSERT INTO `diagram_item` (`id`,`diagram_id`,`item_id`) VALUES (3,1,27);

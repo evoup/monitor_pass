@@ -302,6 +302,7 @@ class Diagram(models.Model):
     name = models.CharField(u'图表名称', max_length=256, default='')
     width = models.CharField(u'宽度', max_length=40, default='100%')
     height = models.CharField(u'高度', max_length=40, default='230')
+    template = models.ForeignKey('Template', verbose_name='所属模板', related_name='d', on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name_plural = '图表表'
