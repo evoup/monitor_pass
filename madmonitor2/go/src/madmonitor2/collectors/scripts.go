@@ -142,7 +142,6 @@ func runSingleScript(key string, interval int, shell string, metricPfx string) {
         return
     }
     // 进行脚本执行
-    fmt.Println(shell)
     args := strings.Fields(shell)
     timestamp := time.Now().Unix()
     out, err := exec.Command(args[0], args[1:]...).Output()
