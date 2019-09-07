@@ -26,7 +26,7 @@ func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
         *r = inc.RPC_SERVER_FAIL
     } else {
         fmt.Printf("items: %v", &keys)
-        inc.ConfigCache.Set("monitorItems", keys, cache.NoExpiration)
+        inc.ConfigCache.Set("monitorItems", configStr, cache.NoExpiration)
         // 写入本地监控项配置文件
         err = config.WriteJson(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE, configStr)
         if err != nil {
