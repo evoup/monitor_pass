@@ -326,7 +326,7 @@ export default {
     },
     // 获取所有模板列表
     fetchTemplateListData() {
-      template_list().then(response => {
+      template_list({ size: 10000 }).then(response => {
         this.templateOrServerGroupData = response.data.items
         this.templateOrServerGroupSelectModel = 1
         // 获取完了刷新监控项
