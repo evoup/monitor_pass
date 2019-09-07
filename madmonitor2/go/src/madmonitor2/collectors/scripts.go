@@ -42,7 +42,6 @@ func foreverRun() {
 
 func scripts() {
     host, _ := inc.ConfObject.GetString("ServerName")
-    fmt.Println("test_scripts.................................................................")
     metricPrefix := "apps.backend." + host + "."
     // 5秒重新获取和运行一次
     time.Sleep(time.Second * 5)
@@ -51,7 +50,6 @@ func scripts() {
     file1, err1 := ioutil.ReadFile(inc.PROC_ROOT + "/" + inc.WORK_SUBPATH + inc.MONITOR_ITEMS_CONF_FILE)
     // 都有才能继续执行，不然都没有下发汇报啥？
     if err == nil && err1 == nil {
-        fmt.Println("test_scripts.................................................................0")
         conf := inc.Conf{}
         err = json.Unmarshal([]byte(file), &conf)
         if err == nil {
