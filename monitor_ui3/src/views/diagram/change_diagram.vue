@@ -65,6 +65,19 @@
     </el-form>
 
     <el-dialog :visible.sync="dialogFormVisible" title="添加监控项到图表">
+      <el-select
+        v-model="templateSelectModel"
+        placeholder="请选择模板（可选）"
+        style="width: 80%"
+      >
+        <el-option
+          v-for="item in templateData"
+          :key="item.id"
+          :label="item.name"
+          :aria-selected="true"
+          :value="item.id"
+        />
+      </el-select>
       <el-form :model="form">
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -81,6 +94,7 @@
 
 <script>
 import { diagram_info, diagram_list } from '../../api/diagram'
+import { template_list } from '../../api/template'
 
 export default {
   name: 'ChangeDiagram',
@@ -98,7 +112,9 @@ export default {
       functionSelectModel: 'avg',
       listLoading: true,
       dataList: [],
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      templateSelectModel: [],
+      templateData: []
     }
   },
   created() {
@@ -118,10 +134,17 @@ export default {
         this.listLoading = false
         this.total = response.data.count
       })
+      this.fetchTemplateListData()
     },
     addItemToDiagram() {
       this.dialogFormVisible = true
       // this.fetchData()
+    },
+    // 获取所有模板列表
+    fetchTemplateListData() {
+      template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
+        this.templateData = response.data.items
+      })
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
