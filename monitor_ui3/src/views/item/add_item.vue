@@ -33,6 +33,18 @@
           <el-input v-model="form.interval" placeholder="数据收集间隔秒数"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="数据存储">
+        <el-col :span="8">
+          <el-select v-model="dataStoreOptionModel" placeholder="请选择" value="1">
+            <el-option
+              v-for="(item, index) in dataStoreOptions"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+      </el-form-item>
       <el-form-item label="数据展示">
         <el-col :span="8">
           <el-select v-model="dataShowOptionModel" placeholder="请输入或选择键" value="1">
@@ -97,6 +109,7 @@ export default {
           label: '每秒增量'
         }
       ],
+      dataStoreOptionModel: '1',
       dataShowOptions: [
         {
           value: '1',
