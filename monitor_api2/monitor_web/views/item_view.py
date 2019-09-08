@@ -25,6 +25,8 @@ class ItemList(APIView):
         """
         # 没有指定就是1，不能全部查询太慢了
         cond = {'template_id': request.GET['template_id']} if 'template_id' in request.GET else {'template_id': 1}
+        if 'ids' in request.GET:
+            cond = {'id__in': request.GET['ids'].split(',')}
         page_data, count = paging_request(request, models.MonitorItem, self,
                                           filter=cond)
         # 对数据进行序列化
