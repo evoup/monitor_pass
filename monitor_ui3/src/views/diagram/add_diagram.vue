@@ -140,7 +140,6 @@ export default {
   methods: {
     getData() {
       this.fetchTemplateListData()
-      this.fetchItemData()
     },
     addItemToDiagram() {
       this.dialogFormVisible = true
@@ -149,6 +148,7 @@ export default {
     fetchTemplateListData() {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
         this.templateData = response.data.items
+        this.fetchItemData()
       })
     },
     fetchItemData() {
