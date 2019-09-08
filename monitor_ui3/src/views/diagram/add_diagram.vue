@@ -130,7 +130,9 @@ export default {
       itemSelectModel: [],
       itemData: [],
       // 展示的监控项列表
-      totalSelectedItemsList: []
+      totalSelectedItemsList: [],
+      // 展示的监控项id
+      totalSelectedItemsIds: []
     }
   },
   created() {
@@ -165,7 +167,18 @@ export default {
     addItemToList() {
       console.log('itemSelectModel' + this.itemSelectModel)
       this.dialogFormVisible = false
-      // this.totalSelectedItemsList.push({ id: this.itemSelectModel, name: '12' })
+      if (!this.totalSelectedItemsIds.includes(this.itemSelectModel)) {
+        this.totalSelectedItemsIds.push(this.itemSelectModel)
+      }
+      item_list(Object.assign({ size: 99999 }, { ids: this.totalSelectedItemsIds.join() })).then(
+        response => {
+          this.totalSelectedItemsList = []
+          for (var i in response.data.items) {
+            console.log('utem:' + response.data.items[i])
+            this.totalSelectedItemsList.push(response.data.items[i])
+          }
+        }
+      )
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
