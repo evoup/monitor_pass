@@ -58,7 +58,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="数据单位">
-        <el-col :span="2">
+        <el-col :span="4">
           <el-input v-model="form.unit" placeholder="请输入数据单位"/>
         </el-col>
       </el-form-item>
