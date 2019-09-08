@@ -45,7 +45,7 @@
           </el-select>
         </el-col>
       </el-form-item>
-      <el-form-item label="数据展示">
+      <el-form-item label="数值显示">
         <el-col :span="8">
           <el-select v-model="dataShowOptionModel" placeholder="请输入或选择键" value="1">
             <el-option

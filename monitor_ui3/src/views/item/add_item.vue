@@ -45,7 +45,7 @@
           </el-select>
         </el-col>
       </el-form-item>
-      <el-form-item label="数据展示">
+      <el-form-item label="数值显示">
         <el-col :span="8">
           <el-select v-model="dataShowOptionModel" placeholder="请输入或选择键" value="1">
             <el-option
@@ -98,7 +98,7 @@ export default {
       dataStoreOptions: [
         {
           value: '1',
-          label: '保持不变'
+          label: '保持原样'
         },
         {
           value: '2',
@@ -109,7 +109,7 @@ export default {
       dataShowOptions: [
         {
           value: '1',
-          label: '保持不变'
+          label: '保持原样'
         },
         {
           value: '2',
