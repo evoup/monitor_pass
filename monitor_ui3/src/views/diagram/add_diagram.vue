@@ -28,7 +28,7 @@
           <el-table-column
             label="名称"
             sortable="custom"
-            prop="item"
+            prop="name"
             min-width="40%"/>
           <el-table-column
             label="取值方式"
@@ -83,7 +83,6 @@
         v-model="itemSelectModel"
         placeholder="请选择监控项"
         style="width: 80%"
-        @change="fetchItemData"
       >
         <el-option
           v-for="item in itemData"
@@ -93,16 +92,15 @@
           :value="item.id"
         />
       </el-select>
-      <el-form :model="form">
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-          >确 定
-          </el-button
-          >
-        </div>
-      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="addItemToList"
+        >确 定
+        </el-button
+        >
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -146,17 +144,27 @@ export default {
     },
     // 获取所有模板列表
     fetchTemplateListData() {
+      this.itemData = null
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
         this.templateData = response.data.items
         this.fetchItemData()
       })
     },
     fetchItemData() {
-      item_list(Object.assign({ size: 99999 }, { template_id: this.templateSelectModel })).then(
+      let cond = null
+      if (this.templateSelectModel != null && this.templateSelectModel !== '') {
+        cond = { template_id: this.templateSelectModel }
+      }
+      item_list(Object.assign({ size: 99999 }, cond)).then(
         response => {
           this.itemData = response.data.items
         }
       )
+    },
+    addItemToList() {
+      console.log('itemSelectModel' + this.itemSelectModel)
+      console.log(this.itemData[this.itemSelectModel])
+      this.dataList.push(this.itemData[this.itemSelectModel - 1])
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
