@@ -405,6 +405,12 @@ PERMISSIONS = {
     "change_generalconfig": "常规设置修改",
     "delete_generalconfig": "常规设置删除",
     "view_generalconfig": "常规设置查看",
+
+    #告警通知港式设置
+    "add_notificationmode": "告警通知方式设置添加",
+    "change_notificationmode": "告警通知方式设置修改",
+    "delete_notificationmode": "告警通知方式设置删除",
+    "view_notificationmode": "告警通知方式设置查看",
 }
 
 # grafana单位映射(数据库中的单位<=>grafana的单位)

@@ -200,4 +200,26 @@ export default {
   .note textarea {
     height: 100px !important;
   }
+  .app-container /deep/ .el-transfer-panel{
+    border: 1px solid #ebeef5;
+
+    border-radius: 4px;
+
+    overflow: hidden;
+
+    background: #fff;
+
+    display: inline-block;
+
+    vertical-align: middle;
+
+    width: 250px;
+
+    -webkit-box-sizing: border-box;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+  }
 </style>
