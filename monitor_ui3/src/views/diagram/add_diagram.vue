@@ -19,7 +19,7 @@
       <el-form-item label="监控项">
         <el-table
           :v-loading="listLoading"
-          :data="dataList"
+          :data="totalSelectedItemsList"
           stripe
           border
           tooltip-effect="dark"
@@ -124,12 +124,13 @@ export default {
       }]],
       functionSelectModel: 'avg',
       listLoading: true,
-      dataList: [],
       dialogFormVisible: false,
       templateSelectModel: [],
       templateData: [],
       itemSelectModel: [],
-      itemData: []
+      itemData: [],
+      // 展示的监控项列表
+      totalSelectedItemsList: []
     }
   },
   created() {
@@ -163,8 +164,8 @@ export default {
     },
     addItemToList() {
       console.log('itemSelectModel' + this.itemSelectModel)
-      console.log(this.itemData[this.itemSelectModel])
-      this.dataList.push(this.itemData[this.itemSelectModel - 1])
+      this.dialogFormVisible = false
+      // this.totalSelectedItemsList.push({ id: this.itemSelectModel, name: '12' })
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
