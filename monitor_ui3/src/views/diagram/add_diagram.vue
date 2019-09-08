@@ -94,7 +94,6 @@
 </template>
 
 <script>
-import { diagram_info, diagram_list } from '../../api/diagram'
 import { template_list } from '../../api/template'
 import { item_list } from '../../api/item'
 
@@ -104,8 +103,8 @@ export default {
     return {
       form: {
         name: '',
-        width: 900,
-        height: 200
+        width: '100%',
+        height: '200'
       },
       functionOptions: [[{
         value: 'avg',
@@ -125,18 +124,6 @@ export default {
   },
   methods: {
     getData() {
-      diagram_list({ id: this.$route.query.id }).then(
-        response => {
-          this.form.name = response.data.items[0].name
-          this.form.width = response.data.items[0].width
-          this.form.height = response.data.items[0].height
-        })
-      diagram_info({ id: this.$route.query.id }).then(response => {
-        this.dataList = response.data.items
-        this.pageList = response.data.page
-        this.listLoading = false
-        this.total = response.data.count
-      })
       this.fetchTemplateListData()
       this.fetchItemData()
     },
