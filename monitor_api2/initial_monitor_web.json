@@ -743,5 +743,39 @@
       "grafana_api_key": null,
       "send_warn": true
     }
+  },
+  {
+    "model": "monitor_web.notificationmode",
+    "pk": 1,
+    "fields": {
+      "type": 1,
+      "name": "email",
+      "smtp_server": "smtp.company.com",
+      "smtp_domain": "company.com",
+      "smtp_port": 25,
+      "username": "user",
+      "passwd": "passwd",
+      "wechat_agent_id": null,
+      "wechat_corp_id": null,
+      "wechat_secret": null,
+      "enabled": true
+    }
+  },
+  {
+    "model": "monitor_web.notificationmode",
+    "pk": 2,
+    "fields": {
+      "type": 2,
+      "name": "\u4f01\u4e1a\u5fae\u4fe1",
+      "smtp_server": null,
+      "smtp_domain": null,
+      "smtp_port": null,
+      "username": null,
+      "passwd": null,
+      "wechat_agent_id": "agent_id",
+      "wechat_corp_id": "corp_id",
+      "wechat_secret": "secret",
+      "enabled": true
+    }
   }
 ]

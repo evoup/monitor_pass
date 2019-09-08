@@ -70,3 +70,5 @@ INSERT INTO `monitor`.`diagram_item` (`diagram_id`, `item_id`) VALUES (2, 23);
 
 
 INSERT INTO `monitor`.`general_config` (`send_warn`) VALUES ('1');
+INSERT INTO `monitor`.`notification_mode` (`type`, `name`, `smtp_server`, `smtp_domain`, `smtp_port`, `username`, `passwd`, `enabled`) VALUES ('1', 'email', 'smtp.company.com', 'company.com', '25', 'user', 'passwd', '1');
+INSERT INTO `monitor`.`notification_mode` (`type`, `name`, `wechat_agent_id`, `wechat_corp_id`, `wechat_secret`, `enabled`) VALUES ('2', '企业微信', 'agent_id', 'corp_id', 'secret', '1');

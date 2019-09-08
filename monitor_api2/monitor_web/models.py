@@ -302,7 +302,8 @@ class Diagram(models.Model):
     name = models.CharField(u'图表名称', max_length=256, default='')
     width = models.CharField(u'宽度', max_length=40, default='100%')
     height = models.CharField(u'高度', max_length=40, default='230')
-    template = models.ForeignKey('Template', verbose_name='所属模板', related_name='d', on_delete=models.SET_NULL, null=True)
+    template = models.ForeignKey('Template', verbose_name='所属模板', related_name='d', on_delete=models.SET_NULL,
+                                 null=True)
 
     class Meta:
         verbose_name_plural = '图表表'
@@ -353,6 +354,31 @@ class DashBoard(models.Model):
         verbose_name_plural = '首页仪表盘表'
         db_table = 'dashboard'
 
+
+class NotificationMode(models.Model):
+    """
+    告警通知方式设置
+    """
+    notification_mode_choices = (
+        (1, '邮件'),
+        (2, '企业微信'),
+    )
+    id = models.BigAutoField(primary_key=True)
+    type = models.IntegerField(choices=notification_mode_choices, default=1)
+    name = models.CharField(u'名称', max_length=20, default='', null=False)
+    smtp_server = models.CharField(u'smtp服务器', max_length=255, default='', null=True)
+    smtp_domain = models.CharField(u'smtp域', max_length=255, default='', null=True)
+    smtp_port = models.IntegerField('smtp端口', null=True)
+    username = models.CharField(u'用户名', max_length=255, default='', null=True)
+    passwd = models.CharField(u'密码', max_length=255, default='', null=True)
+    wechat_agent_id = models.CharField(u'企业微信agent id', max_length=255, default='', null=True)
+    wechat_corp_id = models.CharField(u'企业微信corp id', max_length=255, default='', null=True)
+    wechat_secret = models.CharField(u'企业微信secret', max_length=255, default='', null=True)
+    enabled = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = '告警通知方式设置'
+        db_table = 'notification_mode'
 
 class Function(models.Model):
     """

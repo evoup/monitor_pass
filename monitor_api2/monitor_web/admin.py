@@ -29,6 +29,7 @@ admin.site.register(models.DiagramItem)
 admin.site.register(models.GeneralConfig)
 admin.site.register(models.GrafanaDashboard)
 admin.site.register(models.DashBoard)
+admin.site.register(models.NotificationMode)
 
 
 # ----------扩展django用户组开始-----------------
