@@ -100,22 +100,18 @@ export default {
       dataStoreOptions: [
         {
           value: '1',
-          label: '保持不变'
+          label: '保持原样'
         },
         {
           value: '2',
           label: '增量'
-        },
-        {
-          value: '3',
-          label: '每秒增量'
         }
       ],
       dataStoreOptionModel: '1',
       dataShowOptions: [
         {
           value: '1',
-          label: '保持不变'
+          label: '保持原样'
         },
         {
           value: '2',

@@ -103,10 +103,6 @@ export default {
         {
           value: '2',
           label: '增量'
-        },
-        {
-          value: '3',
-          label: '每秒增量'
         }
       ],
       dataStoreOptionModel: '1',
