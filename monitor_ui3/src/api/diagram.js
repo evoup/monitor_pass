@@ -22,3 +22,17 @@ export function server_diagram_list(param) {
     params: param
   })
 }
+
+export function add_diagram(name, width, height, item_ids, template_id) {
+  return request({
+    url: '/diagram/info',
+    method: 'post',
+    data: {
+      name,
+      width,
+      height,
+      item_ids,
+      template_id
+    }
+  })
+}

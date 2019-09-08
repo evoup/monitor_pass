@@ -1,9 +1,11 @@
 import time
+import traceback
 
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -65,6 +67,34 @@ class DiagramInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.add_diagram', raise_exception=True))
+    def post(self, request, *args, **kwargs):
+        """
+        【模板下的】创建图表
+        """
+        data = JSONParser().parse(self.request)
+        # 创建图表
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建图表失败'
+        }
+        try:
+            t = models.Template.objects.filter(id=data['template_id'])
+            if t.count() > 0:
+                d = models.Diagram.objects.create(name=data['name'], width=data['width'], height=data['height'], template=t.get())
+            # 创建图表项
+            itemIds = data['item_ids'].split(",")
+            for itemId in itemIds:
+                models.DiagramItem.objects.create(diagram=d, item=models.MonitorItem.objects.filter(id=itemId).get())
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '创建图表成功'
+        }
+        return JsonResponse(ret, safe=False)
 
 @permission_classes((IsAuthenticated,))
 class ServerDiagramList(APIView):

@@ -57,7 +57,8 @@
       <el-form-item>
         <el-button
           type="primary"
-        >更新
+          @click="addDiagram(form.name, form.width, form.height, totalSelectedItemsIds)"
+        >添加
         </el-button
         >
         <el-button @click="jumpDiagramList">取消</el-button>
@@ -108,6 +109,7 @@
 <script>
 import { template_list } from '../../api/template'
 import { item_list } from '../../api/item'
+import { add_diagram } from '../../api/diagram'
 
 export default {
   name: 'AddDiagram',
@@ -165,7 +167,6 @@ export default {
       )
     },
     addItemToList() {
-      console.log('itemSelectModel' + this.itemSelectModel)
       this.dialogFormVisible = false
       if (!this.totalSelectedItemsIds.includes(this.itemSelectModel)) {
         this.totalSelectedItemsIds.push(this.itemSelectModel)
@@ -174,11 +175,16 @@ export default {
         response => {
           this.totalSelectedItemsList = []
           for (var i in response.data.items) {
-            console.log('utem:' + response.data.items[i])
             this.totalSelectedItemsList.push(response.data.items[i])
           }
         }
       )
+    },
+    addDiagram(a, b, c, d) {
+      add_diagram(a, b, c, d.join(), this.$route.query.template_id).then(response => {
+      }).catch(e => {
+        console.log(e)
+      })
     },
     jumpDiagramList() {
       this.$router.push({ path: '/diagram_list' })
