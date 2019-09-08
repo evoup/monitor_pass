@@ -161,7 +161,7 @@ export default {
     },
     // 跳转到模板添加页面
     jumpAddDiagram() {
-      this.$router.push({ path: '/add_diagram' })
+      this.$router.push({ path: '/add_diagram?template_id=' + this.$route.query.template_id })
     },
     // 跳转到图表修改页面
     jumpChangeDiagram(id) {

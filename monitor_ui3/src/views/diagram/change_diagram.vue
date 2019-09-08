@@ -67,7 +67,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="添加监控项到图表">
       <el-select
         v-model="templateSelectModel"
-        placeholder="请选择模板（可选）"
+        placeholder="请选择模板"
         style="width: 80%"
         @change="fetchItemData"
       >

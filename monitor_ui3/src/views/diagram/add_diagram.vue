@@ -67,12 +67,26 @@
     <el-dialog :visible.sync="dialogFormVisible" title="添加监控项到图表">
       <el-select
         v-model="templateSelectModel"
-        placeholder="请选择模板（可选）"
+        placeholder="请选择模板"
+        style="width: 80%"
+        @change="fetchTemplateListData"
+      >
+        <el-option
+          v-for="item in templateData"
+          :key="item.id"
+          :label="item.name"
+          :aria-selected="true"
+          :value="item.id"
+        />
+      </el-select>
+      <el-select
+        v-model="itemSelectModel"
+        placeholder="请选择监控项"
         style="width: 80%"
         @change="fetchItemData"
       >
         <el-option
-          v-for="item in templateData"
+          v-for="item in itemData"
           :key="item.id"
           :label="item.name"
           :aria-selected="true"
@@ -116,7 +130,8 @@ export default {
       dialogFormVisible: false,
       templateSelectModel: [],
       templateData: [],
-      dataList2: []
+      itemSelectModel: [],
+      itemData: []
     }
   },
   created() {
@@ -139,9 +154,7 @@ export default {
     fetchItemData() {
       item_list(Object.assign({ size: 99999 }, { template_id: this.templateSelectModel })).then(
         response => {
-          this.dataList2 = response.data.items
-          this.listLoading = false
-          this.total = response.data.count
+          this.itemData = response.data.items
         }
       )
     },
