@@ -211,13 +211,13 @@ export const constantRouterMap = [
         meta: { title: '图表', icon: 'template' },
         hidden: true
       },
-      // {
-      //   path: '/add_diagram',
-      //   name: 'AddDiagram',
-      //   component: () => import('../views/diagram/add_diagram'),
-      //   meta: { title: '添加图表', icon: 'template' },
-      //   hidden: true
-      // },
+      {
+        path: '/add_diagram',
+        name: 'AddDiagram',
+        component: () => import('../views/diagram/add_diagram'),
+        meta: { title: '修改图表', icon: 'template' },
+        hidden: true
+      },
       {
         path: '/change_diagram',
         name: 'ChangeDiagram',

@@ -99,7 +99,7 @@ import { template_list } from '../../api/template'
 import { item_list } from '../../api/item'
 
 export default {
-  name: 'ChangeDiagram',
+  name: 'AddDiagram',
   data() {
     return {
       form: {

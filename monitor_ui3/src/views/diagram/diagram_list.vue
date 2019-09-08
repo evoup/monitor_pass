@@ -6,7 +6,7 @@
           <div class="grid-content">
             <el-button
               type="primary"
-              @click="jumpAddTemplate()"
+              @click="jumpAddDiagram()"
             ><i class="el-icon-plus el-icon--right" />添加图表
             </el-button>
           </div>
@@ -59,7 +59,7 @@
           <el-button
             size="small"
             type="danger"
-            @click="deleteTemplate(prop.row.id, prop.$index)"
+            @click="deleteDiagram(prop.row.id, prop.$index)"
           >删除</el-button
           >
         </template>
@@ -160,8 +160,8 @@ export default {
       this.fetchData()
     },
     // 跳转到模板添加页面
-    jumpAddTemplate() {
-      this.$router.push({ path: '/add_template' })
+    jumpAddDiagram() {
+      this.$router.push({ path: '/add_diagram' })
     },
     // 跳转到图表修改页面
     jumpChangeDiagram(id) {
@@ -170,18 +170,6 @@ export default {
         query: { id: id }
       })
     },
-    // jumpItemList(id) {
-    //   this.$router.push({
-    //     path: '/item_list',
-    //     query: { template_id: id }
-    //   })
-    // },
-    // jumpTriggerList(id) {
-    //   this.$router.push({
-    //     path: '/trigger_list',
-    //     query: { template_id: id }
-    //   })
-    // },
     jumpDiagramList(id) {
       this.$router.push({
         path: '/diagram_list',
@@ -193,7 +181,7 @@ export default {
       rows.splice(index, 1)
     },
     // 删除模板
-    deleteTemplate(id, rowIdx) {
+    deleteDiagram(id, rowIdx) {
       // delete_template({ id: id }).then(response => {
       //   this.deleteRow(rowIdx, this.dataList)
       // })
