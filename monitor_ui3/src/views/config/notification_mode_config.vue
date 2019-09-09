@@ -37,91 +37,91 @@
           </el-table-column>
         </el-table>
       </el-col>
-    </el-form></div>
+  </el-form></div>
 </template>
 
 <!--suppress JSUnusedGlobalSymbols -->
 <script>
-  import { notifaction_mode_list } from '../../api/notification_mode'
-  export default {
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          '在线': 'success',
-          '离线': 'gray'
-        }
-        return statusMap[status]
+import { notifaction_mode_list } from '../../api/notification_mode'
+export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        '在线': 'success',
+        '离线': 'gray'
       }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1,
+        size: 7,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      filters: {
+        name: '',
+        type: 1
+      },
+      listLoading: true,
+      total: 0,
+      pageNum: 1,
+      serverGroupSelectModel: 0,
+      serverGroups: []
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      notifaction_mode_list().then(response => {
+        this.dataList = response.data.items
+        this.listLoading = false
+      })
     },
-    data() {
-      return {
-        // 列表数据
-        dataList: [],
-        // 列表前端分页
-        pageList: {
-          totalCount: '',
-          pageSize: '',
-          totalPage: '',
-          currPage: ''
-        },
-        // 列表分页辅助类(传参)
-        pageHelp: {
-          page: 1,
-          size: 7,
-          order: 'asc'
-        },
-        sortHelp: {
-          prop: '',
-          order: ''
-        },
-        filters: {
-          name: '',
-          type: 1
-        },
-        listLoading: true,
-        total: 0,
-        pageNum: 1,
-        serverGroupSelectModel: 0,
-        serverGroups: []
-      }
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
     },
-    created() {
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
       this.fetchData()
     },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        notifaction_mode_list().then(response => {
-          this.dataList = response.data.items
-          this.listLoading = false
-        })
-      },
-      indexMethod(index) {
-        return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
-      },
-      handleSizeChange(val) {
-        this.pageList.pageSize = val
-        this.pageHelp.size = this.pageList.pageSize
-        this.pageHelp.page = this.pageList.currPage
-        this.fetchData()
-      },
-      // 点击分页sort-change
-      handleCurrentChange(val) {
-        this.pageNum = val
-        this.fetchData()
-      },
-      sortChange(column, prop, order) {
-        this.sortHelp.order = column.order
-        this.sortHelp.prop = column.prop
-        this.fetchData()
-      },
-      // 跳转到服务器详情页面
-      jumpServerDetail(id) {
-        this.$router.push({
-          path: '/server_detail',
-          query: { id: id }
-        })
-      }
+    // 点击分页sort-change
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
+      this.fetchData()
+    },
+    // 跳转到服务器详情页面
+    jumpServerDetail(id) {
+      this.$router.push({
+        path: '/server_detail',
+        query: { id: id }
+      })
     }
   }
+}
 </script>
