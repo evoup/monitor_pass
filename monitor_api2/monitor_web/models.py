@@ -380,6 +380,7 @@ class NotificationMode(models.Model):
         verbose_name_plural = '告警通知方式设置'
         db_table = 'notification_mode'
 
+
 class Function(models.Model):
     """
     函数

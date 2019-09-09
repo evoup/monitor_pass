@@ -232,6 +232,12 @@ export const constantRouterMap = [
         meta: { title: '常规设置', icon: 'form' }
       },
       {
+        path: '/notification_accept_conf',
+        name: 'NotificationAcceptConf',
+        component: () => import('../views/config/notification_mode_config'),
+        meta: { title: '告警接收设置', icon: 'accept' }
+      },
+      {
         path: '/server_group_list',
         name: 'ServerGroupManager',
         component: () => import('../views/server/server_group_list'),

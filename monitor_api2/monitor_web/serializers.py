@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig
+    Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig, NotificationMode
 
 
 class DashboardServersSerializer(serializers.ModelSerializer):
@@ -311,3 +311,17 @@ class GeneralConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneralConfig
         fields = '__all__'
+
+
+class NotificationModeConfigSerializer(serializers.ModelSerializer):
+    detail = serializers.SerializerMethodField()
+
+    class Meta:
+        model = NotificationMode
+        fields = '__all__'
+
+    def get_detail(self, obj):
+        if obj.type == 1:
+            return "Smtp服务器:%s Smtp域名:%s 邮件地址:%s" % (obj.smtp_server, obj.smtp_domain, obj.name)
+        if obj.type == 2:
+            return "Wechat corp id:%s" % obj.wechat_corp_id
