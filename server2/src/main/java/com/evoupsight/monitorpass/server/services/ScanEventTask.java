@@ -40,7 +40,7 @@ public class ScanEventTask {
         this.scanService = scanService;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedDelay = 5000)
     public void doAllJobs() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
@@ -52,7 +52,7 @@ public class ScanEventTask {
                 try {
                     LOG.info("server ready to work");
                     scanService.doAllJobs();
-                    Thread.sleep(15000);
+                    Thread.sleep(5000);
                     LOG.info("server job done");
                 } finally {
                     lock.release();
