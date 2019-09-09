@@ -52,7 +52,6 @@ public class ScanEventTask {
                 try {
                     LOG.info("server ready to work");
                     scanService.doAllJobs();
-                    Thread.sleep(5000);
                     LOG.info("server job done");
                 } finally {
                     lock.release();
