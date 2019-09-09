@@ -12,20 +12,23 @@
           @sort-change="sortChange">
           <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
           <el-table-column
-            label="主机名"
+            label="名称"
             sortable="custom"
             prop="name"
             min-width="14%" />
           <el-table-column
             label="状态"
-            sortable="custom"
-            prop="status"
+            prop="enable"
             min-width="10%">
             <template slot-scope="prop">
-              <el-tag v-if="prop.row.status === 0" type="danger">禁用</el-tag>
-              <el-tag v-if="prop.row.status === 1" type="success">启用</el-tag>
+              <el-tag v-if="prop.row.enabled !== true" type="danger">禁用</el-tag>
+              <el-tag v-if="prop.row.enabled === true" type="success">启用</el-tag>
             </template>
           </el-table-column>
+          <el-table-column
+            label="详情"
+            prop="detail"
+            min-width="14%" />
           <el-table-column label="操作" min-width="16%">
             <template slot-scope="prop">
               <el-button size="small" type="primary" @click="jumpServerDetail(prop.row.id)">查看</el-button>

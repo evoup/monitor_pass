@@ -324,4 +324,4 @@ class NotificationModeConfigSerializer(serializers.ModelSerializer):
         if obj.type == 1:
             return "Smtp服务器:%s Smtp域名:%s 邮件地址:%s" % (obj.smtp_server, obj.smtp_domain, obj.name)
         if obj.type == 2:
-            return "Wechat corp id:%s" % obj.wechat_corp_id
+            return "Wechat corp id:%s Wechat agent id:%s" % (obj.wechat_corp_id, obj.wechat_agent_id)
