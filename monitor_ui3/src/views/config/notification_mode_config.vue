@@ -15,7 +15,7 @@
             label="名称"
             sortable="custom"
             prop="name"
-            min-width="14%" />
+            min-width="10%" />
           <el-table-column
             label="状态"
             prop="enable"
@@ -28,10 +28,11 @@
           <el-table-column
             label="详情"
             prop="detail"
-            min-width="14%" />
+            min-width="20%" />
           <el-table-column label="操作" min-width="16%">
             <template slot-scope="prop">
               <el-button size="small" type="primary" @click="jumpServerDetail(prop.row.id)">查看</el-button>
+              <el-button size="small" type="primary" @click="jumpServerDetail(prop.row.id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
