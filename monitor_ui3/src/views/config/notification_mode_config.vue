@@ -83,7 +83,6 @@
     },
     created() {
       this.fetchData()
-      this.fetchServerGroupListData()
     },
     methods: {
       fetchData() {
