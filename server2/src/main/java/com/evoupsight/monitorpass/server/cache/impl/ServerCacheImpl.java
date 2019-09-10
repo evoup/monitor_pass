@@ -7,6 +7,8 @@ import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupM
 import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.TemplateMapper;
 import com.evoupsight.monitorpass.server.dao.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
@@ -23,6 +25,7 @@ import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_M
 @Repository
 public class ServerCacheImpl implements ServerCache {
     private static final String CACHE_NAME = "com.evoupsight.monitorpass.server.cache.impl.ServerCacheImpl";
+    private static final Logger LOG = LoggerFactory.getLogger(ServerCacheImpl.class);
     @Autowired
     ServerMapper serverMapper;
     @Autowired

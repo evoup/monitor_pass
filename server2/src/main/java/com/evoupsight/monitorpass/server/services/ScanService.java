@@ -58,11 +58,9 @@ import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus
 @SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
 @Service
 public class ScanService {
-
+    private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
     @Value("${opentsdb.serverurl}")
     private String opentsdbUrl;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
 
     private final Configuration hbaseConf;
 
@@ -122,7 +120,7 @@ public class ScanService {
      * 返回opentsdb的数值
      */
     private String getOpentsdbValue(String functionId, Server server) {
-        System.out.println("functionId:" + functionId);
+        LOG.info("functionId:" + functionId);
         String dbValue = "";
         Function f = functionCache.get(new Long(functionId));
         if (f != null) {
@@ -195,10 +193,10 @@ public class ScanService {
                                         m.appendReplacement(sb, getOpentsdbValue(m.group(1), s));
                                     }
                                     m.appendTail(sb);
-                                    System.out.println("key是：" + trigger.getExpression());
-                                    System.out.println("最终表达式是：" + sb.toString());
+                                    LOG.info("key是：" + trigger.getExpression());
+                                    LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
-                                        System.out.println("条件成立，触发阈值+1");
+                                        LOG.info("条件成立，触发阈值+1");
                                     }
                                 }
                             }
