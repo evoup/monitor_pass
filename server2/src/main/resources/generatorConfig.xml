@@ -55,7 +55,8 @@
         <!--<table schema="" tableName="server_group" domainObjectName="ServerGroup" />-->
         <!--<table schema="" tableName="r_template_server_group" domainObjectName="RelationTemplateServerGroup" />-->
         <!--<table schema="" tableName="r_server_server_group" domainObjectName="RelationServerServerGroup" />-->
-        <table schema="" tableName="item" domainObjectName="Item" />
+        <!--<table schema="" tableName="item" domainObjectName="Item" />-->
+        <table schema="" tableName="event" domainObjectName="Event" />
         <!--<columnOverride column="online" jdbcType="INTEGER" javaType="Boolean"/>-->
         <!--</table>-->
 
