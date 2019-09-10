@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from web.common.db_fields import TinyIntegerField
-from django_unixdatetimefield import UnixDateTimeField
 
 
 class Profile(models.Model):
@@ -154,7 +153,7 @@ class DataCollector(models.Model):
 
 class Event(models.Model):
     """
-    监控事件，类似zabbix的event，这里记录所有事件，最终是一个大表，最好用mysql进行分区
+    监控事件，类似zabix的history，这里记录所有事件，最终是一个大表，会用mysql进行分区
     """
     event_type_choice = (
         (0, 'normal'),
@@ -163,15 +162,16 @@ class Event(models.Model):
     )
     id = models.BigAutoField(primary_key=True)
     event = models.CharField(u'监控事件', max_length=200, null=False)
-    time = UnixDateTimeField(u'发生时间')
+    time = models.DateTimeField(u'发生时间')
+    monitor_item = models.ForeignKey('MonitorItem', on_delete=models.CASCADE, default='', editable=False)
     type = TinyIntegerField(u'事件类型', choices=event_type_choice, default=0)
-    trigger = models.ForeignKey('Trigger', on_delete=models.SET_NULL, null=True)
-    acknowledged = models.BooleanField(default=False, null=True)
-    acknowledge = models.CharField(u'确认文字', max_length=200, default='', null=True)
+    acknowledge = models.CharField(u'确认文字', max_length=200, default='')
+    target_id = models.IntegerField(u'事件对象id', null=False)
 
     class Meta:
         verbose_name_plural = '监控事件表'
         db_table = 'event'
+        indexes = [models.Index(fields=['target_id'])]
 
     def __str__(self):
         return self.event
@@ -255,6 +255,7 @@ class MonitorItem(models.Model):
     class Meta:
         verbose_name_plural = '监控项表'
         db_table = 'item'
+        indexes = [models.Index(fields=['host_id']), models.Index(fields=['template_id'])]
 
     def __str__(self):
         return self.name
@@ -344,6 +345,7 @@ class GrafanaDashboard(models.Model):
         verbose_name_plural = 'Grafana仪表盘表'
         db_table = 'grafana_dashboard'
         unique_together = ('device_id', 'device_type', 'diagram')
+        indexes = [models.Index(fields=['device_id'])]
 
 
 class DashBoard(models.Model):
