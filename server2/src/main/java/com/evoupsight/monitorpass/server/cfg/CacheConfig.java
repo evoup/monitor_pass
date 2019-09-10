@@ -39,7 +39,7 @@ public class CacheConfig {
     @Qualifier(CACHE_MANAGER_GUAVA_EVENT)
     GuavaCacheManager guavaCacheManagerEvent() {
         GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
-        guavaCacheManager.setCacheSpecification("maximumSize=50000, expireAfterWrite=1m");
+        guavaCacheManager.setCacheSpecification("maximumSize=50000, expireAfterWrite=30s");
         return guavaCacheManager;
     }
 }

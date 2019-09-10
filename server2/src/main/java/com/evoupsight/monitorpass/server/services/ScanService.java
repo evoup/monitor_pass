@@ -33,6 +33,9 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 import org.opentsdb.client.PoolingHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.evoupsight.monitorpass.server.constants.Constants.*;
 import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus.NOT_MONITORING;
@@ -150,7 +154,7 @@ public class ScanService {
                                     LOG.info("key是：" + trigger.getExpression());
                                     LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
-                                        LOG.info("条件成立，进入事件逻辑");
+                                        LOG.warn("条件成立，进入事件逻辑");
                                         // 检查事件，是否存在该事件，事件是否已经恢复
                                         // 1.如果不存在事件，则生成事件
                                         // 2.如果存在事件，事件已经恢复，则新建事件
@@ -173,13 +177,27 @@ public class ScanService {
         Function f = functionCache.get(new Long(functionId));
         if (f != null) {
             {
+                // f.name = 'avg'  f.parameter = '5m'
+                PeriodFormatter formatter = new PeriodFormatterBuilder()
+                        .appendDays().appendSuffix("d ")
+                        .appendHours().appendSuffix("h ")
+                        .appendMinutes().appendSuffix("m")
+                        .toFormatter();
+                Period period = null;
+                try {
+                 period = formatter.parsePeriod(f.getParameter());
+                } catch (Exception e) {
+                    LOG.warn(f.getParameter() + "不是时间参数");
+                }
                 // 获取监控项的数值
                 Integer itemId = f.getItemId();
                 Item item = itemCache.get(itemId);
-                String key = item.getKey();
-                String apiUrl = opentsdbUrl + "/api/query?start=5m-ago&m=sum:apps.backend." + server.getName() + "." + key;
-                HttpGet httpGet = new HttpGet(apiUrl);
+                HttpGet httpGet;
                 try {
+                    String key = item.getKey();
+                    String minutes = period != null ? String.valueOf(period.getMinutes()) : "15";
+                    String apiUrl = opentsdbUrl + "/api/query?start=" + minutes + "m-ago&m=sum:apps.backend." + server.getName() + "." + key;
+                    httpGet = new HttpGet(apiUrl);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                         HttpEntity entity = httpResponse.getEntity();
@@ -190,19 +208,24 @@ public class ScanService {
                         if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
                             HashMap<String, Object> dataPoints = queryDtos.get(0).getDps();
                             for (Map.Entry<String, Object> entry : dataPoints.entrySet()) {
-                                dbValue = entry.getValue().toString();
+//                                dbValue = entry.getValue().toString();
                                 // 在线
                                 serverCache.makeUp(server.getId());
                                 break;
                             }
-                            return dbValue;
+                            List<Double> primes = dataPoints.entrySet().stream().filter(Objects::nonNull).map(x -> (Double) x.getValue()).collect(Collectors.toList());
+                            DoubleSummaryStatistics stats = primes.stream()
+                                    .mapToDouble((p) -> p)
+                                    .summaryStatistics();
+                            return Double.toString(stats.getAverage());
+//                            return dbValue;
                         } else {
                             // 宕机
                             serverCache.makeDown(server.getId());
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
