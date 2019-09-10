@@ -87,7 +87,7 @@ func scripts() {
                     if monitorItemKey == userScriptKey {
                         // key之后要发消息到channel
                         // shell是要用来执行的
-                        runSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
+                        go runSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
                     } else {
                         // 另外一种情况，统配
                         reg := regexp.MustCompile(`(.*)\[(.*)\]`)
@@ -122,7 +122,7 @@ func scripts() {
                                 }
                             }
                             // 填充对应位置参数值
-                            runSingleScript(monitorItemKey, monitorItemDelay, lastShell, metricPrefix)
+                            go runSingleScript(monitorItemKey, monitorItemDelay, lastShell, metricPrefix)
                         }
                     }
                 }
