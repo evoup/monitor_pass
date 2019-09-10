@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
     <!--<classPathEntry-->
-            <!--location="/opt/maven-local-repository/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar"/>-->
+    <!--location="/opt/maven-local-repository/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar"/>-->
 
     <context id="context1">
 
@@ -28,7 +28,7 @@
             <property name="startPage" value="0"/>
         </plugin>
         <!-- 查询结果选择性返回插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin" />
+        <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
         <!-- 状态枚举生成插件 -->
         <plugin type="com.itfsw.mybatis.generator.plugins.EnumTypeStatusPlugin">
             <!-- 是否开启自动扫描根据约定注释格式生成枚举，默认true -->
@@ -56,7 +56,9 @@
         <!--<table schema="" tableName="r_template_server_group" domainObjectName="RelationTemplateServerGroup" />-->
         <!--<table schema="" tableName="r_server_server_group" domainObjectName="RelationServerServerGroup" />-->
         <!--<table schema="" tableName="item" domainObjectName="Item" />-->
-        <table schema="" tableName="event" domainObjectName="Event" />
+        <table schema="" tableName="event" domainObjectName="Event">
+            <columnOverride column="type" jdbcType="INTEGER" javaType="Integer"/>
+        </table>
         <!--<columnOverride column="online" jdbcType="INTEGER" javaType="Boolean"/>-->
         <!--</table>-->
 

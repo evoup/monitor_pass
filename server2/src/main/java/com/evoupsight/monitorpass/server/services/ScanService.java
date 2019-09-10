@@ -4,6 +4,7 @@ import com.evoupsight.monitorpass.server.cache.FunctionCache;
 import com.evoupsight.monitorpass.server.cache.ItemCache;
 import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
+import com.evoupsight.monitorpass.server.dao.mapper.EventMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
@@ -47,6 +48,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,11 +90,11 @@ public class ScanService {
     @Autowired
     private ItemCache itemCache;
     @Autowired
-    RelationServerServerGroupMapper relationServerServerGroupMapper;
+    private RelationServerServerGroupMapper relationServerServerGroupMapper;
     @Autowired
-    RelationTemplateServerGroupMapper relationTemplateServerGroupMapper;
+    private RelationTemplateServerGroupMapper relationTemplateServerGroupMapper;
     @Autowired
-    ServerMapper serverMapper;
+    private EventMapper eventMapper;
 
     /**
      * 执行所有工作
@@ -155,6 +157,12 @@ public class ScanService {
                                     LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
                                         LOG.warn("条件成立，进入事件逻辑");
+                                        Event event = new Event();
+                                        event.setTime(new Long(System.currentTimeMillis()).intValue() / 1000);
+                                        event.setAcknowledged(false);
+                                        event.setTriggerId(trigger.getId());
+                                        event.setType(0);
+                                        eventMapper.insertSelective(event);
                                         // 检查事件，是否存在该事件，事件是否已经恢复
                                         // 1.如果不存在事件，则生成事件
                                         // 2.如果存在事件，事件已经恢复，则新建事件
@@ -185,7 +193,7 @@ public class ScanService {
                         .toFormatter();
                 Period period = null;
                 try {
-                 period = formatter.parsePeriod(f.getParameter());
+                    period = formatter.parsePeriod(f.getParameter());
                 } catch (Exception e) {
                     LOG.warn(f.getParameter() + "不是时间参数");
                 }

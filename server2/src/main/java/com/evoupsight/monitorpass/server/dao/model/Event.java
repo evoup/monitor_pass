@@ -38,7 +38,7 @@ public class Event {
      *
      * @mbg.generated
      */
-    private Byte type;
+    private Integer type;
 
     /**
      *
@@ -147,7 +147,7 @@ public class Event {
      *
      * @mbg.generated
      */
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
@@ -159,7 +159,7 @@ public class Event {
      *
      * @mbg.generated
      */
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -317,7 +317,7 @@ public class Event {
          *
          * @mbg.generated
          */
-        public Builder type(Byte type) {
+        public Builder type(Integer type) {
             obj.setType(type);
             return this;
         }
@@ -382,7 +382,7 @@ public class Event {
         id("id", "id", "BIGINT", false),
         event("event", "event", "VARCHAR", false),
         time("time", "time", "INTEGER", true),
-        type("type", "type", "TINYINT", true),
+        type("type", "type", "INTEGER", true),
         acknowledged("acknowledged", "acknowledged", "BIT", false),
         acknowledge("acknowledge", "acknowledge", "VARCHAR", false),
         triggerId("trigger_id", "triggerId", "BIGINT", false);
