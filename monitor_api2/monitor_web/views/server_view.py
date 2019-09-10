@@ -173,6 +173,8 @@ class ServerInfo(APIView):
                 	""" % (srv.name, tsdb_key)
                     targets.append(target)
                 targets = ','.join(targets)
+                if not diagrams_names[diagram_id]:
+                    continue
                 pane = """
                                     {
                 	"aliasColors": {},
@@ -280,6 +282,8 @@ class ServerInfo(APIView):
                 return JsonResponse(ret, safe=False)
             else:
                 for diagram_id in diagrams_names.keys():
+                    if not diagrams_names[diagram_id]:
+                        continue
                     uid = r.json()['uid']
                     if (models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
                                                                diagram=models.Diagram.objects.filter(
