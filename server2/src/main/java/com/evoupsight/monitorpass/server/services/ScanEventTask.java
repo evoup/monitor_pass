@@ -47,6 +47,7 @@ public class ScanEventTask {
         LOG.info("server ready to work");
         scanService.doAllJobs();
         LOG.info("server job done");
+
 //        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
 //        try (CuratorFramework cfClient = CuratorFrameworkFactory.newClient(zkServers, retryPolicy)) {
 //            cfClient.start();
