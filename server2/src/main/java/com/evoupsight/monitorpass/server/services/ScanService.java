@@ -117,6 +117,54 @@ public class ScanService {
 
 
     /**
+     * 检查主机
+     */
+    private void checkHosts() {
+        // server -> server_group -> template -> trigger -> function -> 计算function数值 -> 返回function表达式 -> 判断真假
+        List<Server> servers = serverCache.fetchAll();
+        servers.stream().filter(Objects::nonNull).filter(s -> !new Integer(NOT_MONITORING.ordinal()).equals(s.getStatus())).forEach(s -> {
+            RelationServerServerGroupExample example = new RelationServerServerGroupExample();
+            example.createCriteria().andServerIdEqualTo(s.getId());
+            List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(example);
+            if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
+                for (RelationServerServerGroup relation : relationServerServerGroups) {
+                    if (s.getId().equals(relation.getServerId())) {
+                        Integer servergroupId = relation.getServergroupId();
+                        RelationTemplateServerGroupExample example1 = new RelationTemplateServerGroupExample();
+                        example1.createCriteria().andServergroupIdEqualTo(servergroupId);
+                        List<RelationTemplateServerGroup> relationTemplateServerGroup = relationTemplateServerGroupMapper.selectByExample(example1);
+                        for (RelationTemplateServerGroup relation1 : relationTemplateServerGroup) {
+                            Long templateId = relation1.getTemplateId();
+                            List<Trigger> triggers = triggerCache.getByTemplate(templateId);
+                            if (CollectionUtils.isNotEmpty(triggers)) {
+                                for (Trigger trigger : triggers) {
+                                    String expression = trigger.getExpression();
+                                    // 找出表达式中的function，进行演算
+                                    Pattern p = Pattern.compile("\\{([^}]*)\\}");
+                                    Matcher m = p.matcher(expression);
+                                    StringBuffer sb = new StringBuffer();
+                                    while (m.find()) {
+                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s));
+                                    }
+                                    m.appendTail(sb);
+                                    LOG.info("key是：" + trigger.getExpression());
+                                    LOG.info("最终表达式是：" + sb.toString());
+                                    if (antlrTrueFalse(sb.toString())) {
+                                        LOG.info("条件成立，进入事件逻辑");
+                                        // 检查事件，是否存在该事件，事件是否已经恢复
+                                        // 1.如果不存在事件，则生成事件
+                                        // 2.如果存在事件，事件已经恢复，则新建事件
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * 返回opentsdb的数值
      */
     private String getOpentsdbValue(String functionId, Server server) {
@@ -160,53 +208,6 @@ public class ScanService {
         }
         return "";
     }
-
-
-    /**
-     * 检查主机
-     */
-    private void checkHosts() {
-        // server -> server_group -> template -> trigger -> function -> 计算function数值 -> 返回function表达式 -> 判断真假
-        List<Server> servers = serverCache.fetchAll();
-        servers.stream().filter(Objects::nonNull).filter(s -> !new Integer(NOT_MONITORING.ordinal()).equals(s.getStatus())).forEach(s -> {
-            RelationServerServerGroupExample example = new RelationServerServerGroupExample();
-            example.createCriteria().andServerIdEqualTo(s.getId());
-            List<RelationServerServerGroup> relationServerServerGroups = relationServerServerGroupMapper.selectByExample(example);
-            if (CollectionUtils.isNotEmpty(relationServerServerGroups)) {
-                for (RelationServerServerGroup relation : relationServerServerGroups) {
-                    if (s.getId().equals(relation.getServerId())) {
-                        Integer servergroupId = relation.getServergroupId();
-                        RelationTemplateServerGroupExample example1 = new RelationTemplateServerGroupExample();
-                        example1.createCriteria().andServergroupIdEqualTo(servergroupId);
-                        List<RelationTemplateServerGroup> relationTemplateServerGroup = relationTemplateServerGroupMapper.selectByExample(example1);
-                        for (RelationTemplateServerGroup relation1 : relationTemplateServerGroup) {
-                            Long templateId = relation1.getTemplateId();
-                            List<Trigger> triggers = triggerCache.getByTemplate(templateId);
-                            if (CollectionUtils.isNotEmpty(triggers)) {
-                                for (Trigger trigger : triggers) {
-                                    String expression = trigger.getExpression();
-                                    // 找出表达式中的function，进行演算
-                                    Pattern p = Pattern.compile("\\{([^}]*)\\}");
-                                    Matcher m = p.matcher(expression);
-                                    StringBuffer sb = new StringBuffer();
-                                    while (m.find()) {
-                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s));
-                                    }
-                                    m.appendTail(sb);
-                                    LOG.info("key是：" + trigger.getExpression());
-                                    LOG.info("最终表达式是：" + sb.toString());
-                                    if (antlrTrueFalse(sb.toString())) {
-                                        LOG.info("条件成立，触发阈值+1");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
 
     private Boolean antlrTrueFalse(String expression) {
         try {
