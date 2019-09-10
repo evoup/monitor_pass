@@ -160,7 +160,7 @@ public class ScanService {
                                         Event event = new Event();
                                         event.setTime(new Long(System.currentTimeMillis()).intValue() / 1000);
                                         event.setAcknowledged(false);
-                                        event.setTriggerId(trigger.getId());
+                                        event.setTargetId(trigger.getId().intValue());
                                         event.setType(0);
                                         eventMapper.insertSelective(event);
                                         // 检查事件，是否存在该事件，事件是否已经恢复
