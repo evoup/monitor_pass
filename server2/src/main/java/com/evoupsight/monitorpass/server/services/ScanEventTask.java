@@ -44,9 +44,9 @@ public class ScanEventTask {
     public void doAllJobs() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
-        LOG.info("server ready to work");
+        LOG.info("server ready to work--------------------------------");
         scanService.doAllJobs();
-        LOG.info("server job done");
+        LOG.info("server job done!");
 
 //        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
 //        try (CuratorFramework cfClient = CuratorFrameworkFactory.newClient(zkServers, retryPolicy)) {
