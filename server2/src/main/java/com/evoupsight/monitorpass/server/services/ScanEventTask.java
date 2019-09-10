@@ -44,25 +44,28 @@ public class ScanEventTask {
     public void doAllJobs() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
-        try (CuratorFramework cfClient = CuratorFrameworkFactory.newClient(zkServers, retryPolicy)) {
-            cfClient.start();
-            InterProcessLock lock = new InterProcessMutex(cfClient, LOCK_PATH);
-            if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
-                try {
-                    LOG.info("server ready to work");
-                    scanService.doAllJobs();
-                    LOG.info("server job done");
-                } finally {
-                    lock.release();
-                }
-            } else {
-                LOG.error("{} timed out after {} seconds waiting to acquire lock on {}",
-                        MY_NAME, DEFAULT_WAIT_TIME_SECONDS, LOCK_PATH);
-            }
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-        }
+        LOG.info("server ready to work");
+        scanService.doAllJobs();
+        LOG.info("server job done");
+//        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMills, maxRetries);
+//        try (CuratorFramework cfClient = CuratorFrameworkFactory.newClient(zkServers, retryPolicy)) {
+//            cfClient.start();
+//            InterProcessLock lock = new InterProcessMutex(cfClient, LOCK_PATH);
+//            if (lock.acquire(DEFAULT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
+//                try {
+//                    LOG.info("server ready to work");
+//                    scanService.doAllJobs();
+//                    LOG.info("server job done");
+//                } finally {
+//                    lock.release();
+//                }
+//            } else {
+//                LOG.error("{} timed out after {} seconds waiting to acquire lock on {}",
+//                        MY_NAME, DEFAULT_WAIT_TIME_SECONDS, LOCK_PATH);
+//            }
+//        } catch (Exception e) {
+//            LOG.error(e.getMessage(), e);
+//        }
 
         LOG.info("The time is now {}", DATE_FORMAT.format(new Date()));
     }
