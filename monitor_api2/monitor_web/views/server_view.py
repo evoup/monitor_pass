@@ -297,7 +297,7 @@ class ServerInfo(APIView):
                                                                    id=diagram_id).get())
             # [从模板创建出的逻辑]
             #     item表中如果hostid是0，则为系统默认的item，它的templateId是严格对应到template表的，item_template_id是0
-            # hostid>0的，都是外建到server的新建出来的服务器的item，它的templateId严格对应到template表的，并且item_template_id对应到复制源的itemId
+            # hostid>0的，都是外建到server的新建出来的服务器的item，它的templateId严格对应到template表的，并且item_copy_from对应到复制源的itemId
             #     item复制完成后，从trigger表复制templateId匹配的记录，查找当前function最大的id，+1后插入新的trigger表，并且对对应的function表也做维护。
             #     diagram同样的，需要复制出来。
             #    最后触发的时候，根据trigger倒推出function,function找出item，item有他对应的host，就能对应到一台服务器了。
