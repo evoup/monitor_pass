@@ -383,6 +383,8 @@ func processLine(readChannel inc.ReaderChannel, line string) {
 		dedupInteval := 300
 		if COLLECTORS[collectorName+".so"].CollectorValues[metricName].Value == value &&
 			timestamp-COLLECTORS[collectorName+".so"].CollectorValues[metricName].Timestamp < dedupInteval {
+		    fmt.Printf("timestamp0:%v %v", metricName, COLLECTORS[collectorName+".so"].CollectorValues[metricName].Timestamp)
+		    fmt.Printf("timestamp1:%v %v", metricName, timestamp)
 			collectorValue := inc.CollectorValue{value, true, line, timestamp}
 			COLLECTORS[collectorName+".so"].CollectorValues[metricName] = collectorValue
 			fmt.Println("data duplicate, ignore:" + metricName)
