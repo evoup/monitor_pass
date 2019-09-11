@@ -244,7 +244,7 @@ class MonitorItem(models.Model):
     delay = models.IntegerField(u'轮询间隔秒数', default=1)
     desc = models.CharField(u'描述', max_length=512, default='')
     error = models.CharField(u'错误', max_length=128, default='')
-    key = models.CharField(u'opentsdb指标名', max_length=128, default='', unique=True)
+    key = models.CharField(u'opentsdb指标名', max_length=128, default='')
     multiplier = models.FloatField(u'自定义乘子', default=1.0)
     unit = models.CharField(u'单位', max_length=12, default='')
     # 0代表不属于任何
@@ -252,10 +252,12 @@ class MonitorItem(models.Model):
     # 0代表不属于任何
     template_id = models.IntegerField(u'对应模板id', 0)
     delta = models.IntegerField(u'增量类型', default='0', editable=False)
+    item_copy_from = models.IntegerField(u'监控项复制自', default='0', editable=False, null=True)
 
     class Meta:
         verbose_name_plural = '监控项表'
         db_table = 'item'
+        unique_together = ('key', 'host_id')
         indexes = [models.Index(fields=['host_id']), models.Index(fields=['template_id'])]
 
     def __str__(self):

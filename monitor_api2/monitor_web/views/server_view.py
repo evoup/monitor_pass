@@ -123,6 +123,7 @@ class ServerInfo(APIView):
                 monitor_items = models.MonitorItem.objects.filter(template_id=template.id).all()
                 for monitor_item in monitor_items:
                     match_monitor_items[monitor_item.id] = 1
+            # FIXME 这里templates不知道是否有传参
             for tp in data['templates']:
                 # 指向模板
                 srv.templates.add(tp)
@@ -259,7 +260,8 @@ class ServerInfo(APIView):
                 	}
                 }
                                     """ % (
-                    diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
+                    diagram_id, targets, diagrams_names[diagram_id], GRAFANA_UNIT_MAP[diagrams_units[diagram_id]],
+                    GRAFANA_UNIT_MAP[diagrams_units[diagram_id]])
                 panes.append(pane)
             dashboard = """
                 {
@@ -296,11 +298,24 @@ class ServerInfo(APIView):
                                                                diagram=models.Diagram.objects.filter(
                                                                    id=diagram_id).get())
             # [从模板创建出的逻辑]
-            #     item表中如果hostid是0，则为系统默认的item，它的templateId是严格对应到template表的，item_template_id是0
+            #     item表中如果hostid是0，则为系统默认的item，它的templateId是严格对应到template表的，item_copy_from是0
             # hostid>0的，都是外建到server的新建出来的服务器的item，它的templateId严格对应到template表的，并且item_copy_from对应到复制源的itemId
             #     item复制完成后，从trigger表复制templateId匹配的记录，查找当前function最大的id，+1后插入新的trigger表，并且对对应的function表也做维护。
             #     diagram同样的，需要复制出来。
             #    最后触发的时候，根据trigger倒推出function,function找出item，item有他对应的host，就能对应到一台服务器了。
+            for sg in data['server_groups']:
+                srv.server_groups.add(sg)
+                template = models.Template.objects.filter(server_group=sg).get()
+                monitor_items = models.MonitorItem.objects.filter(template_id=template.id).all()
+                for monitor_item in monitor_items:
+                    if monitor_item.host_id == 0:
+                        monitor_item.host_id = srv.id
+                        monitor_item.item_copy_from = monitor_item.pk
+                        monitor_item.pk = None
+                        try:
+                            monitor_item.save()
+                        except:
+                            pass
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
