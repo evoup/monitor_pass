@@ -385,6 +385,7 @@ func processLine(readChannel inc.ReaderChannel, line string) {
 			timestamp-COLLECTORS[collectorName+".so"].CollectorValues[metricName].Timestamp < dedupInteval {
 			collectorValue := inc.CollectorValue{value, true, line, timestamp}
 			COLLECTORS[collectorName+".so"].CollectorValues[metricName] = collectorValue
+			fmt.Println("data duplicate, ignore:" + metricName)
 			return
 		}
 		collectorValue := inc.CollectorValue{value, false, line, timestamp}
