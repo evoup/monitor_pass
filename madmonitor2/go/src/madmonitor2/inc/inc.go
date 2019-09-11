@@ -113,6 +113,8 @@ type ICollector interface {
 }
 
 var Wg sync.WaitGroup
+// 脚本用的等待组
+var Wg1 sync.WaitGroup
 var Shutdown = make(chan int)
 
 var MsgQueue = make(chan string, MAX_MSGQ_SIZE)

@@ -133,14 +133,17 @@ func scripts() {
 }
 
 // 安全关闭goroutine方式地调用shell
+// https://stackoverflow.com/questions/19208725/example-for-sync-waitgroup-correct
 func goRunSingleScript(key string, interval int, shell string, metricPfx string) {
-    defer inc.Wg.Done()
+    defer inc.Wg1.Done()
     select {
     case _ = <-inc.Shutdown:
         //We're done!
         return
     default:
+        inc.Wg1.Add(1)
         runSingleScript(key, interval, shell, metricPfx)
+        inc.Wg1.Wait()
     }
 }
 
