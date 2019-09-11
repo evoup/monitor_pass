@@ -87,7 +87,7 @@ func scripts() {
                     if monitorItemKey == userScriptKey {
                         // key之后要发消息到channel
                         // shell是要用来执行的
-                        go runSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
+                        go goRunSingleScript(userScriptKey, monitorItemDelay, shell, metricPrefix)
                     } else {
                         // 另外一种情况，统配
                         reg := regexp.MustCompile(`(.*)\[(.*)\]`)
@@ -122,7 +122,7 @@ func scripts() {
                                 }
                             }
                             // 填充对应位置参数值
-                            go runSingleScript(monitorItemKey, monitorItemDelay, lastShell, metricPrefix)
+                            go goRunSingleScript(monitorItemKey, monitorItemDelay, lastShell, metricPrefix)
                         }
                     }
                 }
@@ -132,7 +132,17 @@ func scripts() {
     }
 }
 
-
+// 安全关闭goroutine方式地调用shell
+func goRunSingleScript(key string, interval int, shell string, metricPfx string) {
+    defer inc.Wg.Done()
+    select {
+    case _ = <-inc.Shutdown:
+        //We're done!
+        return
+    default:
+        runSingleScript(key, interval, shell, metricPfx)
+    }
+}
 
 func runSingleScript(key string, interval int, shell string, metricPfx string) {
     // 判断是否在interval内
