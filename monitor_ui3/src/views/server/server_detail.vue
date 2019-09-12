@@ -169,17 +169,17 @@ export default {
       var server_groups = []
       server_group_list().then(response => {
         server_groups = response.data.items
-      })
-      read_server({ id: id }).then(response => {
-        this.form.name = response.data.item.name
-        this.form.ip = response.data.item.ip
-        var grps = []
-        for (var grp in response.data.item.server_groups) {
-          if (server_groups[grp] !== null && server_groups[grp].hasOwnProperty('name')) {
-            grps.push(server_groups[grp].name)
+        read_server({ id: id }).then(response => {
+          this.form.name = response.data.item.name
+          this.form.ip = response.data.item.ip
+          var grps = []
+          for (var grp in response.data.item.server_groups) {
+            if (server_groups[grp] !== null && server_groups[grp].hasOwnProperty('name')) {
+              grps.push(server_groups[grp].name)
+            }
           }
-        }
-        this.form.server_groups = grps.join()
+          this.form.server_groups = grps.join(', ')
+        })
       })
       // 加载图表
       server_diagram_list({ id: this.$route.query.id }).then(response => {
