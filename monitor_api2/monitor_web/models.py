@@ -258,7 +258,8 @@ class MonitorItem(models.Model):
         verbose_name_plural = '监控项表'
         db_table = 'item'
         unique_together = ('key', 'host_id')
-        indexes = [models.Index(fields=['host_id']), models.Index(fields=['template_id'])]
+        indexes = [models.Index(fields=['host_id']), models.Index(fields=['template_id']),
+                   models.Index(fields=['item_copy_from'])]
 
     def __str__(self):
         return self.name
@@ -291,10 +292,12 @@ class Trigger(models.Model):
     template = models.ForeignKey('Template', verbose_name='所属模板', related_name='t', on_delete=models.CASCADE)
     name = models.CharField(u'触发器名', max_length=256, default='', null=False)
     desc = models.CharField(u'描述', max_length=256, default='', null=True)
+    trigger_copy_from = models.IntegerField(u'触发器复制自', default='0', editable=False, null=True)
 
     class Meta:
         verbose_name_plural = '触发器表'
         db_table = 'trigger'
+        indexes = [models.Index(fields=['trigger_copy_from'])]
 
     def __str__(self):
         return self.expression

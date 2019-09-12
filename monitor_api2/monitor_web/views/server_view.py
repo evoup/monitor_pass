@@ -306,6 +306,7 @@ class ServerInfo(APIView):
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
                 template = models.Template.objects.filter(server_group=sg).get()
+                # item
                 monitor_items = models.MonitorItem.objects.filter(template_id=template.id).all()
                 for monitor_item in monitor_items:
                     if monitor_item.host_id == 0:
@@ -316,6 +317,10 @@ class ServerInfo(APIView):
                             monitor_item.save()
                         except:
                             pass
+                # trigger, trigger_copy_from=0的是系统默认的
+                triggers = models.Trigger.objects.filter(template_id=template.id, trigger_copy_from=0).all()
+                for trigger in triggers:
+                    pass
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
