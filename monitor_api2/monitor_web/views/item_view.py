@@ -25,6 +25,9 @@ class ItemList(APIView):
         """
         # 没有指定就是1，不能全部查询太慢了
         cond = {'template_id': request.GET['template_id']} if 'template_id' in request.GET else {'template_id': 1}
+        # 没有指定host_id，就是系统默认的模板下的监控项
+        if 'host_id' not in request.GET:
+            cond['host_id'] = 0
         if 'ids' in request.GET:
             cond = {'id__in': request.GET['ids'].split(',')}
         page_data, count = paging_request(request, models.MonitorItem, self,
@@ -82,7 +85,8 @@ class ItemInfo(APIView):
             return JsonResponse(ret, safe=False)
         else:
             try:
-                MonitorItem.objects.create(name=data['name'], delay=data['interval'], key=data['key'], desc=data['desc'],
+                MonitorItem.objects.create(name=data['name'], delay=data['interval'], key=data['key'],
+                                           desc=data['desc'],
                                            multiplier=data['multiplier'], unit=data['unit'],
                                            template_id=data['template_id'], host_id=0)
             except:
