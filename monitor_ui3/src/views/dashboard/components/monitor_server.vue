@@ -34,8 +34,8 @@ export default {
           name: 'OpenTSDB',
           info: '2个节点在线     0个节点宕机'
         }, {
-          name: '监控状态',
-          info: '良好'
+          name: '数据收集器',
+          info: '3个节点在线     0个节点宕机'
         }, {
           name: '在线用户数',
           info: '2'
