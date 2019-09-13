@@ -303,6 +303,7 @@ class ServerInfo(APIView):
             #     item复制完成后，从trigger表复制templateId匹配的记录，查找当前function最大的id，+1后插入新的trigger表，并且对对应的function表也做维护。
             #     diagram同样的，需要复制出来。
             #    最后触发的时候，根据trigger倒推出function,function找出item，item有他对应的host，就能对应到一台服务器了。
+            pattern = re.compile(r'{([^}]*)}', re.S)
             for sg in data['server_groups']:
                 srv.server_groups.add(sg)
                 template = models.Template.objects.filter(server_group=sg).get()
@@ -320,6 +321,8 @@ class ServerInfo(APIView):
                 # trigger, trigger_copy_from=0的是系统默认的
                 triggers = models.Trigger.objects.filter(template_id=template.id, trigger_copy_from=0).all()
                 for trigger in triggers:
+                    # {5}>300 找出{}中的function的id，对其中的记录进行复制
+                    newExpression = re.sub(pattern, callback, trigger.expression)
                     pass
         except:
             print(traceback.format_exc())
@@ -439,3 +442,7 @@ class ServerGroupInfo(APIView):
             'message': '创建服务组成功'
         }
         return JsonResponse(ret, safe=False)
+
+def callback(matchObj):
+    s = int(matchObj.group(1))*3
+    return '{%s}' % s
