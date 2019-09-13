@@ -300,9 +300,11 @@ class ServerInfo(APIView):
                                                                diagram=models.Diagram.objects.filter(
                                                                    id=diagram_id).get())
             # [从模板创建出的逻辑]
-            #     item表中如果hostid是0，则为系统默认的item，它的templateId是严格对应到template表的，item_copy_from是0
+            #     一上来，先利用model.CASCAND把指定服务器的item对应的function自动删除删除了。
+            #     item表中如果host_id是0，则为系统默认的item，它的templateId是严格对应到template表的，item_copy_from是0
             # hostid>0的，都是外建到server的新建出来的服务器的item，它的templateId严格对应到template表的，并且item_copy_from对应到复制源的itemId
-            #     item复制完成后，从trigger表复制templateId匹配的记录，查找当前function最大的id，+1后插入新的trigger表，并且对对应的function表也做维护。
+            #     item复制完成后，遍历trigger的trigger_copy_from为0的，其中的expression的{}内的function需要重新生成，但是生成后会出现新的trigger，
+            # 并且老的有的trigger的function id已经找不到了，这需要之后用计划任务删掉。
             #     diagram同样的，需要复制出来。
             #    最后触发的时候，根据trigger倒推出function,function找出item，item有他对应的host，就能对应到一台服务器了。
             pattern = re.compile(r'{([^}]*)}', re.S)
@@ -317,6 +319,7 @@ class ServerInfo(APIView):
                         monitor_item.item_copy_from = monitor_item.pk
                         monitor_item.pk = None
                         try:
+                            # TODO 这边的速度要优化成bulk insert
                             monitor_item.save()
                         except:
                             pass
@@ -328,7 +331,7 @@ class ServerInfo(APIView):
                     # 这样就是复制新的
                     trigger.pk = None
                     trigger.save()
-                    newExpression = re.sub(pattern, callback({'host_id': srv.id, 'trigger_id': trigger.id}),
+                    newExpression = re.sub(pattern, expression_replace_callback({'host_id': srv.id, 'trigger_id': trigger.id}),
                                            trigger.expression)
                     models.Trigger.objects.filter(id=trigger.id).update(expression=newExpression)
                     pass
@@ -452,7 +455,10 @@ class ServerGroupInfo(APIView):
         return JsonResponse(ret, safe=False)
 
 
-class callback(object):
+class expression_replace_callback(object):
+    """
+    re.sub的回调函数，替换调原本表达式中对用的function id
+    """
     # 初始化属性
     def __init__(self, extra_arg):
         self.extra_arg = extra_arg
@@ -466,9 +472,7 @@ class callback(object):
         else:
             function = f.get()
             monitorItemSourceId = function.item.id
-            # 寻找已经复制出来的itemCopyFrom的item
-            new_name = function.name
-            new_parameter = function.parameter
+            # 寻找已经复制出来的itemCopyFrom的item.name和parameter保存原来的
             new_item = models.MonitorItem.objects.filter(host_id=self.extra_arg['host_id'],
                                                          item_copy_from=monitorItemSourceId).get()
             # 确定trigger
