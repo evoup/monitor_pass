@@ -322,7 +322,13 @@ class ServerInfo(APIView):
                 triggers = models.Trigger.objects.filter(template_id=template.id, trigger_copy_from=0).all()
                 for trigger in triggers:
                     # {5}>300 找出{}中的function的id，对其中的记录进行复制
-                    newExpression = re.sub(pattern, callback, trigger.expression)
+                    trigger.trigger_copy_from = trigger.pk
+                    # 这样就是复制新的
+                    trigger.pk = None
+                    trigger.save()
+                    newExpression = re.sub(pattern, callback({'host_id': srv.id, 'trigger_id': trigger.id}),
+                                           trigger.expression)
+                    models.Trigger.objects.filter(id=trigger.id).update(expression=newExpression)
                     pass
         except:
             print(traceback.format_exc())
@@ -443,6 +449,30 @@ class ServerGroupInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
-def callback(matchObj):
-    s = int(matchObj.group(1))*3
-    return '{%s}' % s
+
+class callback(object):
+    # 初始化属性
+    def __init__(self, extra_arg):
+        self.extra_arg = extra_arg
+
+    # 使类的实例变得callable
+    def __call__(self, match_obj):
+        functionId = int(match_obj.group(1))
+        f = models.Function.objects.filter(id=functionId)
+        if f.count() == 0:
+            return ""
+        else:
+            function = f.get()
+            monitorItemSourceId = function.item.id
+            # 寻找已经复制出来的itemCopyFrom的item
+            new_name = function.name
+            new_parameter = function.parameter
+            new_item = models.MonitorItem.objects.filter(host_id=self.extra_arg['host_id'],
+                                                         item_copy_from=monitorItemSourceId).get()
+            # 确定trigger
+            new_trigger = models.Trigger.objects.filter(id=self.extra_arg['trigger_id']).get()
+            function.item = new_item
+            function.trigger = new_trigger
+            function.pk = None
+            function.save()
+            return '{%s}' % function.id
