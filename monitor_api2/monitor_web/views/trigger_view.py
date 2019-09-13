@@ -19,7 +19,7 @@ class TriggerList(APIView):
     def get(self, request, pk=None, format=None):
         template_id = self.request.query_params['template_id']
         item_ids = []
-        for item in models.MonitorItem.objects.filter(template_id=template_id).all():
+        for item in models.MonitorItem.objects.filter(template_id=template_id, item_copy_from=0).all():
             item_ids.append(item.id)
         # 汇总每个item对应的触发器
 

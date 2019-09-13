@@ -178,7 +178,7 @@ class TemplateSerializer(serializers.ModelSerializer):
     def get_triggers(self, obj):
         # 找template下的item，每个item汇总trigger数目
         triggers = 0
-        for item in models.MonitorItem.objects.filter(template_id=obj.id).all():
+        for item in models.MonitorItem.objects.filter(template_id=obj.id, host_id=0).all():
             triggers = triggers + models.Function.objects.filter(item=item.id).count()
         return triggers
 
