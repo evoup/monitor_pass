@@ -115,6 +115,8 @@ class ServerInfo(APIView):
                                                         status=3 if data['monitoring'] else 2)
             match_monitor_items = {}
             srv = Server.objects.get(id=data['id'])
+            # 删除全部监控项，这样会删除监控项对应的function
+            models.MonitorItem.objects.filter(host_id=srv.id).delete()
             for sg in data['server_groups']:
                 # 指向服务器组
                 srv.server_groups.add(sg)

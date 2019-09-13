@@ -404,7 +404,19 @@ class Function(models.Model):
     class Meta:
         verbose_name_plural = '函数表'
         db_table = 'function'
+        unique_together = ('item', 'trigger', 'name', 'parameter')
 
+    def validate_unique(self, *args, **kwargs):
+        super(Function, self).validate_unique(*args, **kwargs)
+
+        if self.__class__.objects.\
+                filter(item=self.item, trigger=self.trigger, name=self.name, parameter=self.parameter).\
+                exists():
+            from django.core.exceptions import ValidationError
+            raise ValidationError(
+                message='MyModel with this (fk, my_field) already exists.',
+                code='unique_together',
+            )
 
 class BusinessUnit(models.Model):
     """
