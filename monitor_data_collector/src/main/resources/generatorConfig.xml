@@ -11,7 +11,10 @@
     <!-- 用反引号`包裹,默认是双引号"-->
     <property name="beginningDelimiter" value="`"/>
     <property name="endingDelimiter" value="`"/>
-
+    <commentGenerator>
+      <property name="suppressDate" value="true"/>
+      <!--<property name="suppressAllComments" value="true" />-->
+    </commentGenerator>
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://lab4:3307/monitor" userId="dba" password="123456" />
     <javaModelGenerator targetPackage="com.evoupsight.monitorpass.datacollector.dao.model" targetProject="src/main/java" />
     <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources" />
