@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form ref="form">
-      <el-form-item label="服务器组">
+      <el-form-item label="筛选">
         <el-row>
           <el-col :span="18">
             <el-select
@@ -17,11 +17,18 @@
                 :value="item.id"
               />
             </el-select>
-          </el-col>
-          <el-col :span="4" align="right">
-            <div class="grid-content">
-              <el-button type="primary" @click="jumpAddServer()"><i class="el-icon-plus el-icon--right" />添加服务器</el-button>
-            </div>
+            <el-select
+              v-model="serverSelectModel"
+              placeholder="请选择服务器"
+            >
+              <el-option
+                v-for="item in servers"
+                :key="item.id"
+                :label="item.name"
+                :aria-selected="true"
+                :value="item.id"
+              />
+            </el-select>
           </el-col>
         </el-row>
       </el-form-item>
@@ -30,8 +37,58 @@
 </template>
 
 <script>
+import { server_group_list, server_list } from '../../api/server'
+
 export default {
-  name: 'EventList'
+  name: 'EventList',
+  data() {
+    return {
+      serverGroupSelectModel: null,
+      serverSelectModel: null,
+      serverGroups: [],
+      servers: [],
+      listLoading: true,
+      total: 0,
+      pageNum: 1,
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
+      },
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        page: 1,
+        size: 7,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      }
+    }
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
+      server_list(Object.assign(this.pageHelp, this.sortHelp, { serverGroup: this.serverGroupSelectModel })).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    },
+    fetchServerGroupListData() {
+      server_group_list().then(response => {
+        this.serverGroups = response.data.items
+        this.serverGroups.push({ id: 0, name: '所有', desc: null, alarm_type: null })
+      })
+    }
+  }
 }
 </script>
 

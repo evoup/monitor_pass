@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      list: [{ name: '看板列1', order: 0, fixed: false, comp_name: 'Host' },{ name: '看板列2', order: 1, fixed: false, comp_name: 'Event' }],
+      list: [{ name: '看板列1', order: 0, fixed: false, comp_name: 'Host' }, { name: '看板列2', order: 1, fixed: false, comp_name: 'Event' }],
       list2: [{ name: '看板列3', order: 2, fixed: false, comp_name: 'MonitorServer' }],
       list3: [{ name: '看板列4', order: 3, fixed: false, comp_name: 'Issue' }],
       list4: [],
