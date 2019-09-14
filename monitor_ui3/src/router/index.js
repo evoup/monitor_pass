@@ -94,6 +94,12 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: '/event_list',
+        name: 'EventList',
+        component: () => import('../views/server/event_list'),
+        meta: { title: '事件', icon: 'server3' }
+      },
+      {
         path: 'batch_file_upload',
         name: 'Tree1',
         component: () => import('../views/tree/index'),

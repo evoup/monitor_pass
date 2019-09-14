@@ -732,6 +732,16 @@
     }
   },
   {
+    "model": "monitor_web.diagram",
+    "pk": 4,
+    "fields": {
+      "name": "所有线程数",
+      "width": "100%",
+      "height": "230",
+      "template_id": 1
+    }
+  },
+  {
     "model": "monitor_web.diagramitem",
     "pk": 1,
     "fields": {
@@ -769,6 +779,14 @@
     "fields": {
       "diagram": 3,
       "item": 1
+    }
+  },
+  {
+    "model": "monitor_web.diagramitem",
+    "pk": 6,
+    "fields": {
+      "diagram": 4,
+      "item": 29
     }
   },
   {
