@@ -685,6 +685,23 @@
     }
   },
   {
+    "model": "monitor_web.monitoritem",
+    "pk": 29,
+    "fields": {
+      "name": "Total threads",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "Total threads",
+      "error": "",
+      "key": "proc.loadavg.total_threads",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 1,
+      "delta": 0
+    }
+  },
+  {
     "model": "monitor_web.diagram",
     "pk": 1,
     "fields": {
