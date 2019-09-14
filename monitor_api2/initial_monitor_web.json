@@ -715,7 +715,7 @@
     "model": "monitor_web.diagram",
     "pk": 2,
     "fields": {
-      "name": "内存使用率",
+      "name": "内存使用",
       "width": "100%",
       "height": "230",
       "template_id": 1
