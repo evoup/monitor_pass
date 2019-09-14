@@ -43,7 +43,7 @@ export default {
   name: 'EventList',
   data() {
     return {
-      serverGroupSelectModel: null,
+      serverGroupSelectModel: 0,
       serverSelectModel: null,
       serverGroups: [],
       servers: [],
@@ -70,6 +70,10 @@ export default {
         order: ''
       }
     }
+  },
+  created() {
+    this.fetchData()
+    this.fetchServerGroupListData()
   },
   methods: {
     fetchData() {
