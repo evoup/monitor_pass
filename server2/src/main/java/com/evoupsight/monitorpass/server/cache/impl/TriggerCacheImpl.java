@@ -15,6 +15,7 @@ import static com.evoupsight.monitorpass.server.constants.CacheConstants.CACHE_M
 /**
  * @author evoup
  */
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Repository
 public class TriggerCacheImpl implements TriggerCache {
     private static final String CACHE_NAME = "com.evoupsight.monitorpass.server.cache.impl.TriggerCacheImpl";
@@ -33,7 +34,7 @@ public class TriggerCacheImpl implements TriggerCache {
     @Cacheable(value = CACHE_NAME, key = "#root.targetClass+'-tempalte_id-'+ #templateId", unless = "#result == null", condition = "#templateId != null", cacheManager = CACHE_MANAGER_GUAVA)
     public List<Trigger> getByTemplate(Long templateId) {
         TriggerExample example = new TriggerExample();
-        example.createCriteria().andTemplateIdEqualTo(templateId);
+        example.createCriteria().andTemplateIdEqualTo(templateId).andTriggerCopyFromNotEqualTo(0);
         return triggerMapper.selectByExample(example);
     }
 }
