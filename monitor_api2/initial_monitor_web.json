@@ -688,7 +688,7 @@
     "model": "monitor_web.diagram",
     "pk": 1,
     "fields": {
-      "name": "cpu load",
+      "name": "cpu负载",
       "width": "100%",
       "height": "230",
       "template_id": 1
@@ -698,7 +698,17 @@
     "model": "monitor_web.diagram",
     "pk": 2,
     "fields": {
-      "name": "memory usage",
+      "name": "内存使用率",
+      "width": "100%",
+      "height": "230",
+      "template_id": 1
+    }
+  },
+  {
+    "model": "monitor_web.diagram",
+    "pk": 3,
+    "fields": {
+      "name": "所有进程数",
       "width": "100%",
       "height": "230",
       "template_id": 1
@@ -734,6 +744,14 @@
     "fields": {
       "diagram": 2,
       "item": 23
+    }
+  },
+  {
+    "model": "monitor_web.diagramitem",
+    "pk": 5,
+    "fields": {
+      "diagram": 3,
+      "item": 1
     }
   },
   {
