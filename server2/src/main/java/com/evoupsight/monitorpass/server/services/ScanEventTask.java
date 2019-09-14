@@ -40,7 +40,7 @@ public class ScanEventTask {
         this.scanService = scanService;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10000)
     public void doAllJobs() {
         int baseSleepTimeMills = 1000;
         int maxRetries = 3;

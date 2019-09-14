@@ -175,16 +175,16 @@ public class ScanService {
     private void processEvent(Trigger trigger) {
         // 选择最近的一条事件记录
         // 1.如果不存在事件，则生成事件
-        // 2.如果存在事件，事件已经恢复，则新建事件
+        // 2.如果存在事件，事件已经恢复（且超过5分钟），则新建事件
         List<Event> events = eventMapper.selectByExample(
                 new EventExample().limit(1).createCriteria().andTargetIdEqualTo(trigger.getId().intValue())
                         .example().orderBy(Event.Column.time.desc())
         );
         if (CollectionUtils.isEmpty(events)) {
-            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(0).build();
+            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(EventState.PROBLEM.ordinal()).build();
             eventMapper.insertSelective(event);
-        } else if (events.get(0).getAcknowledged()) {
-            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(0).build();
+        } else if (events.get(0).getType() != null && events.get(0).getType() > EventState.OK.ordinal()) {
+            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(EventState.PROBLEM.ordinal()).build();
             eventMapper.insertSelective(event);
         }
 
