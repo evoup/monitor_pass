@@ -7,7 +7,6 @@ import com.evoupsight.monitorpass.server.cache.TriggerCache;
 import com.evoupsight.monitorpass.server.dao.mapper.EventMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
 import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
-import com.evoupsight.monitorpass.server.dao.mapper.ServerMapper;
 import com.evoupsight.monitorpass.server.dao.model.*;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
@@ -48,7 +47,6 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,7 +59,7 @@ import static com.evoupsight.monitorpass.server.constants.Constants.ServerStatus
 /**
  * @author evoup
  */
-@SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection"})
+@SuppressWarnings({"Duplicates", "SpringJavaAutowiredFieldsWarningInspection", "SpringJavaInjectionPointsAutowiringInspection"})
 @Service
 public class ScanService {
     private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
@@ -157,15 +155,8 @@ public class ScanService {
                                     LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
                                         LOG.warn("条件成立，进入事件逻辑");
-                                        Event event = new Event();
-                                        event.setTime(new Long(System.currentTimeMillis()).intValue() / 1000);
-                                        event.setAcknowledged(false);
-                                        event.setTargetId(trigger.getId().intValue());
-                                        event.setType(0);
-                                        eventMapper.insertSelective(event);
-                                        // 检查事件，是否存在该事件，事件是否已经恢复
-                                        // 1.如果不存在事件，则生成事件
-                                        // 2.如果存在事件，事件已经恢复，则新建事件
+                                        processEvent(trigger);
+                                        LOG.info("事件逻辑结束");
                                     }
                                 }
                             }
@@ -174,6 +165,29 @@ public class ScanService {
                 }
             }
         });
+    }
+
+    /**
+     * 检查事件，是否存在该事件，事件是否已经恢复
+     *
+     * @param trigger
+     */
+    private void processEvent(Trigger trigger) {
+        // 选择最近的一条事件记录
+        // 1.如果不存在事件，则生成事件
+        // 2.如果存在事件，事件已经恢复，则新建事件
+        List<Event> events = eventMapper.selectByExample(
+                new EventExample().limit(1).createCriteria().andTargetIdEqualTo(trigger.getId().intValue())
+                        .example().orderBy(Event.Column.time.desc())
+        );
+        if (CollectionUtils.isEmpty(events)) {
+            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(0).build();
+            eventMapper.insertSelective(event);
+        } else if (events.get(0).getAcknowledged()) {
+            Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(0).build();
+            eventMapper.insertSelective(event);
+        }
+
     }
 
     /**
@@ -240,6 +254,12 @@ public class ScanService {
         return "";
     }
 
+    /**
+     * 通过antlr判断逻辑真假
+     *
+     * @param expression
+     * @return
+     */
     private Boolean antlrTrueFalse(String expression) {
         try {
             CharStream input = new ANTLRInputStream(expression);

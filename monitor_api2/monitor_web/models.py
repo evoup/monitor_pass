@@ -172,7 +172,7 @@ class Event(models.Model):
     class Meta:
         verbose_name_plural = '监控事件表'
         db_table = 'event'
-        indexes = [models.Index(fields=['target_id'])]
+        indexes = [models.Index(fields=['target_id']), models.Index(fields=['time'])]
 
     def __str__(self):
         return self.event
