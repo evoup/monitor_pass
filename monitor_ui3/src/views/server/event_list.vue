@@ -80,7 +80,7 @@ export default {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
       server_list(Object.assign(this.pageHelp, this.sortHelp, { serverGroup: this.serverGroupSelectModel })).then(response => {
-        this.dataList = response.data.items
+        this.servers = response.data.items
         this.pageList = response.data.page
         this.listLoading = false
         this.total = response.data.count
