@@ -255,6 +255,7 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     server = serializers.SerializerMethodField()
+    detail = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -265,6 +266,12 @@ class EventSerializer(serializers.ModelSerializer):
         function = Function.objects.filter(id=obj.target_id).get()
         host_id = function.item.host_id
         return Server.objects.filter(id=host_id).get().name
+
+    def get_detail(self, obj):
+        function = Function.objects.filter(id=obj.target_id).get()
+        host_id = function.item.host_id
+        host_name = Server.objects.filter(id=host_id).get().name
+        return re.sub(r'{HOST.NAME}', host_name, function.trigger.name)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
