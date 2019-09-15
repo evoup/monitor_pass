@@ -540,7 +540,8 @@
       "expression": "{1}>300",
       "template": 1,
       "name": "Too many processes on {HOST.NAME}",
-      "desc": null
+      "desc": null,
+      "level": 1
     }
   },
   {
@@ -550,7 +551,8 @@
       "expression": "{2}>5",
       "template": 1,
       "name": "Processor load is too high on {HOST.NAME}",
-      "desc": null
+      "desc": null,
+      "level": 1
     }
   },
   {
@@ -560,7 +562,8 @@
       "expression": "{3}>30",
       "template": 1,
       "name": "Too many processes running on {HOST.NAME}",
-      "desc": null
+      "desc": null,
+      "level": 1
     }
   },
   {
@@ -570,7 +573,8 @@
       "expression": "{4}>0",
       "template": 1,
       "name": "Host information was changed on {HOST.NAME}",
-      "desc": null
+      "desc": null,
+      "level": 1
     }
   },
   {
@@ -580,7 +584,8 @@
       "expression": "{5}<50",
       "template": 1,
       "name": "Lack of free swap space on {HOST.NAME}",
-      "desc": "It probably means that the systems requires more physical memory."
+      "desc": "It probably means that the systems requires more physical memory.",
+      "level": 1
     }
   },
   {

@@ -287,11 +287,18 @@ class Trigger(models.Model):
     """
     触发器
     """
+    level_choices = (
+        (0, '信息'),
+        (1, '警告'),
+        (2, '严重警告'),
+        (3, '灾难警告'),
+    )
     id = models.BigAutoField(primary_key=True)
     expression = models.CharField(u'触发器表达式', max_length=256, default='')
     template = models.ForeignKey('Template', verbose_name='所属模板', related_name='t', on_delete=models.CASCADE)
     name = models.CharField(u'触发器名', max_length=256, default='', null=False)
     desc = models.CharField(u'描述', max_length=256, default='', null=True)
+    level = TinyIntegerField(u'严重等级', choices=level_choices, null=True, default=0)
     trigger_copy_from = models.IntegerField(u'触发器复制自', default='0', editable=False, null=True)
 
     class Meta:

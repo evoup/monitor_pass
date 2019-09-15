@@ -47,11 +47,11 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`, `template_id`, `delta`) VALUES ('Used disk space on $1', '0', '60', 'Used disk space on $1', '', 'vfs.fs.size[{#FSNAME},pused]', '1', '%', '0', '1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`, `template_id`, `delta`) VALUES ('Total threads', '0', '60', 'Total threads', '', 'proc.loadavg.total_threads', '1', '', '0', '1', '0');
 
-INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Too many processes on {HOST.NAME}', '{1}>300', '1');
-INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Processor load is too high on {HOST.NAME}', '{2}>5', '1');
-INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Too many processes running on {HOST.NAME}', '{3}>30', '1');
-INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`) VALUES ('Host information was changed on {HOST.NAME}', '{4}>0', '1');
-INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `desc`) VALUES ('Lack of free swap space on {HOST.NAME}', '{5}<50', '1', 'It probably means that the systems requires more physical memory.');
+INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Too many processes on {HOST.NAME}', '{1}>300', '1', '1');
+INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Processor load is too high on {HOST.NAME}', '{2}>5', '1', '1');
+INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Too many processes running on {HOST.NAME}', '{3}>30', '1', '1');
+INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Host information was changed on {HOST.NAME}', '{4}>0', '1', '1');
+INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `desc`, `level`) VALUES ('Lack of free swap space on {HOST.NAME}', '{5}<50', '1', 'It probably means that the systems requires more physical memory.', '1');
 
 
 INSERT INTO `monitor`.`function` (`name`, `parameter`, `item_id`, `trigger_id`) VALUES ('avg', '5m', '1', '1');
