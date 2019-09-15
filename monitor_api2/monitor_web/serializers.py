@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from monitor_web import models
 from monitor_web.models import Server, Profile, IDC, Asset, Tag, ServerGroup, UserGroup, Template, MonitorItem, Trigger, \
-    Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig, NotificationMode
+    Function, DataCollector, AssetRecord, Diagram, DiagramItem, GeneralConfig, NotificationMode, Event
 
 
 class DashboardServersSerializer(serializers.ModelSerializer):
@@ -251,6 +251,12 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         return "1"
+
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):

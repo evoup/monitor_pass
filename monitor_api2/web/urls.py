@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
-    diagram_view, general_config_view, dashboard_view, notification_mode_config
+    diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -99,5 +99,7 @@ urlpatterns = [
         url(r'^dashboard/server/list', dashboard_view.DashboardServerList.as_view()),
         # 告警接收设置列表
         url(r'^notification_mode_config/list', notification_mode_config.NotificationModeList.as_view()),
+        # 事件列表
+        url(r'^event/list$', event_view.EventList.as_view()),
     ]))
 ]
