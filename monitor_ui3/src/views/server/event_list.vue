@@ -44,7 +44,6 @@
           tooltip-effect="dark"
           style="width: 100%"
           @sort-change="sortChange">
-          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center"/>
           <el-table-column
             label="发生时间"
             sortable="custom"
@@ -58,8 +57,8 @@
           <el-table-column
             label="描述"
             sortable="custom"
-            prop="server"
-            min-width="14%"/>
+            prop="detail"
+            min-width="30%"/>
           <el-table-column
             label="状态"
             sortable="custom"
@@ -180,14 +179,14 @@ export default {
 </script>
 
 <style scoped>
-  .app-container /deep/ tr > td:nth-child(5) .cell {
+  .app-container /deep/ tr > td:nth-child(4) .cell {
     vertical-align: middle;
     width: 100%;
     height: 100%;
     padding: 0;
   }
 
-  .app-container /deep/ tr > td:nth-child(5) div .warn {
+  .app-container /deep/ tr > td:nth-child(4) div .warn {
     width: 100%;
     height: 100%;
     padding-top: 8px;
@@ -195,7 +194,7 @@ export default {
     background-color: #E6A23C;
     vertical-align: middle;
   }
-  .app-container /deep/ tr > td:nth-child(5) div .warn2 {
+  .app-container /deep/ tr > td:nth-child(4) div .warn2 {
     width: 100%;
     height: 100%;
     padding-top: 8px;
