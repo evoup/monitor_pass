@@ -254,9 +254,17 @@ class TriggerFunctionSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    server = serializers.SerializerMethodField()
+
     class Meta:
         model = Event
         fields = '__all__'
+
+    def get_server(self, obj):
+        # obj.target_id是function,再找item的host_id
+        function = Function.objects.filter(id=obj.target_id).get()
+        host_id = function.item.host_id
+        return Server.objects.filter(id=host_id).get().name
 
 
 class ProfileSerializer(serializers.ModelSerializer):

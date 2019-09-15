@@ -46,7 +46,7 @@
           <el-table-column
             label="主机名"
             sortable="custom"
-            prop="name"
+            prop="server"
             min-width="14%" />
           <el-table-column
             label="状态"
