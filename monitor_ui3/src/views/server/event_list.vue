@@ -48,6 +48,17 @@
             sortable="custom"
             prop="name"
             min-width="14%" />
+          <el-table-column
+            label="状态"
+            sortable="custom"
+            prop="type"
+            min-width="14%">
+            <template slot-scope="prop">
+              <a v-if="prop.row.type===0" class="info" @click="void(0)">正常</a>
+              <a v-if="prop.row.type===1" class="info" @click="void(0)">警告</a>
+              <a v-if="prop.row.type===2" class="info" @click="void(0)">严重警告</a>
+            </template>
+          </el-table-column>
         </el-table>
       </el-col>
     </el-form>
@@ -135,7 +146,7 @@ export default {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
       this.fetchData()
-    },
+    }
   }
 }
 </script>
