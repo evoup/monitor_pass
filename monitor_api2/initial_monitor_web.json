@@ -109,6 +109,17 @@
     }
   },
   {
+    "model": "monitor_web.template",
+    "pk": 10,
+    "fields": {
+      "name": "Template JMX Generic",
+      "server_id": [],
+      "monitor_set_id": [],
+      "server_group": [],
+      "template_id": []
+    }
+  },
+  {
     "model": "monitor_web.monitoritem",
     "pk": 1,
     "fields": {
@@ -704,6 +715,193 @@
       "host_id": 0,
       "template_id": 1,
       "delta": 0
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 30,
+    "fields": {
+      "name": "cl Loaded Class Count",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=ClassLoading\",LoadedClassCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 31,
+    "fields": {
+      "name": "cl Total Loaded Class Count",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=ClassLoading\",TotalLoadedClassCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 32,
+    "fields": {
+      "name": "cl Unloaded Class Count",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=ClassLoading\",UnloadedClassCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 33,
+    "fields": {
+      "name": "comp Name of the current JIT compiler",
+      "data_type": 0,
+      "delay": 3600,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=Compilation\",Name]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 34,
+    "fields": {
+      "name": "comp Accumulated time spent in compilation",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=Compilation\",TotalCompilationTime]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 35,
+    "fields": {
+      "name": "gc ConcurrentMarkSweep number of collections per second",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=ConcurrentMarkSweep\",CollectionCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 36,
+    "fields": {
+      "name": "gc ConcurrentMarkSweep accumulated time spent in collection",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=ConcurrentMarkSweep\",CollectionTime]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 37,
+    "fields": {
+      "name": "gc Copy number of collections per second",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=Copy\",CollectionCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 38,
+    "fields": {
+      "name": "gc Copy accumulated time spent in collection",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=Copy\",CollectionTime]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 39,
+    "fields": {
+      "name": "gc MarkSweepCompact number of collections per second",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=MarkSweepCompact\",CollectionCount]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
+    }
+  },
+  {
+    "model": "monitor_web.monitoritem",
+    "pk": 40,
+    "fields": {
+      "name": "gc MarkSweepCompact accumulated time spent in collection",
+      "data_type": 0,
+      "delay": 60,
+      "desc": "",
+      "error": "",
+      "key": "jmx[\"java.lang:type=GarbageCollector,name=MarkSweepCompact\",CollectionTime]",
+      "multiplier": 1.0,
+      "unit": "",
+      "host_id": 0,
+      "template_id": 10,
+      "delta": 1
     }
   },
   {

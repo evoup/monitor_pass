@@ -7,6 +7,7 @@ INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Disks');
 INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP OS Linux');
 INSERT INTO `monitor`.`template` (`name`) VALUES ('Template SNMP Processors');
 INSERT INTO `monitor`.`template` (`name`) VALUES ('Template App MySQL');
+INSERT INTO `monitor`.`template` (`name`) VALUES ('Template JMX Generic');
 
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Number of processes', '0', '60', 'Total number of processes in any state.', '', 'proc.num[]', '1', '', '0', '1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('Processor load (1 min average per core)', '0', '60', 'The processor load is calculated as system CPU load divided by number of CPU cores.', '', 'system.cpu.load[percpu,avg1]', '1', '', '0','1', '0');
@@ -46,6 +47,18 @@ INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `ke
 
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`, `template_id`, `delta`) VALUES ('Used disk space on $1', '0', '60', 'Used disk space on $1', '', 'vfs.fs.size[{#FSNAME},pused]', '1', '%', '0', '1', '0');
 INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`, `template_id`, `delta`) VALUES ('Total threads', '0', '60', 'Total threads', '', 'proc.loadavg.total_threads', '1', '', '0', '1', '0');
+
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('cl Loaded Class Count', '0', '60', '', '', 'jmx["java.lang:type=ClassLoading",LoadedClassCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('cl Total Loaded Class Count', '0', '60', '', '', 'jmx["java.lang:type=ClassLoading",TotalLoadedClassCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('cl Unloaded Class Count', '0', '60', '', '', 'jmx["java.lang:type=ClassLoading",UnloadedClassCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('comp Name of the current JIT compiler', '0', '3600', '', '', 'jmx["java.lang:type=Compilation",Name]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('comp Accumulated time spent in compilation', '0', '60', '', '', 'jmx["java.lang:type=Compilation",TotalCompilationTime]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc ConcurrentMarkSweep number of collections per second', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=ConcurrentMarkSweep",CollectionCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc ConcurrentMarkSweep accumulated time spent in collection', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=ConcurrentMarkSweep",CollectionTime]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc Copy number of collections per second', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=Copy",CollectionCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc Copy accumulated time spent in collection', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=Copy",CollectionTime]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc MarkSweepCompact number of collections per second', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=MarkSweepCompact",CollectionCount]', '1', '', '0','10', '0');
+INSERT INTO `monitor`.`item` (`name`, `data_type`, `delay`, `desc`, `error`, `key`, `multiplier`, `unit`, `host_id`,`template_id`, `delta`) VALUES ('gc MarkSweepCompact accumulated time spent in collection', '0', '60', '', '', 'jmx["java.lang:type=GarbageCollector,name=MarkSweepCompact",CollectionTime]', '1', '', '0','10', '0');
 
 INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Too many processes on {HOST.NAME}', '{1}>300', '1', '1');
 INSERT INTO `monitor`.`trigger` (`name`, `expression`, `template_id`, `level`) VALUES ('Processor load is too high on {HOST.NAME}', '{2}>5', '1', '1');

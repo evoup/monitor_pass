@@ -239,7 +239,7 @@ class MonitorItem(models.Model):
         (1, 'SNMP'),
         (2, 'JMX'),
     )
-    name = models.CharField(u'监控项名', max_length=40, null=False)
+    name = models.CharField(u'监控项名', max_length=80, null=False)
     data_type = TinyIntegerField(u'数据类型', choices=data_type_choices, default=0)
     delay = models.IntegerField(u'轮询间隔秒数', default=1)
     desc = models.CharField(u'描述', max_length=512, default='')
