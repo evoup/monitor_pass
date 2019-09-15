@@ -88,6 +88,22 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <el-col :span="24" class="toolbar block">
+        <!--数据分页
+     layout：分页显示的样式
+     :page-size：每页显示的条数
+     :total：总数
+     具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
+     -->
+        <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
+        <el-pagination
+          :page-sizes="[10,15,30]"
+          :page-size="10"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" />
+      </el-col>
     </el-form>
   </div>
 </template>
