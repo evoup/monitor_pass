@@ -131,6 +131,7 @@ export default {
   created() {
     this.fetchData()
     this.fetchServerGroupListData()
+    this.fetchEventListData()
   },
   methods: {
     fetchData() {
