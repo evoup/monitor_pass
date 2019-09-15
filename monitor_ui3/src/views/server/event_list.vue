@@ -77,6 +77,16 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column
+            label="已确认"
+            sortable="custom"
+            prop="acknowledged"
+            min-width="14%">
+            <template slot-scope="prop">
+              <span v-if="prop.row.acknowledged===true">是</span>
+              <span v-if="prop.row.acknowledged!==true">否</span>
+            </template>
+          </el-table-column>
         </el-table>
       </el-col>
     </el-form>
