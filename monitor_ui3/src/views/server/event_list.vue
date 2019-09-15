@@ -37,6 +37,8 @@
         <el-table
           :v-loading="listLoading"
           :data="dataList"
+          :row-style="{height:'40px'}"
+          :cell-style="{height:'40px',padding:'0px'}"
           stripe
           border
           tooltip-effect="dark"
@@ -49,18 +51,23 @@
             prop="server"
             min-width="14%"/>
           <el-table-column
+            label="描述"
+            sortable="custom"
+            prop="server"
+            min-width="14%"/>
+          <el-table-column
             label="状态"
             sortable="custom"
             prop="type"
             min-width="14%">
             <template slot-scope="prop">
-              <div>
+              <div v-if="prop.row.type===0" class="ok">
                 <span v-if="prop.row.type===0" style="color: white">正常</span>
               </div>
-              <div>
+              <div v-if="prop.row.type===1" class="warn">
                 <span v-if="prop.row.type===1" style="color: white">警告</span>
               </div>
-              <div>
+              <div v-if="prop.row.type===2" class="warn2">
                 <span v-if="prop.row.type===2" style="color: white">严重警告</span>
               </div>
             </template>
@@ -158,9 +165,28 @@ export default {
 </script>
 
 <style scoped>
-  .app-container /deep/ tr > td:nth-child(3)  {
+  .app-container /deep/ tr > td:nth-child(4) .cell {
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  .app-container /deep/ tr > td:nth-child(4) div .warn {
+    width: 100%;
+    height: 100%;
+    padding-top: 8px;
+    padding-left:8px;
     background-color: #E6A23C;
     vertical-align: middle;
-    display: block;
   }
+  .app-container /deep/ tr > td:nth-child(4) div .warn2 {
+    width: 100%;
+    height: 100%;
+    padding-top: 8px;
+    padding-left:8px;
+    background-color: #F56C6C;
+    vertical-align: middle;
+  }
+
 </style>
