@@ -42,21 +42,27 @@
           tooltip-effect="dark"
           style="width: 100%"
           @sort-change="sortChange">
-          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center" />
+          <el-table-column :index="indexMethod" prop="id" label="序号" type="index" width="80" align="center"/>
           <el-table-column
             label="主机名"
             sortable="custom"
             prop="server"
-            min-width="14%" />
+            min-width="14%"/>
           <el-table-column
             label="状态"
             sortable="custom"
             prop="type"
             min-width="14%">
             <template slot-scope="prop">
-              <a v-if="prop.row.type===0" class="info" @click="void(0)">正常</a>
-              <a v-if="prop.row.type===1" class="info" @click="void(0)">警告</a>
-              <a v-if="prop.row.type===2" class="info" @click="void(0)">严重警告</a>
+              <div>
+                <span v-if="prop.row.type===0" style="color: white">正常</span>
+              </div>
+              <div>
+                <span v-if="prop.row.type===1" style="color: white">警告</span>
+              </div>
+              <div>
+                <span v-if="prop.row.type===2" style="color: white">严重警告</span>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -152,5 +158,9 @@ export default {
 </script>
 
 <style scoped>
-
+  .app-container /deep/ tr > td:nth-child(3)  {
+    background-color: #E6A23C;
+    vertical-align: middle;
+    display: block;
+  }
 </style>
