@@ -116,7 +116,20 @@ class ServerInfo(APIView):
             match_monitor_items = {}
             srv = Server.objects.get(id=data['id'])
             # 删除全部监控项，这样会删除监控项对应的function
+            # 首先要清理老的数据,虽然function和item是级联删除，function和trigger也是，但是event对应的target_id和trigger不是
+            # TODO 对于每个item为host的，找出id,进入function，干掉对应的trigger，同时需要干掉对应target_id的event
+            items = models.MonitorItem.objects.filter(host_id=srv.id)
+            functions = models.Function.objects.filter(item__in=models.MonitorItem.objects.filter(host_id=srv.id)).all()
+            delete_trigger_id = []
+            for func in functions:
+                delete_trigger_id.append(func.trigger.id)
+            functions = models.Function.objects.filter(
+                item__in=models.MonitorItem.objects.filter(host_id=srv.id).all()).all()
+            for func in functions:
+                delete_trigger_id.append(func.trigger.id)
+            models.Event.objects.filter(target_id__in=delete_trigger_id).delete()
             models.MonitorItem.objects.filter(host_id=srv.id).delete()
+            models.Trigger.objects.filter(id__in=delete_trigger_id).delete()
             for sg in data['server_groups']:
                 # 指向服务器组
                 srv.server_groups.add(sg)
