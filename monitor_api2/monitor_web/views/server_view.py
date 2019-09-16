@@ -117,8 +117,8 @@ class ServerInfo(APIView):
             srv = Server.objects.get(id=data['id'])
             # 删除全部监控项，这样会删除监控项对应的function
             # 首先要清理老的数据,虽然function和item是级联删除，function和trigger也是，但是event对应的target_id和trigger不是
-            # TODO 对于每个item为host的，找出id,进入function，干掉对应的trigger，同时需要干掉对应target_id的event
-            items = models.MonitorItem.objects.filter(host_id=srv.id)
+            # 对于每个item为host的，找出id,进入function，干掉对应的trigger，同时需要干掉对应target_id的event
+            # FIXME 这里到底怎么写是不用all还是要all
             functions = models.Function.objects.filter(item__in=models.MonitorItem.objects.filter(host_id=srv.id)).all()
             delete_trigger_id = []
             for func in functions:

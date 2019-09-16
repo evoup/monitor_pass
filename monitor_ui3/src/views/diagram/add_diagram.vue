@@ -84,6 +84,7 @@
         v-model="itemSelectModel"
         placeholder="请选择监控项"
         style="width: 80%"
+        multiple="true"
       >
         <el-option
           v-for="item in itemData"
