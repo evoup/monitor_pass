@@ -1033,5 +1033,14 @@
       "wechat_secret": "secret",
       "enabled": true
     }
+  },
+  {
+    "model": "monitor_web.servergroup",
+    "pk": 1,
+    "fields": {
+      "name": "Linux Servers",
+      "desc": "",
+      "alarm_type": 1
+    }
   }
 ]
