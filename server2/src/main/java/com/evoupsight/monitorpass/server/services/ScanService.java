@@ -219,6 +219,7 @@ public class ScanService {
                 Item item = itemCache.get(itemId);
                 LOG.info("test2");
                 HttpGet httpGet;
+                HttpResponse httpResponse = null;
                 try {
                     LOG.info("test3");
                     String key = item.getKey();
@@ -229,7 +230,7 @@ public class ScanService {
                     LOG.info("test6");
                     httpGet = new HttpGet(apiUrl);
                     LOG.info("test7");
-                    HttpResponse httpResponse = httpClient.execute(httpGet);
+                    httpResponse = httpClient.execute(httpGet);
                     LOG.info("test8");
                     if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
                         LOG.info("test9");
@@ -266,6 +267,8 @@ public class ScanService {
                     }
                 } catch (IOException e) {
                     LOG.error(e.getMessage(), e);
+                } finally {
+                    releaseResponse(httpResponse);
                 }
                 LOG.info("test");
             }
