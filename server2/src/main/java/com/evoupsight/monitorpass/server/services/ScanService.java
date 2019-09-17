@@ -196,7 +196,6 @@ public class ScanService {
      */
     private String getOpentsdbValue(String functionId, Server server) {
         LOG.info("functionId:" + functionId);
-        String dbValue = "";
         Function f = functionCache.get(new Long(functionId));
         if (f != null) {
             {
@@ -212,56 +211,37 @@ public class ScanService {
                 } catch (Exception e) {
                     LOG.warn(f.getParameter() + "不是时间参数");
                 }
-                LOG.info("test0");
                 // 获取监控项的数值
                 Integer itemId = f.getItemId();
-                LOG.info("test1");
                 Item item = itemCache.get(itemId);
-                LOG.info("test2");
                 HttpGet httpGet;
                 HttpResponse httpResponse = null;
                 try {
-                    LOG.info("test3");
                     String key = item.getKey();
-                    LOG.info("test4");
                     String minutes = period != null ? String.valueOf(period.getMinutes()) : "15";
-                    LOG.info("test5");
                     String apiUrl = opentsdbUrl + "/api/query?start=" + minutes + "m-ago&m=sum:apps.backend." + server.getName() + "." + key;
-                    LOG.info("test6");
                     httpGet = new HttpGet(apiUrl);
-                    LOG.info("test7");
                     httpResponse = httpClient.execute(httpGet);
-                    LOG.info("test8");
                     if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
-                        LOG.info("test9");
                         HttpEntity entity = httpResponse.getEntity();
-                        LOG.info("test10");
                         // 将entity当中的数据转换为字符串
                         String response = EntityUtils.toString(entity, "utf-8");
-                        LOG.info("test11");
                         ArrayList<QueryDto> queryDtos = new Gson().fromJson(response, new TypeToken<ArrayList<QueryDto>>() {
                         }.getType());
-                        LOG.info("test12");
                         if (queryDtos != null && queryDtos.size() > 0 && queryDtos.get(0).getDps() != null && queryDtos.get(0).getDps().size() > 0) {
                             HashMap<String, Object> dataPoints = queryDtos.get(0).getDps();
-                            LOG.info("test13");
                             for (Map.Entry<String, Object> entry : dataPoints.entrySet()) {
-//                                dbValue = entry.getValue().toString();
                                 // 在线
                                 serverCache.makeUp(server.getId());
                                 break;
                             }
-                            LOG.info("test14");
                             List<Double> primes = dataPoints.entrySet().stream().filter(Objects::nonNull).map(x -> (Double) x.getValue()).collect(Collectors.toList());
                             DoubleSummaryStatistics stats = primes.stream()
                                     .mapToDouble((p) -> p)
                                     .summaryStatistics();
-                            LOG.info("test15");
                             return Double.toString(stats.getAverage());
-//                            return dbValue;
                         } else {
                             // 宕机
-                            LOG.info("test16");
                             serverCache.makeDown(server.getId());
                         }
                     }
@@ -270,7 +250,6 @@ public class ScanService {
                 } finally {
                     releaseResponse(httpResponse);
                 }
-                LOG.info("test");
             }
         }
         return "";

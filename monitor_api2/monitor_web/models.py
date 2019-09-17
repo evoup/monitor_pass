@@ -416,14 +416,15 @@ class Function(models.Model):
     def validate_unique(self, *args, **kwargs):
         super(Function, self).validate_unique(*args, **kwargs)
 
-        if self.__class__.objects.\
-                filter(item=self.item, trigger=self.trigger, name=self.name, parameter=self.parameter).\
+        if self.__class__.objects. \
+                filter(item=self.item, trigger=self.trigger, name=self.name, parameter=self.parameter). \
                 exists():
             from django.core.exceptions import ValidationError
             raise ValidationError(
                 message='MyModel with this (fk, my_field) already exists.',
                 code='unique_together',
             )
+
 
 class BusinessUnit(models.Model):
     """
@@ -590,6 +591,28 @@ class Memory(models.Model):
 
     def __str__(self):
         return self.slot
+
+
+class Operation(models.Model):
+    """
+    操作
+    """
+    status_choices = (
+        (0, '禁用'),
+        (1, '启用'),
+    )
+    name = models.CharField('操作名称', max_length=128)
+    status = models.IntegerField(choices=status_choices, default=1)
+    period = models.IntegerField(null=False, default=3600)
+    title = models.CharField('简短消息', max_length=128)
+    content = models.CharField('简短消息', max_length=512)
+
+    class Meta:
+        verbose_name_plural = "操作表"
+        db_table = 'operation'
+
+    def __str__(self):
+        return self.name
 
 
 class AssetRecord(models.Model):
