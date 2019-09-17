@@ -1,6 +1,7 @@
 package main
 
 import (
+    "bytes"
     "encoding/json"
     "fmt"
     "github.com/patrickmn/go-cache"
@@ -18,6 +19,8 @@ import (
 type scriptsPlugin string
 
 var ScriptItemCache = cache.New(5*time.Minute, 10*time.Minute)
+
+const ShellToUse = "sh"
 
 func main() {
     foreverRun()
@@ -155,9 +158,11 @@ func runSingleScript(key string, interval int, shell string, metricPfx string) {
         return
     }
     // 进行脚本执行
-    args := strings.Fields(shell)
     timestamp := time.Now().Unix()
-    out, err := exec.Command(args[0], args[1:]...).Output()
+    err, out, _ := shellOut(shell)
+    if err != nil {
+        log.Printf("error: %v\n", err)
+    }
     if err != nil {
         log.Fatal(err)
     }
@@ -167,6 +172,17 @@ func runSingleScript(key string, interval int, shell string, metricPfx string) {
     // 完成，设置一个缓存，这样进来后就不执行了
     // TODO 可能有的问题，就是一个进程没有执行完，最好还有锁的支持
     ScriptItemCache.Set(key, "hit", time.Duration(interval)*time.Second)
+}
+
+// 解决go1.9.2更新版本不知道什么情况会出现exec
+func shellOut(command string) (error, string, string) {
+    var stdout bytes.Buffer
+    var stderr bytes.Buffer
+    cmd := exec.Command(ShellToUse, "-c", command)
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    return err, stdout.String(), stderr.String()
 }
 
 var ScriptsSo scriptsPlugin
