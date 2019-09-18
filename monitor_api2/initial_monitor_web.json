@@ -1042,5 +1042,16 @@
       "desc": "",
       "alarm_type": 1
     }
+  },
+  {
+    "model": "monitor_web.operation",
+    "pk": 1,
+    "fields": {
+      "name": "\u53d1\u9001\u544a\u8b66\u81f3\u8fd0\u7ef4\u4eba\u5458",
+      "status": 1,
+      "period": 3600,
+      "title": "{TRIGGER.STATUS}: {TRIGGER.NAME}",
+      "content": "Trigger: {TRIGGER.NAME}\nTrigger status: {TRIGGER.STATUS}\nTrigger severity: {TRIGGER.SEVERITY}\nTrigger URL: {TRIGGER.URL}\n\nItem values:\n\n1. {ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}\n2. {ITEM.NAME2} ({HOST.NAME2}:{ITEM.KEY2}): {ITEM.VALUE2}\n3. {ITEM.NAME3} ({HOST.NAME3}:{ITEM.KEY3}): {ITEM.VALUE3}\n\nOriginal event ID: {EVENT.ID}"
+    }
   }
 ]
