@@ -97,7 +97,9 @@ class ServerInfo(APIView):
             if data['idc'] is not None:
                 i, _ = IDC.objects.get_or_create(name=data['idc'])
                 if server.asset is not None:
-                    a = Asset.objects.filter(id=server.asset.id).update(idc=i)
+                    a = Asset.objects.filter(id=server.asset.id)
+                    a.update(idc=i)
+                    a = a.get()
                 else:
                     a = Asset.objects.create(device_type_id=1, device_status_id=1, idc=i, host_name=data['name'])
             if not data['data_collector']:
