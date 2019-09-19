@@ -1044,6 +1044,14 @@
     }
   },
   {
+    "model": "monitor_web.template_server_group",
+    "pk": 1,
+    "fields": {
+      "template": 1,
+      "servergroup": 1
+    }
+  },
+  {
     "model": "monitor_web.operation",
     "pk": 1,
     "fields": {
