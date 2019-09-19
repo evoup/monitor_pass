@@ -238,6 +238,12 @@ export const constantRouterMap = [
         meta: { title: '常规设置', icon: 'form' }
       },
       {
+        path: '/operation_list',
+        name: 'OperationList',
+        component: () => import('../views/config/operation_list'),
+        meta: { title: '操作', icon: 'form' }
+      },
+      {
         path: '/notification_accept_conf',
         name: 'NotificationAcceptConf',
         component: () => import('../views/config/notification_mode_config'),
