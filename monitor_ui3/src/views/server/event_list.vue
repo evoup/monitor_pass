@@ -135,7 +135,7 @@ export default {
       // 列表分页辅助类(传参)
       pageHelp: {
         page: 1,
-        size: 7,
+        size: 10,
         order: 'asc'
       },
       sortHelp: {
@@ -153,7 +153,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.pageHelp.page = this.pageNum
-      server_list(Object.assign(this.pageHelp, this.sortHelp, { serverGroup: this.serverGroupSelectModel })).then(response => {
+      server_list({ serverGroup: this.serverGroupSelectModel }).then(response => {
         this.servers = response.data.items
         this.listLoading = false
       })
@@ -165,6 +165,8 @@ export default {
       })
     },
     fetchEventListData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
       event_list(Object.assign(this.pageHelp, this.sortHelp, { server: this.serverSelectModel })).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
@@ -179,17 +181,17 @@ export default {
       this.pageList.pageSize = val
       this.pageHelp.size = this.pageList.pageSize
       this.pageHelp.page = this.pageList.currPage
-      this.fetchData()
+      this.fetchEventListData()
     },
     // 点击分页sort-change
     handleCurrentChange(val) {
       this.pageNum = val
-      this.fetchData()
+      this.fetchEventListData()
     },
     sortChange(column, prop, order) {
       this.sortHelp.order = column.order
       this.sortHelp.prop = column.prop
-      this.fetchData()
+      this.fetchEventListData()
     }
   }
 }
