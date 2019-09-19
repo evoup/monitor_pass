@@ -63,7 +63,7 @@
             label="状态"
             sortable="custom"
             prop="type"
-            min-width="7%">
+            min-width="5%">
             <template slot-scope="prop">
               <div v-if="prop.row.type===0" class="ok">
                 <span v-if="prop.row.type===0" style="color: white">正常</span>
