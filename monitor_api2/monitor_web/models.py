@@ -603,7 +603,7 @@ class Operation(models.Model):
     )
     name = models.CharField('操作名称', max_length=128)
     status = models.IntegerField(choices=status_choices, default=1)
-    period = models.IntegerField(null=False, default=3600)
+    period = models.IntegerField('第一阶段结束后到第二阶段的秒数', null=False, default=3600)
     title = models.CharField('简短消息', max_length=128)
     content = models.CharField('简短消息', max_length=512)
 
@@ -613,6 +613,42 @@ class Operation(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class OperationStep(models.Model):
+    """
+    操作步骤，第一轮是立刻开始的，
+    """
+    operation_status_choices = (
+        (1, '发送通知'),
+        (2, '执行命令'),
+    )
+    start_step = models.IntegerField('开始的阶段', null=False, default=1)
+    end_step = models.IntegerField('结束的阶段', null=False, default=1)
+    inteval = models.IntegerField('除了第一阶段的每阶段的间隔秒数', null=False, default=3600)
+    run_type = models.IntegerField('操作类型', choices=operation_status_choices, null=False, default=1)
+
+    class Meta:
+        verbose_name_plural = "操作步骤表"
+        db_table = 'operation_step'
+
+
+class OperationCommand(models.Model):
+    """
+    操作步骤中的命令
+    """
+    exec_at_type_choices = (
+        (1, '在被监控主机'),
+        (2, '在监控服务端上'),
+    )
+    exec_at = models.IntegerField('在什么地方执行', choices=exec_at_type_choices, null=False, default=1)
+    port = models.IntegerField('运行的端口', null=True)
+    ssh_username = models.CharField('用户名', max_length=128)
+    ssh_password = models.CharField('密码', max_length=128)
+
+    class Meta:
+        verbose_name_plural = "操作命令"
+        db_table = 'operation_command'
 
 
 class AssetRecord(models.Model):
