@@ -188,7 +188,7 @@ export default {
       })
     },
     jumpDiagramList() {
-      this.$router.push({ path: '/diagram_list' })
+      this.$router.push({ path: '/diagram_list?template_id=' + this.$route.query.template_id })
     }
   }
 }
