@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="24" align="right">
             <div class="grid-content">
-              <el-button type="primary"><i class="el-icon-plus el-icon--right" />添加操作</el-button>
+              <el-button type="primary" @click="jumpAddOperation"><i class="el-icon-plus el-icon--right" />添加操作</el-button>
             </div>
           </el-col>
         </el-row>
@@ -94,6 +94,9 @@ export default {
         this.listLoading = false
         this.total = response.data.count
       })
+    },
+    jumpAddOperation() {
+      this.$router.push({ path: '/add_operation' })
     }
   }
 }

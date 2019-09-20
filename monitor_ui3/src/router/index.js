@@ -244,6 +244,13 @@ export const constantRouterMap = [
         meta: { title: '操作', icon: 'operation' }
       },
       {
+        path: '/add_operation',
+        name: 'AddOperation',
+        component: () => import('../views/config/add_operation'),
+        meta: { title: '添加操作', icon: 'operation' },
+        hidden: true
+      },
+      {
         path: '/notification_accept_conf',
         name: 'NotificationAcceptConf',
         component: () => import('../views/config/notification_mode_config'),

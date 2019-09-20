@@ -625,6 +625,7 @@ class OperationStep(models.Model):
         (2, '执行命令'),
     )
     id = models.BigAutoField(primary_key=True)
+    operation = models.ForeignKey('Operation', on_delete=models.CASCADE, default=1, null=False)
     start_step = models.IntegerField('开始的阶段', null=False, default=1)
     end_step = models.IntegerField('结束的阶段', null=False, default=1)
     inteval = models.IntegerField('除了第一阶段的每阶段的间隔秒数', null=False, default=3600)
@@ -644,6 +645,7 @@ class OperationCommand(models.Model):
         (2, '在监控服务端上'),
     )
     id = models.BigAutoField(primary_key=True)
+    operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     exec_at = models.IntegerField('在什么地方执行', choices=exec_at_type_choices, null=False, default=1)
     port = models.IntegerField('运行的端口', null=True)
     ssh_username = models.CharField('用户名', max_length=128)
@@ -661,6 +663,7 @@ class OperationMessage(models.Model):
     操作步骤中的消息
     """
     id = models.BigAutoField(primary_key=True)
+    operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
     message = models.CharField(default='', max_length=255, verbose_name='告警正文')
 
