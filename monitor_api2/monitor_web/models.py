@@ -601,6 +601,7 @@ class Operation(models.Model):
         (0, '禁用'),
         (1, '启用'),
     )
+    id = models.AutoField(primary_key=True)
     name = models.CharField('操作名称', max_length=128)
     status = models.IntegerField(choices=status_choices, default=1)
     period = models.IntegerField('第一阶段结束后到第二阶段的秒数', null=False, default=3600)
@@ -623,6 +624,7 @@ class OperationStep(models.Model):
         (1, '发送通知'),
         (2, '执行命令'),
     )
+    id = models.BigAutoField(primary_key=True)
     start_step = models.IntegerField('开始的阶段', null=False, default=1)
     end_step = models.IntegerField('结束的阶段', null=False, default=1)
     inteval = models.IntegerField('除了第一阶段的每阶段的间隔秒数', null=False, default=3600)
@@ -638,17 +640,33 @@ class OperationCommand(models.Model):
     操作步骤中的命令
     """
     exec_at_type_choices = (
-        (1, '在被监控主机'),
+        (1, '在被监控主机上'),
         (2, '在监控服务端上'),
     )
+    id = models.BigAutoField(primary_key=True)
     exec_at = models.IntegerField('在什么地方执行', choices=exec_at_type_choices, null=False, default=1)
     port = models.IntegerField('运行的端口', null=True)
     ssh_username = models.CharField('用户名', max_length=128)
     ssh_password = models.CharField('密码', max_length=128)
+    command = models.TextField(null=False)
+    notification_mode = models.ForeignKey('NotificationMode', null=True, on_delete=models.SET_NULL)
 
     class Meta:
-        verbose_name_plural = "操作命令"
+        verbose_name_plural = "执行命令的操作"
         db_table = 'operation_command'
+
+
+class OperationMessage(models.Model):
+    """
+    操作步骤中的消息
+    """
+    id = models.BigAutoField(primary_key=True)
+    subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
+    message = models.CharField(default='', max_length=255, verbose_name='告警正文')
+
+    class Meta:
+        verbose_name_plural = "发送消息的操作"
+        db_table = 'operation_message'
 
 
 class AssetRecord(models.Model):
