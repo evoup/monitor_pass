@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: 'add_operation'
+    name: 'addOperation'
   }
 </script>
 
