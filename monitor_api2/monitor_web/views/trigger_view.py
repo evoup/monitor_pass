@@ -73,7 +73,8 @@ class TriggerInfo(APIView):
         pattern = re.compile(r'{([^}]*)}(.*)', re.S)
         trigger = models.Trigger.objects.create(name=data['name'], expression=data['expression'],
                                                 template_id=data['template_id'])
-        db_express = re.sub(pattern, expression_replace_callback2(extra_arg={'trigger_id': trigger.id}),
+        db_express = re.sub(pattern, expression_replace_callback2(
+            extra_arg={'trigger_id': trigger.id, 'template_id': data['template_id']}),
                             data['expression'])
         try:
             models.Trigger.objects.filter(id=trigger.id).update(expression=db_express)
@@ -109,9 +110,9 @@ class expression_replace_callback2(object):
         param = m[2].replace('(', '')
         param = param.replace(')', '')
         # 分别入库得到id
-        item_object = models.MonitorItem.objects.get(key=item_key, host_id=0)
+        item_object, created = models.MonitorItem.objects.get_or_create(key=item_key, host_id=0, template_id=self.extra_arg['template_id'])
         function = models.Function.objects.create(name=function_name, parameter=param,
-                                                  item=models.MonitorItem.objects.get(key=item_key, host_id=0),
+                                                  item=models.MonitorItem.objects.get(key=item_key, host_id=0, template_id=self.extra_arg['template_id']),
                                                   trigger=models.Trigger.objects.get(id=self.extra_arg['trigger_id']))
         x = "{%s}%s" % (function.id, operator_value)
         return x

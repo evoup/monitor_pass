@@ -257,7 +257,7 @@ class MonitorItem(models.Model):
     class Meta:
         verbose_name_plural = '监控项表'
         db_table = 'item'
-        unique_together = ('key', 'host_id')
+        unique_together = ('key', 'host_id', 'template_id')
         indexes = [models.Index(fields=['host_id']), models.Index(fields=['template_id']),
                    models.Index(fields=['item_copy_from'])]
 
