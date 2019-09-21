@@ -126,6 +126,7 @@
               v-model="templateOrServerGroupSelectModel"
               placeholder=""
               style="width: 80%"
+              @change="fetchMonitorItemListData"
             >
               <el-option
                 v-for="item in templateOrServerGroupData"
