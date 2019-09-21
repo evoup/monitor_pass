@@ -162,7 +162,7 @@ export default {
     },
     // 跳转到添加触发器页面
     jumpAddTrigger() {
-      this.$router.push({ path: '/add_trigger' })
+      this.$router.push({ path: '/add_trigger?template_id=' + this.$route.query.template_id })
     },
     // 跳转到修改除法器页面
     jumpChangeTrigger(id) {
