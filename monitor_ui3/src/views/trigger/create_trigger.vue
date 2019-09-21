@@ -375,6 +375,8 @@ export default {
       let func = ''
       if (!param1 && !param2) {
         func = functionName + '()'
+      } else if (param1 && !param2) {
+        func = functionName + '(' + param1 + ')'
       } else {
         func = functionName + '(' + param1 + ',' + param2 + ')'
       }

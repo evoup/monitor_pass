@@ -37,7 +37,7 @@ import { validateName } from '../../../lib/validator.js'
 class ParamForm {
   constructor() {
     this.param1 = ''
-    this.param2 = '0'
+    this.param2 = ''
     this.param3 = ''
     this.name = 'avg'
     this.operator = '#'
