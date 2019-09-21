@@ -1,8 +1,10 @@
+import re
 
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -29,7 +31,8 @@ class TriggerList(APIView):
         serializer = TriggerFunctionSerializer(instance=page_data, many=True)
 
         # 字段在Function表外，手动再对trigger_name排序
-        data = sorted(serializer.data, key=lambda kv: kv['trigger_name'], reverse=param_to_order(request)) if param_to_order(request) is not None else serializer.data
+        data = sorted(serializer.data, key=lambda kv: kv['trigger_name'],
+                      reverse=param_to_order(request)) if param_to_order(request) is not None else serializer.data
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
@@ -57,3 +60,37 @@ class TriggerInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('monitor_web.add_trigger', raise_exception=True))
+    def post(self, request, pk=None, format=None):
+        data = JSONParser().parse(self.request)
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建触发器失败'
+        }
+        # 匹配触发器中的值
+        pattern = re.compile(r'{([^}]*)}', re.S)
+        db_express = re.sub(pattern, expression_replace_callback2(extra_arg=None), data['expression'])
+        pass
+
+
+class expression_replace_callback2(object):
+    """
+    re.sub的回调函数，替换调原本表达式中item key成id
+    """
+
+    # 初始化属性
+    def __init__(self, extra_arg):
+        self.extra_arg = extra_arg
+
+    # 使类的实例变得callable
+    def __call__(self, match_obj):
+        # 'proc.num[].avg(5m,0)'
+        # 把监控项和函数以及参数入库
+        item_function = match_obj.group(1)
+        m = re.match(r"(.*)\.([avg|last|diff|change]*)((.*))", item_function).groups()
+        item = m[0]
+        function_name=m[1]
+        param = m[2].replace('(','')
+        param = param.replace(')','')
+        pass

@@ -87,7 +87,7 @@
           <el-row :gutter="20">
             <el-col :span="10">
               <el-switch
-                v-model="switchValue1"
+                v-model="switchStatus"
                 active-value="1"
                 inactive-value="0"
               />
@@ -99,7 +99,7 @@
         <el-button
           type="primary"
           @click="
-            addServer(form.name, form.client, form.jmx, form.snmp, form.idc)
+            addTrigger(form.name, form.expression, form.desc, switchStatus, form.level)
           "
         >创建
         </el-button
@@ -197,6 +197,7 @@ import './components/avg_lt'
 import './components/avg_eq'
 import './components/avg_neq'
 import './components/diff_eq'
+import { add_trigger } from '../../api/trigger'
 
 export default {
   name: 'CreateTrigger',
@@ -281,7 +282,7 @@ export default {
       // 默认只告警一次
       switchValue: '1',
       // 默认启用
-      switchValue1: '1',
+      switchStatus: '1',
       dialogFormVisible: false,
       templateSelectVisible: true,
       formLabelWidth: '150px',
@@ -390,6 +391,12 @@ export default {
         default:
           this.form.expression = this.form.expression + '{' + expression + '.' + func + '}' + operator + n
       }
+    },
+    addTrigger(a, b, c, d, e) {
+      add_trigger(a, b, c, d, e).then(response => {
+      }).catch(e => {
+        console.log(e)
+      })
     }
   }
 }
