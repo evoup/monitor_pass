@@ -382,13 +382,13 @@ export default {
       }
       switch (prefixLogic) {
         case this.logicType.AND:
-          this.form.expression = this.form.expression + ' & ' + expression + '.' + func + operator + n
+          this.form.expression = this.form.expression + ' & ' + '{' + expression + '.' + func + '}' + operator + n
           break
         case this.logicType.OR:
-          this.form.expression = this.form.expression + ' | ' + expression + '.' + func + operator + n
+          this.form.expression = this.form.expression + ' | ' + '{' + expression + '.' + func + '}' + operator + n
           break
         default:
-          this.form.expression = this.form.expression + expression + '.' + func + operator + n
+          this.form.expression = this.form.expression + '{' + expression + '.' + func + '}' + operator + n
       }
     }
   }
