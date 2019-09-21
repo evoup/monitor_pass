@@ -1,4 +1,5 @@
 import re
+import traceback
 
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
@@ -69,9 +70,22 @@ class TriggerInfo(APIView):
             'message': '创建触发器失败'
         }
         # 匹配触发器中的值
-        pattern = re.compile(r'{([^}]*)}', re.S)
-        db_express = re.sub(pattern, expression_replace_callback2(extra_arg=None), data['expression'])
-        pass
+        pattern = re.compile(r'{([^}]*)}(.*)', re.S)
+        trigger = models.Trigger.objects.create(name=data['name'], expression=data['expression'],
+                                                template_id=data['template_id'])
+        db_express = re.sub(pattern, expression_replace_callback2(extra_arg={'trigger_id': trigger.id}),
+                            data['expression'])
+        try:
+            models.Trigger.objects.filter(id=trigger.id).update(expression=db_express)
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        # TODO 这里需要数据库需要加锁
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '创建触发器成功'
+        }
+        return JsonResponse(ret, safe=False)
 
 
 class expression_replace_callback2(object):
@@ -88,9 +102,16 @@ class expression_replace_callback2(object):
         # 'proc.num[].avg(5m,0)'
         # 把监控项和函数以及参数入库
         item_function = match_obj.group(1)
+        operator_value = match_obj.group(2)
         m = re.match(r"(.*)\.([avg|last|diff|change]*)((.*))", item_function).groups()
-        item = m[0]
-        function_name=m[1]
-        param = m[2].replace('(','')
-        param = param.replace(')','')
-        pass
+        item_key = m[0]
+        function_name = m[1]
+        param = m[2].replace('(', '')
+        param = param.replace(')', '')
+        # 分别入库得到id
+        item_object = models.MonitorItem.objects.get(key=item_key, host_id=0)
+        function = models.Function.objects.create(name=function_name, parameter=param,
+                                                  item=models.MonitorItem.objects.get(key=item_key, host_id=0),
+                                                  trigger=models.Trigger.objects.get(id=self.extra_arg['trigger_id']))
+        x = "{%s}%s" % (function.id, operator_value)
+        return x

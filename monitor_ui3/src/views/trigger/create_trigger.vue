@@ -393,7 +393,7 @@ export default {
       }
     },
     addTrigger(a, b, c, d, e) {
-      add_trigger(a, b, c, d, e).then(response => {
+      add_trigger(a, b, c, d, e, this.$route.query.template_id).then(response => {
       }).catch(e => {
         console.log(e)
       })

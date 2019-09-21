@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function add_trigger(name, expression, desc, enable, level) {
+export function add_trigger(name, expression, desc, enable, level, template_id) {
   return request({
     url: '/trigger/info',
     method: 'post',
@@ -9,7 +9,8 @@ export function add_trigger(name, expression, desc, enable, level) {
       expression,
       desc,
       enable,
-      level
+      level,
+      template_id
     }
   })
 }
