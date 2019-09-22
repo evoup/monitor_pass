@@ -100,9 +100,10 @@ class expression_replace_callback2(object):
 
     # 使类的实例变得callable
     def __call__(self, match_obj):
-        # 'proc.num[].avg(5m,0)'
+        # 'proc.num[].avg(5m)'
         # 把监控项和函数以及参数入库
         item_function = match_obj.group(1)
+        # >300
         operator_value = match_obj.group(2)
         m = re.match(r"(.*)\.([avg|last|diff|change]*)((.*))", item_function).groups()
         item_key = m[0]
@@ -110,9 +111,11 @@ class expression_replace_callback2(object):
         param = m[2].replace('(', '')
         param = param.replace(')', '')
         # 分别入库得到id
-        item_object, created = models.MonitorItem.objects.get_or_create(key=item_key, host_id=0, template_id=self.extra_arg['template_id'])
+        old_item = models.MonitorItem.objects.filter(key=item_key, host_id=0).first()
+        item_object, created = models.MonitorItem.objects.get_or_create(name=old_item.name, key=item_key, host_id=0, template_id=self.extra_arg['template_id'])
         function = models.Function.objects.create(name=function_name, parameter=param,
-                                                  item=models.MonitorItem.objects.get(key=item_key, host_id=0, template_id=self.extra_arg['template_id']),
+                                                  item=item_object,
                                                   trigger=models.Trigger.objects.get(id=self.extra_arg['trigger_id']))
+        # 转换成{5}>300
         x = "{%s}%s" % (function.id, operator_value)
         return x
