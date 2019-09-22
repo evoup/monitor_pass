@@ -145,6 +145,7 @@ export default {
     fetchTemplateData(id) {
       read_template(id).then(response => {
         this.items = response.data.item.items
+        this.triggers = response.data.item.triggers
         this.form.name = response.data.item.name
         const serverGroupIds = response.data.item.server_group
         const a = []
