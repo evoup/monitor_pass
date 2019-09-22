@@ -14,8 +14,10 @@ const store = new Vuex.Store({
   getters,
   // 监控系统应用添加的状态
   state: {
-    // 触发器页面的参数自附件
-    triggerParamComponentName: 'last_eq'
+    // 触发器页面的参数附件
+    triggerParamComponentName: 'last_eq',
+    // 操作页面的操作类型组件
+    operationTypeComponentName: 'send_notice'
   }
 })
 

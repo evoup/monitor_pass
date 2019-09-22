@@ -62,10 +62,13 @@
       </el-form-item>
       <el-form-item>
         <el-col :span="10">
-          <el-radio v-model="runTypeModel" label="1">发送消息</el-radio>
-          <el-radio v-model="runTypeModel" label="2">执行命令</el-radio>
+          <el-radio v-model="runTypeModel" label="1" @change="changeData('send_notice')">发送消息</el-radio>
+          <el-radio v-model="runTypeModel" label="2" @change="changeData('exec_command')">执行命令</el-radio>
         </el-col>
       </el-form-item>
+      <el-col :span="10">
+        <component ref="operationFormComp" :is="componentFile" />
+      </el-col>
     </el-form>
   </div>
 </template>
@@ -90,10 +93,20 @@ export default {
       runTypeModel: '1'
     }
   },
+  // 动态加载组件
+  computed: {
+    componentFile() {
+      const componentName = this.$store.state.operationTypeComponentName
+      return () => import(`./components/${componentName}.vue`)
+    }
+  },
   created() {
     this.fetchTemplateListData()
   },
   methods: {
+    changeData(d) {
+      this.$store.state.operationTypeComponentName = d
+    },
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
