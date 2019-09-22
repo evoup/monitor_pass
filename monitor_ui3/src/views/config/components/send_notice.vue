@@ -12,6 +12,24 @@
           <el-input v-model="send_interval" placeholder=""/>
         </el-col>
       </el-form-item>
+      <el-form-item label="发送给：">
+        <el-col :span="24">
+          <el-select
+            v-model="userGroupSelectModel"
+            placeholder=""
+            style="width: 80%"
+            multiple="true"
+          >
+            <el-option
+              v-for="item in userGroupListData"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
+          </el-select>
+        </el-col>
+      </el-form-item>
       <el-form-item label="接收：">
         <el-col :span="24">
           <el-checkbox-group
@@ -27,6 +45,8 @@
 </template>
 
 <script>
+import { user_group_list } from '../../../api/user'
+
 export default {
   name: 'SendNotice',
   data() {
@@ -35,7 +55,20 @@ export default {
       step: '1-1',
       checkedSendTypes: ['邮件', '企业微信'],
       sendTypes: ['邮件', '企业微信'],
-      operationForm: null
+      operationForm: null,
+      userGroupSelectModel: null,
+      userGroupListData: []
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      user_group_list().then(response => {
+        this.userGroupListData = response.data.items
+      })
     }
   }
 }
