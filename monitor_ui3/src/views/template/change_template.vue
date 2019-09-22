@@ -6,7 +6,7 @@
       ><div class="grid-content el-form-item__label">
         监控项(<el-link
           type="primary"
-          @click="jumpItemList(items)"
+          @click="jumpItemList"
         >{{ items }}</el-link
         >)
       </div></el-col>
@@ -15,8 +15,17 @@
       ><div class="grid-content el-form-item__label">
         触发器(<el-link
           type="primary"
-          @click="jumpItemList(triggers)"
+          @click="jumpTriggerList"
         >{{ triggers }}</el-link
+        >)
+      </div></el-col>
+      <el-col
+        :span="4"
+      ><div class="grid-content el-form-item__label">
+        图表(<el-link
+          type="primary"
+          @click="jumpDiagramList"
+        >{{ diagrams }}</el-link
         >)
       </div></el-col>
       <el-col :span="12"><div class="grid-content"/></el-col>
@@ -89,6 +98,7 @@ export default {
     return {
       items: 0,
       triggers: 0,
+      diagrams: 0,
       form: {
         name: '',
         type: [],
@@ -146,6 +156,7 @@ export default {
       read_template(id).then(response => {
         this.items = response.data.item.items
         this.triggers = response.data.item.triggers
+        this.diagrams = response.data.item.diagrams
         this.form.name = response.data.item.name
         const serverGroupIds = response.data.item.server_group
         const a = []
@@ -167,9 +178,21 @@ export default {
     jumpTemplateList() {
       this.$router.push({ path: '/template_list' })
     },
-    jumpItemList(id) {
+    jumpItemList() {
       this.$router.push({
         path: '/item_list',
+        query: { template_id: this.$route.query.id }
+      })
+    },
+    jumpTriggerList() {
+      this.$router.push({
+        path: '/trigger_list',
+        query: { template_id: this.$route.query.id }
+      })
+    },
+    jumpDiagramList() {
+      this.$router.push({
+        path: '/diagram_list',
         query: { template_id: this.$route.query.id }
       })
     }
