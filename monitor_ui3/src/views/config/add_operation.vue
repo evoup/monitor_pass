@@ -60,6 +60,12 @@
           </el-select>
         </el-col>
       </el-form-item>
+      <el-form-item>
+        <el-col :span="10">
+          <el-radio v-model="runTypeModel" label="1">发送消息</el-radio>
+          <el-radio v-model="runTypeModel" label="2">执行命令</el-radio>
+        </el-col>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -80,7 +86,8 @@ export default {
       templateListData: [],
       templateSelectModel: null,
       triggerListData: [],
-      triggerSelectModel: null
+      triggerSelectModel: null,
+      runTypeModel: '1'
     }
   },
   created() {
@@ -104,7 +111,7 @@ export default {
 
 <style scoped>
   .app-container /deep/ .el-form-item {
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
   .app-container /deep/ textarea {
     height:120px;
