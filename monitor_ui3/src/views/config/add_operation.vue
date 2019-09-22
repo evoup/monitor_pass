@@ -24,16 +24,36 @@
       <el-form-item
         label="请选择模板："
       >
-        <el-col :span="8">
+        <el-col :span="10">
           <el-select
             v-model="templateSelectModel"
-            placeholder="请选择模板（可选）"
+            placeholder="请选择模板"
             style="width: 80%"
+            @change="fetchTriggerListData"
           >
             <el-option
               v-for="item in templateListData"
               :key="item.id"
               :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
+          </el-select>
+        </el-col>
+      </el-form-item>
+      <el-form-item
+        label="请选择触发器："
+      >
+        <el-col :span="10">
+          <el-select
+            v-model="triggerSelectModel"
+            placeholder="请选择触发器"
+            style="width: 80%"
+          >
+            <el-option
+              v-for="item in triggerListData"
+              :key="item.id"
+              :label="item.trigger_name"
               :aria-selected="true"
               :value="item.id"
             />
@@ -46,6 +66,7 @@
 
 <script>
 import { template_list } from '../../api/template'
+import { trigger_list } from '../../api/trigger'
 
 export default {
   name: 'AddOperation',
@@ -57,7 +78,9 @@ export default {
         message: ''
       },
       templateListData: [],
-      templateSelectModel: null
+      templateSelectModel: null,
+      triggerListData: [],
+      triggerSelectModel: null
     }
   },
   created() {
@@ -69,11 +92,21 @@ export default {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
         this.templateListData = response.data.items
       })
+    },
+    fetchTriggerListData() {
+      trigger_list({ template_id: this.templateSelectModel }).then(response => {
+        this.triggerListData = response.data.items
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .app-container /deep/ .el-form-item {
+    margin-bottom: 8px;
+  }
+  .app-container /deep/ textarea {
+    height:120px;
+  }
 </style>
