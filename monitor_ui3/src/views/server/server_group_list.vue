@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="warp-breadcrum" >
+    <el-row type="flex" class="warp-breadcrum">
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">

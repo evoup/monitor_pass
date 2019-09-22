@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="row-bg">
+    <el-row type="flex" class="warp-breadcrum">
       <el-col :span="24">
         <el-col :span="3" :offset="21">
           <div class="grid-content">
@@ -19,7 +19,7 @@
       stripe
       border
       tooltip-effect="dark"
-      style="width: 100%"
+      style="width: 100%;margin-top:10px"
       @sort-change="sortChange"
     >
       <el-table-column
