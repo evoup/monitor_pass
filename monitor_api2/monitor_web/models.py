@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.migrations.operations.base import Operation
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_unixdatetimefield import UnixDateTimeField
@@ -591,6 +592,26 @@ class Memory(models.Model):
 
     def __str__(self):
         return self.slot
+
+
+class OperationCondition(models.Model):
+    """
+    操作条件
+    """
+    type_choices = (
+        (0, '触发器被触发'),
+        (1, '在计划时间段内'),
+    )
+    id = models.AutoField(primary_key=True)
+    operation = models.ForeignKey('Operation', on_delete=models.CASCADE)
+    type = models.IntegerField(choices=type_choices, default=0)
+    # 对于type=1，0是触发器没有触发，1是触发了，以此类推
+    operator = models.IntegerField('操作符', default=1)
+    value = models.CharField('值', max_length=255)
+
+    class Meta:
+        verbose_name_plural = "操作条件表"
+        db_table = 'operation_condition'
 
 
 class Operation(models.Model):

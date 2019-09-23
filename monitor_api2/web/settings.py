@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import datetime
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -27,7 +25,6 @@ SECRET_KEY = 'l110wk$h&cq!qk-p7abu1xmoyk9f4azou5)74!vdp(ht9%c(14'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -76,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -90,7 +86,6 @@ DATABASES = {
         'PORT': '3307'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -110,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -124,12 +118,10 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -146,19 +138,19 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
-    'rest_framework_jwt.utils.jwt_encode_handler',
+        'rest_framework_jwt.utils.jwt_encode_handler',
 
     'JWT_DECODE_HANDLER':
-    'rest_framework_jwt.utils.jwt_decode_handler',
+        'rest_framework_jwt.utils.jwt_decode_handler',
 
     'JWT_PAYLOAD_HANDLER':
-    'rest_framework_jwt.utils.jwt_payload_handler',
+        'rest_framework_jwt.utils.jwt_payload_handler',
 
     'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-    'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+        'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
 
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-    'rest_framework_jwt.utils.jwt_response_payload_handler',
+        'rest_framework_jwt.utils.jwt_response_payload_handler',
 
     'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_GET_USER_SECRET_KEY': None,
@@ -206,8 +198,8 @@ LOGGING = {
         'default': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/', 'all.log'),
-            'maxBytes': 1024*1024*5,  # 5 MB
+            'filename': os.path.join(STATIC_ROOT + '/logs/', 'all.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
@@ -219,16 +211,16 @@ LOGGING = {
         'request_handler': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/', 'script.log'),
-            'maxBytes': 1024*1024*5,  # 5 MB
+            'filename': os.path.join(STATIC_ROOT + '/logs/', 'script.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
         'scprits_handler': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(STATIC_ROOT+'/logs/', 'script.log'),
-            'maxBytes': 1024*1024*5,  # 5 MB
+            'filename': os.path.join(STATIC_ROOT + '/logs/', 'script.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
@@ -258,7 +250,20 @@ LOGGING = {
 }
 
 # 这些权限不需要，其中包含用户和用户组的，用默认的
-ABANDONED_PERMISSIONS = ['add_logentry', 'change_logentry', 'delete_logentry', 'view_logentry', 'add_permission', 'change_permission', 'delete_permission', 'view_permission', 'add_contenttype', 'change_contenttype', 'delete_contenttype', 'view_contenttype', 'add_session', 'change_session', 'delete_session', 'view_session', 'add_profile', 'change_profile', 'delete_profile', 'view_profile', 'add_usergroup', 'change_usergroup', 'delete_usergroup', 'view_usergroup', 'add_relationuseritem', 'change_relationuseritem', 'delete_relationuseritem', 'view_relationuseritem', 'add_function', 'change_function', 'delete_function', 'view_function', 'add_grafanadashboard', 'change_grafanadashboard', 'delete_grafanadashboard', 'view_grafanadashboard', 'add_dashboard', 'change_dashboard', 'delete_dashboard', 'view_dashboard', 'add_operationcommand', 'change_operationcommand', 'delete_operationcommand', 'view_operationcommand', 'add_operationmessage', 'change_operationmessage', 'delete_operationmessage', 'view_operationmessage', 'add_operationstep', 'change_operationstep', 'delete_operationstep', 'view_operationstep']
+ABANDONED_PERMISSIONS = ['add_logentry', 'change_logentry', 'delete_logentry', 'view_logentry', 'add_permission',
+                         'change_permission', 'delete_permission', 'view_permission', 'add_contenttype',
+                         'change_contenttype', 'delete_contenttype', 'view_contenttype', 'add_session',
+                         'change_session', 'delete_session', 'view_session', 'add_profile', 'change_profile',
+                         'delete_profile', 'view_profile', 'add_usergroup', 'change_usergroup', 'delete_usergroup',
+                         'view_usergroup', 'add_relationuseritem', 'change_relationuseritem', 'delete_relationuseritem',
+                         'view_relationuseritem', 'add_function', 'change_function', 'delete_function', 'view_function',
+                         'add_grafanadashboard', 'change_grafanadashboard', 'delete_grafanadashboard',
+                         'view_grafanadashboard', 'add_dashboard', 'change_dashboard', 'delete_dashboard',
+                         'view_dashboard', 'add_operationcommand', 'change_operationcommand', 'delete_operationcommand',
+                         'view_operationcommand', 'add_operationmessage', 'change_operationmessage',
+                         'delete_operationmessage', 'view_operationmessage', 'add_operationstep',
+                         'change_operationstep', 'delete_operationstep', 'view_operationstep', 'add_operationcondition',
+                         'change_operationcondition', 'view_operationcondition', 'delete_operationcondition']
 
 # 权限管理(两个app的view函数不能重复)
 PERMISSIONS = {

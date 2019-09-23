@@ -45,5 +45,6 @@ class OperationInfo(APIView):
             'message': '创建操作失败'
         }
         data = JSONParser().parse(request)
-        models.Operation.objects.create(name=data['name'],title=data['subject'],content=data['message'])
+        operation = models.Operation.objects.create(name=data['name'],title=data['subject'],content=data['message'])
+        models.OperationCondition.objects.create(operation=operation, type=0, operator=0, value=data['triggerId'])
         return JsonResponse(ret, safe=False)
