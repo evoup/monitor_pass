@@ -40,7 +40,7 @@
           <ul>
             <li v-for="obj in prop.row.operation_items">{{obj.name}}
               (<el-link size="small" type="primary">编辑</el-link>
-              <el-link size="small" type="danger">删除</el-link>)
+              <el-link size="small" type="primary">删除</el-link>)
             </li>
           </ul>
         </template>
