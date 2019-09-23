@@ -1,3 +1,5 @@
+import traceback
+
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -45,6 +47,17 @@ class OperationInfo(APIView):
             'message': '创建操作失败'
         }
         data = JSONParser().parse(request)
-        operation = models.Operation.objects.create(name=data['name'],title=data['subject'],content=data['message'])
-        models.OperationCondition.objects.create(operation=operation, type=0, operator=0, value=data['triggerId'])
+        try:
+            operation = models.Operation.objects.create(name=data['name'], title=data['subject'],
+                                                        content=data['message'])
+            models.OperationCondition.objects.create(operation=operation, type=0, operator=0,
+                                                     value=0 if not data['triggerId'] else data['triggerId'])
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '创建操作成功',
+            'id': operation.id
+        }
         return JsonResponse(ret, safe=False)
