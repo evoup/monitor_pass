@@ -38,7 +38,7 @@
         min-width="50%">
         <template slot-scope="prop">
           <ul>
-            <li v-for="obj in prop.row.operation_items">{{obj.name}}
+            <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
               (<el-link size="small" type="primary">编辑</el-link>
               <el-link size="small" type="primary">删除</el-link>)
             </li>
@@ -67,60 +67,60 @@
 </template>
 
 <script>
-  import { operation_list } from '../../api/operation'
+import { operation_list } from '../../api/operation'
 
-  export default {
-    name: 'OperationList',
-    data() {
-      return {
-        typeData: [],
-        // 列表数据
-        dataList: [],
-        // 列表前端分页
-        pageList: {
-          totalCount: '',
-          pageSize: '',
-          totalPage: '',
-          currPage: ''
-        },
-        // 列表分页辅助类(传参)
-        pageHelp: {
-          // 和后端参数一样
-          page: 1,
-          // 后端参数为size
-          size: 5,
-          order: 'asc'
-        },
-        sortHelp: {
-          prop: '',
-          order: ''
-        },
-        filters: {
-          name: '',
-          type: 1
-        },
-        listLoading: true,
-        total: 0,
-        pageNum: 1
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
-          this.dataList = response.data.items
-          this.pageList = response.data.page
-          this.listLoading = false
-          this.total = response.data.count
-        })
+export default {
+  name: 'OperationList',
+  data() {
+    return {
+      typeData: [],
+      // 列表数据
+      dataList: [],
+      // 列表前端分页
+      pageList: {
+        totalCount: '',
+        pageSize: '',
+        totalPage: '',
+        currPage: ''
       },
-      jumpAddOperation() {
-        this.$router.push({ path: '/add_operation' })
-      }
+      // 列表分页辅助类(传参)
+      pageHelp: {
+        // 和后端参数一样
+        page: 1,
+        // 后端参数为size
+        size: 5,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: '',
+        order: ''
+      },
+      filters: {
+        name: '',
+        type: 1
+      },
+      listLoading: true,
+      total: 0,
+      pageNum: 1
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+        this.dataList = response.data.items
+        this.pageList = response.data.page
+        this.listLoading = false
+        this.total = response.data.count
+      })
+    },
+    jumpAddOperation() {
+      this.$router.push({ path: '/add_operation' })
     }
   }
+}
 </script>
 
 <style scoped>

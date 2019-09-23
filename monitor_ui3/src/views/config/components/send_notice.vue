@@ -18,7 +18,7 @@
             v-model="userGroupSelectModel"
             placeholder=""
             style="width: 80%"
-            multiple="true"
+            multiple
           >
             <el-option
               v-for="item in userGroupListData"
