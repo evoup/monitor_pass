@@ -57,9 +57,9 @@
       </el-table-column>
       <el-table-column>
         <template slot-scope="prop" min-width="10%">
-          <el-button size="small" type="primary">添加操作项</el-button>
-          <el-button size="small" type="primary">编辑操作</el-button>
-          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除操作</el-button>
+          <el-button size="small" type="primary" @click="jumpAddOperationItem(prop.row.id)">添加操作项</el-button>
+          <el-button size="small" type="primary">编辑</el-button>
+          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,6 +118,9 @@ export default {
     },
     jumpAddOperation() {
       this.$router.push({ path: '/add_operation' })
+    },
+    jumpAddOperationItem(i) {
+      this.$router.push({ path: '/add_operation_item?id=' + i })
     }
   }
 }
