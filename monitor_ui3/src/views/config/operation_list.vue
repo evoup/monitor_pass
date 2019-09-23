@@ -35,7 +35,7 @@
         label="操作项"
         sortable="custom"
         prop="operation_items"
-        min-width="40%">
+        min-width="50%">
         <template slot-scope="prop">
           <ul>
             <li v-for="obj in prop.row.operation_items">{{obj.name}}
@@ -56,7 +56,7 @@
         </template>
       </el-table-column>
       <el-table-column>
-        <template slot-scope="prop">
+        <template slot-scope="prop" min-width="10%">
           <el-button size="small" type="primary">添加操作项</el-button>
           <el-button size="small" type="primary">编辑操作</el-button>
           <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除操作</el-button>
