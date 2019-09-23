@@ -25,7 +25,7 @@
         label="名称"
         sortable="custom"
         prop="name"
-        min-width="15%"/>
+        min-width="20%"/>
       <el-table-column
         label="条件"
         sortable="custom"
@@ -35,7 +35,7 @@
         label="操作项"
         sortable="custom"
         prop="operation_items"
-        min-width="50%">
+        min-width="45%">
         <template slot-scope="prop">
           <ul>
             <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
