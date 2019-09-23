@@ -345,6 +345,16 @@ class NotificationModeConfigSerializer(serializers.ModelSerializer):
 
 
 class OperationSerializer(serializers.ModelSerializer):
+    condition = serializers.SerializerMethodField()
+    operation_items = serializers.SerializerMethodField()
+
     class Meta:
         model = Operation
         fields = '__all__'
+
+    def get_condition(self, obj):
+        return '当检查出有问题时'
+
+    def get_operation_items(self, obj):
+        return [{'id': 1, 'name': '轮次(1-3)使用企业微信发送通知到运维组'},
+                {'id': 2, 'name': '轮次(4-0)使用邮件发送通知到运维组'}]
