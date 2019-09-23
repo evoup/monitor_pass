@@ -20,7 +20,7 @@
       tooltip-effect="dark"
       style="width: 100%;margin-top:10px"
     >
-      <el-table-column prop="id" label="序号" type="index" width="80" align="center"/>
+      <el-table-column prop="id" label="序号" type="index" width="60" align="center"/>
       <el-table-column
         label="名称"
         sortable="custom"
@@ -35,7 +35,7 @@
         label="操作项"
         sortable="custom"
         prop="operation_items"
-        min-width="45%">
+        min-width="70%">
         <template slot-scope="prop">
           <ul>
             <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
@@ -49,7 +49,7 @@
         label="状态"
         sortable="custom"
         prop="status"
-        min-width="10%">
+        min-width="15%">
         <template slot-scope="prop">
           <el-tag v-if="prop.row.status === 0" type="info">禁用</el-tag>
           <el-tag v-if="prop.row.status === 1" type="success">启用</el-tag>
