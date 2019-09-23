@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -29,4 +30,20 @@ class OperationList(APIView):
                 }
             }
         }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class OperationInfo(APIView):
+    @method_decorator(permission_required('monitor_web.add_operation', raise_exception=True))
+    def post(self, request, *args, **kwargs):
+        """
+        创建操作
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建操作失败'
+        }
+        data = JSONParser().parse(request)
+        models.Operation.objects.create(name=data['name'],title=data['subject'],content=data['message'])
         return JsonResponse(ret, safe=False)

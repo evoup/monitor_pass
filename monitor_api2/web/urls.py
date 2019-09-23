@@ -103,5 +103,7 @@ urlpatterns = [
         url(r'^event/list$', event_view.EventList.as_view()),
         # 操作列表
         url(r'^operation/list$', operation_view.OperationList.as_view()),
+        # 返回单个操作/修改/添加/删除操作
+        url(r'^operation/info', operation_view.OperationInfo.as_view()),
     ]))
 ]

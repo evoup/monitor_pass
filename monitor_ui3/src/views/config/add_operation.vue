@@ -61,14 +61,16 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-col :span="10">
-          <el-radio v-model="runTypeModel" label="1" @change="changeData('send_notice')">发送消息</el-radio>
-          <el-radio v-model="runTypeModel" label="2" @change="changeData('exec_command')">执行命令</el-radio>
-        </el-col>
+        <el-button
+          type="primary"
+          @click="
+            addOperation(form.name,form.subject,form.message, triggerSelectModel)
+          "
+        >创建
+        </el-button
+        >
+        <el-button @click="jumpOperationList">取消</el-button>
       </el-form-item>
-      <el-col :span="10">
-        <component ref="operationFormComp" :is="componentFile" />
-      </el-col>
     </el-form>
   </div>
 </template>
@@ -76,6 +78,7 @@
 <script>
 import { template_list } from '../../api/template'
 import { trigger_list } from '../../api/trigger'
+import { add_operation } from '../../api/operation'
 
 export default {
   name: 'AddOperation',
@@ -89,24 +92,13 @@ export default {
       templateListData: [],
       templateSelectModel: null,
       triggerListData: [],
-      triggerSelectModel: null,
-      runTypeModel: '1'
-    }
-  },
-  // 动态加载组件
-  computed: {
-    componentFile() {
-      const componentName = this.$store.state.operationTypeComponentName
-      return () => import(`./components/${componentName}.vue`)
+      triggerSelectModel: null
     }
   },
   created() {
     this.fetchTemplateListData()
   },
   methods: {
-    changeData(d) {
-      this.$store.state.operationTypeComponentName = d
-    },
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
@@ -117,6 +109,15 @@ export default {
       trigger_list({ template_id: this.templateSelectModel }).then(response => {
         this.triggerListData = response.data.items
       })
+    },
+    addOperation(a, b, c, d) {
+      add_operation(a, b, c, d).then(response => {
+      }).catch(e => {
+        console.log(e)
+      })
+    },
+    jumpOperationList() {
+      this.$router.push({ path: '/operation_list' })
     }
   }
 }
@@ -126,7 +127,8 @@ export default {
   .app-container /deep/ .el-form-item {
     margin-bottom: 5px;
   }
+
   .app-container /deep/ textarea {
-    height:120px;
+    height: 120px;
   }
 </style>
