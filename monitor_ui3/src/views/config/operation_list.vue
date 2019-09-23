@@ -5,7 +5,8 @@
         <el-row>
           <el-col :span="24" align="right">
             <div class="grid-content">
-              <el-button type="primary" @click="jumpAddOperation"><i class="el-icon-plus el-icon--right" />添加操作</el-button>
+              <el-button type="primary" @click="jumpAddOperation"><i class="el-icon-plus el-icon--right"/>添加操作
+              </el-button>
             </div>
           </el-col>
         </el-row>
@@ -19,22 +20,28 @@
       tooltip-effect="dark"
       style="width: 100%;margin-top:10px"
     >
-      <el-table-column prop="id" label="序号" type="index" width="80" align="center" />
+      <el-table-column prop="id" label="序号" type="index" width="80" align="center"/>
       <el-table-column
         label="名称"
         sortable="custom"
         prop="name"
-        min-width="20%" />
+        min-width="15%"/>
       <el-table-column
         label="条件"
         sortable="custom"
         prop="condition"
-        min-width="20%" />
+        min-width="15%"/>
       <el-table-column
         label="操作项"
         sortable="custom"
-        prop="desc"
-        min-width="20%" />
+        prop="operation_items"
+        min-width="40%">
+        <template slot-scope="prop">
+          <ul>
+            <li v-for="obj in prop.row.operation_items">{{obj.name}}</li>
+          </ul>
+        </template>
+      </el-table-column>
       <el-table-column
         label="状态"
         sortable="custom"
@@ -57,60 +64,60 @@
 </template>
 
 <script>
-import { operation_list } from '../../api/operation'
+  import { operation_list } from '../../api/operation'
 
-export default {
-  name: 'OperationList',
-  data() {
-    return {
-      typeData: [],
-      // 列表数据
-      dataList: [],
-      // 列表前端分页
-      pageList: {
-        totalCount: '',
-        pageSize: '',
-        totalPage: '',
-        currPage: ''
-      },
-      // 列表分页辅助类(传参)
-      pageHelp: {
-        // 和后端参数一样
-        page: 1,
-        // 后端参数为size
-        size: 5,
-        order: 'asc'
-      },
-      sortHelp: {
-        prop: '',
-        order: ''
-      },
-      filters: {
-        name: '',
-        type: 1
-      },
-      listLoading: true,
-      total: 0,
-      pageNum: 1
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {
-      operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
-        this.dataList = response.data.items
-        this.pageList = response.data.page
-        this.listLoading = false
-        this.total = response.data.count
-      })
+  export default {
+    name: 'OperationList',
+    data() {
+      return {
+        typeData: [],
+        // 列表数据
+        dataList: [],
+        // 列表前端分页
+        pageList: {
+          totalCount: '',
+          pageSize: '',
+          totalPage: '',
+          currPage: ''
+        },
+        // 列表分页辅助类(传参)
+        pageHelp: {
+          // 和后端参数一样
+          page: 1,
+          // 后端参数为size
+          size: 5,
+          order: 'asc'
+        },
+        sortHelp: {
+          prop: '',
+          order: ''
+        },
+        filters: {
+          name: '',
+          type: 1
+        },
+        listLoading: true,
+        total: 0,
+        pageNum: 1
+      }
     },
-    jumpAddOperation() {
-      this.$router.push({ path: '/add_operation' })
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+          this.dataList = response.data.items
+          this.pageList = response.data.page
+          this.listLoading = false
+          this.total = response.data.count
+        })
+      },
+      jumpAddOperation() {
+        this.$router.push({ path: '/add_operation' })
+      }
     }
   }
-}
 </script>
 
 <style scoped>
