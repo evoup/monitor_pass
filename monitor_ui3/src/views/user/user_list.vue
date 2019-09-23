@@ -50,7 +50,7 @@
         label="描述"
         prop="profile.desc"
         width="280" />
-      <el-table-column label="操作">
+      <el-table-column>
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="jumpChangeUser(prop.row.id)">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteUser(prop.row.id, prop.$index)">删除</el-button>

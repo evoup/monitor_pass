@@ -33,7 +33,7 @@
         sortable="custom"
         prop="port"
         min-width="20%" />
-      <el-table-column label="操作">
+      <el-table-column>
         <template slot-scope="prop">
           <el-button size="small" type="primary">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>

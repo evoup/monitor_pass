@@ -63,7 +63,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column>
         <template slot-scope="prop">
           <el-button
             size="small"

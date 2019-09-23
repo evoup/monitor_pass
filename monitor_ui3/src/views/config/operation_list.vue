@@ -26,16 +26,21 @@
         prop="name"
         min-width="20%" />
       <el-table-column
-        label="ip"
+        label="条件"
         sortable="custom"
-        prop="ip"
+        prop="condition"
         min-width="30%" />
       <el-table-column
-        label="port"
+        label="轮次"
         sortable="custom"
-        prop="port"
+        prop="step"
         min-width="20%" />
-      <el-table-column label="操作">
+      <el-table-column
+        label="描述"
+        sortable="custom"
+        prop="desc"
+        min-width="20%" />
+      <el-table-column>
         <template slot-scope="prop">
           <el-button size="small" type="primary">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>

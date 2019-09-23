@@ -58,7 +58,7 @@
         sortable="custom"
         prop="date"
         min-width="9%" />
-      <el-table-column label="操作" min-width="12%">
+      <el-table-column min-width="12%">
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="lookUser(prop.$index,prop.row.u_uuid)">查看</el-button>
           <el-button size="small" type="danger" @click="deleteServerGroup(prop.row.id, prop.$index)">删除</el-button>

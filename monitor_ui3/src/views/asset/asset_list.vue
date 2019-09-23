@@ -69,7 +69,7 @@
             <el-tag v-if="prop.row.device_status_id === 4" type="primary">下架</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="17%">
+        <el-table-column min-width="17%">
           <template slot-scope="prop">
             <el-button size="small" type="primary" @click="jumpViewDetail(prop.row.id)">查看详情</el-button>
             <el-button size="small" type="primary">编辑</el-button>

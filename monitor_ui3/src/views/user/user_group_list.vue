@@ -44,7 +44,7 @@
         label="成员用户"
         prop="members"
         width="200" />
-      <el-table-column label="操作">
+      <el-table-column>
         <template slot-scope="prop">
           <el-button size="small" type="primary" @click="lookUser(prop.$index,scope.row.u_uuid)">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteUserGroup(prop.row.id, prop.$index)">删除</el-button>
