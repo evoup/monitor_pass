@@ -31,19 +31,15 @@
         prop="condition"
         min-width="30%" />
       <el-table-column
-        label="轮次"
-        sortable="custom"
-        prop="step"
-        min-width="20%" />
-      <el-table-column
-        label="描述"
+        label="操作项"
         sortable="custom"
         prop="desc"
         min-width="20%" />
       <el-table-column>
         <template slot-scope="prop">
-          <el-button size="small" type="primary">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
+          <el-button size="small" type="primary">添加操作项</el-button>
+          <el-button size="small" type="primary">编辑操作</el-button>
+          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除操作</el-button>
         </template>
       </el-table-column>
     </el-table>
