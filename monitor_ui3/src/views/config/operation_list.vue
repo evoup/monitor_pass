@@ -38,7 +38,10 @@
         min-width="40%">
         <template slot-scope="prop">
           <ul>
-            <li v-for="obj in prop.row.operation_items">{{obj.name}}</li>
+            <li v-for="obj in prop.row.operation_items">{{obj.name}}
+              (<el-link size="small" type="primary">编辑</el-link>
+              <el-link size="small" type="danger">删除</el-link>)
+            </li>
           </ul>
         </template>
       </el-table-column>
