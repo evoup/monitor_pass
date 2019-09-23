@@ -112,12 +112,23 @@ export default {
     },
     addOperation(a, b, c, d) {
       add_operation(a, b, c, d).then(response => {
+        this.openConfirm()
       }).catch(e => {
         console.log(e)
       })
     },
     jumpOperationList() {
       this.$router.push({ path: '/operation_list' })
+    },
+    openConfirm() {
+      this.$confirm('将在操作下创建操作项, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        this.$router.push({ path: '/add_operation_item' })
+      }).catch(() => {
+      })
     }
   }
 }

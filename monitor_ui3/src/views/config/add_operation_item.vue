@@ -6,60 +6,6 @@
           <el-input v-model="form.name" placeholder="请输入操作名称"/>
         </el-col>
       </el-form-item>
-      <el-form-item label="通知主题：">
-        <el-col :span="8">
-          <el-input v-model="form.subject" placeholder="请输入通知主题"/>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="通知内容：">
-        <el-col :span="8">
-          <el-input
-            v-model="form.message"
-            class="note"
-            placeholder="请输入通知内容"
-            type="textarea"
-          />
-        </el-col>
-      </el-form-item>
-      <el-form-item
-        label="请选择模板："
-      >
-        <el-col :span="10">
-          <el-select
-            v-model="templateSelectModel"
-            placeholder="请选择模板"
-            style="width: 80%"
-            @change="fetchTriggerListData"
-          >
-            <el-option
-              v-for="item in templateListData"
-              :key="item.id"
-              :label="item.name"
-              :aria-selected="true"
-              :value="item.id"
-            />
-          </el-select>
-        </el-col>
-      </el-form-item>
-      <el-form-item
-        label="请选择触发器："
-      >
-        <el-col :span="10">
-          <el-select
-            v-model="triggerSelectModel"
-            placeholder="请选择触发器"
-            style="width: 80%"
-          >
-            <el-option
-              v-for="item in triggerListData"
-              :key="item.id"
-              :label="item.trigger_name"
-              :aria-selected="true"
-              :value="item.id"
-            />
-          </el-select>
-        </el-col>
-      </el-form-item>
       <el-form-item>
         <el-col :span="10">
           <el-radio v-model="runTypeModel" label="1" @change="changeData('send_notice')">发送消息</el-radio>
