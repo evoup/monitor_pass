@@ -29,12 +29,22 @@
         label="条件"
         sortable="custom"
         prop="condition"
-        min-width="30%" />
+        min-width="20%" />
       <el-table-column
         label="操作项"
         sortable="custom"
         prop="desc"
         min-width="20%" />
+      <el-table-column
+        label="状态"
+        sortable="custom"
+        prop="status"
+        min-width="10%">
+        <template slot-scope="prop">
+          <el-tag v-if="prop.row.status === 0" type="info">禁用</el-tag>
+          <el-tag v-if="prop.row.status === 1" type="success">启用</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template slot-scope="prop">
           <el-button size="small" type="primary">添加操作项</el-button>
