@@ -3,10 +3,10 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="操作名称：">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="操作名称" :disabled="true"/>
+          <el-input v-model="form.name" :disabled="true" placeholder="操作名称"/>
         </el-col>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="操作类型：">
         <el-col :span="10">
           <el-radio v-model="runTypeModel" label="1" @change="changeData('send_notice')">发送消息</el-radio>
           <el-radio v-model="runTypeModel" label="2" @change="changeData('exec_command')">执行命令</el-radio>
@@ -20,8 +20,8 @@
           <el-button
             type="primary"
             @click="
-            addOperationItem()
-          "
+              addOperationItem()
+            "
           >创建
           </el-button
           >
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { add_operation_item, read_operation } from '../../api/operation'
+import { add_operation_item, read_operation } from '../../api/operation'
 
 export default {
   name: 'AddOperation',
@@ -71,7 +71,10 @@ export default {
       })
     },
     addOperationItem() {
-      add_operation_item(this.runTypeModel, this.form)
+      add_operation_item(this.runTypeModel, this.$refs.operationFormComp.$refs.operationForm.model.form)
+    },
+    jumpOperationList() {
+      this.$router.push({ path: '/operation_list' })
     }
   }
 }

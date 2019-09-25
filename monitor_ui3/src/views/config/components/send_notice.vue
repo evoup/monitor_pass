@@ -3,19 +3,19 @@
     <el-form ref="operationForm" :model="operationForm" label-width="120px">
       <el-form-item label="指定的轮次：">
         <el-col :span="6">
-          <el-input v-model="step" placeholder=""/>
+          <el-input v-model="operationForm.step" placeholder=""/>
         </el-col>
         <span style="font-size: 10px;color: dimgrey;padding-left:10px;">（a-b代表从第a次到第b次，b为0代表无限次）</span>
       </el-form-item>
       <el-form-item label="发送间隔：">
         <el-col :span="6">
-          <el-input v-model="send_interval" placeholder=""/>
+          <el-input v-model="operationForm.send_interval" placeholder=""/>
         </el-col>
       </el-form-item>
       <el-form-item label="发送给用户组：">
         <el-col :span="24">
           <el-select
-            v-model="userGroupSelectModel"
+            v-model="operationForm.userGroupSelectModel"
             placeholder=""
             style="width: 80%"
             multiple
@@ -47,16 +47,21 @@
 <script>
 import { user_group_list } from '../../../api/user'
 
+class OperationForm {
+  constructor() {
+    this.send_interval = 3600
+    this.step = '1-1'
+    this.userGroupSelectModel = null
+  }
+}
+
 export default {
   name: 'SendNotice',
   data() {
     return {
-      send_interval: 3600,
-      step: '1-1',
+      operationForm: new OperationForm(),
       checkedSendTypes: ['邮件', '企业微信'],
       sendTypes: ['邮件', '企业微信'],
-      operationForm: null,
-      userGroupSelectModel: null,
       userGroupListData: []
     }
   },
