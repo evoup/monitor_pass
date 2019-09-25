@@ -364,7 +364,7 @@ class OperationSerializer(serializers.ModelSerializer):
                     # 将后面多余的变量替换掉
                     return trigger.get().name.replace(' on {HOST.NAME}', '')
                 else:
-                    return ''
+                    return '当检查出现问题时'
             else:
                 return '%s时间段内的' % v
         else:
