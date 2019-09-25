@@ -97,6 +97,11 @@ class OperationItemInfo(APIView):
             send_interval = form['send_interval']
             step = form['step']
             user_groups = form['userGroupSelectModel']
+            send_types = []
+            for send_type in form['checkedSendTypes']:
+                if send_type == '邮件':
+                    send_types.append(0)
+                if send_type == '企业微信':
+                    send_types.append(1)
             pass
-        form = data['form']
         pass

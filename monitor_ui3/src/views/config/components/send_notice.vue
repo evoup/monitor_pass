@@ -33,7 +33,7 @@
       <el-form-item label="接收：">
         <el-col :span="24">
           <el-checkbox-group
-            v-model="checkedSendTypes"
+            v-model="operationForm.checkedSendTypes"
             :min="0"
             :max="2">
             <el-checkbox v-for="sendType in sendTypes" :label="sendType" :key="sendType">{{ sendType }}</el-checkbox>
@@ -52,6 +52,7 @@ class OperationForm {
     this.send_interval = 3600
     this.step = '1-1'
     this.userGroupSelectModel = null
+    this.checkedSendTypes = ['邮件', '企业微信']
   }
 }
 
@@ -60,7 +61,6 @@ export default {
   data() {
     return {
       operationForm: new OperationForm(),
-      checkedSendTypes: ['邮件', '企业微信'],
       sendTypes: ['邮件', '企业微信'],
       userGroupListData: []
     }
