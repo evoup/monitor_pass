@@ -14,21 +14,7 @@
       </el-form-item>
       <el-form-item label="发送给：">
         <el-col :span="24">
-          <el-tree :data="data" show-checkbox/>
-          <el-select
-            v-model="operationForm.userGroupSelectModel"
-            placeholder=""
-            style="width: 80%"
-            multiple
-          >
-            <el-option
-              v-for="item in userGroupListData"
-              :key="item.id"
-              :label="item.name"
-              :aria-selected="true"
-              :value="item.id"
-            />
-          </el-select>
+          <el-tree ref="tree1" :data="data" show-checkbox @check-change="handleClick"/>
         </el-col>
       </el-form-item>
       <el-form-item label="接收：">
@@ -52,7 +38,6 @@ class OperationForm {
   constructor() {
     this.send_interval = 3600
     this.step = '1-1'
-    this.userGroupSelectModel = null
     this.checkedSendTypes = ['邮件', '企业微信']
   }
 }
@@ -63,7 +48,6 @@ export default {
     return {
       operationForm: new OperationForm(),
       sendTypes: ['邮件', '企业微信'],
-      userGroupListData: [],
       data: [{
         id: 'user_group1',
         label: '运维部',
@@ -85,10 +69,19 @@ export default {
     this.fetchData()
   },
   methods: {
+    handleClick(data) {
+      const checkedNodes = this.$refs.tree1.getCheckedNodes()
+      const user_group_user_ids = new Set([])
+      for (const i in checkedNodes) {
+        console.log(checkedNodes[i].id)
+        user_group_user_ids.add(checkedNodes[i].id)
+      }
+      this.operationForm.userGroupSelectModel = user_group_user_ids
+    },
     fetchData() {
       this.listLoading = true
       user_group_list().then(response => {
-        this.userGroupListData = response.data.items
+        // this.userGroupListData = response.data.items
       })
     }
   }
