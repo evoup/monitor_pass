@@ -353,7 +353,22 @@ class OperationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_condition(self, obj):
-        return '当检查出有问题时'
+        c = models.OperationCondition.objects.filter(operation=models.Operation.objects.filter(id=obj.id).get())
+        if c.count() > 0:
+            condition = c.get()
+            v = condition.value
+            if condition.type == 0:
+                v = int(v)
+                trigger = models.Trigger.objects.filter(id=v)
+                if trigger.count() > 0:
+                    # 将后面多余的变量替换掉
+                    return trigger.get().name.replace(' on {HOST.NAME}', '')
+                else:
+                    return ''
+            else:
+                return '%s时间段内的' % v
+        else:
+            return '当检查出有问题时'
 
     def get_operation_items(self, obj):
         return [{'id': 1, 'name': '轮次(1-3)使用企业微信发送通知到运维组'},
