@@ -12,8 +12,9 @@
           <el-input v-model="operationForm.send_interval" placeholder=""/>
         </el-col>
       </el-form-item>
-      <el-form-item label="发送给用户组：">
+      <el-form-item label="发送给：">
         <el-col :span="24">
+          <el-tree :data="data" show-checkbox/>
           <el-select
             v-model="operationForm.userGroupSelectModel"
             placeholder=""
@@ -62,7 +63,22 @@ export default {
     return {
       operationForm: new OperationForm(),
       sendTypes: ['邮件', '企业微信'],
-      userGroupListData: []
+      userGroupListData: [],
+      data: [{
+        id: 'user_group1',
+        label: '运维部',
+        children: [{
+          id: 'user1',
+          label: 'admin'
+        }]
+      }, {
+        id: 'user_group2',
+        label: '开发部',
+        children: [{
+          id: 'user1',
+          label: 'admin'
+        }]
+      }]
     }
   },
   created() {
@@ -81,6 +97,6 @@ export default {
 
 <style scoped>
   [v-cloak] {
-    display:none;
+    display: none;
   }
 </style>
