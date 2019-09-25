@@ -71,7 +71,7 @@ export default {
       })
     },
     addOperationItem() {
-      add_operation_item(this.runTypeModel, this.$refs.operationFormComp.$refs.operationForm.model.form)
+      add_operation_item(this.runTypeModel, this.$refs.operationFormComp.$refs.operationForm.model)
     },
     jumpOperationList() {
       this.$router.push({ path: '/operation_list' })

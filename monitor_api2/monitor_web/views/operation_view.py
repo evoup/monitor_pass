@@ -91,4 +91,12 @@ class OperationItemInfo(APIView):
             'message': '创建操作项失败'
         }
         data = JSONParser().parse(request)
+        form = data['form']
+        # 发送信息
+        if data['type'] == '1':
+            send_interval = form['send_interval']
+            step = form['step']
+            user_groups = form['userGroupSelectModel']
+            pass
+        form = data['form']
         pass
