@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="操作名称：">
         <el-col :span="8">
-          <el-input v-model="form.name" placeholder="请输入操作名称"/>
+          <el-input v-model="form.name" placeholder="操作名称" :disabled="true"/>
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import { template_list } from '../../api/template'
-import { trigger_list } from '../../api/trigger'
+import { read_operation } from '../../api/operation'
 
 export default {
   name: 'AddOperation',
@@ -47,21 +46,15 @@ export default {
     }
   },
   created() {
-    this.fetchTemplateListData()
+    this.fetchData()
   },
   methods: {
     changeData(d) {
       this.$store.state.operationTypeComponentName = d
     },
-    // 获取所有模板列表
-    fetchTemplateListData() {
-      template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
-        this.templateListData = response.data.items
-      })
-    },
-    fetchTriggerListData() {
-      trigger_list({ template_id: this.templateSelectModel }).then(response => {
-        this.triggerListData = response.data.items
+    fetchData() {
+      read_operation({ id: this.$route.query.id }).then(response => {
+        this.form.name = response.data.item.name
       })
     }
   }
