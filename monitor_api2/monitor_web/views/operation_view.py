@@ -99,6 +99,7 @@ class OperationItemInfo(APIView):
                 step = form['step']
                 user_groups = form['userGroupSelectModel']
                 send_types = []
+                operation = models.Operation.objects.filter(id=data['operationId']).get()
                 for send_type in form['checkedSendTypes']:
                     # TODO 这里最好不要写死
                     if send_type == '邮件':
@@ -108,11 +109,13 @@ class OperationItemInfo(APIView):
                 # 创建operation_step，返回id，基于此id创建operation_message
                 start = int(data['form']['step'].split('-')[0])
                 end = int(data['form']['step'].split('-')[1])
-                models.OperationStep.objects.create(
-                    operation=models.Operation.objects.filter(id=data['operationId']).get(),
+                operation_step = models.OperationStep.objects.create(
+                    operation=operation,
                     start_step=start, end_step=end,
                     inteval=int(data['form']['send_interval']),
                     run_type=int(data['type']))
+                models.OperationMessage.objects.create(operation_step=operation_step, subject=operation.title,
+                                                       message=operation.content)
                 pass
             elif data['type'] == '2':
                 pass

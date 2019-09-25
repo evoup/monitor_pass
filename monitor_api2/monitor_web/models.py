@@ -686,7 +686,7 @@ class OperationMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
     operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
-    message = models.CharField(default='', max_length=255, verbose_name='告警正文')
+    message = models.CharField(default='', max_length=1024, verbose_name='告警正文')
 
     class Meta:
         verbose_name_plural = "发送消息的操作"
