@@ -29,13 +29,14 @@ export function read_operation(param) {
   })
 }
 
-export function add_operation_item(type, form) {
+export function add_operation_item(type, form, operationId) {
   return request({
     url: '/operation_item/info',
     method: 'post',
     data: {
       type,
-      form
+      form,
+      operationId
     }
   })
 }

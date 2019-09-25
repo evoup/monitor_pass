@@ -92,16 +92,36 @@ class OperationItemInfo(APIView):
         }
         data = JSONParser().parse(request)
         form = data['form']
-        # 发送信息
-        if data['type'] == '1':
-            send_interval = form['send_interval']
-            step = form['step']
-            user_groups = form['userGroupSelectModel']
-            send_types = []
-            for send_type in form['checkedSendTypes']:
-                if send_type == '邮件':
-                    send_types.append(0)
-                if send_type == '企业微信':
-                    send_types.append(1)
-            pass
-        pass
+        try:
+            # 发送信息
+            if data['type'] == '1':
+                send_interval = form['send_interval']
+                step = form['step']
+                user_groups = form['userGroupSelectModel']
+                send_types = []
+                for send_type in form['checkedSendTypes']:
+                    # TODO 这里最好不要写死
+                    if send_type == '邮件':
+                        send_types.append(0)
+                    if send_type == '企业微信':
+                        send_types.append(1)
+                # 创建operation_step，返回id，基于此id创建operation_message
+                start = int(data['form']['step'].split('-')[0])
+                end = int(data['form']['step'].split('-')[1])
+                models.OperationStep.objects.create(
+                    operation=models.Operation.objects.filter(id=data['operationId']).get(),
+                    start_step=start, end_step=end,
+                    inteval=int(data['form']['send_interval']),
+                    run_type=int(data['type']))
+                pass
+            elif data['type'] == '2':
+                pass
+        except:
+            print(traceback.format_exc())
+            return JsonResponse(ret, safe=False)
+
+        ret = {
+            'code': constant.BACKEND_CODE_CREATED,
+            'message': '创建服务器成功'
+        }
+        return JsonResponse(ret, safe=False)
