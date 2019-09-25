@@ -78,7 +78,7 @@
 <script>
 import { template_list } from '../../api/template'
 import { trigger_list } from '../../api/trigger'
-import { add_operation } from '../../api/operation'
+import { add_operation, read_operation } from '../../api/operation'
 
 export default {
   name: 'AddOperation',
@@ -87,7 +87,7 @@ export default {
       form: {
         name: '',
         subject: null,
-        message: null      },
+        message: null },
       templateListData: [],
       templateSelectModel: null,
       triggerListData: [],
@@ -95,9 +95,17 @@ export default {
     }
   },
   created() {
+    this.fetchData(this.$route.query.id)
     this.fetchTemplateListData()
   },
   methods: {
+    fetchData(id) {
+      read_operation({ id: id }).then(response => {
+        this.form.name = response.data.item.name
+        this.form.subject = response.data.item.title
+        this.form.message = response.data.item.content
+      })
+    },
     // 获取所有模板列表
     fetchTemplateListData() {
       template_list({ page: 1, size: 99999, order: 'asc' }).then(response => {
@@ -129,6 +137,6 @@ export default {
   }
 
   .app-container /deep/ textarea {
-    height: 120px;
+    height: 280px;
   }
 </style>

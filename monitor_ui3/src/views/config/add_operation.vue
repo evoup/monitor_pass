@@ -151,6 +151,6 @@ export default {
   }
 
   .app-container /deep/ textarea {
-    height: 120px;
+    height: 280px;
   }
 </style>

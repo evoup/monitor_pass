@@ -20,3 +20,11 @@ export function add_operation(name, subject, message, triggerId) {
     }
   })
 }
+
+export function read_operation(param) {
+  return request({
+    url: '/operation/info',
+    method: 'get',
+    params: param
+  })
+}
