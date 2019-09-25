@@ -12,7 +12,7 @@
           <el-input v-model="send_interval" placeholder=""/>
         </el-col>
       </el-form-item>
-      <el-form-item label="发送给：">
+      <el-form-item label="发送给用户组：">
         <el-col :span="24">
           <el-select
             v-model="userGroupSelectModel"

@@ -15,12 +15,25 @@
       <el-col :span="10">
         <component ref="operationFormComp" :is="componentFile" />
       </el-col>
+      <el-col :span="24">
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="
+            addOperationItem()
+          "
+          >创建
+          </el-button
+          >
+          <el-button @click="jumpOperationList">取消</el-button>
+        </el-form-item>
+      </el-col>
     </el-form>
   </div>
 </template>
 
 <script>
-import { read_operation } from '../../api/operation'
+  import { add_operation_item, read_operation } from '../../api/operation'
 
 export default {
   name: 'AddOperation',
@@ -56,6 +69,9 @@ export default {
       read_operation({ id: this.$route.query.id }).then(response => {
         this.form.name = response.data.item.name
       })
+    },
+    addOperationItem() {
+      add_operation_item(this.runTypeModel, this.form)
     }
   }
 }
