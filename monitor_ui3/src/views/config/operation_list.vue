@@ -57,7 +57,7 @@
         <el-table-column>
           <template slot-scope="prop" min-width="10%">
             <el-button size="small" type="primary" @click="jumpAddOperationItem(prop.row.id)">添加操作项</el-button>
-            <el-button size="small" type="primary">编辑</el-button>
+            <el-button size="small" type="primary" @click="jumpChangeOperation(prop.row.id)">编辑</el-button>
             <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
           </template>
         </el-table-column>
@@ -156,6 +156,9 @@ export default {
     },
     jumpAddOperationItem(i) {
       this.$router.push({ path: '/add_operation_item?id=' + i })
+    },
+    jumpChangeOperation(i) {
+      this.$router.push({ path: '/change_operation?id=' + i })
     }
   }
 }
