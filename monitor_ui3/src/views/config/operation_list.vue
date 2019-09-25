@@ -11,58 +11,74 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-table
+        :v-loading="listLoading"
+        :data="dataList"
+        stripe
+        border
+        tooltip-effect="dark"
+        style="width: 100%;margin-top:10px"
+      >
+        <el-table-column prop="id" label="序号" type="index" width="60" align="center"/>
+        <el-table-column
+          label="名称"
+          sortable="custom"
+          prop="name"
+          min-width="20%"/>
+        <el-table-column
+          label="条件"
+          sortable="custom"
+          prop="condition"
+          min-width="15%"/>
+        <el-table-column
+          label="操作项"
+          sortable="custom"
+          prop="operation_items"
+          min-width="70%">
+          <template slot-scope="prop">
+            <ul>
+              <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
+                (<el-link size="small" type="primary">编辑</el-link>
+                <el-link size="small" type="primary">删除</el-link>)
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          sortable="custom"
+          prop="status"
+          min-width="15%">
+          <template slot-scope="prop">
+            <el-tag v-if="prop.row.status === 0" type="info">禁用</el-tag>
+            <el-tag v-if="prop.row.status === 1" type="success">启用</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="prop" min-width="10%">
+            <el-button size="small" type="primary" @click="jumpAddOperationItem(prop.row.id)">添加操作项</el-button>
+            <el-button size="small" type="primary">编辑</el-button>
+            <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-col :span="24" class="toolbar block">
+        <!--数据分页
+     layout：分页显示的样式
+     :page-size：每页显示的条数
+     :total：总数
+     具体功能查看地址：http://element-cn.eleme.io/#/zh-CN/component/pagination
+     -->
+        <!--<el-pagination :page-size="15" :total="total" background layout="total,prev,pager,next" @current-change="handleCurrentChange" />-->
+        <el-pagination
+          :page-sizes="[7,10,15]"
+          :page-size="7"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" />
+      </el-col>
     </el-form>
-    <el-table
-      :v-loading="listLoading"
-      :data="dataList"
-      stripe
-      border
-      tooltip-effect="dark"
-      style="width: 100%;margin-top:10px"
-    >
-      <el-table-column prop="id" label="序号" type="index" width="60" align="center"/>
-      <el-table-column
-        label="名称"
-        sortable="custom"
-        prop="name"
-        min-width="20%"/>
-      <el-table-column
-        label="条件"
-        sortable="custom"
-        prop="condition"
-        min-width="15%"/>
-      <el-table-column
-        label="操作项"
-        sortable="custom"
-        prop="operation_items"
-        min-width="70%">
-        <template slot-scope="prop">
-          <ul>
-            <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
-              (<el-link size="small" type="primary">编辑</el-link>
-              <el-link size="small" type="primary">删除</el-link>)
-            </li>
-          </ul>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="状态"
-        sortable="custom"
-        prop="status"
-        min-width="15%">
-        <template slot-scope="prop">
-          <el-tag v-if="prop.row.status === 0" type="info">禁用</el-tag>
-          <el-tag v-if="prop.row.status === 1" type="success">启用</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column>
-        <template slot-scope="prop" min-width="10%">
-          <el-button size="small" type="primary" @click="jumpAddOperationItem(prop.row.id)">添加操作项</el-button>
-          <el-button size="small" type="primary">编辑</el-button>
-          <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
   </div>
 </template>
 
@@ -108,6 +124,25 @@ export default {
     this.fetchData()
   },
   methods: {
+    indexMethod(index) {
+      return (this.pageList.currPage - 1) * this.pageList.pageSize + index + 1
+    },
+    handleSizeChange(val) {
+      this.pageList.pageSize = val
+      this.pageHelp.size = this.pageList.pageSize
+      this.pageHelp.page = this.pageList.currPage
+      this.fetchData()
+    },
+    // 点击分页sort-change
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.fetchData()
+    },
+    sortChange(column, prop, order) {
+      this.sortHelp.order = column.order
+      this.sortHelp.prop = column.prop
+      this.fetchData()
+    },
     fetchData() {
       operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items

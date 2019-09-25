@@ -252,7 +252,7 @@ export const constantRouterMap = [
       },
       {
         path: '/add_operation_item',
-        name: 'AddOperation',
+        name: 'AddOperationItem',
         component: () => import('../views/config/add_operation_item'),
         meta: { title: '添加操作项', icon: 'operation' },
         hidden: true
