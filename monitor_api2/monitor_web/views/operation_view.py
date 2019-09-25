@@ -61,3 +61,19 @@ class OperationInfo(APIView):
             'id': operation.id
         }
         return JsonResponse(ret, safe=False)
+
+    @method_decorator(permission_required('monitor_web.view_operation', raise_exception=True))
+    def get(self, request, *args, **kwargs):
+        """
+        读取操作
+        """
+        operation = models.Operation.objects.get(
+            id=self.request.query_params['id']) if self.request.query_params.__contains__('id') else None
+        serializer = OperationSerializer(instance=operation, many=False)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "item": serializer.data
+            }
+        }
+        return JsonResponse(ret, safe=False)
