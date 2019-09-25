@@ -75,10 +75,6 @@ export default {
 </script>
 
 <style scoped>
-  .param-form {}
-  .param-form input {
-    width: 50px;
-  }
   [v-cloak] {
     display:none;
   }

@@ -90,20 +90,22 @@ urlpatterns = [
         # 图表列表
         url(r'^diagram/list$', diagram_view.DiagramList.as_view()),
         # 读取图表
-        url(r'^diagram/info', diagram_view.DiagramInfo.as_view()),
+        url(r'^diagram/info$', diagram_view.DiagramInfo.as_view()),
         # 读取常规设置
-        url(r'^general_config/info', general_config_view.GeneralConfig.as_view()),
+        url(r'^general_config/info$', general_config_view.GeneralConfig.as_view()),
         # grafana图表
-        url(r'^server_diagram/list', diagram_view.ServerDiagramList.as_view()),
+        url(r'^server_diagram/list$', diagram_view.ServerDiagramList.as_view()),
         # 概览
-        url(r'^dashboard/server/list', dashboard_view.DashboardServerList.as_view()),
+        url(r'^dashboard/server/list$', dashboard_view.DashboardServerList.as_view()),
         # 告警接收设置列表
-        url(r'^notification_mode_config/list', notification_mode_config.NotificationModeList.as_view()),
+        url(r'^notification_mode_config/list$', notification_mode_config.NotificationModeList.as_view()),
         # 事件列表
         url(r'^event/list$', event_view.EventList.as_view()),
         # 操作列表
         url(r'^operation/list$', operation_view.OperationList.as_view()),
         # 返回单个操作/修改/添加/删除操作
-        url(r'^operation/info', operation_view.OperationInfo.as_view()),
+        url(r'^operation/info$', operation_view.OperationInfo.as_view()),
+        # 返回单个操作项/修改/添加/删除操作项
+        url(r'^operation_item/info$', operation_view.OperationItemInfo.as_view()),
     ]))
 ]

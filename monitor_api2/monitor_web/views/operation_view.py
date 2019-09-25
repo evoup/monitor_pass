@@ -77,3 +77,18 @@ class OperationInfo(APIView):
             }
         }
         return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
+class OperationItemInfo(APIView):
+    @method_decorator(permission_required('monitor_web.add_operation', raise_exception=True))
+    def post(self, request, *args, **kwargs):
+        """
+        创建操作项
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '创建操作项失败'
+        }
+        data = JSONParser().parse(request)
+        pass
