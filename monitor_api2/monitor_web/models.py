@@ -687,6 +687,7 @@ class OperationMessage(models.Model):
     operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
     message = models.CharField(default='', max_length=1024, verbose_name='告警正文')
+    send_type = models.IntegerField('发送信息的方式')
 
     class Meta:
         verbose_name_plural = "发送消息的操作"
