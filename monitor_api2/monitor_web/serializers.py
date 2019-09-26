@@ -394,16 +394,19 @@ class OperationSerializer(serializers.ModelSerializer):
                     run_type = '发送通知'
                 elif step.run_type == 2:
                     run_type = '执行命令'
-                m = models.OperationMessage.objects.get(
-                    operation_step=models.OperationStep.objects.get(id=step.id))
-                users = models.RelationOperationMessageUser.objects.filter(operation_message=m)
-                if users.count() > 0:
-                    u = []
-                    for user in users.all():
-                        u.append(user.user.user.first_name)
-                    u = ','.join(u)
-                    operation_items.append(
-                        {'id': step.id, 'name': '轮次(%s-%s)使用XX%s到%s' % (start_step, end_step, run_type, u)})
+                try:
+                    messages = models.OperationMessage.objects.filter(operation_step=models.OperationStep.objects.get(id=step.id))
+                    for message in messages.all():
+                        users = models.RelationOperationMessageUser.objects.filter(operation_message=message)
+                        if users.count() > 0:
+                            u = []
+                            for user in users.all():
+                                u.append(user.user.user.first_name)
+                            u = ','.join(u)
+                            operation_items.append(
+                                {'id': message.id, 'name': '轮次(%s-%s)使用XX%s到%s' % (start_step, end_step, run_type, u)})
+                except models.OperationMessage.DoesNotExist:
+                    pass
 
         # return [{'id': 1, 'name': '轮次(1-3)使用企业微信发送通知到运维组'},
         #         {'id': 2, 'name': '轮次(4-0)使用邮件发送通知到运维组'}]
