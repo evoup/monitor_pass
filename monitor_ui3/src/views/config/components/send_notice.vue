@@ -14,7 +14,7 @@
       </el-form-item>
       <el-form-item label="发送给：">
         <el-col :span="24">
-          <el-tree ref="tree1" :data="data" show-checkbox @check-change="handleClick"/>
+          <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick"/>
         </el-col>
       </el-form-item>
       <el-form-item label="接收：">
@@ -48,32 +48,30 @@ export default {
     return {
       operationForm: new OperationForm(),
       sendTypes: ['邮件', '企业微信'],
-      data: [{
-        id: 'user_group1',
-        label: '运维部',
-        children: [{
-          id: 'user1',
-          label: 'admin'
-        }]
-      }, {
-        id: 'user_group2',
-        label: '开发部',
-        children: [{
-          id: 'user1',
-          label: 'admin'
-        }]
-      }]
+      tree_data: []
     }
   },
   created() {
     this.fetchData()
   },
   methods: {
+    buildTree(data) {
+      this.tree_data = []
+      for (const i in data) {
+        const user_group_id = 'user_group' + data[i].id
+        const label = data[i].name
+        const members = []
+        for (const j in data[i].member_list) {
+          members.push({ id: data[i].member_list[j].id, label: data[i].member_list[j].first_name })
+        }
+        const usergroup_member = { id: user_group_id, label: label, children: members }
+        this.tree_data.push(usergroup_member)
+      }
+    },
     handleClick(data) {
       const checkedNodes = this.$refs.tree1.getCheckedNodes()
       const user_group_user_ids = new Set([])
       for (const i in checkedNodes) {
-        console.log(checkedNodes[i].id)
         user_group_user_ids.add(checkedNodes[i].id)
       }
       this.operationForm.userGroupSelectModel = user_group_user_ids
@@ -81,7 +79,7 @@ export default {
     fetchData() {
       this.listLoading = true
       user_group_list().then(response => {
-        // this.userGroupListData = response.data.items
+        this.buildTree(response.data.items)
       })
     }
   }
