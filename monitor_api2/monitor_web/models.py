@@ -673,6 +673,7 @@ class OperationCommand(models.Model):
     ssh_password = models.CharField('密码', max_length=128)
     command = models.TextField(null=False)
     notification_mode = models.ForeignKey('NotificationMode', null=True, on_delete=models.SET_NULL)
+    target_host = models.ManyToManyField('Server', db_table='r_operation_command_server')
 
     class Meta:
         verbose_name_plural = "执行命令的操作"
@@ -687,6 +688,8 @@ class OperationMessage(models.Model):
     operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
     message = models.CharField(default='', max_length=1024, verbose_name='告警正文')
+    # 直接关联User会报错，采取关联profile的方式
+    user = models.ManyToManyField('Profile', db_table='r_operation_message_user')
 
     class Meta:
         verbose_name_plural = "发送消息的操作"
