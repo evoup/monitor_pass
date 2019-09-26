@@ -383,5 +383,20 @@ class OperationSerializer(serializers.ModelSerializer):
             return '当检查出有问题时'
 
     def get_operation_items(self, obj):
-        return [{'id': 1, 'name': '轮次(1-3)使用企业微信发送通知到运维组'},
-                {'id': 2, 'name': '轮次(4-0)使用邮件发送通知到运维组'}]
+        operation_items = []
+        steps = models.OperationStep.objects.filter(operation=models.Operation.objects.get(id=obj.id))
+        if steps.count() > 0:
+            for step in steps.all():
+                start_step = step.start_step
+                end_step = step.end_step
+                run_type = ''
+                if step.run_type == 1:
+                    run_type = '发送通知'
+                elif step.run_type == 2:
+                    run_type = '执行命令'
+
+                operation_items.append({'id': step.id, 'name': '%s-%s使用XX%s到' % (start_step, end_step, run_type)})
+
+        # return [{'id': 1, 'name': '轮次(1-3)使用企业微信发送通知到运维组'},
+        #         {'id': 2, 'name': '轮次(4-0)使用邮件发送通知到运维组'}]
+        return operation_items
