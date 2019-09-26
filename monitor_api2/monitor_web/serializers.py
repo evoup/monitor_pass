@@ -403,8 +403,13 @@ class OperationSerializer(serializers.ModelSerializer):
                             for user in users.all():
                                 u.append(user.user.user.first_name)
                             u = ','.join(u)
+                            ms = ''
+                            if message.send_type == 0:
+                                ms = "电子邮件"
+                            elif message.send_type == 1:
+                                ms = "企业微信"
                             operation_items.append(
-                                {'id': message.id, 'name': '轮次(%s-%s)使用XX%s到%s' % (start_step, end_step, run_type, u)})
+                                {'id': message.id, 'name': '轮次(%s-%s)使用%s%s到%s' % (start_step, end_step, ms, run_type, u)})
                 except models.OperationMessage.DoesNotExist:
                     pass
 
