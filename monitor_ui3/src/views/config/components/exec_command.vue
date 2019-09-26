@@ -14,6 +14,12 @@
       </el-form-item>
       <el-form-item label="执行目标：">
         <el-col :span="6"/>
+        <el-col :span="24">
+          <el-radio v-model="operationForm.exec_target" label="1">当前服务器</el-radio>
+          <el-radio v-model="operationForm.exec_target" label="2">指定服务器</el-radio>
+          <el-radio v-model="operationForm.exec_target" label="3">指定服务器组</el-radio>
+          <el-input v-if="operationForm.exec_target==='2'"></el-input>
+        </el-col>
       </el-form-item>
       <el-form-item label="ssh用户名：">
         <el-col :span="6">
@@ -46,6 +52,7 @@ class OperationForm {
     this.step = '1-1'
     this.ssh_user = ''
     this.command = ''
+    this.exec_target = '1'
   }
 }
 export default {
