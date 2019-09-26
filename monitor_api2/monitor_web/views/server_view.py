@@ -346,9 +346,10 @@ class ServerInfo(APIView):
                     # 这样就是复制新的
                     trigger.pk = None
                     trigger.save()
-                    newExpression = re.sub(pattern, expression_replace_callback({'host_id': srv.id, 'trigger_id': trigger.id}),
-                                           trigger.expression)
-                    models.Trigger.objects.filter(id=trigger.id).update(expression=newExpression)
+                    new_expression = re.sub(pattern,
+                                            expression_replace_callback({'host_id': srv.id, 'trigger_id': trigger.id}),
+                                            trigger.expression)
+                    models.Trigger.objects.filter(id=trigger.id).update(expression=new_expression)
                     pass
         except:
             print(traceback.format_exc())
@@ -385,9 +386,9 @@ class ServerList(APIView):
         获取服务器列表
         """
         # 0是服务器组
-        filter = {'server_groups__in': request.query_params.get('serverGroup')} if request.query_params.get(
+        ft = {'server_groups__in': request.query_params.get('serverGroup')} if request.query_params.get(
             'serverGroup') is not '0' else None
-        page_data, count = paging_request(request, models.Server, self, filter=filter)
+        page_data, count = paging_request(request, models.Server, self, filter=ft)
         # 对数据进行序列化
         serializer = ServerSerializer(instance=page_data, many=True)
         ret = {
@@ -438,8 +439,7 @@ class ServerGroupInfo(APIView):
             'code': constant.BACKEND_CODE_DELETED,
             'message': '删除服务器组成功'
         }
-        serverGroup = models.ServerGroup.objects.get(id=self.request.query_params['id'])
-        serverGroup.delete()
+        models.ServerGroup.objects.filter(id=self.request.query_params['id']).delete()
         return JsonResponse(ret, safe=False)
 
     @method_decorator(permission_required('monitor_web.add_servergroup', raise_exception=True))
@@ -452,17 +452,20 @@ class ServerGroupInfo(APIView):
             'message': '创建服务器组失败'
         }
         data = JSONParser().parse(request)
-        new_group, created = models.ServerGroup.objects.get_or_create(name=data['name'], desc=data['desc'],
-                                                                      alarm_type=data['alarm_type'])
-        new_group_id = new_group.id
-        # 维护服务器组用户组关系
-        user_groups = models.UserGroup.objects.filter(id__in=data['user_groups']).all()
-        for user_group in user_groups:
-            user_group.server_group.add(new_group_id)
-        # 维护服务器组模板关系
-        templates = models.Template.objects.filter(id__in=data['templates']).all()
-        for template in templates:
-            template.server_group.add(new_group_id)
+        try:
+            new_group, created = models.ServerGroup.objects.get_or_create(name=data['name'], desc=data['desc'],
+                                                                          alarm_type=data['alarm_type'])
+            new_group_id = new_group.id
+            # 维护服务器组用户组关系
+            user_groups = models.UserGroup.objects.filter(id__in=data['user_groups']).all()
+            for user_group in user_groups:
+                user_group.server_group.add(new_group_id)
+            # 维护服务器组模板关系
+            templates = models.Template.objects.filter(id__in=data['templates']).all()
+            for template in templates:
+                template.server_group.add(new_group_id)
+        except:
+            return JsonResponse(ret, safe=False)
         ret = {
             'code': constant.BACKEND_CODE_DELETED,
             'message': '创建服务组成功'
@@ -474,6 +477,7 @@ class expression_replace_callback(object):
     """
     re.sub的回调函数，替换调原本表达式中对用的function id
     """
+
     # 初始化属性
     def __init__(self, extra_arg):
         self.extra_arg = extra_arg
@@ -486,10 +490,9 @@ class expression_replace_callback(object):
             return ""
         else:
             function = f.get()
-            monitorItemSourceId = function.item.id
             # 寻找已经复制出来的itemCopyFrom的item.name和parameter保存原来的
             new_item = models.MonitorItem.objects.filter(host_id=self.extra_arg['host_id'],
-                                                         item_copy_from=monitorItemSourceId).get()
+                                                         item_copy_from=function.item.id).get()
             # 确定trigger
             new_trigger = models.Trigger.objects.filter(id=self.extra_arg['trigger_id']).get()
             function.item = new_item
