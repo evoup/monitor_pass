@@ -308,7 +308,6 @@ class UserGroupList(APIView):
         page_data = page_handler.paginate_queryset(queryset=records, request=request, view=self)
         # 对数据进行序列化
         serializer = GroupSerializer(instance=page_data, many=True)
-        # ser = UserGroupSerializer(instance=page_roles, many=True)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

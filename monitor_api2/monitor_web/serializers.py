@@ -303,12 +303,14 @@ class ProfileBelongUserGroupSerializer(ProfileSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     members = serializers.SerializerMethodField()
+    member_list = serializers.SerializerMethodField()
     desc = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['id', 'name', 'members', 'desc']
+        fields = ['id', 'name', 'members', 'desc', 'member_list']
 
+    # TODO 删除members返回字段，member_list有完整信息
     def get_members(self, obj):
         members = []
         users = User.objects.all()
@@ -318,6 +320,16 @@ class GroupSerializer(serializers.ModelSerializer):
                 if group in user.groups.all():
                     members.append(user.first_name + user.last_name)
         return ', '.join(members)
+
+    def get_member_list(self, obj):
+        members = []
+        users = User.objects.all()
+        if users is not None:
+            for user in users:
+                group = Group.objects.get(id=obj.id)
+                if group in user.groups.all():
+                    members.append({'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name})
+        return members
 
     def get_desc(self, obj):
         if len(UserGroup.objects.filter(group_id=obj.id).all()) > 0:
