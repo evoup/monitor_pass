@@ -12,7 +12,7 @@
           <el-radio v-model="runTypeModel" label="2" @change="changeData('exec_command')">执行命令</el-radio>
         </el-col>
       </el-form-item>
-      <el-col :span="10">
+      <el-col :span="12">
         <component ref="operationFormComp" :is="componentFile" />
       </el-col>
       <el-col :span="24">
