@@ -673,7 +673,6 @@ class OperationCommand(models.Model):
     ssh_password = models.CharField('密码', max_length=128)
     command = models.TextField(null=False)
     notification_mode = models.ForeignKey('NotificationMode', null=True, on_delete=models.SET_NULL)
-    target_host = models.ManyToManyField('Server', db_table='r_operation_command_server')
 
     class Meta:
         verbose_name_plural = "执行命令的操作"
@@ -688,12 +687,36 @@ class OperationMessage(models.Model):
     operation_step = models.ForeignKey('OperationStep', on_delete=models.CASCADE, default=1, null=True)
     subject = models.CharField(default='', max_length=80, verbose_name='告警主题')
     message = models.CharField(default='', max_length=1024, verbose_name='告警正文')
-    # 直接关联User会报错，采取关联profile的方式
-    user = models.ManyToManyField('Profile', db_table='r_operation_message_user')
 
     class Meta:
         verbose_name_plural = "发送消息的操作"
         db_table = 'operation_message'
+
+
+class RelationOperationMessageUser(models.Model):
+    """
+    发送消息的操作对用户关系表
+    """
+    id = models.BigAutoField(primary_key=True)
+    operation_message = models.ForeignKey('OperationMessage', on_delete=models.CASCADE)
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "发送消息的操作对用户关系表"
+        db_table = 'r_operation_message_user'
+
+
+class RelationOperationCommandUser(models.Model):
+    """
+    执行命令的操作对服务器关系表
+    """
+    id = models.BigAutoField(primary_key=True)
+    operation_command = models.ForeignKey('OperationCommand', on_delete=models.CASCADE)
+    server = models.ForeignKey('Server', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = '执行命令的操作对服务器关系表'
+        db_table = 'r_operation_command_server'
 
 
 class AssetRecord(models.Model):

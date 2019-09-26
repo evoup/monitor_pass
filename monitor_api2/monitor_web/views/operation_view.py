@@ -98,6 +98,13 @@ class OperationItemInfo(APIView):
                 send_interval = form['send_interval']
                 step = form['step']
                 user_groups = form['userGroupSelectModel']
+                # 传递来2种元素，usergroup|数字和user|数字，其实只要user就可以了
+                send_users = []
+                for user_group in user_groups:
+                    sp_arr = user_group.split('|')
+                    if sp_arr[0] == 'user':
+                        send_users.append(sp_arr[1])
+
                 send_types = []
                 operation = models.Operation.objects.filter(id=data['operationId']).get()
                 for send_type in form['checkedSendTypes']:
