@@ -62,7 +62,7 @@ export default {
         const label = data[i].name
         const members = []
         for (const j in data[i].member_list) {
-          members.push({ id: data[i].member_list[j].id, label: data[i].member_list[j].first_name })
+          members.push({ id: 'user' + data[i].member_list[j].id, label: data[i].member_list[j].first_name })
         }
         const usergroup_member = { id: user_group_id, label: label, children: members }
         this.tree_data.push(usergroup_member)

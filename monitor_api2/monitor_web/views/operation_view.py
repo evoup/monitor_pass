@@ -107,12 +107,12 @@ class OperationItemInfo(APIView):
                     if send_type == '企业微信':
                         send_types.append(1)
                 # 创建operation_step，返回id，基于此id创建operation_message
-                start = int(data['form']['step'].split('-')[0])
-                end = int(data['form']['step'].split('-')[1])
+                start = int(step.split('-')[0])
+                end = int(step.split('-')[1])
                 operation_step = models.OperationStep.objects.create(
                     operation=operation,
                     start_step=start, end_step=end,
-                    inteval=int(data['form']['send_interval']),
+                    inteval=int(send_interval),
                     run_type=int(data['type']))
                 models.OperationMessage.objects.create(operation_step=operation_step, subject=operation.title,
                                                        message=operation.content)
