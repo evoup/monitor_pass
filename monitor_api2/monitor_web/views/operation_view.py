@@ -138,6 +138,6 @@ class OperationItemInfo(APIView):
 
         ret = {
             'code': constant.BACKEND_CODE_CREATED,
-            'message': '创建服务器成功'
+            'message': '创建操作项成功'
         }
         return JsonResponse(ret, safe=False)
