@@ -92,3 +92,5 @@ INSERT INTO `monitor`.`notification_mode` (`type`, `name`, `wechat_agent_id`, `w
 
 
 INSERT INTO `operation` (`id`,`name`,`status`,`period`,`title`,`content`) VALUES (1,'发送告警至运维人员',1,3600,'{TRIGGER.STATUS}: {TRIGGER.NAME}','Trigger: {TRIGGER.NAME}\nTrigger status: {TRIGGER.STATUS}\nTrigger severity: {TRIGGER.SEVERITY}\nTrigger URL: {TRIGGER.URL}\n\nItem values:\n\n1. {ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}\n2. {ITEM.NAME2} ({HOST.NAME2}:{ITEM.KEY2}): {ITEM.VALUE2}\n3. {ITEM.NAME3} ({HOST.NAME3}:{ITEM.KEY3}): {ITEM.VALUE3}\n\nOriginal event ID: {EVENT.ID}');
+
+INSERT INTO `monitor`.`operation_condition` (`id`, `type`, `operator`, `value`, `operation_id`) VALUES (1, '0', '0', '0', '1');

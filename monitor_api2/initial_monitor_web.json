@@ -1044,5 +1044,15 @@
       "title": "{TRIGGER.STATUS}: {TRIGGER.NAME}",
       "content": "Trigger: {TRIGGER.NAME}\nTrigger status: {TRIGGER.STATUS}\nTrigger severity: {TRIGGER.SEVERITY}\nTrigger URL: {TRIGGER.URL}\n\nItem values:\n\n1. {ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}\n2. {ITEM.NAME2} ({HOST.NAME2}:{ITEM.KEY2}): {ITEM.VALUE2}\n3. {ITEM.NAME3} ({HOST.NAME3}:{ITEM.KEY3}): {ITEM.VALUE3}\n\nOriginal event ID: {EVENT.ID}"
     }
+  },
+  {
+    "model": "monitor_web.operationcondition",
+    "pk": 1,
+    "fields": {
+      "operation": 1,
+      "type": 0,
+      "operator": 0,
+      "value": "0"
+    }
   }
 ]
