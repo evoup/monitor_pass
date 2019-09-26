@@ -121,9 +121,15 @@ class OperationItemInfo(APIView):
                     start_step=start, end_step=end,
                     inteval=int(send_interval),
                     run_type=int(data['type']))
-                models.OperationMessage.objects.create(operation_step=operation_step, subject=operation.title,
-                                                       message=operation.content)
-                pass
+                operation_message = models.OperationMessage.objects.create(operation_step=operation_step,
+                                                                           subject=operation.title,
+                                                                           message=operation.content)
+                for send_user in send_users:
+                    # TODO 方法不好，应该直接查询到user
+                    models.RelationOperationMessageUser.objects.get_or_create(operation_message=operation_message,
+                                                                              user=models.Profile.objects.get(
+                                                                                  user=models.User.objects.get(
+                                                                                      id=send_user)))
             elif data['type'] == '2':
                 pass
         except:
