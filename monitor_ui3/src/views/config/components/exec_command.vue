@@ -12,6 +12,29 @@
           <el-input v-model="operationForm.send_interval" placeholder=""/>
         </el-col>
       </el-form-item>
+      <el-form-item label="执行目标：">
+        <el-col :span="6"/>
+      </el-form-item>
+      <el-form-item label="ssh用户名：">
+        <el-col :span="6">
+          <el-input v-model="operationForm.ssh_user" placeholder=""/>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="ssh密码：">
+        <el-col :span="6">
+          <el-input v-model="operationForm.ssh_user" placeholder=""/>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="命令：">
+        <el-col :span="17">
+          <el-input
+            v-model="operationForm.command"
+            class="note"
+            placeholder="请输入命令"
+            type="textarea"
+          />
+        </el-col>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -21,6 +44,8 @@ class OperationForm {
   constructor() {
     this.send_interval = 3600
     this.step = '1-1'
+    this.ssh_user = ''
+    this.command = ''
   }
 }
 export default {
@@ -34,5 +59,11 @@ export default {
 </script>
 
 <style scoped>
+  .param-form /deep/ .el-form-item {
+    margin-bottom: 5px;
+  }
 
+  .param-form /deep/ textarea {
+    height: 150px;
+  }
 </style>

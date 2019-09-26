@@ -81,6 +81,9 @@ export default {
 </script>
 
 <style scoped>
+  .app-container /deep/ .el-form-item {
+    margin-bottom: 5px;
+  }
   .app-container /deep/ textarea {
     height:120px;
   }
