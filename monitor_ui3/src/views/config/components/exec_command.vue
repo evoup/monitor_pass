@@ -56,7 +56,7 @@
       </el-form-item>
       <el-form-item label="ssh密码：">
         <el-col :span="6">
-          <el-input v-model="operationForm.ssh_passwd" placeholder=""/>
+          <el-input v-model="operationForm.ssh_passwd" placeholder="" show-password />
         </el-col>
       </el-form-item>
       <el-form-item label="命令：">
