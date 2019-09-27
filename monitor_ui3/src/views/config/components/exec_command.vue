@@ -18,6 +18,8 @@
           <el-radio v-model="operationForm.exec_target" label="1">当前服务器</el-radio>
           <el-radio v-model="operationForm.exec_target" label="2">指定服务器</el-radio>
           <el-radio v-model="operationForm.exec_target" label="3">指定服务器组</el-radio>
+        </el-col>
+        <el-col :span="24">
           <el-select
             v-if="operationForm.exec_target==='2'"
             v-model="operationForm.server_select_model"
@@ -84,7 +86,7 @@ class OperationForm {
     this.command = ''
     this.exec_target = '1'
     this.server_select_model = []
-    this.server_group_select_model = []
+    this.server_group_select_model = null
   }
 }
 export default {
@@ -95,8 +97,21 @@ export default {
       options: [],
       loading: false,
       list: [],
-      serverGroupList: []
+      serverGroupList: null
     }
+  },
+  created() {
+    server_group_list().then(
+      response => {
+        // 所属的服务器组
+        const serverGroupIds = response.data.items
+        const a = []
+        serverGroupIds.forEach(function(e) {
+          a.push(e)
+        })
+        this.serverGroupList = a
+      }
+    )
   },
   mounted() {
     // 加载服务器到服务器搜索选择列表
@@ -111,17 +126,6 @@ export default {
         return { value: item.id, label: item.name }
       })
     })
-    server_group_list().then(
-      response => {
-        // 所属的服务器组
-        const serverGroupIds = response.data.items
-        const a = []
-        serverGroupIds.forEach(function(e) {
-          a.push(e)
-        })
-        this.serverGroupList = a
-      }
-    )
   },
   methods: {
     remoteMethod(query) {
