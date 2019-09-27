@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { server_list } from '../../../api/server'
+
 class OperationForm {
   constructor() {
     this.send_interval = 3600
@@ -97,6 +99,15 @@ export default {
     }
   },
   mounted() {
+    server_list({
+      page: 1,
+      size: 99999,
+      order: 'asc',
+      prop: '',
+      serverGroup: 0
+    }).then(response => {
+      console.log(response.data.items)
+    })
     this.list = this.states.map(item => {
       return { value: item.id, label: item.name }
     })
