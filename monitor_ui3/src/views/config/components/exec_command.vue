@@ -20,7 +20,7 @@
           <el-radio v-model="operationForm.exec_target" label="3">指定服务器组</el-radio>
           <el-select
             v-if="operationForm.exec_target==='2'"
-            v-model="select_value"
+            v-model="operationForm.server_select_model"
             :remote-method="remoteMethod"
             :loading="loading"
             multiple
@@ -28,6 +28,19 @@
             remote
             reserve-keyword
             placeholder="请输入关键词">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+          <el-select
+            v-if="operationForm.exec_target==='3'"
+            v-model="operationForm.server_group_select_model"
+            :remote-method="remoteMethod"
+            :loading="loading"
+            multiple
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -43,7 +56,7 @@
       </el-form-item>
       <el-form-item label="ssh密码：">
         <el-col :span="6">
-          <el-input v-model="operationForm.ssh_user" placeholder=""/>
+          <el-input v-model="operationForm.ssh_passwd" placeholder=""/>
         </el-col>
       </el-form-item>
       <el-form-item label="命令：">
@@ -66,8 +79,11 @@ class OperationForm {
     this.send_interval = 3600
     this.step = '1-1'
     this.ssh_user = ''
+    this.ssh_passwd = ''
     this.command = ''
     this.exec_target = '1'
+    this.server_select_model = []
+    this.server_group_select_model = []
   }
 }
 export default {
@@ -76,9 +92,8 @@ export default {
     return {
       operationForm: new OperationForm(),
       options: [],
-      select_value: [],
       loading: false,
-      states: [{ id: 1, name: 'Alabama' }, { id: 2, name: 'Kakaxi' }]
+      states: [{ id: '1', name: 'Alabama' }, { id: '2', name: 'Kakaxi' }]
     }
   },
   mounted() {
