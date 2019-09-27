@@ -90,4 +90,11 @@ export default {
   [v-cloak] {
     display: none;
   }
+  .param-form /deep/ .el-form-item {
+    margin-bottom: 5px;
+  }
+
+  .param-form /deep/ textarea {
+    height: 280px;
+  }
 </style>
