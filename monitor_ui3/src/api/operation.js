@@ -30,6 +30,14 @@ export function read_operation(param) {
   })
 }
 
+export function delete_operation(param) {
+  return request({
+    url: '/operation/info',
+    method: 'delete',
+    params: param
+  })
+}
+
 export function add_operation_item(type, form, operationId) {
   return request({
     url: '/operation_item/info',

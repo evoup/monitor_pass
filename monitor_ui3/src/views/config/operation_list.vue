@@ -38,8 +38,10 @@
           <template slot-scope="prop">
             <ul>
               <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
-                (<el-link size="small" type="primary">编辑</el-link>
-                <el-link size="small" type="primary">删除</el-link>)
+                (
+                <el-link size="small" type="primary">编辑</el-link>
+                <el-link size="small" type="primary">删除</el-link>
+                )
               </li>
             </ul>
           </template>
@@ -58,7 +60,7 @@
           <template slot-scope="prop" min-width="10%">
             <el-button size="small" type="primary" @click="jumpAddOperationItem(prop.row.id)">添加操作项</el-button>
             <el-button size="small" type="primary" @click="jumpChangeOperation(prop.row.id)">编辑</el-button>
-            <el-button size="small" type="danger" @click="deleteIdc(prop.row.id, prop.$index)">删除</el-button>
+            <el-button size="small" type="danger" @click="deleteOperation(prop.row.id, prop.$index)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,14 +78,14 @@
           :total="total"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" />
+          @current-change="handleCurrentChange"/>
       </el-col>
     </el-form>
   </div>
 </template>
 
 <script>
-import { operation_list } from '../../api/operation'
+import { delete_operation, operation_list } from '../../api/operation'
 
 export default {
   name: 'OperationList',
@@ -161,6 +163,15 @@ export default {
     },
     jumpChangeOperation(i) {
       this.$router.push({ path: '/change_operation?id=' + i })
+    },
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
+    },
+    deleteOperation(id, rowIdx) {
+      console.log(id)
+      delete_operation({ id: id }).then(response => {
+        this.deleteRow(rowIdx, this.dataList)
+      })
     }
   }
 }
