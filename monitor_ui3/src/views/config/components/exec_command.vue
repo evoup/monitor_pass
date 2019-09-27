@@ -20,20 +20,19 @@
           <el-radio v-model="operationForm.exec_target" label="3">指定服务器组</el-radio>
           <el-select
             v-if="operationForm.exec_target==='2'"
-            v-model="value"
+            v-model="select_value"
+            :remote-method="remoteMethod"
+            :loading="loading"
             multiple
             filterable
             remote
             reserve-keyword
-            placeholder="请输入关键词"
-            :remote-method="remoteMethod"
-            :loading="loading">
+            placeholder="请输入关键词">
             <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
-            </el-option>
+              :value="item.value"/>
           </el-select>
         </el-col>
       </el-form-item>
@@ -73,49 +72,34 @@ class OperationForm {
 }
 export default {
   name: 'ExecCommand',
-  mounted() {
-    this.list = this.states.map(item => {
-      return { value: item, label: item }
-    })
-  },
   data() {
     return {
       operationForm: new OperationForm(),
       options: [],
-      value: [],
+      select_value: [],
       loading: false,
-      states: ["Alabama", "Alaska", "Arizona",
-        "Arkansas", "California", "Colorado",
-        "Connecticut", "Delaware", "Florida",
-        "Georgia", "Hawaii", "Idaho", "Illinois",
-        "Indiana", "Iowa", "Kansas", "Kentucky",
-        "Louisiana", "Maine", "Maryland",
-        "Massachusetts", "Michigan", "Minnesota",
-        "Mississippi", "Missouri", "Montana",
-        "Nebraska", "Nevada", "New Hampshire",
-        "New Jersey", "New Mexico", "New York",
-        "North Carolina", "North Dakota", "Ohio",
-        "Oklahoma", "Oregon", "Pennsylvania",
-        "Rhode Island", "South Carolina",
-        "South Dakota", "Tennessee", "Texas",
-        "Utah", "Vermont", "Virginia",
-        "Washington", "West Virginia", "Wisconsin",
-        "Wyoming"]
+      states: [{ id: 1, name: 'Alabama' }, { id: 2, name: 'Kakaxi' }]
     }
+  },
+  mounted() {
+    this.list = this.states.map(item => {
+      return { value: item.id, label: item.name }
+    })
   },
   methods: {
     remoteMethod(query) {
       if (query !== '') {
-        this.loading = true;
+        this.loading = true
         setTimeout(() => {
-          this.loading = false;
+          this.loading = false
           this.options = this.list.filter(item => {
             return item.label.toLowerCase()
-              .indexOf(query.toLowerCase()) > -1;
-          });
-        }, 200);
+              .indexOf(query.toLowerCase()) > -1
+          })
+          console.log(this.select_value)
+        }, 200)
       } else {
-        this.options = [];
+        this.options = []
       }
     }
   }
