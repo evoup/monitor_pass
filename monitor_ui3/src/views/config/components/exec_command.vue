@@ -37,15 +37,14 @@
           <el-select
             v-if="operationForm.exec_target==='3'"
             v-model="operationForm.server_group_select_model"
-            :remote-method="remoteMethod"
-            :loading="loading"
-            multiple
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"/>
+              v-for="item in serverGroupList"
+              :key="item.id"
+              :label="item.name"
+              :aria-selected="true"
+              :value="item.id"
+            />
           </el-select>
         </el-col>
       </el-form-item>
@@ -74,7 +73,7 @@
 </template>
 
 <script>
-import { server_list } from '../../../api/server'
+import { server_group_list, server_list } from '../../../api/server'
 
 class OperationForm {
   constructor() {
@@ -95,10 +94,12 @@ export default {
       operationForm: new OperationForm(),
       options: [],
       loading: false,
-      states: [{ id: '1', name: 'Alabama' }, { id: '2', name: 'Kakaxi' }]
+      list: [],
+      serverGroupList: []
     }
   },
   mounted() {
+    // 加载服务器到服务器搜索选择列表
     server_list({
       page: 1,
       size: 99999,
@@ -106,11 +107,21 @@ export default {
       prop: '',
       serverGroup: 0
     }).then(response => {
-      console.log(response.data.items)
+      this.list = response.data.items.map(item => {
+        return { value: item.id, label: item.name }
+      })
     })
-    this.list = this.states.map(item => {
-      return { value: item.id, label: item.name }
-    })
+    server_group_list().then(
+      response => {
+        // 所属的服务器组
+        const serverGroupIds = response.data.items
+        const a = []
+        serverGroupIds.forEach(function(e) {
+          a.push(e)
+        })
+        this.serverGroupList = a
+      }
+    )
   },
   methods: {
     remoteMethod(query) {
@@ -122,7 +133,6 @@ export default {
             return item.label.toLowerCase()
               .indexOf(query.toLowerCase()) > -1
           })
-          console.log(this.select_value)
         }, 200)
       } else {
         this.options = []
