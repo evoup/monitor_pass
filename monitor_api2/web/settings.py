@@ -267,7 +267,9 @@ ABANDONED_PERMISSIONS = ['add_logentry', 'change_logentry', 'delete_logentry', '
                          'add_relationoperationcommanduser', 'change_relationoperationcommanduser',
                          'delete_relationoperationcommanduser', 'view_relationoperationcommanduser',
                          'add_relationoperationmessageuser', 'change_relationoperationmessageuser',
-                         'delete_relationoperationmessageuser', 'view_relationoperationmessageuser']
+                         'delete_relationoperationmessageuser', 'view_relationoperationmessageuser',
+                         'add_historystringdata', 'change_historystringdata', 'delete_historystringdata',
+                         'view_historystringdata']
 
 # 权限管理(两个app的view函数不能重复)
 PERMISSIONS = {
