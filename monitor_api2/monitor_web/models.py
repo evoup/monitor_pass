@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.migrations.operations.base import Operation
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_unixdatetimefield import UnixDateTimeField
@@ -767,3 +766,20 @@ class GeneralConfig(models.Model):
 
     def __str__(self):
         return "常规设置"
+
+
+class HistoryStringData(models.Model):
+    """
+    历史的字符串数据，历史的数字数据存在opentsdb中
+    """
+    monitor_item = models.BigIntegerField(u'监控项', null=False)
+    ts = models.IntegerField(u'时间戳（秒）', null=False)
+    value = models.CharField(u'值', max_length=255, null=False)
+
+    class Meta:
+        verbose_name_plural = '历史字符串数据表'
+        db_table = 'history_string_data'
+        # 不使用唯一索引，有参考zabbix，查了文档是因为普通索引+change buffer适合写多读少的场景，充分使用change buffer，比较适合账单和日志业务场景
+        indexes = [
+            models.Index(fields=['monitor_item', 'ts'])
+        ]
