@@ -62,6 +62,26 @@ class OperationInfo(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+    @method_decorator(permission_required('monitor_web.delete_operation', raise_exception=True))
+    def delete(self, request, *args, **kwargs):
+        """
+        删除操作
+        """
+        ret = {
+            'code': constant.BACKEND_CODE_OPT_FAIL,
+            'message': '删除操作失败'
+        }
+        try:
+            models.OperationCondition.objects.filter(operation=models.Operation.objects.get(id=self.request.query_params['id'])).delete()
+            models.Operation.objects.filter(id=self.request.query_params['id']).delete()
+        except:
+            return JsonResponse(ret, safe=False)
+        ret = {
+            'code': constant.BACKEND_CODE_DELETED,
+            'message': '删除操作成功'
+        }
+        return JsonResponse(ret, safe=False)
+
     @method_decorator(permission_required('monitor_web.view_operation', raise_exception=True))
     def get(self, request, *args, **kwargs):
         """
