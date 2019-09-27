@@ -8,7 +8,7 @@ export function operation_list(param) {
   })
 }
 
-export function add_operation(name, subject, message, triggerId) {
+export function add_operation(name, subject, message, triggerId, status) {
   return request({
     url: '/operation/info',
     method: 'post',
@@ -16,7 +16,8 @@ export function add_operation(name, subject, message, triggerId) {
       name,
       subject,
       message,
-      triggerId
+      triggerId,
+      status
     }
   })
 }

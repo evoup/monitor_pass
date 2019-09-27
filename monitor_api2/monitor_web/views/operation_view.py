@@ -49,7 +49,7 @@ class OperationInfo(APIView):
         data = JSONParser().parse(request)
         try:
             operation = models.Operation.objects.create(name=data['name'], title=data['subject'],
-                                                        content=data['message'])
+                                                        content=data['message'], status=1 if data['status'] else 0)
             models.OperationCondition.objects.create(operation=operation, type=0, operator=0,
                                                      value=0 if not data['triggerId'] else data['triggerId'])
         except:

@@ -60,11 +60,18 @@
           </el-select>
         </el-col>
       </el-form-item>
+      <el-form-item label="启用：">
+        <el-col>
+          <el-switch
+            v-model="form.status"
+          />
+        </el-col>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           @click="
-            addOperation(form.name,form.subject,form.message, triggerSelectModel)
+            addOperation(form.name,form.subject,form.message, triggerSelectModel, form.status)
           "
         >创建
         </el-button
@@ -98,7 +105,8 @@ export default {
           '2. {ITEM.NAME2} ({HOST.NAME2}:{ITEM.KEY2}): {ITEM.VALUE2}\n' +
           '3. {ITEM.NAME3} ({HOST.NAME3}:{ITEM.KEY3}): {ITEM.VALUE3}\n' +
           '\n' +
-          'Original event ID: {EVENT.ID}'
+          'Original event ID: {EVENT.ID}',
+        status: true
       },
       templateListData: [],
       templateSelectModel: null,
@@ -121,8 +129,8 @@ export default {
         this.triggerListData = response.data.items
       })
     },
-    addOperation(a, b, c, d) {
-      add_operation(a, b, c, d).then(response => {
+    addOperation(a, b, c, d, e) {
+      add_operation(a, b, c, d, e).then(response => {
         this.openConfirm(response.id)
       }).catch(e => {
         console.log(e)
