@@ -144,6 +144,8 @@ export default {
       this.fetchData()
     },
     fetchData() {
+      this.listLoading = true
+      this.pageHelp.page = this.pageNum
       operation_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
         this.dataList = response.data.items
         this.pageList = response.data.page
