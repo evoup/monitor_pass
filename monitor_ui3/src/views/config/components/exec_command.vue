@@ -25,6 +25,7 @@
             v-model="operationForm.server_select_model"
             :remote-method="remoteMethod"
             :loading="loading"
+            class="select1"
             multiple
             filterable
             remote
@@ -153,5 +154,8 @@ export default {
 
   .param-form /deep/ textarea {
     height: 150px;
+  }
+  .param-form /deep/ .select1 {
+    width: 300px;
   }
 </style>
