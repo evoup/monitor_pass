@@ -10,7 +10,7 @@ export function read_user(param) {
 }
 
 // 添加用户
-export function add_user(login_name, name, email, password, desc) {
+export function add_user(login_name, name, email, password, desc, mobile, wechat_id) {
   return request({
     url: '/user/info',
     method: 'post',
@@ -19,7 +19,9 @@ export function add_user(login_name, name, email, password, desc) {
       name,
       email,
       password,
-      desc
+      desc,
+      mobile,
+      wechat_id
     }
   })
 }
