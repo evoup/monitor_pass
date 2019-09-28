@@ -47,6 +47,9 @@ class OperationInfo(APIView):
             'message': '创建操作失败'
         }
         data = JSONParser().parse(request)
+        if not data['name']:
+            ret['message'] = ret['message'] + ': 操作名称不能为空'
+            return JsonResponse(ret, safe=False)
         try:
             operation = models.Operation.objects.create(name=data['name'], title=data['subject'],
                                                         content=data['message'], status=1 if data['status'] else 0)
