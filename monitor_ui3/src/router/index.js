@@ -55,7 +55,7 @@ export const constantRouterMap = [
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/server/batch_command_exec'),
         meta: { title: '监控服务器状态', icon: 'tree' }
       }
     ]
@@ -102,13 +102,13 @@ export const constantRouterMap = [
       {
         path: 'batch_file_upload',
         name: 'Tree1',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/server/batch_file_upload'),
         meta: { title: '批量文件上传', icon: 'file_upload' }
       },
       {
         path: 'batch_command_execute',
         name: 'Tree2',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/server/batch_command_exec'),
         meta: { title: '批量命令执行', icon: 'command_exec' }
       }
     ]
