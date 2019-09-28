@@ -1,16 +1,27 @@
 <template>
   <div class="app-container">
-    <el-row>
-      <el-col :span="6"><div class="grid-content bg-purple">
-        <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick"/>
-      </div></el-col>
-      <el-col :span="18"><div class="grid-content bg-purple">
-        <el-input
-          v-model="commandModel"
-          placeholder=""
-          type="textarea"/>
-      </div></el-col>
-    </el-row>
+    <el-container>
+      <el-container>
+        <el-aside width="200px">
+          <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick"/>
+        </el-aside>
+        <el-container>
+          <el-main>
+            <el-input
+              v-model="commandModel"
+              placeholder=""
+              type="textarea"/>
+          </el-main>
+          <el-footer>
+            <div style="float: right">
+              <span style="font-size: 14px">执行命令的用户名：</span>
+              <el-input v-model="username" placeholder="" style="width:120px"/>
+              <el-button type="primary" style="margin-left: 20px">发送命令</el-button>
+            </div>
+          </el-footer>
+        </el-container>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -31,7 +42,8 @@ export default {
         prop: '',
         order: ''
       },
-      commandModel: 'ls -la'
+      commandModel: 'ls -la',
+      username: ''
     }
   },
   created() {
