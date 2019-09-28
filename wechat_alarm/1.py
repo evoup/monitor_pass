@@ -17,7 +17,7 @@ import sys
 # 部门id
 Toparty = "2"
 
-Touser = 'YinJia'
+Touser = 'evoup'
 
 # 应用id
 AgentID = 1000002
@@ -41,14 +41,15 @@ token = json_data["access_token"]
 # 消息发送接口
 
 Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token
-
+Murl = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=%s&department_id=%s&fetch_child=true" % (token, 2)
+x = requests.get(Murl, headers=headers)
 
 # 消息发送函数
 
 def msg(title, message):
     weixin_msg = {
 
-        "touser" : Touser,
+        "touser" : "evoup",
 
         "msgtype": "textcard",
 
