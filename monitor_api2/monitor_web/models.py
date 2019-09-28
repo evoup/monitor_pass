@@ -16,6 +16,7 @@ class Profile(models.Model):
     mobile = models.CharField(u'手机', max_length=32, blank=True, null=True)
     desc = models.CharField(u'描述', max_length=255, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    wechat_id = models.CharField(u'企业微信id', max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = '用户信息表'
