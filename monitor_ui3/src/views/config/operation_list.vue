@@ -36,7 +36,10 @@
           prop="operation_items"
           min-width="70%">
           <template slot-scope="prop">
-            <ul>
+            <div v-if="!prop.row.operation_items.length">
+              未添加操作项
+            </div>
+            <ul v-if ="prop.row.operation_items.length">
               <li v-for="obj in prop.row.operation_items" :key="obj.id">{{ obj.name }}
                 (
                 <el-link size="small" type="primary">编辑</el-link>
