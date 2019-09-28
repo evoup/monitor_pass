@@ -18,7 +18,6 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 
 from monitor_web import models
 from monitor_web.models import Profile, UserGroup
-# Create your views here.
 from monitor_web.serializers import ProfileSerializer, UserSerializer, GroupSerializer
 from web.common import constant
 from web.common.order import getOrderList
@@ -172,7 +171,8 @@ class UserInfo(APIView):
             user.__setattr__('first_name', data['name'])
             user.__setattr__('email', data['email'])
             user.save()
-            Profile.objects.filter(pk=user.id).update(desc=data['desc'])
+            Profile.objects.filter(pk=user.id).update(desc=data['desc'], mobile=data['mobile'],
+                                                      wechat_id=data['wechat_id'])
             if user is not None:
                 ret = {
                     'code': constant.BACKEND_CODE_CREATED,
