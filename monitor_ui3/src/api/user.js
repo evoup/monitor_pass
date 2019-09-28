@@ -27,7 +27,7 @@ export function add_user(login_name, name, email, password, desc, mobile, wechat
 }
 
 // 更新用户,不能更新登录名
-export function change_user(id, name, email, old_password, new_password, desc) {
+export function change_user(id, name, email, old_password, new_password, desc, mobile, wechat_id) {
   return request({
     url: '/user/info',
     method: 'put',
@@ -37,7 +37,9 @@ export function change_user(id, name, email, old_password, new_password, desc) {
       email,
       old_password,
       new_password,
-      desc
+      desc,
+      mobile,
+      wechat_id
     }
   })
 }

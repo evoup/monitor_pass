@@ -44,7 +44,7 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="changeUser(form.name, form.email, form.old_password, form.new_password, form.desc)">更新</el-button>
+          @click="changeUser(form.name, form.email, form.old_password, form.new_password, form.desc, form.mobile, form.wechat_id)">更新</el-button>
         <el-button @click="jumpUserList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -86,9 +86,9 @@ export default {
       })
     },
     // 更新用户
-    changeUser(b, c, d, e, f) {
+    changeUser(b, c, d, e, f, g, h) {
       const a = this.$route.query.id
-      change_user(a, b, c, d, e, f)
+      change_user(a, b, c, d, e, f, g, h)
     },
     // 跳转到用户列表页面
     jumpUserList() {
