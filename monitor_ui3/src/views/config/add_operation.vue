@@ -96,14 +96,14 @@ export default {
         subject: '{TRIGGER.STATUS}: {TRIGGER.NAME}',
         message: '触发器: {TRIGGER.NAME}\n' +
           '触发器状态: {TRIGGER.STATUS}\n' +
-          '严重等级: {TRIGGER.SEVERITY}\n' +
+          '严重等级: {TRIGGER.LEVEL}\n' +
           // 'Trigger URL: {TRIGGER.URL}\n' +
           '\n' +
           '监控项数值:\n' +
           '\n' +
-          '1. {ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}\n' +
-          '2. {ITEM.NAME2} ({HOST.NAME2}:{ITEM.KEY2}): {ITEM.VALUE2}\n' +
-          '3. {ITEM.NAME3} ({HOST.NAME3}:{ITEM.KEY3}): {ITEM.VALUE3}\n' +
+          '1. {MONITOR_ITEM.NAME1} ({HOST.NAME1}:{MONITOR_ITEM.KEY1}): {MONITOR_ITEM.VALUE1}\n' +
+          '2. {MONITOR_ITEM.NAME2} ({HOST.NAME2}:{MONITOR_ITEM.KEY2}): {MONITOR_ITEM.VALUE2}\n' +
+          '3. {MONITOR_ITEM.NAME3} ({HOST.NAME3}:{MONITOR_ITEM.KEY3}): {MONITOR_ITEM.VALUE3}\n' +
           '\n',
         // 'Original event ID: {EVENT.ID}',
         status: true
