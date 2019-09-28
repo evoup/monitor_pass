@@ -143,7 +143,8 @@ class UserInfo(APIView):
                                                 password=data['password'])
                 user.first_name = data['name']
                 user.save()
-                Profile.objects.filter(pk=user.id).update(desc=data['desc'])
+                Profile.objects.filter(pk=user.id).update(desc=data['desc'], mobile=data['mobile'],
+                                                          wechat_id=data['wechat_id'])
         except IntegrityError:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
