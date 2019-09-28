@@ -1,6 +1,7 @@
 import logging
 import re
 import traceback
+import json
 
 import requests
 from django.contrib.auth.decorators import permission_required
@@ -164,16 +165,24 @@ class ServerInfo(APIView):
                     diagrams_tsdb_keys[str(diagram_item.diagram.id)].append(diagram_item.item.key)
                     diagrams_units[str(diagram_item.diagram.id)] = diagram_item.item.unit
             panes = []
-            grafana_url = 'http://localhost/grafana/api/dashboards/db'
+            # TODO 可以改成线程加速前端体验
+            gconf = models.GeneralConfig.objects.all()[0]
+            headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
+                       'Content-Type': 'application/json'}
+            grafana_search_url = 'http://localhost/grafana/api/search?folderIds=0&query=Dashboard %s&starred=false' % srv.name
+            resp = requests.get(grafana_search_url, headers=headers)
+
             grafana_delete_url = 'http://localhost/grafana/api/dashboards/uid/%s'
+            results = json.loads(resp.text)
+            for result in results:
+                requests.delete(grafana_delete_url % result['uid'], headers=headers)
+
+            grafana_url = 'http://localhost/grafana/api/dashboards/db'
             for diagram_id in diagrams_names.keys():
                 # 先删除以前的图表
                 old = models.GrafanaDashboard.objects.filter(device_id=srv.id, device_type=1,
                                                              diagram=models.Diagram.objects.filter(
                                                                  id=diagram_id).get())
-                gconf = models.GeneralConfig.objects.all()[0]
-                headers = {'Authorization': gconf.grafana_api_key, 'Accept': 'application/json',
-                           'Content-Type': 'application/json'}
                 if old.count() > 0:
                     requests.delete(grafana_delete_url % old.get().dashboard_uid, headers=headers)
                 targets = []
