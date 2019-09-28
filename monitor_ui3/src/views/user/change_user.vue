@@ -16,6 +16,16 @@
           <el-input v-model="form.email" placeholder="请输入正确的邮箱格式"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="手机号码">
+        <el-col :span="8">
+          <el-input v-model="form.mobile" placeholder="请输入正确的手机号码格式（可选）"/>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="企业微信id">
+        <el-col :span="8">
+          <el-input v-model="form.wechat_id" placeholder="请输入企业微信id（可选）"/>
+        </el-col>
+      </el-form-item>
       <el-form-item label="旧的登录密码">
         <el-col :span="8">
           <el-input v-model="form.old_password" type="password" placeholder="请输入旧的登录密码"/>
@@ -51,11 +61,12 @@ export default {
         login_name: '',
         name: '',
         email: '',
+        mobile: '',
         old_password: '',
         new_password: '',
         desc: '',
-        type: [],
-        resource: ''
+        wechat_id: '',
+        type: []
       }
     }
   },
@@ -68,8 +79,10 @@ export default {
       read_user(a).then(response => {
         this.form.login_name = response.data.item.username
         this.form.email = response.data.item.email
+        this.form.mobile = response.data.item.profile.mobile
         this.form.name = response.data.item.first_name
         this.form.desc = response.data.item.profile.desc
+        this.form.wechat_id = response.data.item.profile.wechat_id
       })
     },
     // 更新用户

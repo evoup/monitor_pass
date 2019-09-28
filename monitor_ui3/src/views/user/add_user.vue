@@ -21,6 +21,11 @@
           <el-input v-model="form.mobile" placeholder="请输入正确的手机号码格式（可选）"/>
         </el-col>
       </el-form-item>
+      <el-form-item label="企业微信id">
+        <el-col :span="8">
+          <el-input v-model="form.wechat_id" placeholder="请输入企业微信id（可选）"/>
+        </el-col>
+      </el-form-item>
       <el-form-item label="登录密码">
         <el-col :span="8">
           <el-input v-model="form.password" type="password" placeholder="请输入登录密码"/>
@@ -29,11 +34,6 @@
       <el-form-item label="描述">
         <el-col :span="14">
           <el-input v-model="form.desc" class="note" type="textarea" placeholder="可输入描述（可选）"/>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="企业微信id">
-        <el-col :span="8">
-          <el-input v-model="form.wechat_id" placeholder="请输入企业微信id（可选）"/>
         </el-col>
       </el-form-item>
       <el-form-item>
