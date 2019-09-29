@@ -7,3 +7,5 @@ django-cors-headers==2.4.0
 django_extensions
 requests
 django-unixdatetimefield
+celery==4.3.0
+redis
