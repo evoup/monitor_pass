@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
-    diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view, operation_view
+    diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view, operation_view, celery_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -107,5 +107,7 @@ urlpatterns = [
         url(r'^operation/info$', operation_view.OperationInfo.as_view()),
         # 返回单个操作项/修改/添加/删除操作项
         url(r'^operation_item/info$', operation_view.OperationItemInfo.as_view()),
+        # 测试celery
+        url(r'^celery/info$', celery_view.CeleryInfo.as_view()),
     ]))
 ]
