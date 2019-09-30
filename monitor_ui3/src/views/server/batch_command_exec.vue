@@ -2,23 +2,27 @@
   <div class="app-container">
     <el-row>
       <el-col :span="6"><div>
-        <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick" style="background: transparent"/>
+        <el-tree ref="tree1" :data="tree_data" show-checkbox style="background: transparent" @check-change="handleClick"/>
       </div></el-col>
       <el-col :span="18"><div>
         <el-input
+          id="textarea0"
           v-model="resultModel"
           placeholder=""
-          type="textarea" id="textarea0"/>
+          type="textarea"/>
       </div></el-col>
     </el-row>
     <!--下方输入框和按钮-->
     <el-row>
-      <el-col :span="6"><div class="grid-content"></div></el-col>
+      <el-col :span="6"><div class="grid-content"/></el-col>
       <el-col :span="18">
-        <el-input
-          v-model="commandModel"
-          placeholder=""
-          type="textarea" id="textarea1"/>
+        <el-row>
+          <el-col :span="20">
+            <div>
+              <component ref="editAreaShellComp" :is="componentFile" />
+            </div>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -67,7 +71,6 @@ export default {
         const server_group_member = { id: server_group_id, label: label, children: member_servers }
         this.tree_data.push(server_group_member)
       }
-      console.log(this.tree_data)
     },
     handleClick(data) {
       // const checkedNodes = this.$refs.tree1.getCheckedNodes()
@@ -94,11 +97,6 @@ export default {
     height: 380px;
     background: #1f2d3d;
     color: chartreuse;
-  }
-  .app-container /deep/ #textarea1 {
-    height: 180px;
-    background: #d3dce6;
-    color: #1f2d3d;
   }
   .grid-content {
     border-radius: 4px;

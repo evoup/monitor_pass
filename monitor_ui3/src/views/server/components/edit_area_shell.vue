@@ -17,7 +17,7 @@
   // 核心样式
   import 'codemirror/lib/codemirror.css'
   // 引入主题后还需要在 options 中指定主题才会生效
-  import 'codemirror/theme/cobalt.css'
+  import 'codemirror/theme/idea.css'
 
   // 需要引入具体的语法高亮库才会有对应的语法高亮效果
   // codemirror 官方其实支持通过 /addon/mode/loadmode.js 和 /mode/meta.js 来实现动态加载对应语法高亮库
@@ -61,7 +61,7 @@
           // 缩进格式
           tabSize: 2,
           // 主题，对应主题库 JS 需要提前引入
-          theme: 'cobalt',
+          theme: 'idea',
           // 显示行号
           lineNumbers: true,
           line: true
