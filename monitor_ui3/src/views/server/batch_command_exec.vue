@@ -13,7 +13,7 @@
       </div></el-col>
     </el-row>
     <!--下方输入框和按钮-->
-    <el-row>
+    <el-row style="margin-top:20px">
       <el-col :span="6"><div class="grid-content"/></el-col>
       <el-col :span="18">
         <el-row>
