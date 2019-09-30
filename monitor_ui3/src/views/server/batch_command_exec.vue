@@ -14,7 +14,9 @@
     </el-row>
     <!--下方输入框和按钮-->
     <el-row style="margin-top:20px">
-      <el-col :span="6"><div class="grid-content"/></el-col>
+      <el-col :span="6">
+        <div class="grid-content"/>
+      </el-col>
       <el-col :span="18">
         <el-row>
           <el-col :span="20">
@@ -23,6 +25,7 @@
             </div>
           </el-col>
           <el-col :span="4">
+            <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"></el-input>
             <el-button type="primary" class="send_button">执行</el-button>
           </el-col>
         </el-row>
@@ -49,7 +52,8 @@ export default {
         order: ''
       },
       resultModel: '',
-      commandModel: 'ls -la'
+      commandModel: 'ls -la',
+      send_user_input: ''
     }
   },
   computed: {
@@ -105,8 +109,14 @@ export default {
     border-radius: 4px;
     min-height: 36px;
   }
+  .send_user {
+    width:170px;
+    margin-top:20px;
+    margin-left:20px;
+  }
   .send_button {
     width:170px;
+    margin-top:20px;
     margin-left:20px;
   }
 
