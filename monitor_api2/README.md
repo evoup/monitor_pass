@@ -24,6 +24,12 @@ context is:
         }
 ```
 
+# deploy 
+```bash
+celery worker -A web -l debug
+```
+
+
 # development
 If add initial Sql, should dump them for installation:
 ```bash
