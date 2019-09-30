@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import os
 
 # Broker配置，使用Redis作为消息中间件
 CELERY_BROKER_URL = 'redis://172.16.25.89:6379/15'

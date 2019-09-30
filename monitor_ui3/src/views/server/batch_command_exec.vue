@@ -1,27 +1,36 @@
 <template>
   <div class="app-container">
-    <el-container>
-      <el-container>
-        <el-aside width="200px">
-          <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick"/>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <el-input
-              v-model="commandModel"
-              placeholder=""
-              type="textarea"/>
-          </el-main>
-          <el-footer>
-            <div style="float: right">
-              <span style="font-size: 14px">执行命令的用户名：</span>
-              <el-input v-model="username" placeholder="" style="width:120px"/>
-              <el-button type="primary" style="margin-left: 20px">发送命令</el-button>
+    <el-row>
+      <el-col :span="6"><div>
+        <el-tree ref="tree1" :data="tree_data" show-checkbox style="background: transparent" @check-change="handleClick"/>
+      </div></el-col>
+      <el-col :span="18"><div>
+        <el-input
+          id="textarea0"
+          v-model="resultModel"
+          placeholder=""
+          type="textarea"/>
+      </div></el-col>
+    </el-row>
+    <!--下方输入框和按钮-->
+    <el-row style="margin-top:20px">
+      <el-col :span="6">
+        <div class="grid-content"/>
+      </el-col>
+      <el-col :span="18">
+        <el-row>
+          <el-col :span="20">
+            <div>
+              <component ref="editAreaShellComp" :is="componentFile" />
             </div>
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
+          </el-col>
+          <el-col :span="4">
+            <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"></el-input>
+            <el-button type="primary" class="send_button">执行</el-button>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -42,26 +51,32 @@ export default {
         prop: '',
         order: ''
       },
+      resultModel: '',
       commandModel: 'ls -la',
-      username: ''
+      send_user_input: ''
+    }
+  },
+  computed: {
+    componentFile() {
+      return () => import(`./components/edit_area_shell.vue`)
     }
   },
   created() {
     this.fetchData()
   },
   methods: {
-    buildTree(data) {
+    buildTree(data0, data) {
       this.tree_data = []
-      for (const i in data) {
-        console.log(data[i])
-        // const user_group_id = 'user_group|' + data[i].id
-        // const label = data[i].name
-        // const members = []
-        // for (const j in data[i].member_list) {
-        //   members.push({ id: 'user|' + data[i].member_list[j].id, label: data[i].member_list[j].first_name })
-        // }
-        // const usergroup_member = { id: user_group_id, label: label, children: members }
-        // this.tree_data.push(usergroup_member)
+      for (const i in data0) {
+        const server_group_id = 'server_group|' + data0[i].id
+        const label = data0[i].name
+        const member_servers = []
+        for (const j in data) {
+          const node_label = data[j].hostname
+          member_servers.push({ id: 'server|' + data[j].id, label: node_label })
+        }
+        const server_group_member = { id: server_group_id, label: label, children: member_servers }
+        this.tree_data.push(server_group_member)
       }
     },
     handleClick(data) {
@@ -74,10 +89,10 @@ export default {
     },
     fetchData() {
       server_group_list().then(response => {
-        console.log(response.data.items)
-      })
-      server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
-        this.buildTree(response.data.items)
+        const server_groups = response.data.items
+        server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+          this.buildTree(server_groups, response.data.items)
+        })
       })
     }
   }
@@ -85,9 +100,24 @@ export default {
 </script>
 
 <style scoped>
-  .app-container /deep/ textarea {
+  .app-container /deep/ #textarea0 {
     height: 380px;
     background: #1f2d3d;
     color: chartreuse;
   }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .send_user {
+    width:170px;
+    margin-top:20px;
+    margin-left:20px;
+  }
+  .send_button {
+    width:170px;
+    margin-top:20px;
+    margin-left:20px;
+  }
+
 </style>

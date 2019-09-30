@@ -14,4 +14,4 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.autodiscover_tasks()  # 发现任务文件每个app下的task.py
 
-app.conf.result_expires = 60
+app.conf.result_expires = 300
