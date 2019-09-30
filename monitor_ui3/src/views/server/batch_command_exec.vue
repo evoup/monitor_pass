@@ -22,6 +22,9 @@
               <component ref="editAreaShellComp" :is="componentFile" />
             </div>
           </el-col>
+          <el-col :span="4">
+            <el-button type="primary" class="send_button">执行</el-button>
+          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -101,6 +104,10 @@ export default {
   .grid-content {
     border-radius: 4px;
     min-height: 36px;
+  }
+  .send_button {
+    width:170px;
+    margin-left:20px;
   }
 
 </style>
