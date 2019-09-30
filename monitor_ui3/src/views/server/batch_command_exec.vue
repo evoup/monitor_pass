@@ -1,15 +1,25 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :span="6"><div class="grid-content bg-purple">
+      <el-col :span="6"><div>
         <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick" style="background: transparent"/>
       </div></el-col>
-      <el-col :span="18"><div class="grid-content bg-purple">
+      <el-col :span="18"><div>
+        <el-input
+          v-model="resultModel"
+          placeholder=""
+          type="textarea" id="textarea0"/>
+      </div></el-col>
+    </el-row>
+    <!--下方输入框和按钮-->
+    <el-row>
+      <el-col :span="6"><div class="grid-content"></div></el-col>
+      <el-col :span="18">
         <el-input
           v-model="commandModel"
           placeholder=""
-          type="textarea"/>
-      </div></el-col>
+          type="textarea" id="textarea1"/>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -31,6 +41,7 @@ export default {
         prop: '',
         order: ''
       },
+      resultModel: '',
       commandModel: 'ls -la'
     }
   },
@@ -74,9 +85,19 @@ export default {
 </script>
 
 <style scoped>
-  .app-container /deep/ textarea {
+  .app-container /deep/ #textarea0 {
     height: 380px;
     background: #1f2d3d;
     color: chartreuse;
   }
+  .app-container /deep/ #textarea1 {
+    height: 180px;
+    background: #d3dce6;
+    color: #1f2d3d;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
 </style>
