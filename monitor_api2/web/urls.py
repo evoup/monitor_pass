@@ -107,7 +107,9 @@ urlpatterns = [
         url(r'^operation/info$', operation_view.OperationInfo.as_view()),
         # 返回单个操作项/修改/添加/删除操作项
         url(r'^operation_item/info$', operation_view.OperationItemInfo.as_view()),
-        # 测试celery
+        # 测试celery添加任务
         url(r'^celery/info$', celery_view.CeleryInfo.as_view()),
+        # 测试celery获取任务结果
+        url(r'^celery_task/info$', celery_view.CeleryTaskInfo.as_view()),
     ]))
 ]
