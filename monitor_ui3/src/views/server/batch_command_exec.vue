@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="6"><div class="grid-content bg-purple">
-        <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick"/>
+        <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick" style="background: transparent"/>
       </div></el-col>
       <el-col :span="18"><div class="grid-content bg-purple">
         <el-input
