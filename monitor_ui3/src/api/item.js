@@ -24,7 +24,7 @@ export function read_item(param) {
   })
 }
 
-export function add_item(name, key, multiplier, interval, show, unit, desc, template_id) {
+export function add_item(name, key, multiplier, interval, transform, unit, desc, template_id) {
   return request({
     url: '/item/info',
     method: 'post',
@@ -33,7 +33,7 @@ export function add_item(name, key, multiplier, interval, show, unit, desc, temp
       key,
       multiplier,
       interval,
-      show,
+      transform,
       unit,
       desc,
       template_id
