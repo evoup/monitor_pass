@@ -6,7 +6,7 @@
           <el-input v-model="form.name" placeholder="请输入名称"/>
         </el-col>
       </el-form-item>
-      <el-form-item label="键">
+      <el-form-item label="opentsdb键">
         <el-col :span="8">
           <el-input v-model="form.key" placeholder="请输入或选择键"/>
         </el-col>
