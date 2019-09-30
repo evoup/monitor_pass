@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="180px">
+    <el-form ref="form" :model="form" label-width="230px">
       <el-form-item label="Grafana的api key">
         <el-col :span="18">
           <el-input v-model="form.api_key" placeholder="请输入api key"/>
@@ -15,7 +15,7 @@
           />
         </el-col>
       </el-form-item>
-      <el-form-item label="命令过滤规则">
+      <el-form-item label="批量命令执行中的命令过滤规则">
         <el-col :span="8">
           <el-input
             v-model="form.filter_command"
