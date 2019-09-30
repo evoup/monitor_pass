@@ -15,6 +15,15 @@
           />
         </el-col>
       </el-form-item>
+      <el-form-item label="命令过滤规则">
+        <el-col :span="8">
+          <el-input
+            v-model="form.filter_command"
+            placeholder=""
+            type="textarea"
+          />
+        </el-col>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="changeGeneralConfig(form.api_key, form.switchValue)">更新</el-button>
         <el-button @click="jumpTemplateList">取消</el-button>
@@ -32,7 +41,8 @@ export default {
     return {
       form: {
         api_key: null,
-        switchValue: null
+        switchValue: null,
+        filter_command: 'rm -rf\nreboot\npoweroff\nsu'
       }
     }
   },
@@ -57,5 +67,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .app-container /deep/ textarea {
+    height: 200px;
+  }
 </style>
