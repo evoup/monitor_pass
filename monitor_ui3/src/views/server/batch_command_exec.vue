@@ -45,6 +45,11 @@ export default {
       commandModel: 'ls -la'
     }
   },
+  computed: {
+    componentFile() {
+      return () => import(`./components/edit_area_shell.vue`)
+    }
+  },
   created() {
     this.fetchData()
   },
