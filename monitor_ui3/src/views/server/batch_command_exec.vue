@@ -38,19 +38,20 @@ export default {
     this.fetchData()
   },
   methods: {
-    buildTree(data) {
+    buildTree(data0, data) {
       this.tree_data = []
-      for (const i in data) {
-        console.log(data[i])
-        // const user_group_id = 'user_group|' + data[i].id
-        // const label = data[i].name
-        // const members = []
-        // for (const j in data[i].member_list) {
-        //   members.push({ id: 'user|' + data[i].member_list[j].id, label: data[i].member_list[j].first_name })
-        // }
-        // const usergroup_member = { id: user_group_id, label: label, children: members }
-        // this.tree_data.push(usergroup_member)
+      for (const i in data0) {
+        const server_group_id = 'server_group|' + data0[i].id
+        const label = data0[i].name
+        const member_servers = []
+        for (const j in data) {
+          const node_label = data[j].hostname
+          member_servers.push({ id: 'server|' + data[j].id, label: node_label })
+        }
+        const server_group_member = { id: server_group_id, label: label, children: member_servers }
+        this.tree_data.push(server_group_member)
       }
+      console.log(this.tree_data)
     },
     handleClick(data) {
       // const checkedNodes = this.$refs.tree1.getCheckedNodes()
@@ -62,10 +63,10 @@ export default {
     },
     fetchData() {
       server_group_list().then(response => {
-        console.log(response.data.items)
-      })
-      server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
-        this.buildTree(response.data.items)
+        const server_groups = response.data.items
+        server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
+          this.buildTree(server_groups, response.data.items)
+        })
       })
     }
   }
