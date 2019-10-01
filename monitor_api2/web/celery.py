@@ -5,7 +5,7 @@ import os
 from celery import Celery
 
 # 设置django环境
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web.cop_settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web.deploy_settings')
 
 app = Celery('web')
 

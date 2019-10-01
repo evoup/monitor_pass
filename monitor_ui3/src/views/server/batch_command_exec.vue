@@ -25,7 +25,7 @@
             </div>
           </el-col>
           <el-col :span="4">
-            <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"></el-input>
+            <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"/>
             <el-button type="primary" class="send_button">执行</el-button>
           </el-col>
         </el-row>
