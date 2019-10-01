@@ -11,7 +11,7 @@ def add(host, port, username, command):
     ssh = SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(AutoAddPolicy())
-    ssh.connect(hostname=host, port=port, username=username, password='hellomadhouse', compress=True)
+    ssh.connect(hostname=host, port=port, username=username, password='xxx', compress=True)
     stdin, stdout, stderr = ssh.exec_command(command)
     return {'out': str(stdout.read())}
 
