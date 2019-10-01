@@ -90,7 +90,7 @@ export default {
       // 编辑器赋值
       this.coder.setValue(this.value || this.code)
       // 设置高度
-      this.coder.setSize(500, 150)
+      this.coder.setSize(300, 150)
 
       // 支持双向绑定
       this.coder.on('change', (coder) => {

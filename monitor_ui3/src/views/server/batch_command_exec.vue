@@ -19,12 +19,12 @@
       </el-col>
       <el-col :span="18">
         <el-row>
-          <el-col :span="20">
+          <el-col :span="18">
             <div>
               <component ref="editAreaShellComp" :is="componentFile" />
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"/>
             <el-button type="primary" class="send_button">执行</el-button>
           </el-col>
