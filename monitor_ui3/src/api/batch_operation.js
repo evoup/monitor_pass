@@ -11,3 +11,11 @@ export function batch_send_commands(hosts, username, command) {
     }
   })
 }
+
+export function get_command_result(param) {
+  return request({
+    url: '/batch_operation/send_command',
+    method: 'get',
+    params: param
+  })
+}

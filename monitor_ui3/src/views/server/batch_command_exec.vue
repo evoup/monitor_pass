@@ -106,9 +106,11 @@ export default {
         console.log(tasks)
       })
     },
+    // 轮训任务结果
     wait_command_finish(task_id) {
       get_command_result({ task_id: task_id }).then(response => {
         if (response.data.item != null) {
+          this.resultModel = this.resultModel + '\n' + response.data.item.out
           console.log('done')
         } else {
           setTimeout(() => {

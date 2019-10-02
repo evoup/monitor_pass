@@ -45,4 +45,5 @@ class BatchSendCommand(APIView):
             res = result.get(timeout=10)
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
         except:
+            print(traceback.format_exc())
             return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '遇到问题'})

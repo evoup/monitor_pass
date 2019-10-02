@@ -20,7 +20,8 @@ def exec_command(host, port, username, command):
     # ssh.connect(hostname=host, port=port, username=username, password='xxx', compress=True)
     ssh.connect(hostname=host, port=port, username=username, pkey=key, compress=True)
     stdin, stdout, stderr = ssh.exec_command(command)
-    return {'out': str(stdout.read())}
+    bytes = stdout.read()
+    return {'out': bytes.decode()}
 
 
 @shared_task
