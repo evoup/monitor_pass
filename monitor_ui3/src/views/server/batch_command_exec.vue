@@ -62,6 +62,9 @@ export default {
       return () => import(`./components/edit_area_shell.vue`)
     }
   },
+  watch: {
+    'resultModel': 'scrollToBottom'
+  },
   created() {
     this.fetchData()
   },
@@ -103,7 +106,6 @@ export default {
         for (var i in tasks) {
           this.wait_command_finish(tasks[i])
         }
-        console.log(tasks)
       })
     },
     // 轮训任务结果
@@ -117,6 +119,13 @@ export default {
             this.wait_command_finish(task_id)
           }, 2000)
         }
+      })
+    },
+    // 执行结果滚动条滚动到底部
+    scrollToBottom: function() {
+      this.$nextTick(() => {
+        var div = document.getElementById('textarea0')
+        div.scrollTop = div.scrollHeight
       })
     }
   }
