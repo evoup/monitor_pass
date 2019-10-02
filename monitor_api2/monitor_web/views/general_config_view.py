@@ -37,7 +37,9 @@ class GeneralConfig(APIView):
         config = models.GeneralConfig.objects.all()[0]
         try:
             models.GeneralConfig.objects.filter(id=config.id).update(grafana_api_key=data['api_key'],
-                                                                     send_warn=data['send_warn'] == '1')
+                                                                     send_warn=data['send_warn'] == '1',
+                                                                     stop_command=data['stop_command'],
+                                                                     ssh_private_key_dir=data['ssh_private_key_dir'])
         except:
             print(traceback.format_exc())
             return JsonResponse(ret, safe=False)
