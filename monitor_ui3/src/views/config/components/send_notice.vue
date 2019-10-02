@@ -14,7 +14,7 @@
       </el-form-item>
       <el-form-item label="发送给：">
         <el-col :span="24">
-          <el-tree ref="tree1" :data="tree_data" show-checkbox @check-change="handleClick" style="background: transparent"/>
+          <el-tree ref="tree1" :data="tree_data" show-checkbox style="background: transparent" @check-change="handleClick"/>
         </el-col>
       </el-form-item>
       <el-form-item label="接收：">
