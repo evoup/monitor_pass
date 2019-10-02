@@ -32,5 +32,5 @@ class BatchSendCommand(APIView):
         return JsonResponse(
             {'code': constant.BACKEND_CODE_CREATED,
              'message': '命令发送中...',
-             'task_ids': task_ids}
+             'data': {'items': task_ids}}
         )
