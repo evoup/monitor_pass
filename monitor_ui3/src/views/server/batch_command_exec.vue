@@ -36,7 +36,7 @@
 
 <script>
 import { server_group_list, server_list } from '../../api/server'
-import { batch_send_commands } from '../../api/batch_operation'
+import { batch_send_commands, get_command_result } from '../../api/batch_operation'
 
 export default {
   name: 'BatchCommandExec',
@@ -99,7 +99,22 @@ export default {
     send_command() {
       var command = this.$refs.editAreaShellComp.code
       batch_send_commands(this.$refs.tree1.getCheckedNodes(), this.send_user_input, command).then(response => {
-        console.log(response.data)
+        var tasks = response.data.items
+        for (var i in tasks) {
+          this.wait_command_finish(tasks[i])
+        }
+        console.log(tasks)
+      })
+    },
+    wait_command_finish(task_id) {
+      get_command_result({ task_id: task_id }).then(response => {
+        if (response.data.item != null) {
+          console.log('done')
+        } else {
+          setTimeout(() => {
+            this.wait_command_finish(task_id)
+          }, 2000)
+        }
       })
     }
   }

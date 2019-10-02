@@ -34,3 +34,15 @@ class BatchSendCommand(APIView):
              'message': '命令发送中...',
              'data': {'items': task_ids}}
         )
+
+    def get(self, request, pk=None, format=None):
+        # grab the AsyncResult
+        if 'task_id' not in self.request.query_params:
+            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
+        result = None
+        try:
+            result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
+            res = result.get(timeout=10)
+            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
+        except:
+            return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '遇到问题'})
