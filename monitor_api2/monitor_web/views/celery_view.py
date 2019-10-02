@@ -6,7 +6,7 @@ from monitor_web import tasks
 
 class CeleryInfo(APIView):
     def get(self, request, pk=None, format=None):
-        res = tasks.exec_command.delay('localhost', 22, 'evoup', 'ls -la /')
+        res = tasks.exec_command.delay('host1', 'localhost', 22, 'evoup', 'ls -la /')
         # res = tasks.mul.delay(1,2)
         # 任务逻辑
         return JsonResponse({'status': 'successful', 'task_id': res.task_id})

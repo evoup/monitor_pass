@@ -52,9 +52,9 @@ export default {
         prop: '',
         order: ''
       },
-      resultModel: '',
-      commandModel: 'ls -la',
-      send_user_input: ''
+      resultModel: null,
+      commandModel: null,
+      send_user_input: null
     }
   },
   computed: {

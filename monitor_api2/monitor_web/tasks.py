@@ -7,7 +7,7 @@ from monitor_web import models
 
 
 @shared_task
-def exec_command(host, port, username, command):
+def exec_command(name, host, port, username, command):
     if str(command).find('rm ') >= 0 or str(command).find('rm -rf') >= 0:
         return {'out': '该命令被禁用!'}
     config = models.GeneralConfig.objects.filter(id=1).get()
@@ -21,7 +21,7 @@ def exec_command(host, port, username, command):
     ssh.connect(hostname=host, port=port, username=username, pkey=key, compress=True)
     stdin, stdout, stderr = ssh.exec_command(command)
     bytes = stdout.read()
-    return {'out': bytes.decode()}
+    return {'out': bytes.decode(), 'name': name}
 
 
 @shared_task

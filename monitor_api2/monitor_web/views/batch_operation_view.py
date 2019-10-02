@@ -24,7 +24,8 @@ class BatchSendCommand(APIView):
             if server.count() > 0:
                 # server.ssh_address
                 try:
-                    res = tasks.exec_command.delay(server.get().ip, 22, data['username'], data['command'])
+                    server = server.get()
+                    res = tasks.exec_command.delay(server.name, server.ip, 22, data['username'], data['command'])
                     task_ids.append(res.task_id)
                 except:
                     print(traceback.format_exc())
@@ -39,7 +40,6 @@ class BatchSendCommand(APIView):
         # grab the AsyncResult
         if 'task_id' not in self.request.query_params:
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
-        result = None
         try:
             result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
             res = result.get(timeout=30)
