@@ -19,7 +19,8 @@ from django.urls import path, include
 from rest_framework import routers
 
 from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
-    diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view, operation_view, celery_view
+    diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view, operation_view, \
+    celery_view, batch_operation_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -111,5 +112,7 @@ urlpatterns = [
         url(r'^celery/info$', celery_view.CeleryInfo.as_view()),
         # 测试celery获取任务结果
         url(r'^celery_task/info$', celery_view.CeleryTaskInfo.as_view()),
+        # 批量命令执行
+        url(r'^batch_operation/send_command$', batch_operation_view.BatchSendCommand.as_view()),
     ]))
 ]

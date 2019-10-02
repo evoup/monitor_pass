@@ -476,7 +476,7 @@ class ServerGroupInfo(APIView):
         except:
             return JsonResponse(ret, safe=False)
         ret = {
-            'code': constant.BACKEND_CODE_DELETED,
+            'code': constant.BACKEND_CODE_CREATED,
             'message': '创建服务组成功'
         }
         return JsonResponse(ret, safe=False)
