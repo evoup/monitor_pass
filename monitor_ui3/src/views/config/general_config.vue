@@ -33,7 +33,11 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="changeGeneralConfig(form.api_key, form.switchValue)">更新</el-button>
+        <el-button
+          type="primary"
+          @click="changeGeneralConfig(form.apiKey, form.switchValue, form.stopCommand, form.sshPrivateKeyDir)">
+          更新
+        </el-button>
         <el-button @click="jumpTemplateList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -67,8 +71,8 @@ export default {
         this.form.sshPrivateKeyDir = response.data.item.ssh_private_key_dir
       })
     },
-    changeGeneralConfig(a, b) {
-      change_general_config(a, b)
+    changeGeneralConfig(a, b, c, d) {
+      change_general_config(a, b, c, d)
     },
     jumpTemplateList() {
       this.$router.push({ path: '/template_list' })

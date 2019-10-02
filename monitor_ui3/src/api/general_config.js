@@ -8,13 +8,15 @@ export function read_general_config(param) {
   })
 }
 
-export function change_general_config(api_key, send_warn) {
+export function change_general_config(api_key, send_warn, stop_command, ssh_private_key_dir) {
   return request({
     url: '/general_config/info',
     method: 'put',
     data: {
       api_key,
-      send_warn
+      send_warn,
+      stop_command,
+      ssh_private_key_dir
     }
   })
 }
