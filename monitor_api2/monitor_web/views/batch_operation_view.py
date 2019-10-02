@@ -42,7 +42,7 @@ class BatchSendCommand(APIView):
         result = None
         try:
             result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
-            res = result.get(timeout=10)
+            res = result.get(timeout=30)
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
         except:
             print(traceback.format_exc())
