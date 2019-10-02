@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="6"><div>
-        <el-tree ref="tree1" :data="tree_data" show-checkbox style="background: transparent" @check-change="handleClick"/>
+        <el-tree ref="tree1" :data="tree_data" show-checkbox style="background: transparent"/>
       </div></el-col>
       <el-col :span="18"><div>
         <el-input
@@ -82,14 +82,6 @@ export default {
         const server_group_member = { id: server_group_id, label: label, children: member_servers }
         this.tree_data.push(server_group_member)
       }
-    },
-    handleClick(data) {
-      // const checkedNodes = this.$refs.tree1.getCheckedNodes()
-      // const user_group_user_ids = new Set([])
-      // for (const i in checkedNodes) {
-      //   user_group_user_ids.add(checkedNodes[i].id)
-      // }
-      // this.operationForm.userGroupSelectModel = user_group_user_ids
     },
     fetchData() {
       server_group_list().then(response => {
