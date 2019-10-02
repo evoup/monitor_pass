@@ -26,7 +26,7 @@
           </el-col>
           <el-col :span="6">
             <el-input v-model="send_user_input" placeholder="请输入执行的系统用户名" class="send_user"/>
-            <el-button type="primary" class="send_button">执行</el-button>
+            <el-button type="primary" class="send_button" @click="send_command">执行</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -36,6 +36,7 @@
 
 <script>
 import { server_group_list, server_list } from '../../api/server'
+import { batch_send_commands } from '../../api/batch_operation'
 
 export default {
   name: 'BatchCommandExec',
@@ -93,6 +94,12 @@ export default {
         server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
           this.buildTree(server_groups, response.data.items)
         })
+      })
+    },
+    send_command() {
+      var command = this.$refs.editAreaShellComp.code
+      batch_send_commands(this.$refs.tree1.getCheckedNodes(), this.send_user_input, command).then(response => {
+        console.log(response.data)
       })
     }
   }
