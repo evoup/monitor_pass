@@ -52,7 +52,7 @@ export default {
         prop: '',
         order: ''
       },
-      resultModel: null,
+      resultModel: '',
       commandModel: null,
       send_user_input: null
     }
@@ -112,7 +112,7 @@ export default {
     wait_command_finish(task_id) {
       get_command_result({ task_id: task_id }).then(response => {
         if (response.data.item != null) {
-          this.resultModel = this.resultModel + '\n' + response.data.item.out
+          this.resultModel = this.resultModel + '\n' + response.data.item.name + '执行命令完成，结果如下：\n'+ response.data.item.out
           console.log('done')
         } else {
           setTimeout(() => {
