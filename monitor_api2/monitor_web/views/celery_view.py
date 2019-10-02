@@ -6,7 +6,7 @@ from monitor_web import tasks
 
 class CeleryInfo(APIView):
     def get(self, request, pk=None, format=None):
-        res = tasks.add.delay('localhost', 22, 'evoup', 'ls -la /')
+        res = tasks.exec_command.delay('localhost', 22, 'evoup', 'ls -la /')
         # res = tasks.mul.delay(1,2)
         # 任务逻辑
         return JsonResponse({'status': 'successful', 'task_id': res.task_id})
@@ -19,7 +19,7 @@ class CeleryTaskInfo(APIView):
             return JsonResponse({'status': 40000})
         result = None
         try:
-            result = tasks.add.AsyncResult(self.request.query_params['task_id'])
+            result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
             x = result.get(timeout=10)
             return JsonResponse(x)
         except:
