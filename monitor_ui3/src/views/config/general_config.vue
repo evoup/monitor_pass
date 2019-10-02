@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       form: {
-        api_key: null,
+        apiKey: null,
         switchValue: null,
         stopCommand: null,
         sshPrivateKeyDir: null
