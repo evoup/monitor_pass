@@ -760,6 +760,8 @@ class GeneralConfig(models.Model):
     """
     grafana_api_key = models.CharField(u'grafana的api key', max_length=255, blank=True, null=True)
     send_warn = models.BooleanField(default=False)
+    stop_command = models.CharField(u'批量命令执行中的命令过滤规则', max_length=4096, blank=True, null=True)
+    ssh_private_key_dir = models.CharField(u'ssh私钥路径', max_length=512, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = '常规设置表'
