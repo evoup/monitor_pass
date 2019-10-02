@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="230px">
       <el-form-item label="Grafana的api key：">
         <el-col :span="18">
-          <el-input v-model="form.api_key" placeholder="请输入api key"/>
+          <el-input v-model="form.apiKey" placeholder="请输入api key"/>
         </el-col>
       </el-form-item>
       <el-form-item label="服务端故障时告警：">
@@ -18,7 +18,7 @@
       <el-form-item label="批量命令执行中的命令过滤规则：">
         <el-col :span="8">
           <el-input
-            v-model="form.filter_command"
+            v-model="form.stopCommand"
             placeholder=""
             type="textarea"
           />
@@ -27,7 +27,7 @@
       <el-form-item label="ssh私钥路径（批量命令执行和批量文件分发中用到）：">
         <el-col :span="8">
           <el-input
-            v-model="form.private_key_dir"
+            v-model="form.sshPrivateKeyDir"
             placeholder=""
           />
         </el-col>
@@ -50,8 +50,8 @@ export default {
       form: {
         api_key: null,
         switchValue: null,
-        filter_command: 'rm -rf\nreboot\npoweroff\nsu',
-        private_key_dir: null
+        stopCommand: null,
+        sshPrivateKeyDir: null
       }
     }
   },
@@ -61,8 +61,10 @@ export default {
   methods: {
     readGeneralConfig() {
       read_general_config().then(response => {
-        this.form.api_key = response.data.item.grafana_api_key
+        this.form.apiKey = response.data.item.grafana_api_key
         this.form.switchValue = response.data.item.send_warn ? '1' : '2'
+        this.form.stopCommand = response.data.item.stop_command
+        this.form.sshPrivateKeyDir = response.data.item.ssh_private_key_dir
       })
     },
     changeGeneralConfig(a, b) {

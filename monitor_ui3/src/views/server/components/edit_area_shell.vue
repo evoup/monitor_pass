@@ -45,6 +45,7 @@ export default {
   name: 'InCoder',
   props: {
     // 外部传入的内容，用于实现双向绑定
+    // eslint-disable-next-line vue/require-default-prop
     value: String,
     // 外部传入的语法类型
     language: {
