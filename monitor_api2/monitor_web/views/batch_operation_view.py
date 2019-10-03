@@ -2,7 +2,7 @@ import traceback
 
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -15,6 +15,7 @@ class BatchSendCommand(APIView):
     """
     发送任务到celery
     """
+
     def post(self, request, pk=None, format=None):
         data = JSONParser().parse(self.request)
         task_ids = []
@@ -53,3 +54,30 @@ class BatchSendCommand(APIView):
         except:
             print(traceback.format_exc())
             return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '遇到问题'})
+
+
+# 只实现了Postman最后一种binary上传方式
+class FileUploadView(APIView):
+    parser_classes = [FileUploadParser]
+
+    # def post(self, request, filename, format='jpg'):
+    def post(self, request, filename, format=None):
+        up_file = request.FILES['file']
+        destination = open('/tmp/' + up_file.name, 'wb+')
+        for chunk in up_file.chunks():
+            destination.write(chunk)
+        destination.close()
+        request.FILES['file'].close()
+        return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % up_file.name})
+
+# TODO MultiPartParser multipart/form-data没有实现
+# https://github.com/unicefuganda/eums/blob/2b67cba8215d0fe67677d9177b252609ad74b0b4/eums/api/import_data/import_orders_endpoint.py
+# class FileUploadView1(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+#
+#     def post(self, request, format='jpg'):
+#         up_file = request.FILES['file']
+#         destination = open('/tmp/'+up_file.name, 'wb+')
+#         for chunk in up_file.chunks():
+#             destination.write(chunk)
+#         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % up_file.name})

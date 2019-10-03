@@ -114,5 +114,7 @@ urlpatterns = [
         url(r'^celery_task/info$', celery_view.CeleryTaskInfo.as_view()),
         # 批量命令执行
         url(r'^batch_operation/send_command$', batch_operation_view.BatchSendCommand.as_view()),
+        # 上传
+        url(r'^batch_operation/upload$', batch_operation_view.FileUploadView.as_view()),
     ]))
 ]
