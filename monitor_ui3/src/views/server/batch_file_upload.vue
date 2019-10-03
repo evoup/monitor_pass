@@ -19,12 +19,13 @@
       </el-col>
       <el-col :span="18">
         <el-row>
-          <el-col :span="18">
+          <el-col :span="15">
             <div>
               <!--原先编辑的地方-->
               <el-upload
                 ref="upload"
                 :show-file-list="true"
+                :auto-upload="false"
                 :http-request="uploadImg"
                 action="http://localhost/mmsapi2.0/batch_operation/upload">
                 <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
@@ -33,8 +34,9 @@
               <el-progress :percentage="progressPercent"/>
             </div>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="9">
             <el-input v-model="send_user_input" placeholder="请输入分发的系统用户名" class="send_user"/>
+            <el-input v-model="send_dir_input" placeholder="请输入要分发到的系统路径" class="send_dir"/>
             <el-button type="success" class="send_button" @click="send_files">分发到服务器</el-button>
           </el-col>
         </el-row>
@@ -66,6 +68,7 @@ export default {
       resultModel: '',
       commandModel: null,
       send_user_input: null,
+      send_dir_input: null,
       fileList: [],
       header: this.getHeader(),
       progressPercent: 0
@@ -138,7 +141,7 @@ export default {
     getHeader() {
       return {
         'Authorization': 'JWT ' + getToken(),
-        'Content-Disposition': 'form-data; name="file"; filename="test.jpg"',
+        'Content-Disposition': 'form-data; name="file"; filename="filename"',
         'Content-Type': 'multipart/form-data'
       }
     },
@@ -147,13 +150,6 @@ export default {
       console.log(item.file)
       const formData = new FormData()
       formData.append('file', item.file)
-      formData.append('group', 'system')
-      // var request = new XMLHttpRequest()
-      // request.open('POST', 'http://localhost/mmsapi2.0/batch_operation/upload')
-      // request.setRequestHeader('Authorization', 'JWT ' + getToken())
-      // request.setRequestHeader('Content-Disposition', 'form-data; name="file"; filename="test.jpg"')
-      // request.setRequestHeader('Content-Type', 'multipart/form-data')
-      // request.send(formData)
       axios({
         url: process.env.BASE_API + '/batch_operation/upload',
         method: 'post',
@@ -162,7 +158,7 @@ export default {
         onUploadProgress: progressEvent => {
           // progressEvent.loaded:已上传文件大小
           // progressEvent.total:被上传文件的总大小
-          this.progressPercent = (progressEvent.loaded / progressEvent.total * 100)
+          this.progressPercent = Math.floor(progressEvent.loaded / progressEvent.total * 100)
         }
       })
         .then((data) => {
@@ -186,13 +182,18 @@ export default {
     border-radius: 4px;
     min-height: 36px;
   }
+  .send_dir {
+    width:250px;
+    margin-top:20px;
+    margin-left:20px;
+  }
   .send_user {
-    width:170px;
+    width:250px;
     margin-top:20px;
     margin-left:20px;
   }
   .send_button {
-    width:170px;
+    width:250px;
     margin-top:20px;
     margin-left:20px;
   }
