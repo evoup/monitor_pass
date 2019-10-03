@@ -84,7 +84,8 @@ class FileUploadView(APIView):
 
     def post(self, request, filename, format=None):
         if hasattr(request.FILES['file'].file, 'file'):
-            new_file = request.FILES['file'].file.file.name
+            new_file = request.FILES['file'].file.name
+            # todo new_file是临时文件，需要之后close，接下来要分发
         else:
             up_file = request.FILES['file'].file.getvalue()
             destination = None
