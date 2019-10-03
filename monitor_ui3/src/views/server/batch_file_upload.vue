@@ -28,10 +28,11 @@
                 :on-remove="handleRemove"
                 :file-list="fileList"
                 :auto-upload="false"
+                :headers="header"
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/">
+                action="http://localhost/mmsapi2.0/batch_operation/upload">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <div slot="tip" class="el-upload__tip">上传单个不超过50M的文件</div>
+                <div slot="tip" class="el-upload__tip">上传单个不超过500M的文件</div>
               </el-upload>
             </div>
           </el-col>
@@ -47,7 +48,8 @@
 
 <script>
 import { server_group_list, server_list } from '../../api/server'
-import { batch_send_commands, get_command_result } from '../../api/batch_operation'
+import { get_command_result } from '../../api/batch_operation'
+import { getToken } from '../../utils/auth'
 
 export default {
   name: 'BatchFileUpload',
@@ -66,7 +68,8 @@ export default {
       resultModel: '',
       commandModel: null,
       send_user_input: null,
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+      header: this.getHeader()
     }
   },
   watch: {
@@ -99,13 +102,14 @@ export default {
       })
     },
     send_files() {
-      var command = this.$refs.editAreaShellComp.code
-      batch_send_commands(this.$refs.tree1.getCheckedNodes(), this.send_user_input, command).then(response => {
-        var tasks = response.data.items
-        for (var i in tasks) {
-          this.wait_command_finish(tasks[i])
-        }
-      })
+      this.$refs.upload.submit()
+      // var command = this.$refs.editAreaShellComp.code
+      // batch_send_commands(this.$refs.tree1.getCheckedNodes(), this.send_user_input, command).then(response => {
+      //   var tasks = response.data.items
+      //   for (var i in tasks) {
+      //     this.wait_command_finish(tasks[i])
+      //   }
+      // })
     },
     // 轮训任务结果
     wait_command_finish(task_id) {
@@ -126,14 +130,18 @@ export default {
         div.scrollTop = div.scrollHeight
       })
     },
-    submitUpload() {
-      this.$refs.upload.submit()
-    },
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
     handlePreview(file) {
       console.log(file)
+    },
+    getHeader() {
+      return {
+        'Authorization': 'JWT ' + getToken(),
+        'Content-Disposition': 'form-data; name="file"; filename="test.jpg"',
+        'Content-Type': 'multipart/form-data'
+      }
     }
   }
 }
