@@ -63,11 +63,18 @@ class FileUploadView(APIView):
     # def post(self, request, filename, format='jpg'):
     def post(self, request, filename, format=None):
         up_file = request.FILES['file']
-        destination = open('/tmp/' + up_file.name, 'wb+')
-        for chunk in up_file.chunks():
-            destination.write(chunk)
-        destination.close()
-        request.FILES['file'].close()
+        destination = None
+        try:
+            destination = open('/tmp/' + up_file.name, 'wb+')
+            for chunk in up_file.chunks():
+                destination.write(chunk)
+            destination.close()
+            request.FILES['file'].close()
+        except:
+            request.FILES['file'].close()
+            if destination is not None:
+                destination.close()
+            return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % up_file.name})
         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % up_file.name})
 
 # TODO MultiPartParser multipart/form-data没有实现
