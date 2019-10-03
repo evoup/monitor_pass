@@ -24,12 +24,8 @@
               <!--原先编辑的地方-->
               <el-upload
                 ref="upload"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :auto-upload="false"
-                :headers="header"
-                class="upload-demo"
+                :show-file-list="true"
+                :http-request="uploadImg"
                 action="http://localhost/mmsapi2.0/batch_operation/upload">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <div slot="tip" class="el-upload__tip">上传单个不超过500M的文件</div>
@@ -48,7 +44,7 @@
 
 <script>
 import { server_group_list, server_list } from '../../api/server'
-import { get_command_result } from '../../api/batch_operation'
+import { get_command_result, upload_file } from '../../api/batch_operation'
 import { getToken } from '../../utils/auth'
 
 export default {
@@ -142,6 +138,29 @@ export default {
         'Content-Disposition': 'form-data; name="file"; filename="test.jpg"',
         'Content-Type': 'multipart/form-data'
       }
+    },
+    // 自定义上传方法，因为django默认的uploadfileParser是二进制的
+    uploadImg(item) {
+      console.log(item.file)
+      const formData = new FormData()
+      formData.append('file', item.file)
+      formData.append('group', 'system')
+      var request = new XMLHttpRequest()
+      request.open('POST', 'http://localhost/mmsapi2.0/batch_operation/upload')
+      request.setRequestHeader('Authorization', 'JWT ' + getToken())
+      request.setRequestHeader('Content-Disposition', 'form-data; name="file"; filename="test.jpg"')
+      // request.setRequestHeader('Content-Type', 'multipart/form-data')
+      request.send(formData)
+      // upload_file({
+      //   // 选择FormData方式传参
+      //   data: formData
+      // })
+      //   .then((data) => {
+      //     console.log(data)
+      //   })
+      //   .catch((err) => {
+      //     console.log(err, 'error')
+      //   })
     }
   }
 }

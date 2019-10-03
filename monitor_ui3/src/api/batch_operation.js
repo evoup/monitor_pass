@@ -19,3 +19,11 @@ export function get_command_result(param) {
     params: param
   })
 }
+
+export function upload_file(param) {
+  return request({
+    url: '/batch_operation/upload',
+    method: 'post',
+    params: param
+  })
+}
