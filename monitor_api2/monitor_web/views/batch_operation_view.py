@@ -12,6 +12,9 @@ from web.common import constant
 
 @permission_classes((IsAuthenticated,))
 class BatchSendCommand(APIView):
+    """
+    发送任务到celery
+    """
     def post(self, request, pk=None, format=None):
         data = JSONParser().parse(self.request)
         task_ids = []
@@ -37,6 +40,9 @@ class BatchSendCommand(APIView):
         )
 
     def get(self, request, pk=None, format=None):
+        """
+        从celery中查询任务的执行结果
+        """
         # grab the AsyncResult
         if 'task_id' not in self.request.query_params:
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
