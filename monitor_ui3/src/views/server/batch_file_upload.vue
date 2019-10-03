@@ -30,6 +30,7 @@
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <div slot="tip" class="el-upload__tip">上传单个不超过500M的文件</div>
               </el-upload>
+              <el-progress :percentage="progressPercent"/>
             </div>
           </el-col>
           <el-col :span="6">
@@ -44,8 +45,9 @@
 
 <script>
 import { server_group_list, server_list } from '../../api/server'
-import { get_command_result, upload_file } from '../../api/batch_operation'
+import { get_command_result } from '../../api/batch_operation'
 import { getToken } from '../../utils/auth'
+import * as axios from 'axios'
 
 export default {
   name: 'BatchFileUpload',
@@ -64,8 +66,9 @@ export default {
       resultModel: '',
       commandModel: null,
       send_user_input: null,
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
-      header: this.getHeader()
+      fileList: [],
+      header: this.getHeader(),
+      progressPercent: 0
     }
   },
   watch: {
@@ -145,22 +148,29 @@ export default {
       const formData = new FormData()
       formData.append('file', item.file)
       formData.append('group', 'system')
-      var request = new XMLHttpRequest()
-      request.open('POST', 'http://localhost/mmsapi2.0/batch_operation/upload')
-      request.setRequestHeader('Authorization', 'JWT ' + getToken())
-      request.setRequestHeader('Content-Disposition', 'form-data; name="file"; filename="test.jpg"')
+      // var request = new XMLHttpRequest()
+      // request.open('POST', 'http://localhost/mmsapi2.0/batch_operation/upload')
+      // request.setRequestHeader('Authorization', 'JWT ' + getToken())
+      // request.setRequestHeader('Content-Disposition', 'form-data; name="file"; filename="test.jpg"')
       // request.setRequestHeader('Content-Type', 'multipart/form-data')
-      request.send(formData)
-      // upload_file({
-      //   // 选择FormData方式传参
-      //   data: formData
-      // })
-      //   .then((data) => {
-      //     console.log(data)
-      //   })
-      //   .catch((err) => {
-      //     console.log(err, 'error')
-      //   })
+      // request.send(formData)
+      axios({
+        url: process.env.BASE_API + '/batch_operation/upload',
+        method: 'post',
+        data: formData,
+        headers: this.getHeader(),
+        onUploadProgress: progressEvent => {
+          // progressEvent.loaded:已上传文件大小
+          // progressEvent.total:被上传文件的总大小
+          this.progressPercent = (progressEvent.loaded / progressEvent.total * 100)
+        }
+      })
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((err) => {
+          console.log(err, 'error')
+        })
     }
   }
 }
