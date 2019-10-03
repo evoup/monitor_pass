@@ -27,15 +27,15 @@
                 :show-file-list="true"
                 :http-request="uploadImg"
                 action="http://localhost/mmsapi2.0/batch_operation/upload">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">上传单个不超过500M的文件</div>
               </el-upload>
               <el-progress :percentage="progressPercent"/>
             </div>
           </el-col>
           <el-col :span="6">
-            <el-input v-model="send_user_input" placeholder="请输入上传的系统用户名" class="send_user"/>
-            <el-button type="success" class="send_button" @click="send_files">上传到服务器</el-button>
+            <el-input v-model="send_user_input" placeholder="请输入分发的系统用户名" class="send_user"/>
+            <el-button type="success" class="send_button" @click="send_files">分发到服务器</el-button>
           </el-col>
         </el-row>
       </el-col>
