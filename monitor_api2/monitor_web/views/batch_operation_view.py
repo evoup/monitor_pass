@@ -1,9 +1,11 @@
+import json
+import os
 import tempfile
 import traceback
 
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
-from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -84,13 +86,14 @@ class FileUploadView(APIView):
     parser_classes = [MultiPartParser]
 
     def post(self, request, filename, format=None):
+        task_ids = []
         # 如果是非图片等的二进制文件
         if hasattr(request.FILES['file'].file, 'file'):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
             print('%s上传临时文件名：' % tmp_file_name)
-            # todo new_file是临时文件，需要之后close，接下来要分发
+            # task_ids.append(dispatch(request, ))
         # 如果是图片
         else:
             real_file_name = request.FILES['file'].name
@@ -98,11 +101,12 @@ class FileUploadView(APIView):
             destination = None
             try:
                 # destination = open('/tmp/' + request.FILES['file'].name, 'wb+')
-                fp = tempfile.NamedTemporaryFile()
+                fp = tempfile.NamedTemporaryFile(delete=False)
                 fp.write(up_file)
-                # close后会删除临时文件，up_file还存在
+                # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
-                fp.close()
+                task_ids.append(dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
+                # fp.close()
                 request.FILES['file'].close()
             except:
                 print(traceback.format_exc())
@@ -110,3 +114,22 @@ class FileUploadView(APIView):
                 return JsonResponse(
                     {'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % request.FILES['file'].name})
         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name})
+
+
+def dispatch(request, src_file, dest_file):
+    task_ids = []
+    for host in json.loads(request.POST['hosts']):
+        if len(host['id'].split('server|')) < 2:
+            continue
+        host_id = host['id'].split('server|')[1]
+        # 查询端口
+        server = models.Server.objects.filter(id=host_id)
+        if server.count() > 0:
+            # server.ssh_address
+            try:
+                server = server.get()
+                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file, dest_file)
+                task_ids.append(res.task_id)
+            except:
+                print(traceback.format_exc())
+    return task_ids
