@@ -88,15 +88,16 @@ class FileUploadView(APIView):
 
     def post(self, request, filename, format=None):
         task_ids = []
-        # 如果是非图片等的二进制文件
+        # 如果较大的文件，根据测试，应该大于2M
         if hasattr(request.FILES['file'].file, 'file'):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
+            # 临时文件会被python回收，需要复制一份
             dispatched_tasks = dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
             for dispatched_task in dispatched_tasks:
                 task_ids.append(dispatched_task)
-        # 如果是图片
+        # 如果小文件
         else:
             real_file_name = request.FILES['file'].name
             up_file = request.FILES['file'].file.getvalue()
@@ -106,7 +107,8 @@ class FileUploadView(APIView):
                 fp.write(up_file)
                 # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
-                dispatched_tasks = dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
+                dispatched_tasks = dispatch(request, tmp_file_name,
+                                            os.path.join(request.POST['send_dir'], real_file_name))
                 for dispatched_task in dispatched_tasks:
                     task_ids.append(dispatched_task)
                 # todo 需要写一个清理任务，定期清楚这些临时文件
@@ -118,7 +120,7 @@ class FileUploadView(APIView):
                 return JsonResponse(
                     {'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % request.FILES['file'].name})
         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name,
-                             'data': {'items': task_ids}})
+                             'items': task_ids})
 
 # 实现了Postman最后一种binary上传方式，很遗憾el-upload不支持，postman的binary是可以的
 # class FileUploadView0(APIView):
