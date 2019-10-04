@@ -150,6 +150,9 @@ export default {
       console.log(item.file)
       const formData = new FormData()
       formData.append('file', item.file)
+      formData.append('hosts', JSON.stringify(this.$refs.tree1.getCheckedNodes()))
+      formData.append('username', this.send_user_input)
+      formData.append('send_dir', this.send_dir_input)
       axios({
         url: process.env.BASE_API + '/batch_operation/upload',
         method: 'post',
@@ -197,5 +200,4 @@ export default {
     margin-top:20px;
     margin-left:20px;
   }
-
 </style>

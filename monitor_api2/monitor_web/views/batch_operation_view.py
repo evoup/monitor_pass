@@ -98,15 +98,15 @@ class FileUploadView(APIView):
         else:
             real_file_name = request.FILES['file'].name
             up_file = request.FILES['file'].file.getvalue()
-            destination = None
             try:
-                # destination = open('/tmp/' + request.FILES['file'].name, 'wb+')
+                # 不能马上删除，任务完成后，交给后续的任务去清理
                 fp = tempfile.NamedTemporaryFile(delete=False)
                 fp.write(up_file)
                 # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
                 task_ids.append(dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
-                # fp.close()
+                # todo 需要写一个清理任务，定期清楚这些临时文件
+                fp.close()
                 request.FILES['file'].close()
             except:
                 print(traceback.format_exc())
