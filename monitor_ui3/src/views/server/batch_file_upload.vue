@@ -157,9 +157,7 @@ export default {
           this.progressPercent = Math.floor(progressEvent.loaded / progressEvent.total * 100)
         }
       }).then((response) => {
-        console.log(response)
         var tasks = response.data.data.items
-        console.log(tasks)
         for (var i in tasks) {
           this.wait_command_finish(tasks[i])
         }
