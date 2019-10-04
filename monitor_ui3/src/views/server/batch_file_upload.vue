@@ -71,7 +71,8 @@ export default {
       send_dir_input: null,
       fileList: [],
       header: this.getHeader(),
-      progressPercent: 0
+      progressPercent: 0,
+      totalTasks: []
     }
   },
   watch: {
@@ -111,6 +112,14 @@ export default {
       get_command_result({ task_id: task_id }).then(response => {
         if (response.data.item != null) {
           this.resultModel = this.resultModel + '\n' + response.data.item.name + '分发完成，结果如下：\n' + response.data.item.out
+          // 从总任务中减去当前任务
+          var i = this.totalTasks.indexOf(task_id)
+          if (i !== -1) {
+            this.totalTasks.splice(i, 1)
+          }
+          if (this.totalTasks.length === 0) {
+            this.resultModel = this.resultModel + '\n' + '----------------------\n所有任务完成!'
+          }
         } else {
           setTimeout(() => {
             this.wait_command_finish(task_id)
@@ -159,6 +168,7 @@ export default {
       }).then((response) => {
         var tasks = response.data.data.items
         for (var i in tasks) {
+          this.totalTasks.push(tasks[i])
           this.wait_command_finish(tasks[i])
         }
       }).catch((err) => {
