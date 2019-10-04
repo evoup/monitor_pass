@@ -13,7 +13,7 @@ from web.common import constant
 @permission_classes((IsAuthenticated,))
 class BatchSendCommand(APIView):
     """
-    发送任务到celery
+    发送执行命令的任务到celery
     """
 
     def post(self, request, pk=None, format=None):
