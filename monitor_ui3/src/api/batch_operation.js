@@ -14,7 +14,7 @@ export function batch_send_commands(hosts, username, command) {
 
 export function get_command_result(param) {
   return request({
-    url: '/batch_operation/send_command',
+    url: '/batch_operation/task',
     method: 'get',
     params: param
   })

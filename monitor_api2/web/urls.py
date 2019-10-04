@@ -20,7 +20,7 @@ from rest_framework import routers
 
 from monitor_web.views import view, template_view, item_view, trigger_view, idc_view, data_collector_view, asset_view, \
     diagram_view, general_config_view, dashboard_view, notification_mode_config, event_view, operation_view, \
-    celery_view, batch_operation_view
+    batch_operation_view
 from monitor_web.views import user_view
 from monitor_web.views import server_view
 
@@ -108,13 +108,11 @@ urlpatterns = [
         url(r'^operation/info$', operation_view.OperationInfo.as_view()),
         # 返回单个操作项/修改/添加/删除操作项
         url(r'^operation_item/info$', operation_view.OperationItemInfo.as_view()),
-        # 测试celery添加任务
-        url(r'^celery/info$', celery_view.CeleryInfo.as_view()),
-        # 测试celery获取任务结果
-        url(r'^celery_task/info$', celery_view.CeleryTaskInfo.as_view()),
         # 批量命令执行
         url(r'^batch_operation/send_command$', batch_operation_view.BatchSendCommand.as_view()),
         # 上传
         url(r'^batch_operation/upload$', batch_operation_view.FileUploadView.as_view()),
+        # 获取任务结果
+        url(r'^batch_operation/task', batch_operation_view.CeleryTaskInfo.as_view()),
     ]))
 ]

@@ -5,12 +5,30 @@ import traceback
 
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
-from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from monitor_web import tasks, models
 from web.common import constant
+
+
+@permission_classes((IsAuthenticated,))
+class CeleryTaskInfo(APIView):
+    def get(self, request, pk=None, format=None):
+        """
+        从celery中查询任务的执行结果
+        """
+        # grab the AsyncResult
+        if 'task_id' not in self.request.query_params:
+            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
+        try:
+            result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
+            res = result.get(timeout=30)
+            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
+        except:
+            print(traceback.format_exc())
+            return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '遇到问题'})
 
 
 @permission_classes((IsAuthenticated,))
@@ -43,45 +61,8 @@ class BatchSendCommand(APIView):
              'data': {'items': task_ids}}
         )
 
-    def get(self, request, pk=None, format=None):
-        """
-        从celery中查询任务的执行结果
-        """
-        # grab the AsyncResult
-        if 'task_id' not in self.request.query_params:
-            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
-        try:
-            result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
-            res = result.get(timeout=30)
-            return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
-        except:
-            print(traceback.format_exc())
-            return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '遇到问题'})
 
-
-# 只实现了Postman最后一种binary上传方式
-class FileUploadView0(APIView):
-    parser_classes = [FileUploadParser]
-
-    # def post(self, request, filename, format='jpg'):
-    def post(self, request, filename, format=None):
-        up_file = request.FILES['file']
-        destination = None
-        try:
-            destination = open('/tmp/' + up_file.name, 'wb+')
-            for chunk in up_file.chunks():
-                destination.write(chunk)
-            destination.close()
-            request.FILES['file'].close()
-        except:
-            request.FILES['file'].close()
-            if destination is not None:
-                destination.close()
-            return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % up_file.name})
-        return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % up_file.name})
-
-
-# MultiPartParser multipart/form-data没有实现
+# MultiPartParser multipart/form-data的方式
 class FileUploadView(APIView):
     parser_classes = [MultiPartParser]
 
@@ -103,7 +84,8 @@ class FileUploadView(APIView):
                 fp.write(up_file)
                 # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
-                task_ids.append(dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
+                task_ids.append(
+                    dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
                 # todo 需要写一个清理任务，定期清楚这些临时文件
                 fp.close()
                 request.FILES['file'].close()
@@ -127,8 +109,30 @@ def dispatch(request, src_file, dest_file):
             # server.ssh_address
             try:
                 server = server.get()
-                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file, dest_file)
+                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file,
+                                                dest_file)
                 task_ids.append(res.task_id)
             except:
                 print(traceback.format_exc())
     return task_ids
+
+# 实现了Postman最后一种binary上传方式，很遗憾el-upload不支持，postman的binary是可以的
+# class FileUploadView0(APIView):
+#     parser_classes = [FileUploadParser]
+#
+#     # def post(self, request, filename, format='jpg'):
+#     def post(self, request, filename, format=None):
+#         up_file = request.FILES['file']
+#         destination = None
+#         try:
+#             destination = open('/tmp/' + up_file.name, 'wb+')
+#             for chunk in up_file.chunks():
+#                 destination.write(chunk)
+#             destination.close()
+#             request.FILES['file'].close()
+#         except:
+#             request.FILES['file'].close()
+#             if destination is not None:
+#                 destination.close()
+#             return JsonResponse({'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % up_file.name})
+#         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % up_file.name})
