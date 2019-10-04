@@ -83,15 +83,18 @@ class FileUploadView(APIView):
     parser_classes = [MultiPartParser]
 
     def post(self, request, filename, format=None):
+        # 如果是非图片等的二进制文件
         if hasattr(request.FILES['file'].file, 'file'):
             new_file = request.FILES['file'].file.name
             # todo new_file是临时文件，需要之后close，接下来要分发
+        # 如果是图片
         else:
             up_file = request.FILES['file'].file.getvalue()
             destination = None
             try:
                 destination = open('/tmp/' + request.FILES['file'].name, 'wb+')
                 destination.write(up_file)
+                #close后会删除临时文件，up_file还存在
                 destination.close()
                 request.FILES['file'].close()
             except:
