@@ -92,8 +92,7 @@ class FileUploadView(APIView):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
-            print('%s上传临时文件名：' % tmp_file_name)
-            # task_ids.append(dispatch(request, ))
+            task_ids.append(dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
         # 如果是图片
         else:
             real_file_name = request.FILES['file'].name
