@@ -123,7 +123,7 @@ class FileUploadView(APIView):
                 return JsonResponse(
                     {'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % request.FILES['file'].name})
         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name,
-                             'items': task_ids})
+                             'data': {'items': task_ids}})
 
 # 实现了Postman最后一种binary上传方式，很遗憾el-upload不支持，postman的binary是可以的
 # class FileUploadView0(APIView):
