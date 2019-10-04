@@ -26,7 +26,7 @@
                 ref="upload"
                 :show-file-list="true"
                 :auto-upload="false"
-                :http-request="uploadImg"
+                :http-request="uploadFile"
                 action="string">
                 <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">上传单个不超过500M的文件</div>
@@ -139,7 +139,7 @@ export default {
       }
     },
     // 自定义上传方法，因为django默认的uploadfileParser是二进制的
-    uploadImg(item) {
+    uploadFile(item) {
       console.log(item.file)
       const formData = new FormData()
       formData.append('file', item.file)
@@ -158,7 +158,7 @@ export default {
         }
       }).then((response) => {
         console.log(response)
-        var tasks = response.data.items
+        var tasks = response.data.data.items
         console.log(tasks)
         for (var i in tasks) {
           this.wait_command_finish(tasks[i])
