@@ -2,6 +2,7 @@ import json
 import os
 import tempfile
 import traceback
+from shutil import copyfile
 
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
@@ -93,8 +94,10 @@ class FileUploadView(APIView):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
+            copied_tmp_file_name = "%s-copy" % tmp_file_name
+            copyfile(tmp_file_name, copied_tmp_file_name)
             # 临时文件会被python回收，需要复制一份
-            dispatched_tasks = dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
+            dispatched_tasks = dispatch(request, copied_tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
             for dispatched_task in dispatched_tasks:
                 task_ids.append(dispatched_task)
         # 如果小文件
