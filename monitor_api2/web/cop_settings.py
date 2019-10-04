@@ -1,11 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
-
 # Broker配置，使用Redis作为消息中间件
+import redis
+
 CELERY_BROKER_URL = 'redis://172.16.25.89:6379/15'
 
 # BACKEND配置，这里使用redis
 CELERY_RESULT_BACKEND = 'redis://172.16.25.89:6379/15'
+
+POOL = redis.ConnectionPool(host='172.16.25.89', port=6379, max_connections=20)
 
 # 结果序列化方案
 CELERY_RESULT_SERIALIZER = 'json'
@@ -262,5 +265,5 @@ LOGGING = {
 }
 
 # 最大上传字节
-DATA_UPLOAD_MAX_MEMORY_SIZE=2147483648
-DATA_UPLOAD_MAX_NUMBER_FIELDS=2147483648
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2147483648
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2147483648

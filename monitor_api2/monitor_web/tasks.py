@@ -40,8 +40,6 @@ def file_dispatch(name, host, port, username, src_file, dest_dir):
     pkey = config.ssh_private_key_dir
     key = RSAKey.from_private_key_file(pkey)
     t = Transport(host, port)
-    # t.default_max_packet_size = 999999999
-    # t.default_window_size = 999999999
     t.connect(username=username, pkey=key)
     sftp = SFTPClient.from_transport(t)
     sftp.put(src_file, dest_dir)

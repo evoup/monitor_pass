@@ -26,7 +26,7 @@ context is:
 
 # deploy 
 ```bash
-celery worker -A web -l debug
+export DJANGO_SETTINGS_MODULE=web.deploy_settings && celery worker -A web -l debug
 ```
 
 
