@@ -1,3 +1,4 @@
+import tempfile
 import traceback
 
 from django.http import JsonResponse
@@ -85,23 +86,27 @@ class FileUploadView(APIView):
     def post(self, request, filename, format=None):
         # 如果是非图片等的二进制文件
         if hasattr(request.FILES['file'].file, 'file'):
-            new_file = request.FILES['file'].file.name
+            real_file_name = request.FILES['file'].name
+            # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
+            tmp_file_name = request.FILES['file'].file.name
+            print('%s上传临时文件名：' % tmp_file_name)
             # todo new_file是临时文件，需要之后close，接下来要分发
         # 如果是图片
         else:
+            real_file_name = request.FILES['file'].name
             up_file = request.FILES['file'].file.getvalue()
             destination = None
             try:
-                destination = open('/tmp/' + request.FILES['file'].name, 'wb+')
-                destination.write(up_file)
-                #close后会删除临时文件，up_file还存在
-                destination.close()
+                # destination = open('/tmp/' + request.FILES['file'].name, 'wb+')
+                fp = tempfile.NamedTemporaryFile()
+                fp.write(up_file)
+                # close后会删除临时文件，up_file还存在
+                tmp_file_name = fp.name
+                fp.close()
                 request.FILES['file'].close()
             except:
                 print(traceback.format_exc())
                 request.FILES['file'].close()
-                if destination is not None:
-                    destination.close()
                 return JsonResponse(
                     {'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % request.FILES['file'].name})
         return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name})
