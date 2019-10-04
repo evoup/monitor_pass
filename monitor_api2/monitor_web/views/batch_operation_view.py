@@ -13,6 +13,26 @@ from monitor_web import tasks, models
 from web.common import constant
 
 
+def dispatch(request, src_file, dest_file):
+    task_ids = []
+    for host in json.loads(request.POST['hosts']):
+        if len(host['id'].split('server|')) < 2:
+            continue
+        host_id = host['id'].split('server|')[1]
+        # 查询端口
+        server = models.Server.objects.filter(id=host_id)
+        if server.count() > 0:
+            # server.ssh_address
+            try:
+                server = server.get()
+                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file,
+                                                dest_file)
+                task_ids.append(res.task_id)
+            except:
+                print(traceback.format_exc())
+    return task_ids
+
+
 @permission_classes((IsAuthenticated,))
 class CeleryTaskInfo(APIView):
     def get(self, request, pk=None, format=None):
@@ -73,7 +93,9 @@ class FileUploadView(APIView):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
-            task_ids.append(dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
+            dispatched_tasks = dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
+            for dispatched_task in dispatched_tasks:
+                task_ids.append(dispatched_task)
         # 如果是图片
         else:
             real_file_name = request.FILES['file'].name
@@ -84,8 +106,9 @@ class FileUploadView(APIView):
                 fp.write(up_file)
                 # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
-                task_ids.append(
-                    dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name)))
+                dispatched_tasks = dispatch(request, tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
+                for dispatched_task in dispatched_tasks:
+                    task_ids.append(dispatched_task)
                 # todo 需要写一个清理任务，定期清楚这些临时文件
                 fp.close()
                 request.FILES['file'].close()
@@ -94,27 +117,8 @@ class FileUploadView(APIView):
                 request.FILES['file'].close()
                 return JsonResponse(
                     {'code': constant.BACKEND_CODE_OPT_FAIL, 'message': '文件%s上传失败' % request.FILES['file'].name})
-        return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name})
-
-
-def dispatch(request, src_file, dest_file):
-    task_ids = []
-    for host in json.loads(request.POST['hosts']):
-        if len(host['id'].split('server|')) < 2:
-            continue
-        host_id = host['id'].split('server|')[1]
-        # 查询端口
-        server = models.Server.objects.filter(id=host_id)
-        if server.count() > 0:
-            # server.ssh_address
-            try:
-                server = server.get()
-                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file,
-                                                dest_file)
-                task_ids.append(res.task_id)
-            except:
-                print(traceback.format_exc())
-    return task_ids
+        return JsonResponse({'code': constant.BACKEND_CODE_CREATED, 'message': '文件%s上传成功' % request.FILES['file'].name,
+                             'data': {'items': task_ids}})
 
 # 实现了Postman最后一种binary上传方式，很遗憾el-upload不支持，postman的binary是可以的
 # class FileUploadView0(APIView):
