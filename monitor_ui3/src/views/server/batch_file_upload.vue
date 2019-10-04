@@ -105,19 +105,12 @@ export default {
     },
     send_files() {
       this.$refs.upload.submit()
-      // var command = this.$refs.editAreaShellComp.code
-      // batch_send_commands(this.$refs.tree1.getCheckedNodes(), this.send_user_input, command).then(response => {
-      //   var tasks = response.data.items
-      //   for (var i in tasks) {
-      //     this.wait_command_finish(tasks[i])
-      //   }
-      // })
     },
     // 轮训任务结果
     wait_command_finish(task_id) {
       get_command_result({ task_id: task_id }).then(response => {
         if (response.data.item != null) {
-          this.resultModel = this.resultModel + '\n' + response.data.item.name + '执行命令完成，结果如下：\n' + response.data.item.out
+          this.resultModel = this.resultModel + '\n' + response.data.item.name + '分发完成，结果如下：\n' + response.data.item.out
         } else {
           setTimeout(() => {
             this.wait_command_finish(task_id)
@@ -163,13 +156,14 @@ export default {
           // progressEvent.total:被上传文件的总大小
           this.progressPercent = Math.floor(progressEvent.loaded / progressEvent.total * 100)
         }
+      }).then((response) => {
+        var tasks = response.data.items
+        for (var i in tasks) {
+          this.wait_command_finish(tasks[i])
+        }
+      }).catch((err) => {
+        console.log(err, 'error')
       })
-        .then((data) => {
-          console.log(data)
-        })
-        .catch((err) => {
-          console.log(err, 'error')
-        })
     }
   }
 }
