@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 
 from monitor_web import tasks, models
 from web.common import constant
+from web.common.constant import TEMPFILE_SUFFIX
 
 
 def dispatch(request, src_file, dest_file):
@@ -94,10 +95,11 @@ class FileUploadView(APIView):
             real_file_name = request.FILES['file'].name
             # python自动将上传的文件放到/tmp目录下，文件名new_file是随机生成的
             tmp_file_name = request.FILES['file'].file.name
-            copied_tmp_file_name = "%s-copy" % tmp_file_name
+            copied_tmp_file_name = "%s%s" % (tmp_file_name, TEMPFILE_SUFFIX)
             copyfile(tmp_file_name, copied_tmp_file_name)
             # 临时文件会被python回收，需要复制一份
-            dispatched_tasks = dispatch(request, copied_tmp_file_name, os.path.join(request.POST['send_dir'], real_file_name))
+            dispatched_tasks = dispatch(request, copied_tmp_file_name,
+                                        os.path.join(request.POST['send_dir'], real_file_name))
             for dispatched_task in dispatched_tasks:
                 task_ids.append(dispatched_task)
         # 如果小文件
@@ -106,7 +108,7 @@ class FileUploadView(APIView):
             up_file = request.FILES['file'].file.getvalue()
             try:
                 # 不能马上删除，任务完成后，交给后续的任务去清理
-                fp = tempfile.NamedTemporaryFile(delete=False)
+                fp = tempfile.NamedTemporaryFile(delete=False, suffix=TEMPFILE_SUFFIX)
                 fp.write(up_file)
                 # close后会删除临时文件，up_file还存在,'/tmp/tmpzmvv_r4x'
                 tmp_file_name = fp.name
