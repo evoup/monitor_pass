@@ -155,7 +155,10 @@ public class ScanService {
                                     LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
                                         LOG.warn("条件成立，进入事件逻辑");
-                                        processProblemEvent(trigger);
+                                        // 问题事件生成
+                                        generateProblemEvent(trigger);
+                                        // 进行操作
+                                        doOperation(trigger);
                                         LOG.info("事件逻辑结束");
                                     }
                                 }
@@ -172,7 +175,7 @@ public class ScanService {
      *
      * @param trigger
      */
-    private void processProblemEvent(Trigger trigger) {
+    private void generateProblemEvent(Trigger trigger) {
         // 选择最近的一条事件记录
         // 1.如果不存在事件，则生成事件
         // 2.如果存在事件，事件已经恢复，则新建事件
@@ -188,6 +191,17 @@ public class ScanService {
             Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(EventState.PROBLEM.ordinal()).build();
             eventMapper.insertSelective(event);
         }
+    }
+
+    /**
+     * 进行操作，发送消息，执行命令
+     * @param trigger
+     */
+    private void doOperation(Trigger trigger) {
+        // 从redis中查询处理操作
+        // 轮次的确定：如果没有数据，插入就是第一轮， key为triggerId,value为轮次和剩余的时间（格式为1|now+3600），并且触发操作
+        //           如果有数据，取出value，判断本轮次是否已经结束，如果结束就加轮次，并且触发操作
+        String key = String.format(KEY_PREFIX_OPERATION, String.valueOf(trigger.getId()));
     }
 
     /**
