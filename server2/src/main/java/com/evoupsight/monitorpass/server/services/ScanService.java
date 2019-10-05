@@ -155,7 +155,7 @@ public class ScanService {
                                     LOG.info("最终表达式是：" + sb.toString());
                                     if (antlrTrueFalse(sb.toString())) {
                                         LOG.warn("条件成立，进入事件逻辑");
-                                        processEvent(trigger);
+                                        processProblemEvent(trigger);
                                         LOG.info("事件逻辑结束");
                                     }
                                 }
@@ -168,15 +168,15 @@ public class ScanService {
     }
 
     /**
-     * 检查事件，是否存在该事件，事件是否已经恢复
+     * 处理问题事件
      *
      * @param trigger
      */
-    private void processEvent(Trigger trigger) {
+    private void processProblemEvent(Trigger trigger) {
         // 选择最近的一条事件记录
         // 1.如果不存在事件，则生成事件
         // 2.如果存在事件，事件已经恢复，则新建事件
-        // TODO 2.且超过5分钟
+        // TODO 2.且超过5分钟才生成
         List<Event> events = eventMapper.selectByExample(
                 new EventExample().limit(1).createCriteria().andTargetIdEqualTo(trigger.getId().intValue())
                         .example().orderBy(Event.Column.time.desc())
@@ -188,7 +188,6 @@ public class ScanService {
             Event event = Event.builder().event("").time(new Long(System.currentTimeMillis() / 1000).intValue()).acknowledged(false).targetId(trigger.getId().intValue()).type(EventState.PROBLEM.ordinal()).build();
             eventMapper.insertSelective(event);
         }
-
     }
 
     /**
