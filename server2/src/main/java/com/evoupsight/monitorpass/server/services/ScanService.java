@@ -158,7 +158,7 @@ public class ScanService {
                                         // 问题事件生成
                                         generateProblemEvent(trigger);
                                         // 进行操作
-                                        doOperation(trigger);
+                                        doOperation(trigger, s);
                                         LOG.info("事件逻辑结束");
                                     }
                                 }
@@ -195,13 +195,41 @@ public class ScanService {
 
     /**
      * 进行操作，发送消息，执行命令
-     * @param trigger
      */
-    private void doOperation(Trigger trigger) {
+    private void doOperation(Trigger trigger, Server server) {
         // 从redis中查询处理操作
         // 轮次的确定：如果没有数据，插入就是第一轮， key为triggerId,value为轮次和剩余的时间（格式为1|now+3600），并且触发操作
         //           如果有数据，取出value，判断本轮次是否已经结束，如果结束就加轮次，并且触发操作
-        String key = String.format(KEY_PREFIX_OPERATION, String.valueOf(trigger.getId()));
+        String key = String.format(KEY_PREFIX_OPERATION, trigger.getId());
+        try (Jedis resource = jedisPool.getResource()) {
+            String value = resource.get(key);
+            Integer interval = 3600;
+            if (StringUtils.isEmpty(value)) {
+                value = String.format("1|%s", System.currentTimeMillis() / 1000 + interval);
+                resource.set(key, value);
+                // 触发操作
+                LOG.warn("触发操作:" + server.getName());
+            } else {
+                String[] split = value.split("\\|");
+                if (split.length == 2) {
+                    Integer turn = Integer.valueOf(split[0]);
+                    // 不让数值过大
+                    if (turn > 9999) {
+                        turn = 9999;
+                    }
+                    Integer ts = Integer.valueOf(split[1]);
+                    if (System.currentTimeMillis() / 1000 - ts > 0) {
+                        // 迭代轮次，并触发操作
+                        value = String.format("%s|%s", turn + 1, System.currentTimeMillis() / 1000 + interval);
+                        resource.set(key, value);
+                        // 触发操作
+                        LOG.warn("触发操作:" + server.getName());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
     /**
