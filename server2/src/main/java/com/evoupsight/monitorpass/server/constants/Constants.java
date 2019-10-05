@@ -63,5 +63,5 @@ public class Constants {
     /**
      * redis的操作key，格式为oper|触发器id
      */
-    public static String KEY_PREFIX_OPERATION = "oper|%s";
+    public static String KEY_PREFIX_OPERATION = "monitor:oper|%s";
 }
