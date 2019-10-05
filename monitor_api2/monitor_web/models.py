@@ -605,7 +605,7 @@ class OperationCondition(models.Model):
     id = models.AutoField(primary_key=True)
     operation = models.ForeignKey('Operation', on_delete=models.CASCADE)
     type = models.IntegerField(choices=type_choices, default=0)
-    # 对于type=1，0是触发器没有触发，1是触发了，以此类推
+    # 对于type=0，0是触发器没有触发，1是触发了，以此类推
     operator = models.IntegerField('操作符', default=1)
     value = models.CharField('值', max_length=255)
 
