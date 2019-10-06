@@ -28,12 +28,6 @@ public class Config {
     @Value("${redis.host}")
     String redisHost;
 
-    @Value("${celery.brokerUri}")
-    String celeryBrokerUri;
-
-    @Value("${celery.backendUri}")
-    String celeryBackendUri;
-
     @Bean
     public org.apache.hadoop.conf.Configuration hbaseConf() {
         org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
