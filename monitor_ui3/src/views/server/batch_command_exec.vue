@@ -106,7 +106,7 @@ export default {
     wait_command_finish(task_id) {
       get_command_result({ task_id: task_id }).then(response => {
         if (response.data.item != null) {
-          this.resultModel = this.resultModel + '\n' + response.data.item.name + '执行命令完成，结果如下：\n' + response.data.item.out
+          this.resultModel = this.resultModel + '\n' + response.data.item.name + '执行命令完成，结果如下：\n' + this.decodeBase64Content(response.data.item.out)
           // 从总任务中减去当前任务
           var i = this.totalTasks.indexOf(task_id)
           if (i !== -1) {
@@ -128,6 +128,11 @@ export default {
         var div = document.getElementById('textarea0')
         div.scrollTop = div.scrollHeight
       })
+    },
+    decodeBase64Content: function(base64Content) {
+      let commonContent = base64Content.replace(/\s/g, '+');
+      commonContent = Buffer.from(commonContent, 'base64').toString();
+      return commonContent;
     }
   }
 }

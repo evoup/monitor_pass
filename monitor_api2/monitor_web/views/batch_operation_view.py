@@ -4,6 +4,7 @@ import tempfile
 import traceback
 from shutil import copyfile
 
+import redis
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser, MultiPartParser
@@ -34,6 +35,15 @@ def dispatch(request, src_file, dest_file):
                 print(traceback.format_exc())
     return task_ids
 
+def wait_till_redis_ok(result):
+    res = None
+    try:
+        res = result.get(timeout=30)
+    # celery的redis包问题很多，只能重试
+    # except redis.exceptions.InvalidResponse or redis.exceptions.ConnectionError:
+    except:
+        wait_till_redis_ok(result)
+    return res
 
 @permission_classes((IsAuthenticated,))
 class CeleryTaskInfo(APIView):
@@ -46,7 +56,7 @@ class CeleryTaskInfo(APIView):
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
         try:
             result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
-            res = result.get(timeout=30)
+            res = wait_till_redis_ok(result)
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
         except:
             print(traceback.format_exc())
