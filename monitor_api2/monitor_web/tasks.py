@@ -44,3 +44,8 @@ def file_dispatch(name, host, port, username, src_file, dest_dir):
     sftp = SFTPClient.from_transport(t)
     sftp.put(src_file, dest_dir)
     return {'out': '分发成功', 'name': name}
+
+
+@shared_task
+def add(x, y):
+    return x + y

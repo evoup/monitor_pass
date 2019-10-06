@@ -1,7 +1,6 @@
 package com.evoupsight.monitorpass.server.cfg;
 
 
-import com.geneea.celery.Celery;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.opentsdb.client.PoolingHttpClient;
@@ -22,7 +21,6 @@ import java.time.Duration;
 @Configuration
 @PropertySources({
         @PropertySource("file:${spring.config.location:./}/server.properties"),
-        @PropertySource("file:${spring.config.location:./}/celery.properties"),
         @PropertySource("file:${spring.config.location:./}/redis.properties")
 })
 public class Config {
@@ -68,13 +66,5 @@ public class Config {
     @Bean(name = "http_client_pool")
     public PoolingHttpClient poolingHttpClient() {
         return new PoolingHttpClient();
-    }
-
-    @Bean(name = "celery_client")
-    public Celery celeryClient() {
-        return Celery.builder()
-                .brokerUri(celeryBrokerUri)
-                .backendUri(celeryBackendUri)
-                .build();
     }
 }

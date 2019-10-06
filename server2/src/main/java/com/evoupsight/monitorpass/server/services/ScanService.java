@@ -14,7 +14,6 @@ import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
 import com.evoupsight.monitorpass.server.exporession.MainVisitor;
 import com.evoupsight.monitorpass.server.exporession.TriggerLexer;
 import com.evoupsight.monitorpass.server.exporession.TriggerParser;
-import com.geneea.celery.Celery;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -73,14 +72,11 @@ public class ScanService {
 
     private final PoolingHttpClient httpClient;
 
-    private final Celery celeryClient;
-
     @Autowired
-    private ScanService(JedisPool jedisPool, Configuration hbaseConf, PoolingHttpClient httpClient, Celery celeryClient) {
+    private ScanService(JedisPool jedisPool, Configuration hbaseConf, PoolingHttpClient httpClient) {
         this.jedisPool = jedisPool;
         this.hbaseConf = hbaseConf;
         this.httpClient = httpClient;
-        this.celeryClient = celeryClient;
     }
 
     @Autowired
@@ -213,7 +209,6 @@ public class ScanService {
                 resource.set(key, value);
                 // 触发操作
                 LOG.warn("触发操作:" + server.getName());
-                celeryClient.submit("tasks.add", new Object[]{1, 2});
             } else {
                 String[] split = value.split("\\|");
                 if (split.length == 2) {
@@ -229,7 +224,6 @@ public class ScanService {
                         resource.set(key, value);
                         // 触发操作
                         LOG.warn("触发操作:" + server.getName());
-                        celeryClient.submit("tasks.add", new Object[]{1, 2});
                     }
                 }
             }
