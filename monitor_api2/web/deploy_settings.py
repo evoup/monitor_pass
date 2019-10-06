@@ -10,7 +10,7 @@ CELERY_BROKER_URL = 'redis://redis:6379/15'
 # BACKEND配置，这里使用redis
 CELERY_RESULT_BACKEND = 'redis://redis:6379/15'
 
-POOL = redis.ConnectionPool(host='redis', port=6379, max_connections=20)
+# POOL = redis.ConnectionPool(host='redis', port=6379, max_connections=20)
 
 # 结果序列化方案
 CELERY_RESULT_SERIALIZER = 'json'

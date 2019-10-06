@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import base64
+
 from celery import shared_task
 from paramiko import SSHClient, AutoAddPolicy, RSAKey, SFTPClient, Transport
 
@@ -28,7 +30,8 @@ def exec_command(name, host, port, username, command):
     ssh.connect(hostname=host, port=port, username=username, pkey=key, compress=True)
     stdin, stdout, stderr = ssh.exec_command(command)
     bytes = stdout.read()
-    return {'out': bytes.decode(), 'name': name}
+    # 编码以避免问题
+    return {'out': base64.b64encode(bytes).decode(), 'name': name}
 
 
 @shared_task

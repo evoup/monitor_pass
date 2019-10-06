@@ -72,7 +72,7 @@ class BatchSendCommand(APIView):
                 # server.ssh_address
                 try:
                     server = server.get()
-                    res = tasks.exec_command.delay(server.name, server.ip, 22, data['username'], data['command'])
+                    res = tasks.exec_command.apply_async((server.name, server.ip, 22, data['username'], data['command']), expires=60)
                     task_ids.append(res.task_id)
                 except:
                     print(traceback.format_exc())
