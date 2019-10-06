@@ -38,6 +38,7 @@ def dispatch(request, src_file, dest_file):
 def wait_till_redis_ok(result):
     res = None
     try:
+        #FIXME这里不能同步，并且有些任务完成了但是前端显示超时
         res = result.get(timeout=30)
     # celery的redis包问题很多，只能重试
     # except redis.exceptions.InvalidResponse or redis.exceptions.ConnectionError:
