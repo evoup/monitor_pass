@@ -4,6 +4,7 @@ import tempfile
 import traceback
 from shutil import copyfile
 
+from django.core.cache import cache
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser, MultiPartParser
@@ -44,7 +45,7 @@ class CeleryTaskInfo(APIView):
         if 'task_id' not in self.request.query_params:
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
         try:
-            res = None
+            res = cache.get("task_id:%s" % self.request.query_params['task_id'])
             # 如果celery backend使用rpc（rabbitmq/amqp），则不能使用reuslt.get()，消息是阅后即焚的，参见https://docs.celeryproject.org/en/latest/userguide/tasks.html
             # 由于文档上提到不同的进程不能获得相同的结果，所以用redis事先保存，这里来获取
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
