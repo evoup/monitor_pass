@@ -89,7 +89,7 @@ def send_wechat_message(self, server_name):
 
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token
     title = '告警'
-    message = '34'
+    message = '%s发生问题事件' % server_name
     weixin_msg = {
 
         "touser": Touser,
