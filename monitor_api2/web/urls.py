@@ -109,10 +109,10 @@ urlpatterns = [
         # 返回单个操作项/修改/添加/删除操作项
         url(r'^operation_item/info$', operation_view.OperationItemInfo.as_view()),
         # 批量命令执行
-        url(r'^batch_operation/send_command$', batch_operation_view.BatchSendCommand.as_view()),
+        url(r'^batch_operation/send_command$', batch_operation_view.BatchSendCommandView.as_view()),
         # 上传
         url(r'^batch_operation/upload$', batch_operation_view.FileUploadView.as_view()),
         # 获取任务结果
-        url(r'^batch_operation/task', batch_operation_view.CeleryTaskInfo.as_view()),
+        url(r'^batch_operation/task', batch_operation_view.CeleryTaskInfoView.as_view()),
     ]))
 ]

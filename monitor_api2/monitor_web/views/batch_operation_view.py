@@ -37,7 +37,7 @@ def dispatch(request, src_file, dest_file):
 
 
 @permission_classes((IsAuthenticated,))
-class CeleryTaskInfo(APIView):
+class CeleryTaskInfoView(APIView):
     def get(self, request, pk=None, format=None):
         """
         从celery中查询任务的执行结果
@@ -55,7 +55,7 @@ class CeleryTaskInfo(APIView):
 
 
 @permission_classes((IsAuthenticated,))
-class BatchSendCommand(APIView):
+class BatchSendCommandView(APIView):
     """
     发送执行命令的任务到celery
     """
