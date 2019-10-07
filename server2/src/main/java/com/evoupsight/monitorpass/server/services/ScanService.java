@@ -213,7 +213,7 @@ public class ScanService {
                 resource.set(key, value);
                 // 触发操作
                 LOG.warn("触发操作:" + server.getName());
-                celeryClient.submit("tasks.add", new Object[]{1, 2});
+                celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
             } else {
                 String[] split = value.split("\\|");
                 if (split.length == 2) {
@@ -229,7 +229,7 @@ public class ScanService {
                         resource.set(key, value);
                         // 触发操作
                         LOG.warn("触发操作:" + server.getName());
-                        celeryClient.submit("tasks.add", new Object[]{1, 2});
+                        celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
                     }
                 }
             }
