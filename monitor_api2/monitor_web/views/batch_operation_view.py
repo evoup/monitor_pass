@@ -29,21 +29,10 @@ def dispatch(request, src_file, dest_file):
                 server = server.get()
                 res = tasks.file_dispatch.s(server.name, server.ip, 22, request.POST['username'], src_file,
                                             dest_file).delay()
-                wait_till_ok(res)
                 task_ids.append(res.task_id)
             except:
                 print(traceback.format_exc())
     return task_ids
-
-
-def wait_till_ok(result):
-    print('waiting')
-    res = None
-    try:
-        res = result.get(timeout=5)
-    except:
-        wait_till_ok(result)
-    return res
 
 
 @permission_classes((IsAuthenticated,))
@@ -55,8 +44,9 @@ class CeleryTaskInfo(APIView):
         if 'task_id' not in self.request.query_params:
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
         try:
-            result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
-            res = wait_till_ok(result)
+            res = None
+            # 如果celery backend使用rpc（rabbitmq/amqp），则不能使用reuslt.get()，消息是阅后即焚的，参见https://docs.celeryproject.org/en/latest/userguide/tasks.html
+            # 由于文档上提到不同的进程不能获得相同的结果，所以用redis事先保存，这里来获取
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
         except:
             print(traceback.format_exc())

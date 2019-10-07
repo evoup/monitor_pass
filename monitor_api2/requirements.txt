@@ -8,5 +8,5 @@ django_extensions
 requests
 django-unixdatetimefield
 celery==4.2.0
-redis
 paramiko
+django-redis

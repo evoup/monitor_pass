@@ -90,6 +90,8 @@ export default {
         server_list(Object.assign(this.pageHelp, this.sortHelp)).then(response => {
           this.buildTree(server_groups, response.data.items)
         })
+      }).catch(e => {
+        console.log(e)
       })
     },
     send_command() {
@@ -100,6 +102,8 @@ export default {
           this.totalTasks.push(tasks[i])
           this.wait_command_finish(tasks[i])
         }
+      }).catch(e => {
+        console.log(e)
       })
     },
     // 轮训任务结果
@@ -120,6 +124,8 @@ export default {
             this.wait_command_finish(task_id)
           }, 2000)
         }
+      }).catch(e => {
+        console.log(e)
       })
     },
     // 执行结果滚动条滚动到底部

@@ -76,6 +76,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web.wsgi.application'
 
+CELERY = {
+    'BROKER_URL': 'amqp://user:password@rabbitmq:5672',
+    'CELERY_RESULT_BACKEND': 'rpc://user:password@rabbitmq:5672',
+    'CELERY_IMPORTS': ('monitor_web.tasks',),
+    'CELERY_TASK_SERIALIZER': 'json',
+    'CELERY_RESULT_SERIALIZER': 'json',
+    'CELERY_ACCEPT_CONTENT': ['json'],
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
