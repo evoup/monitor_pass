@@ -46,6 +46,8 @@ class CeleryTaskInfoView(APIView):
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
         try:
             res = cache.get("task_id:%s" % self.request.query_params['task_id'])
+            if res is not None:
+                res = json.loads(res)
             # 如果celery backend使用rpc（rabbitmq/amqp），则不能使用reuslt.get()，消息是阅后即焚的，参见https://docs.celeryproject.org/en/latest/userguide/tasks.html
             # 由于文档上提到不同的进程不能获得相同的结果，所以用redis事先保存，这里来获取
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})

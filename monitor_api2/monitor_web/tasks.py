@@ -34,7 +34,6 @@ def exec_command(self, name, host, port, username, command):
     bytes = stdout.read()
     result_command = bytes.decode()
     cache.set("task_id:%s" % exec_command.request.id, json.dumps({'out': result_command, 'name': name}), timeout=300)
-    # 编码以避免问题
     return {'out': result_command, 'name': name}
 
 
@@ -50,6 +49,7 @@ def file_dispatch(name, host, port, username, src_file, dest_dir):
     t.connect(username=username, pkey=key)
     sftp = SFTPClient.from_transport(t)
     sftp.put(src_file, dest_dir)
+    cache.set("task_id:%s" % file_dispatch.request.id, json.dumps({'out': '分发成功', 'name': name}), timeout=300)
     return {'out': '分发成功', 'name': name}
 
 
