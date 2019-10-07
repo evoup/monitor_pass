@@ -7,7 +7,7 @@ from paramiko import SSHClient, AutoAddPolicy, RSAKey, SFTPClient, Transport
 
 from monitor_web import models
 from web.celery import app
-
+from django.core.cache import cache
 
 @app.task(bind=True, name='exec_command')
 def exec_command(self, name, host, port, username, command):
@@ -31,6 +31,7 @@ def exec_command(self, name, host, port, username, command):
     ssh.connect(hostname=host, port=port, username=username, pkey=key, compress=True)
     stdin, stdout, stderr = ssh.exec_command(command)
     bytes = stdout.read()
+    cache.set("task_id:%s" % exec_command.request.id, bytes.decode(), timeout=300)
     # 编码以避免问题
     return {'out': base64.b64encode(bytes).decode(), 'name': name}
 
