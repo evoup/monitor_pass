@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 
+import requests
 from celery import shared_task
 from paramiko import SSHClient, AutoAddPolicy, RSAKey, SFTPClient, Transport
 
@@ -56,3 +57,59 @@ def file_dispatch(name, host, port, username, src_file, dest_dir):
 @shared_task
 def add(x, y):
     return x + y
+
+
+@app.task(bind=True, name='tasks.send_wechat_message')
+def send_wechat_message(self, server_name):
+    # 部门id
+    Toparty = "2"
+
+    Touser = 'YinJia'
+
+    # 应用id
+    AgentID = 1000002
+
+    # 修改为企业CropID和Secret
+
+    CropID = 'ww0adfed0b986e2142'
+
+    Secret = 'oIithrVguY_ax6tywSjiqS7L8P6piHEc_AjoUggmKvM'
+
+    # 获取Token
+
+    Gtoken = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + CropID + "&corpsecret=" + Secret
+
+    headers = {'Content-Type': 'application/json'}
+
+    json_data = json.loads(requests.get(Gtoken).content.decode())
+
+    token = json_data["access_token"]
+
+    # 消息发送接口
+
+    Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token
+    title = '告警'
+    message = '34'
+    weixin_msg = {
+
+        "touser": Touser,
+
+        "msgtype": "textcard",
+
+        "agentid": AgentID,
+
+        "textcard": {
+
+            "title": title,
+
+            "description": message,
+
+            "url": "www.evoupsight.com",
+
+            "btntxt": "更多"
+
+        }
+
+    }
+    res = requests.post(Purl, json.dumps(weixin_msg), headers=headers)
+    return {'out': res.status_code, 'name': server_name}
