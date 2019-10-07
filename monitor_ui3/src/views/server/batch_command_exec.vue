@@ -136,9 +136,9 @@ export default {
       })
     },
     decodeBase64Content: function(base64Content) {
-      let commonContent = base64Content.replace(/\s/g, '+');
-      commonContent = Buffer.from(commonContent, 'base64').toString();
-      return commonContent;
+      let commonContent = base64Content.replace(/\s/g, '+')
+      commonContent = Buffer.from(commonContent, 'base64').toString()
+      return commonContent
     }
   }
 }
