@@ -25,8 +25,15 @@ context is:
 ```
 
 # deploy 
+
+deploy celery
 ```bash
 export DJANGO_SETTINGS_MODULE=web.deploy_settings && celery worker -A web -l debug
+```
+or
+
+```bash
+export DJANGO_SETTINGS_MODULE=web.deploy_settings && celery worker -A web --concurrency=4 --hostname=worker@%h -l info
 ```
 
 

@@ -6,10 +6,11 @@ from celery import shared_task
 from paramiko import SSHClient, AutoAddPolicy, RSAKey, SFTPClient, Transport
 
 from monitor_web import models
+from web.celery import app
 
 
-@shared_task
-def exec_command(name, host, port, username, command):
+@app.task(bind=True, name='exec_command')
+def exec_command(self, name, host, port, username, command):
     """
     远程执行命令
     :param name: 执行命令的主机名

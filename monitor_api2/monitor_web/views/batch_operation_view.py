@@ -4,7 +4,6 @@ import tempfile
 import traceback
 from shutil import copyfile
 
-import redis
 from django.http import JsonResponse
 from rest_framework.decorators import permission_classes
 from rest_framework.parsers import JSONParser, MultiPartParser
@@ -28,23 +27,24 @@ def dispatch(request, src_file, dest_file):
             # server.ssh_address
             try:
                 server = server.get()
-                res = tasks.file_dispatch.delay(server.name, server.ip, 22, request.POST['username'], src_file,
-                                                dest_file)
+                res = tasks.file_dispatch.s(server.name, server.ip, 22, request.POST['username'], src_file,
+                                            dest_file).delay()
+                wait_till_ok(res)
                 task_ids.append(res.task_id)
             except:
                 print(traceback.format_exc())
     return task_ids
 
-def wait_till_redis_ok(result):
+
+def wait_till_ok(result):
+    print('waiting')
     res = None
     try:
-        #FIXME这里不能同步，并且有些任务完成了但是前端显示超时
-        res = result.get(timeout=30)
-    # celery的redis包问题很多，只能重试
-    # except redis.exceptions.InvalidResponse or redis.exceptions.ConnectionError:
+        res = result.get(timeout=5)
     except:
-        wait_till_redis_ok(result)
+        wait_till_ok(result)
     return res
+
 
 @permission_classes((IsAuthenticated,))
 class CeleryTaskInfo(APIView):
@@ -52,12 +52,11 @@ class CeleryTaskInfo(APIView):
         """
         从celery中查询任务的执行结果
         """
-        # grab the AsyncResult
         if 'task_id' not in self.request.query_params:
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '仍在继续...'})
         try:
             result = tasks.exec_command.AsyncResult(self.request.query_params['task_id'])
-            res = wait_till_redis_ok(result)
+            res = wait_till_ok(result)
             return JsonResponse({'code': constant.BACKEND_CODE_OK, 'message': '执行完毕', 'data': {'item': res}})
         except:
             print(traceback.format_exc())
@@ -83,7 +82,8 @@ class BatchSendCommand(APIView):
                 # server.ssh_address
                 try:
                     server = server.get()
-                    res = tasks.exec_command.apply_async((server.name, server.ip, 22, data['username'], data['command']), expires=60)
+                    res = tasks.exec_command.apply_async(
+                        (server.name, server.ip, 22, data['username'], data['command']), expires=60)
                     task_ids.append(res.task_id)
                 except:
                     print(traceback.format_exc())

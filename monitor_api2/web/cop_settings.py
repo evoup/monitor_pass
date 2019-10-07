@@ -1,18 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-# Broker配置，使用Redis作为消息中间件
-import redis
-
-CELERY_BROKER_URL = 'redis://172.16.25.89:6379/15'
-
-# BACKEND配置，这里使用redis
-CELERY_RESULT_BACKEND = 'redis://172.16.25.89:6379/15'
-
-# POOL = redis.ConnectionPool(host='172.16.25.89', port=6379, max_connections=20)
-
-# 结果序列化方案
-CELERY_RESULT_SERIALIZER = 'json'
-
 """
 Django settings for web project.
 
@@ -89,6 +76,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'web.wsgi.application'
+
+CELERY = {
+    'BROKER_URL': 'amqp://user:password@192.168.2.194:5672',
+    'CELERY_RESULT_BACKEND': 'rpc://user:password@192.168.2.194:5672',
+    'CELERY_IMPORTS': ('monitor_web.tasks',),
+    'CELERY_TASK_SERIALIZER': 'json',
+    'CELERY_RESULT_SERIALIZER': 'json',
+    'CELERY_ACCEPT_CONTENT': ['json'],
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
