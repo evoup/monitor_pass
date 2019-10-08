@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="key"
+        label="opentsdb键"
         prop="key"
         width="300"/>
       <el-table-column
