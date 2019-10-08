@@ -24,6 +24,11 @@ context is:
         }
 ```
 
+change nginx max upload config, add this in http context:
+```bash
+client_max_body_size 500m; 
+```
+
 # deploy 
 
 deploy celery
