@@ -245,7 +245,7 @@ public class ScanService {
                 // 触发操作
                 LOG.warn("触发操作:" + server.getName());
                 OperationMessageDto triggerDetail = getTriggerDetail(trigger);
-                LOG.warn(new Gson().toJson(triggerDetail));
+                LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
                 celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
             } else {
                 String[] split = value.split("\\|");
@@ -263,7 +263,7 @@ public class ScanService {
                         // 触发操作
                         LOG.warn("触发操作:" + server.getName());
                         OperationMessageDto triggerDetail = getTriggerDetail(trigger);
-                        LOG.warn(new Gson().toJson(triggerDetail));
+                        LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
                         celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
                     }
                 }
