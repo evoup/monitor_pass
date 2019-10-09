@@ -104,6 +104,7 @@ class ServerDiagramList(APIView):
         grafana图表
         """
         server_id = self.request.query_params['id']
+        now = self.request.query_params['now'] if 'now' in self.request.query_params else 'now-6h'
         server = models.Server.objects.filter(id=server_id).get()
         server_name = server.name.lower()
         dashboards = models.GrafanaDashboard.objects.filter(device_id=server_id, device_type=1).all()
@@ -112,7 +113,7 @@ class ServerDiagramList(APIView):
             for d in dashboards:
                 # 图表id，暂时没用
                 did = d.diagram_id
-                ret_iframes = ret_iframes + '<iframe src="http://localhost/grafana/d-solo/%s/dashboard-%s?&panelId=%s&theme=dark&to=%s" width="%s" height="%s" frameborder=0 ></iframe>' % (d.dashboard_uid, server_name, d.diagram_id, time.time()*1000, d.diagram.width, d.diagram.height)
+                ret_iframes = ret_iframes + '<iframe src="http://localhost/grafana/d-solo/%s/dashboard-%s?&panelId=%s&theme=dark&from=%s&to=now" width="%s" height="%s" frameborder=0 ></iframe>' % (d.dashboard_uid, server_name, d.diagram_id, now, d.diagram.width, d.diagram.height)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {

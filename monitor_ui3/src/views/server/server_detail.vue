@@ -152,15 +152,24 @@
             :value="item.id"
           />
         </el-select>
-        <!--如果不用这个技巧，就不能正常刷新-->
-        <div v-if="dateModel==1" :key="shit_key + 1" v-html="all_diagrams"/>
-        <div v-if="dateModel==2" :key="shit_key + 1" v-html="all_diagrams_h12"/>
-        <div v-if="dateModel==3" :key="shit_key + 1" v-html="all_diagrams_h24"/>
-        <div v-if="dateModel==4" :key="shit_key + 1" v-html="all_diagrams_d2"/>
-        <div v-if="dateModel==5" :key="shit_key + 1" v-html="all_diagrams_d7"/>
-        <div v-if="dateModel==6" :key="shit_key + 1" v-html="all_diagrams_d30"/>
-        <div v-if="dateModel==7" :key="shit_key + 1" v-html="all_diagrams_m6"/>
-        <div v-if="dateModel==8" :key="shit_key + 1" v-html="all_diagrams_y1"/>
+        <!--如果不用shit_key这个技巧，就不能正常刷新-->
+        <div v-if="dateModel==1" :key="shit_key + 1" v-html="all_diagrams_1"/>
+        <div v-if="dateModel==2" :key="shit_key + 1" v-html="all_diagrams_2"/>
+        <div v-if="dateModel==3" :key="shit_key + 1" v-html="all_diagrams_3"/>
+        <div v-if="dateModel==4" :key="shit_key + 1" v-html="all_diagrams_4"/>
+        <div v-if="dateModel==5" :key="shit_key + 1" v-html="all_diagrams_5"/>
+        <div v-if="dateModel==6" :key="shit_key + 1" v-html="all_diagrams_6"/>
+        <div v-if="dateModel==7" :key="shit_key + 1" v-html="all_diagrams_7"/>
+        <div v-if="dateModel==8" :key="shit_key + 1" v-html="all_diagrams_8"/>
+        <div v-if="dateModel==9" :key="shit_key + 1" v-html="all_diagrams_9"/>
+        <div v-if="dateModel==10" :key="shit_key + 1" v-html="all_diagrams_10"/>
+        <div v-if="dateModel==11" :key="shit_key + 1" v-html="all_diagrams_11"/>
+        <div v-if="dateModel==12" :key="shit_key + 1" v-html="all_diagrams_12"/>
+        <div v-if="dateModel==13" :key="shit_key + 1" v-html="all_diagrams_13"/>
+        <div v-if="dateModel==14" :key="shit_key + 1" v-html="all_diagrams_14"/>
+        <div v-if="dateModel==15" :key="shit_key + 1" v-html="all_diagrams_15"/>
+        <div v-if="dateModel==16" :key="shit_key + 1" v-html="all_diagrams_16"/>
+        <div v-if="dateModel==17" :key="shit_key + 1" v-html="all_diagrams_17"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -179,26 +188,44 @@ export default {
         ip: '',
         server_groups: null,
         dateList: [
-          { id: 1, name: '最近6小时' },
-          { id: 2, name: '最近12小时' },
-          { id: 3, name: '最近24小时' },
-          { id: 4, name: '最近2天' },
-          { id: 5, name: '最近7天' },
-          { id: 6, name: '最近30天' },
-          { id: 7, name: '最近半年' },
-          { id: 8, name: '最近1年' }
+          { id: 1, name: '最近5分钟' },
+          { id: 2, name: '最近15分钟' },
+          { id: 3, name: '最近30分钟' },
+          { id: 4, name: '最近1小时' },
+          { id: 5, name: '最近3小时' },
+          { id: 6, name: '最近6小时' },
+          { id: 7, name: '最近12小时' },
+          { id: 8, name: '最近24小时' },
+          { id: 9, name: '最近2天' },
+          { id: 10, name: '最近7天' },
+          { id: 11, name: '最近30天' },
+          { id: 12, name: '最近90天' },
+          { id: 13, name: '最近半年' },
+          { id: 14, name: '最近1年' },
+          { id: 15, name: '最近2年' },
+          { id: 16, name: '最近5年' },
+          { id: 17, name: '去年' },
         ]
       },
-      all_diagrams: '',
-      all_diagrams_h12: '',
-      all_diagrams_h24: '',
-      all_diagrams_d2: '',
-      all_diagrams_d7: '',
-      all_diagrams_d30: '',
-      all_diagrams_m6: '',
-      all_diagrams_y1: '',
+      all_diagrams_1: '',
+      all_diagrams_2: '',
+      all_diagrams_3: '',
+      all_diagrams_4: '',
+      all_diagrams_5: '',
+      all_diagrams_6: '',
+      all_diagrams_7: '',
+      all_diagrams_8: '',
+      all_diagrams_9: '',
+      all_diagrams_10: '',
+      all_diagrams_11: '',
+      all_diagrams_12: '',
+      all_diagrams_13: '',
+      all_diagrams_14: '',
+      all_diagrams_15: '',
+      all_diagrams_16: '',
+      all_diagrams_17: '',
       shit_key: 0,
-      dateModel: 2
+      dateModel: 6
     }
   },
   created() {
@@ -208,43 +235,88 @@ export default {
     loadDiagram() {
       switch(this.dateModel) {
         case(1):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-5m' }).then(response => {
+            this.all_diagrams_1 = response.data.item
           })
           break
         case(2):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_h12 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-15m' }).then(response => {
+            this.all_diagrams_2 = response.data.item
           })
           break
         case(3):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_h24 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-30m' }).then(response => {
+            this.all_diagrams_3 = response.data.item
           })
           break
         case(4):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_d2 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-1h' }).then(response => {
+            this.all_diagrams_4 = response.data.item
           })
           break
         case(5):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_d7 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-3h' }).then(response => {
+            this.all_diagrams_5 = response.data.item
           })
           break
         case(6):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_d30 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-6h' }).then(response => {
+            this.all_diagrams_6 = response.data.item
           })
           break
         case(7):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_m6 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-12h' }).then(response => {
+            this.all_diagrams_7 = response.data.item
           })
           break
         case(8):
-          server_diagram_list({ id: this.$route.query.id }).then(response => {
-            this.all_diagrams_y1 = response.data.item
+          server_diagram_list({ id: this.$route.query.id, now: 'now-24h' }).then(response => {
+            this.all_diagrams_8 = response.data.item
+          })
+          break
+        case(9):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-2d' }).then(response => {
+            this.all_diagrams_9 = response.data.item
+          })
+          break
+        case(10):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-7d' }).then(response => {
+            this.all_diagrams_10 = response.data.item
+          })
+          break
+        case(11):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-30d' }).then(response => {
+            this.all_diagrams_11 = response.data.item
+          })
+          break
+        case(12):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-90d' }).then(response => {
+            this.all_diagrams_12 = response.data.item
+          })
+          break
+        case(13):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-6M' }).then(response => {
+            this.all_diagrams_13 = response.data.item
+          })
+          break
+        case(14):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-1y' }).then(response => {
+            this.all_diagrams_14 = response.data.item
+          })
+          break
+        case(15):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-2y' }).then(response => {
+            this.all_diagrams_15 = response.data.item
+          })
+          break
+        case(16):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-5y' }).then(response => {
+            this.all_diagrams_16 = response.data.item
+          })
+          break
+        case(17):
+          server_diagram_list({ id: this.$route.query.id, now: 'now-1d' }).then(response => {
+            this.all_diagrams_17 = response.data.item
           })
           break
       }
