@@ -204,7 +204,7 @@ export default {
           { id: 14, name: '最近1年' },
           { id: 15, name: '最近2年' },
           { id: 16, name: '最近5年' },
-          { id: 17, name: '去年' },
+          { id: 17, name: '去年' }
         ]
       },
       all_diagrams_1: '',
@@ -233,88 +233,88 @@ export default {
   },
   methods: {
     loadDiagram() {
-      switch(this.dateModel) {
-        case(1):
+      switch (this.dateModel) {
+        case (1):
           server_diagram_list({ id: this.$route.query.id, now: 'now-5m' }).then(response => {
             this.all_diagrams_1 = response.data.item
           })
           break
-        case(2):
+        case (2):
           server_diagram_list({ id: this.$route.query.id, now: 'now-15m' }).then(response => {
             this.all_diagrams_2 = response.data.item
           })
           break
-        case(3):
+        case (3):
           server_diagram_list({ id: this.$route.query.id, now: 'now-30m' }).then(response => {
             this.all_diagrams_3 = response.data.item
           })
           break
-        case(4):
+        case (4):
           server_diagram_list({ id: this.$route.query.id, now: 'now-1h' }).then(response => {
             this.all_diagrams_4 = response.data.item
           })
           break
-        case(5):
+        case (5):
           server_diagram_list({ id: this.$route.query.id, now: 'now-3h' }).then(response => {
             this.all_diagrams_5 = response.data.item
           })
           break
-        case(6):
+        case (6):
           server_diagram_list({ id: this.$route.query.id, now: 'now-6h' }).then(response => {
             this.all_diagrams_6 = response.data.item
           })
           break
-        case(7):
+        case (7):
           server_diagram_list({ id: this.$route.query.id, now: 'now-12h' }).then(response => {
             this.all_diagrams_7 = response.data.item
           })
           break
-        case(8):
+        case (8):
           server_diagram_list({ id: this.$route.query.id, now: 'now-24h' }).then(response => {
             this.all_diagrams_8 = response.data.item
           })
           break
-        case(9):
+        case (9):
           server_diagram_list({ id: this.$route.query.id, now: 'now-2d' }).then(response => {
             this.all_diagrams_9 = response.data.item
           })
           break
-        case(10):
+        case (10):
           server_diagram_list({ id: this.$route.query.id, now: 'now-7d' }).then(response => {
             this.all_diagrams_10 = response.data.item
           })
           break
-        case(11):
+        case (11):
           server_diagram_list({ id: this.$route.query.id, now: 'now-30d' }).then(response => {
             this.all_diagrams_11 = response.data.item
           })
           break
-        case(12):
+        case (12):
           server_diagram_list({ id: this.$route.query.id, now: 'now-90d' }).then(response => {
             this.all_diagrams_12 = response.data.item
           })
           break
-        case(13):
+        case (13):
           server_diagram_list({ id: this.$route.query.id, now: 'now-6M' }).then(response => {
             this.all_diagrams_13 = response.data.item
           })
           break
-        case(14):
+        case (14):
           server_diagram_list({ id: this.$route.query.id, now: 'now-1y' }).then(response => {
             this.all_diagrams_14 = response.data.item
           })
           break
-        case(15):
+        case (15):
           server_diagram_list({ id: this.$route.query.id, now: 'now-2y' }).then(response => {
             this.all_diagrams_15 = response.data.item
           })
           break
-        case(16):
+        case (16):
           server_diagram_list({ id: this.$route.query.id, now: 'now-5y' }).then(response => {
             this.all_diagrams_16 = response.data.item
           })
           break
-        case(17):
+        case (17):
           server_diagram_list({ id: this.$route.query.id, now: 'now-1d' }).then(response => {
             this.all_diagrams_17 = response.data.item
           })
