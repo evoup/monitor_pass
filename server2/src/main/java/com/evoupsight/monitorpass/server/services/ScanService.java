@@ -246,7 +246,9 @@ public class ScanService {
                 LOG.warn("触发操作:" + server.getName());
                 OperationMessageDto triggerDetail = getTriggerDetail(trigger);
                 LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
-                celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
+                if (triggerDetail != null) {
+                    celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName()});
+                }
             } else {
                 String[] split = value.split("\\|");
                 if (split.length == 2) {
@@ -264,7 +266,9 @@ public class ScanService {
                         LOG.warn("触发操作:" + server.getName());
                         OperationMessageDto triggerDetail = getTriggerDetail(trigger);
                         LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
-                        celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
+                        if (triggerDetail != null) {
+                        celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName()});
+                        }
                     }
                 }
             }

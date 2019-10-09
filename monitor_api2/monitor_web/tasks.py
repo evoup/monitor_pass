@@ -60,7 +60,7 @@ def add(x, y):
 
 
 @app.task(bind=True, name='tasks.send_wechat_message')
-def send_wechat_message(self, server_name):
+def send_wechat_message(self, server_name, item_name):
     # 部门id
     Toparty = "2"
 
@@ -88,8 +88,8 @@ def send_wechat_message(self, server_name):
     # 消息发送接口
 
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token
-    title = '告警'
-    message = '%s发生问题事件' % server_name
+    title = '%s告警' % server_name
+    message = '问题事件:%s' % item_name
     weixin_msg = {
 
         "touser": Touser,
@@ -104,7 +104,7 @@ def send_wechat_message(self, server_name):
 
             "description": message,
 
-            "url": "www.evoupsight.com",
+            "url": "monitor.evoupsight.com",
 
             "btntxt": "更多"
 
