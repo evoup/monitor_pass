@@ -1,4 +1,3 @@
-import time
 import traceback
 
 from django.contrib.auth.decorators import permission_required
@@ -81,7 +80,8 @@ class DiagramInfo(APIView):
         try:
             t = models.Template.objects.filter(id=data['template_id'])
             if t.count() > 0:
-                d = models.Diagram.objects.create(name=data['name'], width=data['width'], height=data['height'], template=t.get())
+                d = models.Diagram.objects.create(name=data['name'], width=data['width'], height=data['height'],
+                                                  template=t.get())
             # 创建图表项
             itemIds = data['item_ids'].split(",")
             for itemId in itemIds:
@@ -95,6 +95,7 @@ class DiagramInfo(APIView):
             'message': '创建图表成功'
         }
         return JsonResponse(ret, safe=False)
+
 
 @permission_classes((IsAuthenticated,))
 class ServerDiagramList(APIView):
@@ -113,7 +114,8 @@ class ServerDiagramList(APIView):
             for d in dashboards:
                 # 图表id，暂时没用
                 did = d.diagram_id
-                ret_iframes = ret_iframes + '<iframe src="http://localhost/grafana/d-solo/%s/dashboard-%s?&panelId=%s&theme=dark&from=%s&to=now" width="%s" height="%s" frameborder=0 ></iframe>' % (d.dashboard_uid, server_name, d.diagram_id, now, d.diagram.width, d.diagram.height)
+                ret_iframes = ret_iframes + '<iframe src="http://localhost/grafana/d-solo/%s/dashboard-%s?&panelId=%s&theme=dark&from=%s&to=now" width="%s" height="%s" frameborder=0 ></iframe>' % (
+                d.dashboard_uid, server_name, d.diagram_id, now, d.diagram.width, d.diagram.height)
         ret = {
             "code": constant.BACKEND_CODE_OK,
             "data": {
