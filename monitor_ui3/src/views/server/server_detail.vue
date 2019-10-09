@@ -138,7 +138,29 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="实时监控图表">
-        <div :key="shit_key + 1" v-html="all_diagrams"/>
+        <el-select
+          v-model="dateModel"
+          placeholder="请选择时间"
+          style="margin-bottom:10px;float: right"
+          @change="loadDiagram"
+        >
+          <el-option
+            v-for="item in form.dateList"
+            :key="item.id"
+            :label="item.name"
+            :aria-selected="true"
+            :value="item.id"
+          />
+        </el-select>
+        <!--如果不用这个技巧，就不能正常刷新-->
+        <div v-if="dateModel==1" :key="shit_key + 1" v-html="all_diagrams"/>
+        <div v-if="dateModel==2" :key="shit_key + 1" v-html="all_diagrams_h12"/>
+        <div v-if="dateModel==3" :key="shit_key + 1" v-html="all_diagrams_h24"/>
+        <div v-if="dateModel==4" :key="shit_key + 1" v-html="all_diagrams_d2"/>
+        <div v-if="dateModel==5" :key="shit_key + 1" v-html="all_diagrams_d7"/>
+        <div v-if="dateModel==6" :key="shit_key + 1" v-html="all_diagrams_d30"/>
+        <div v-if="dateModel==7" :key="shit_key + 1" v-html="all_diagrams_m6"/>
+        <div v-if="dateModel==8" :key="shit_key + 1" v-html="all_diagrams_y1"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -155,16 +177,78 @@ export default {
       form: {
         name: '',
         ip: '',
-        server_groups: null
+        server_groups: null,
+        dateList: [
+          { id: 1, name: '最近6小时' },
+          { id: 2, name: '最近12小时' },
+          { id: 3, name: '最近24小时' },
+          { id: 4, name: '最近2天' },
+          { id: 5, name: '最近7天' },
+          { id: 6, name: '最近30天' },
+          { id: 7, name: '最近半年' },
+          { id: 8, name: '最近1年' }
+        ]
       },
       all_diagrams: '',
-      shit_key: 0
+      all_diagrams_h12: '',
+      all_diagrams_h24: '',
+      all_diagrams_d2: '',
+      all_diagrams_d7: '',
+      all_diagrams_d30: '',
+      all_diagrams_m6: '',
+      all_diagrams_y1: '',
+      shit_key: 0,
+      dateModel: 2
     }
   },
   created() {
-    this.fetchData(this.$route.query.id)
+    this.fetchData()
   },
   methods: {
+    loadDiagram() {
+      switch(this.dateModel) {
+        case(1):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams = response.data.item
+          })
+          break
+        case(2):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_h12 = response.data.item
+          })
+          break
+        case(3):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_h24 = response.data.item
+          })
+          break
+        case(4):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_d2 = response.data.item
+          })
+          break
+        case(5):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_d7 = response.data.item
+          })
+          break
+        case(6):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_d30 = response.data.item
+          })
+          break
+        case(7):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_m6 = response.data.item
+          })
+          break
+        case(8):
+          server_diagram_list({ id: this.$route.query.id }).then(response => {
+            this.all_diagrams_y1 = response.data.item
+          })
+          break
+      }
+    },
     fetchData(id) {
       var server_groups = []
       server_group_list().then(response => {
@@ -182,9 +266,7 @@ export default {
         })
       })
       // 加载图表
-      server_diagram_list({ id: this.$route.query.id }).then(response => {
-        this.all_diagrams = response.data.item
-      })
+      this.loadDiagram()
     },
     genGrafana() {
       this.shit_key = this.shit_key + 1
