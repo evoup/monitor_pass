@@ -225,6 +225,7 @@ export default {
       all_diagrams_16: '',
       all_diagrams_17: '',
       shit_key: 0,
+      // 默认最近6小时
       dateModel: 6
     }
   },

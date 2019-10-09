@@ -4,10 +4,9 @@ import com.evoupsight.monitorpass.server.cache.FunctionCache;
 import com.evoupsight.monitorpass.server.cache.ItemCache;
 import com.evoupsight.monitorpass.server.cache.ServerCache;
 import com.evoupsight.monitorpass.server.cache.TriggerCache;
-import com.evoupsight.monitorpass.server.dao.mapper.EventMapper;
-import com.evoupsight.monitorpass.server.dao.mapper.RelationServerServerGroupMapper;
-import com.evoupsight.monitorpass.server.dao.mapper.RelationTemplateServerGroupMapper;
+import com.evoupsight.monitorpass.server.dao.mapper.*;
 import com.evoupsight.monitorpass.server.dao.model.*;
+import com.evoupsight.monitorpass.server.dto.OperationMessageDto;
 import com.evoupsight.monitorpass.server.dto.memcache.HostTemplateDto;
 import com.evoupsight.monitorpass.server.dto.memcache.TriggerDto;
 import com.evoupsight.monitorpass.server.dto.opentsdb.QueryDto;
@@ -97,6 +96,10 @@ public class ScanService {
     private RelationTemplateServerGroupMapper relationTemplateServerGroupMapper;
     @Autowired
     private EventMapper eventMapper;
+    @Autowired
+    private FunctionMapper functionMapper;
+    @Autowired
+    private ServerMapper serverMapper;
 
     /**
      * 执行所有工作
@@ -197,6 +200,34 @@ public class ScanService {
         }
     }
 
+
+    /**
+     * 获取trigger的详情,主机是什么，对应的事件描述
+     *
+     * @param trigger
+     */
+    private OperationMessageDto getTriggerDetail(Trigger trigger) {
+//        function = Function.objects.filter(id=obj.target_id).get()
+        FunctionExample functionExample = new FunctionExample();
+        functionExample.createCriteria().andIdEqualTo(trigger.getId());
+        List<Function> functions = functionMapper.selectByExample(functionExample);
+        if (CollectionUtils.isNotEmpty(functions)) {
+            Function function = functions.get(0);
+//            host_id = function.item.host_id
+            // 找函数对应的监控项的主机
+            if (function != null && function.getId() != null) {
+                Item item = itemCache.get(function.getItemId());
+                if (item != null && item.getHostId() != null) {
+                    Server server = serverMapper.selectByPrimaryKey(item.getHostId());
+                    if (server != null) {
+                        return OperationMessageDto.builder().serverName(server.getName()).itemName(item.getName()).build();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * 进行操作，发送消息，执行命令
      */
@@ -207,17 +238,19 @@ public class ScanService {
         String key = String.format(KEY_PREFIX_OPERATION, trigger.getId());
         try (Jedis resource = jedisPool.getResource()) {
             String value = resource.get(key);
-            Integer interval = 3600;
+            int interval = 3600;
             if (StringUtils.isEmpty(value)) {
                 value = String.format("1|%s", System.currentTimeMillis() / 1000 + interval);
                 resource.set(key, value);
                 // 触发操作
                 LOG.warn("触发操作:" + server.getName());
+                OperationMessageDto triggerDetail = getTriggerDetail(trigger);
+                LOG.warn(new Gson().toJson(triggerDetail));
                 celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
             } else {
                 String[] split = value.split("\\|");
                 if (split.length == 2) {
-                    Integer turn = Integer.valueOf(split[0]);
+                    int turn = Integer.parseInt(split[0]);
                     // 不让数值过大
                     if (turn > 9999) {
                         turn = 9999;
@@ -229,6 +262,8 @@ public class ScanService {
                         resource.set(key, value);
                         // 触发操作
                         LOG.warn("触发操作:" + server.getName());
+                        OperationMessageDto triggerDetail = getTriggerDetail(trigger);
+                        LOG.warn(new Gson().toJson(triggerDetail));
                         celeryClient.submit("tasks.send_wechat_message", new Object[]{server.getName()});
                     }
                 }
