@@ -1,15 +1,19 @@
-监控代理2.0 golang
+监控代理2.0
 =======
 
 监控代理2.0说明README.md文档
-本项目给予opentsdb客户端tcollector改写而成
+本项目基于opentsdb客户端tcollector改写成go版本而成
 
 ### 安装依赖
 ```bash
 sudo apt install sysstat
 ```
 
+如果需要收集资产，需要在对应服务器中sudoers编辑加入下方内容，并且对monitor账号做ssh信任
 
+monitor ALL = (ALL) NOPASSWD:/usr/sbin/dmidecode
+
+并且需要安装好MegaCli, TODO ubuntu需要想一想怎么安装
 
 ### 编译环境准备
 
