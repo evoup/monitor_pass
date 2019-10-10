@@ -154,8 +154,10 @@ public class ScanService {
                                     Pattern p = Pattern.compile("\\{([^}]*)\\}");
                                     Matcher m = p.matcher(expression);
                                     StringBuffer sb = new StringBuffer();
+                                    String tsdbValue = "";
                                     while (m.find()) {
-                                        m.appendReplacement(sb, getOpentsdbValue(m.group(1), s));
+                                        tsdbValue = getOpentsdbValue(m.group(1), s);
+                                        m.appendReplacement(sb, tsdbValue);
                                     }
                                     m.appendTail(sb);
                                     LOG.info("key是：" + trigger.getExpression());
@@ -165,7 +167,7 @@ public class ScanService {
                                         // 问题事件生成
                                         generateProblemEvent(trigger);
                                         // 进行操作
-                                        doOperation(trigger, s);
+                                        doOperation(trigger, s, tsdbValue);
                                         LOG.info("事件逻辑结束");
                                     }
                                 }
@@ -231,7 +233,7 @@ public class ScanService {
     /**
      * 进行操作，发送消息，执行命令
      */
-    private void doOperation(Trigger trigger, Server server) {
+    private void doOperation(Trigger trigger, Server server, String itemValue) {
         // 从redis中查询处理操作
         // 轮次的确定：如果没有数据，插入就是第一轮， key为triggerId,value为轮次和剩余的时间（格式为1|now+3600），并且触发操作
         //           如果有数据，取出value，判断本轮次是否已经结束，如果结束就加轮次，并且触发操作
@@ -247,7 +249,7 @@ public class ScanService {
                 OperationMessageDto triggerDetail = getTriggerDetail(trigger);
                 LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
                 if (triggerDetail != null) {
-                    celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName()});
+                    celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName(), itemValue});
                 }
             } else {
                 String[] split = value.split("\\|");
@@ -267,7 +269,7 @@ public class ScanService {
                         OperationMessageDto triggerDetail = getTriggerDetail(trigger);
                         LOG.warn("triggerDetail" + new Gson().toJson(triggerDetail));
                         if (triggerDetail != null) {
-                        celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName()});
+                            celeryClient.submit("tasks.send_wechat_message", new Object[]{triggerDetail.getServerName(), triggerDetail.getItemName(), itemValue});
                         }
                     }
                 }
