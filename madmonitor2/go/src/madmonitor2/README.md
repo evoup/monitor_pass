@@ -57,6 +57,10 @@ UserScripts的配置，UserScripts是用户脚本，格式为<key>:<command>，�
 
 **监控项配置文件的说明**：数据收集器通过扫描server表的字段configUpdated是否为0，判断是否要通过json rpc下发配置文件到客户端。客户端在完成和服务端的scram-sha1认证后，数据收集器将会设置configUpdated字段为0，当rpc更新返回成功后,configUdated字段将设置为1。
 
+开发代理的时候可以这样设置使得使用dmidecode无需sudo密码
+
+dev ALL = (ALL) ALL,NOPASSWD:/usr/sbin/dmidecode
+
 * * *
 *Developed by evoup(evoex123@gmail.com)*
 

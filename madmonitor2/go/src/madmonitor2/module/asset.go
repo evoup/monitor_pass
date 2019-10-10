@@ -37,8 +37,6 @@ func ScheduleGrabAndPostAssetData() {
             } else if key == "model name" && cpuModelName == "" {
                 cpuModelName = kv[1]
             }
-            fmt.Println(key)
-            fmt.Println(line)
         }
 
         // 采集内存
