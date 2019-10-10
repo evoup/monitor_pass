@@ -184,6 +184,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      * @param msg
      * @return
      */
+    @Deprecated
     private boolean dispatchClientConfig(ChannelHandlerContext ctx, Object msg) {
         if (msg != null) {
             Matcher matcher = CLIENT_GET_CONF_MESSAGE.matcher(msg.toString());

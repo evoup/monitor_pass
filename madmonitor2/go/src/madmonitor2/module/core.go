@@ -192,7 +192,6 @@ func (service *Service) Manage(readChannel inc.ReaderChannel, reconnectChannel *
 	//cName, foundServer, serverConn := ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
 	ConnectToServer(true, ServerConnection, readChannel, reconnectChannel)
 	//go run_reconnect(ServerConnection, readChannel, reconnectChannel)
-	go runGetConfig(ServerConnection)
 	//auth(serverConn, cName, foundServer, readChannel, reconnectChannel)
 
 	go mainLoop()
