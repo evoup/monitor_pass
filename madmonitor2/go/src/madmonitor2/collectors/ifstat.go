@@ -35,8 +35,6 @@ func (p ifstatPlugin) Collect() {
 
 func ifstat() {
 	host, _ := inc.ConfObject.GetString("ServerName")
-	//host = s.Replace(host, ".", "", -1)
-	//host = s.Replace(host, "-", "", -1)
 	metricPrefix := "apps.backend." + host + "."
 	collectionInterval := IFSTAT_DEFAULT_COLLECTION_INTERVAL
 	f_netdev, err := os.Open("/proc/net/dev")

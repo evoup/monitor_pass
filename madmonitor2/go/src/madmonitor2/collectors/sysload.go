@@ -74,8 +74,6 @@ func (p sysloadPlugin) Collect() {
 
 func sysload() {
 	host, _ := inc.ConfObject.GetString("ServerName")
-	//host = s.Replace(host, ".", "", -1)
-	//host = s.Replace(host, "-", "", -1)
 	metricPrefix := "apps.backend." + host + "."
 	//convert_to_bytes("1234K");
 	collection_interval := SYSLOAD_DEFAULT_COLLECTION_INTERVAL

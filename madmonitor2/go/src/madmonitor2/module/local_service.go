@@ -44,10 +44,6 @@ func (this *MonitorItemsConfig) Update(configStr string, r *int) error {
         if err != nil {
             fmt.Println(err)
         }
-        //foo, found := inc.ConfigCache.Get("monitorItems")
-        //if found {
-        //    fmt.Println(foo)
-        //}
         *r = inc.RPC_SERVER_OK
     }
     return nil

@@ -39,8 +39,6 @@ func (p procstatsPlugin) Collect() {
 
 func procstats() {
     host, _ := inc.ConfObject.GetString("ServerName")
-    //host = s.Replace(host, ".", "", -1)
-    //host = s.Replace(host, "-", "", -1)
     metricPrefix := "apps.backend." + host + "."
     collectionInterval := PROCSTATS_DEFAULT_COLLECTION_INTERVAL
 
