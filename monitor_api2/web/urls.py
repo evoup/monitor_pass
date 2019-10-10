@@ -88,6 +88,8 @@ urlpatterns = [
         url(r'^asset/list$', asset_view.AssetList.as_view()),
         # 资产变更记录列表
         url(r'^asset_record/list$', asset_view.AssetRecordList.as_view()),
+        # 接收监控代理上传的资产信息(用数字签名认证)
+        url(r'^asset/agent_info$', asset_view.AssetAgentInfo.as_view()),
         # 图表列表
         url(r'^diagram/list$', diagram_view.DiagramList.as_view()),
         # 读取图表

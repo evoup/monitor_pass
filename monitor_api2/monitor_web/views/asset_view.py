@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from monitor_web.serializers import AssetSerializer, AssetRecordSerializer
 from web.common import constant
 from web.common.paging import paging_request
+from rest_framework.permissions import AllowAny
 
 
 @permission_classes((IsAuthenticated,))
@@ -58,3 +59,16 @@ class AssetRecordList(APIView):
         }
         return JsonResponse(ret, safe=False)
 
+
+@permission_classes((AllowAny,))
+class AssetAgentInfo(APIView):
+    """
+    接收来自监控代理提交的资产信息
+    """
+    def post(self, request, *args, **kwargs):
+        ret = {
+            "code": constant.BACKEND_CODE_OK
+        }
+        # TODO 数字签名认证
+        # TODO 接收上传的资产信息
+        return JsonResponse(ret, safe=False)
