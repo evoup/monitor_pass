@@ -8,10 +8,21 @@ import (
     "madmonitor2/utils"
     "bufio"
     "strings"
+    "os/exec"
+    "bytes"
 )
 
 func main() {
     ScheduleGrabAndPostAssetData()
+}
+func shellOut(command string) (error, string, string) {
+    var stdout bytes.Buffer
+    var stderr bytes.Buffer
+    cmd := exec.Command("sh", "-c", command)
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    return err, stdout.String(), stderr.String()
 }
 // 资产管理定时收集服务器信息的模块
 func ScheduleGrabAndPostAssetData() {
@@ -40,6 +51,12 @@ func ScheduleGrabAndPostAssetData() {
         }
 
         // 采集内存
+        var shell = "sudo dmidecode -q -t 17 2>/dev/null"
+        err, out, stderr := shellOut(shell)
+        fmt.Println(err)
+        fmt.Println(out)
+        fmt.Println(stderr)
+
 
         // 采集主板
 

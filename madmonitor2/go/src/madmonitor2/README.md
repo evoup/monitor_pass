@@ -11,7 +11,7 @@ sudo apt install sysstat
 
 如果需要收集资产，需要在对应服务器中sudoers编辑加入下方内容，并且对monitor账号做ssh信任
 
-monitor ALL = (ALL) NOPASSWD:/usr/sbin/dmidecode
+%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode
 
 并且需要安装好MegaCli, TODO ubuntu需要想一想怎么安装
 
@@ -59,7 +59,7 @@ UserScripts的配置，UserScripts是用户脚本，格式为<key>:<command>，�
 
 开发代理的时候可以这样设置使得使用dmidecode无需sudo密码
 
-dev ALL = (ALL) ALL,NOPASSWD:/usr/sbin/dmidecode
+%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode
 
 * * *
 *Developed by evoup(evoex123@gmail.com)*
