@@ -230,7 +230,7 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.fetchData(this.$route.query.id)
   },
   methods: {
     loadDiagram() {
