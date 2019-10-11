@@ -1,5 +1,5 @@
-//package module
-package main
+package module
+//package main
 
 import (
     "bufio"
@@ -114,6 +114,36 @@ func ScheduleGrabAndPostAssetData() {
 
 
         // 采集主板
+        shell = "sudo dmidecode -t1"
+        err, out, _ = shellOut(shell)
+        if err != nil {
+            fmt.Println(err)
+        }
+        manufacturer := ""
+        model := ""
+        sn := ""
+        splitItems := strings.Split(out, "\n")
+        for i := range splitItems {
+            if splitItems[i] == "" {
+                continue
+            }
+            splitItems[i] = strings.TrimLeft(splitItems[i], "\t")
+            kv := strings.Split(splitItems[i], ":")
+            if kv[0] == "Manufacturer" {
+                manufacturer = kv[1]
+                continue
+            }
+            if kv[0] == "Product Name" {
+                model = kv[1]
+                continue
+            }
+            if kv[0] == "Serial Number" {
+                sn = kv[1]
+                continue
+            }
+        }
+        mbJson := fmt.Sprintf(`{"manufacturer":"%v", "model":"%v", "sn"":"%v""}`, manufacturer, model, sn)
+        fmt.Println(mbJson)
 
         // 采集硬盘
 
