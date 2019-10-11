@@ -1,36 +1,18 @@
-package module
-//package main
+//package module
+package main
 
 import (
+    "bufio"
+    "bytes"
     "fmt"
     "github.com/carlescere/scheduler"
-    "os"
     "madmonitor2/utils"
-    "bufio"
-    "strings"
+    "os"
     "os/exec"
-    "bytes"
+    "strings"
 )
 
-//type CpuAsset struct {
-//    CpuCount string
-//    CpuPhysical string
-//    CpuModelName string
-//}
-//
-//type MemAsset struct {
-//    Capicity string
-//    Slot string
-//    Model string
-//    Speed string
-//    Manufacturer string
-//    Sn string
-//}
 
-//type RequestBody struct {
-//    MemAsset MemAsset
-//    CpuAsset []CpuAsset
-//}
 
 
 func main() {
@@ -70,15 +52,12 @@ func ScheduleGrabAndPostAssetData() {
                 cpuModelName = kv[1]
             }
         }
-        //fmt.Printf("cpu_count:%v cpu_physical:%v cpu_model_name:%v \n", cpuCount, cpuPhysicalCount, cpuModelName)
         jsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
         fmt.Printf(jsonStr)
 
         // 采集内存
         var shell = "sudo dmidecode -q -t 17 2>/dev/null"
         err, out, _ := shellOut(shell)
-        //fmt.Println(err)
-        //fmt.Println(out)
         // 根据Memory Device分成两段
         var memArr []string
         arr := strings.Split(out, "Memory Device")
@@ -98,9 +77,7 @@ func ScheduleGrabAndPostAssetData() {
                 if splitItems[j] == "" {
                     continue
                 }
-                //fmt.Printf("%v\n", splitItems[j])
                 kv := strings.Split(splitItems[j], ":")
-                //fmt.Printf("k:%v v:%v\n", kv[0], kv[1])
                 if kv[0] == "Size" {
                     capicity = strings.Trim(kv[1], " ")
                     continue
@@ -127,7 +104,6 @@ func ScheduleGrabAndPostAssetData() {
                 }
             }
             memItemJson := fmt.Sprintf(`{"capicity":"%v", "slot":"%v", "model":"%v", "speed":"%v", "manufacturer":"%v", "sn":"%v"}`, capicity, slot, model, speed, manufacturer, sn)
-            //fmt.Printf(memItemJson)
             memArr = append(memArr, memItemJson)
         }
         if err != nil {
