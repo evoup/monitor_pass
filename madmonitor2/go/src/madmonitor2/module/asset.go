@@ -12,25 +12,25 @@ import (
     "bytes"
 )
 
-type CpuAsset struct {
-    CpuCount string
-    CpuPhysical string
-    CpuModelName string
-}
+//type CpuAsset struct {
+//    CpuCount string
+//    CpuPhysical string
+//    CpuModelName string
+//}
+//
+//type MemAsset struct {
+//    Capicity string
+//    Slot string
+//    Model string
+//    Speed string
+//    Manufacturer string
+//    Sn string
+//}
 
-type MemAsset struct {
-    Capicity string
-    Slot string
-    Model string
-    Speed string
-    Manufacturer string
-    Sn string
-}
-
-type RequestBody struct {
-    MemAsset MemAsset
-    CpuAsset []CpuAsset
-}
+//type RequestBody struct {
+//    MemAsset MemAsset
+//    CpuAsset []CpuAsset
+//}
 
 
 func main() {
@@ -70,6 +70,9 @@ func ScheduleGrabAndPostAssetData() {
                 cpuModelName = kv[1]
             }
         }
+        //fmt.Printf("cpu_count:%v cpu_physical:%v cpu_model_name:%v \n", cpuCount, cpuPhysicalCount, cpuModelName)
+        jsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
+        fmt.Printf(jsonStr)
 
         // 采集内存
         var shell = "sudo dmidecode -q -t 17 2>/dev/null"
@@ -77,6 +80,7 @@ func ScheduleGrabAndPostAssetData() {
         //fmt.Println(err)
         //fmt.Println(out)
         // 根据Memory Device分成两段
+        var memArr []string
         arr := strings.Split(out, "Memory Device")
         for i := range arr {
             if arr[i] == "" {
@@ -96,7 +100,7 @@ func ScheduleGrabAndPostAssetData() {
                 }
                 //fmt.Printf("%v\n", splitItems[j])
                 kv := strings.Split(splitItems[j], ":")
-                fmt.Printf("k:%v v:%v\n", kv[0], kv[1])
+                //fmt.Printf("k:%v v:%v\n", kv[0], kv[1])
                 if kv[0] == "Size" {
                     capicity = strings.Trim(kv[1], " ")
                     continue
@@ -123,9 +127,15 @@ func ScheduleGrabAndPostAssetData() {
                 }
             }
             memItemJson := fmt.Sprintf(`{"capicity":"%v", "slot":"%v", "model":"%v", "speed":"%v", "manufacturer":"%v", "sn":"%v"}`, capicity, slot, model, speed, manufacturer, sn)
-            fmt.Printf(memItemJson)
-
+            //fmt.Printf(memItemJson)
+            memArr = append(memArr, memItemJson)
         }
+        if err != nil {
+            fmt.Print(err)
+        }
+        memJsonStr := fmt.Sprintf("[%s]", strings.Join(memArr,","))
+        fmt.Printf(memJsonStr)
+
 
         // 采集主板
 
@@ -133,9 +143,7 @@ func ScheduleGrabAndPostAssetData() {
 
         // 采集网络接口
 
-        fmt.Printf("cpu_count:%v cpu_physical:%v cpu_model_name:%v \n", cpuCount, cpuPhysicalCount, cpuModelName)
-        jsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
-        fmt.Printf(jsonStr)
+
 
     }
     job()
