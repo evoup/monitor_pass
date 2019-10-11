@@ -147,6 +147,39 @@ func ScheduleGrabAndPostAssetData() {
 
         // 采集硬盘
 
+        //# -*- coding:utf-8 -*-
+        //import subprocess
+        //
+        //
+        //def get_disk_info():
+        //"""
+        //获取存储信息。
+        //本脚本只针对ubuntu中使用sda，且只有一块硬盘的情况。
+        //具体查看硬盘信息的命令，请根据实际情况，实际调整。
+        //如果需要查看Raid信息，可以尝试MegaCli工具。
+        //:return:
+        //"""
+        //raw_data = subprocess.Popen("sudo hdparm -i /dev/sda | grep Model", stdout=subprocess.PIPE, shell=True)
+        //raw_data = raw_data.stdout.read().decode()
+        //data_list = raw_data.split(",")
+        //model = data_list[0].split("=")[1]
+        //sn = data_list[2].split("=")[1].strip()
+        //
+        //size_data = subprocess.Popen("sudo fdisk -l /dev/sda | grep Disk|head -1", stdout=subprocess.PIPE, shell=True)
+        //size_data = size_data.stdout.read().decode()
+        //size = size_data.split(":")[1].strip().split(" ")[0]
+        //
+        //result = {'physical_disk_driver': []}
+        //disk_dict = dict()
+        //disk_dict["model"] = model
+        //disk_dict["size"] = size
+        //disk_dict["sn"] = sn
+        //result['physical_disk_driver'].append(disk_dict)
+        //
+        //return result
+        //
+        //get_disk_info()
+
         // 采集网络接口
 
 
