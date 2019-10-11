@@ -179,6 +179,9 @@ func ScheduleGrabAndPostAssetData() {
         //return result
         //
         //get_disk_info()
+        //diskJson := `{"model": "VBOX HARDDISK","size": "50","sn": "VBeee1ba73-09085302"}`
+        diskJson := `[{"model": "KINGSTON SA400S37120G","size": "111.8","sn": "50026B777903D7A7"}]`
+        fmt.Println(diskJson)
 
         // 采集网络接口
 
