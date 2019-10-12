@@ -203,6 +203,24 @@ func ScheduleGrabAndPostAssetData() {
         }
         splitItems = strings.Split(out, "\n")
         fmt.Println(splitItems)
+        nextIpLine := false
+        lastMacAddr := ""
+        for i := range splitItems {
+            line := splitItems[i]
+            if nextIpLine {
+                nextIpLine = false
+                nicName := strings.Split(lastMacAddr, " ")[0]
+                // 不好docker网络接口和虚拟网卡
+                if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
+                    continue
+                }
+                fmt.Println(nicName)
+            }
+            if strings.Contains(line, "HWaddr") {
+                nextIpLine = true
+                lastMacAddr = line
+            }
+        }
 
 
     }
