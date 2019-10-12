@@ -147,6 +147,41 @@ func ScheduleGrabAndPostAssetData() {
 
         // 采集硬盘
 
+        //获取存储信息。
+        //本脚本只针对ubuntu中使用sda，且只有一块硬盘的情况。
+        //具体查看硬盘信息的命令，请根据实际情况，实际调整。
+        //如果需要查看Raid信息，可以尝试MegaCli工具。
+        shell = "sudo hdparm -i /dev/sda | grep Model"
+        err, out, _ = shellOut(shell)
+        if err != nil {
+            fmt.Print(err)
+        }
+        splitItems = strings.Split(out, "\n")
+        model = ""
+        sn = ""
+        for i := range splitItems {
+            line := splitItems[i]
+            if line == "" {
+                continue
+            }
+            lineItems := strings.Split(line, ",")
+            for j := range lineItems {
+                fmt.Println(lineItems[j])
+                if lineItems[j] == "" {
+                    continue
+                }
+                kv := strings.Split(lineItems[j], "=")
+                if strings.Trim(kv[0], " ") == "Model" {
+                    model = kv[1]
+                    continue
+                }
+                if strings.Trim(kv[0], " ") == "SerialNo" {
+                    sn = kv[1]
+                    continue
+                }
+            }
+        }
+
         //# -*- coding:utf-8 -*-
         //import subprocess
         //
