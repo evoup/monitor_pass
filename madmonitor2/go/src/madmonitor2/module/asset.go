@@ -54,8 +54,7 @@ func ScheduleGrabAndPostAssetData() {
                 cpuModelName = kv[1]
             }
         }
-        jsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
-        fmt.Printf(jsonStr)
+        cpuJsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
 
         // 采集内存
         var shell = "sudo dmidecode -q -t 17 2>/dev/null"
@@ -112,7 +111,6 @@ func ScheduleGrabAndPostAssetData() {
             fmt.Print(err)
         }
         memJsonStr := fmt.Sprintf("[%s]", strings.Join(memArr,","))
-        fmt.Printf(memJsonStr)
 
 
         // 采集主板
@@ -132,20 +130,19 @@ func ScheduleGrabAndPostAssetData() {
             splitItems[i] = strings.TrimLeft(splitItems[i], "\t")
             kv := strings.Split(splitItems[i], ":")
             if kv[0] == "Manufacturer" {
-                manufacturer = kv[1]
+                manufacturer = strings.Trim(kv[1], " ")
                 continue
             }
             if kv[0] == "Product Name" {
-                model = kv[1]
+                model = strings.Trim(kv[1], " ")
                 continue
             }
             if kv[0] == "Serial Number" {
-                sn = kv[1]
+                sn = strings.Trim(kv[1], " ")
                 continue
             }
         }
-        mbJson := fmt.Sprintf(`{"manufacturer":"%v", "model":"%v", "sn"":"%v""}`, manufacturer, model, sn)
-        fmt.Println(mbJson)
+        mbJsonStr := fmt.Sprintf(`{"manufacturer":"%v", "model":"%v", "sn":"%v"}`, manufacturer, model, sn)
 
         // 采集硬盘
 
@@ -182,7 +179,8 @@ func ScheduleGrabAndPostAssetData() {
                 }
             }
         }
-        size := ""
+        diskJsonStr := "[]"
+        var size string
         shell = "sudo fdisk -l /dev/sda | grep Disk|head -1"
         err, out, _ = shellOut(shell)
         if err != nil {
@@ -191,8 +189,7 @@ func ScheduleGrabAndPostAssetData() {
         items := strings.Split(out, " ")
         if len(items) > 1 {
             size = items[2]
-            diskJson := fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
-            fmt.Println(diskJson)
+            diskJsonStr = fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
         }
 
         // 采集网络接口
@@ -202,9 +199,9 @@ func ScheduleGrabAndPostAssetData() {
             fmt.Print(err)
         }
         splitItems = strings.Split(out, "\n")
-        fmt.Println(splitItems)
         nextIpLine := false
-        lastMacAddr := ""
+        var lastMacAddr string
+        var nicArr []string
         for i := range splitItems {
             line := splitItems[i]
             if nextIpLine {
@@ -214,15 +211,31 @@ func ScheduleGrabAndPostAssetData() {
                 if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
                     continue
                 }
-                fmt.Println(nicName)
+                macAddr := strings.Trim(strings.Split(lastMacAddr, "HWaddr")[1], " ")
+                rawIpAddr := strings.Split(line, "inet addr:")
+                rawBcast := strings.Split(line, "Bcast:")
+                rawMask := strings.Split(line, "Mask:")
+
+                var ipAddr string
+                var network string
+                var netmask string
+                // fixme 这里没有ip，就算没有网卡？
+                if len(rawIpAddr) > 1 {
+                    ipAddr = strings.Split(rawIpAddr[1], " ")[0]
+                    network = strings.Split(rawBcast[1], " ")[0]
+                    netmask = strings.Split(rawMask[1], " ")[0]
+                    jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v"}`, nicName, macAddr, ipAddr, network, netmask)
+                    nicArr = append(nicArr, jsonStr)
+                }
             }
             if strings.Contains(line, "HWaddr") {
                 nextIpLine = true
                 lastMacAddr = line
             }
         }
-
-
+        nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
+        lastJsonStr := fmt.Sprintf(`{"cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
+        fmt.Println(lastJsonStr)
     }
     job()
     _, err := scheduler.Every(20).Minutes().Run(job)
