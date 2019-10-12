@@ -189,12 +189,20 @@ func ScheduleGrabAndPostAssetData() {
             fmt.Println(err)
         }
         items := strings.Split(out, " ")
-        size = items[2]
-        diskJson := fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
-        fmt.Println(diskJson)
+        if len(items) > 1 {
+            size = items[2]
+            diskJson := fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
+            fmt.Println(diskJson)
+        }
 
         // 采集网络接口
-
+        shell = "LANG=en_us_8859_1 && ifconfig -a"
+        err, out, _ = shellOut(shell)
+        if err != nil {
+            fmt.Print(err)
+        }
+        splitItems = strings.Split(out, "\n")
+        fmt.Println(splitItems)
 
 
     }
