@@ -10,8 +10,9 @@ sudo apt install sysstat
 ```
 
 如果需要收集资产，需要在对应服务器中sudoers编辑加入下方内容
+Cmnd_Alias FDISK_CMD=/sbin/fdisk -l *
 
-%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode,/sbin/hdparm
+%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode,/sbin/hdparm,FDISK_CMD
 
 add also add a account called monitor for run monitor client
 
