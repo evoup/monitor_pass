@@ -9,9 +9,15 @@
 sudo apt install sysstat
 ```
 
-如果需要收集资产，需要在对应服务器中sudoers编辑加入下方内容，并且对monitor账号做ssh信任
+如果需要收集资产，需要在对应服务器中sudoers编辑加入下方内容
 
-%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode
+%sudo   ALL=(ALL:ALL) NOPASSWD:/usr/sbin/dmidecode,/sbin/hdparm
+
+add also add a account called monitor for run monitor client
+
+```bash
+sudo usermod -G sudo monitor
+```
 
 并且需要安装好MegaCli, TODO ubuntu需要想一想怎么安装
 
