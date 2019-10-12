@@ -30,6 +30,8 @@ func shellOut(command string) (error, string, string) {
 // 资产管理定时收集服务器信息的模块
 func ScheduleGrabAndPostAssetData() {
     job := func() {
+        //{"cpu_count":"6","cpu_physical": "6", "cpu_model_name": " Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz"}[{"capicity":"16384 MB", "slot":"ChannelA-DIMM1", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EA2C9791"},{"capicity":"16384 MB", "slot":"ChannelA-DIMM2", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EB2C5992"},{"capicity":"No Module Installed", "slot":"ChannelB-DIMM1", "model":"Unknown", "speed":"Unknown", "manufacturer":"Not Specified", "sn":"Not Specified"},{"capicity":"16384 MB", "slot":"ChannelB-DIMM2", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EE2CA492"}]{"manufacturer":" System manufacturer", "model":" System Product Name", "sn"":" System Serial Number""}
+        //[{"model": "WDC WD10EZEX-08WN4A0","size": "931.5","sn": "WD-WCC6Y1DN06AY"}]
         // 采集CPU
         f, err := os.Open("/proc/cpuinfo")
         if err != nil {
@@ -166,7 +168,6 @@ func ScheduleGrabAndPostAssetData() {
             }
             lineItems := strings.Split(line, ",")
             for j := range lineItems {
-                fmt.Println(lineItems[j])
                 if lineItems[j] == "" {
                     continue
                 }
@@ -181,41 +182,15 @@ func ScheduleGrabAndPostAssetData() {
                 }
             }
         }
-
-        //# -*- coding:utf-8 -*-
-        //import subprocess
-        //
-        //
-        //def get_disk_info():
-        //"""
-        //获取存储信息。
-        //本脚本只针对ubuntu中使用sda，且只有一块硬盘的情况。
-        //具体查看硬盘信息的命令，请根据实际情况，实际调整。
-        //如果需要查看Raid信息，可以尝试MegaCli工具。
-        //:return:
-        //"""
-        //raw_data = subprocess.Popen("sudo hdparm -i /dev/sda | grep Model", stdout=subprocess.PIPE, shell=True)
-        //raw_data = raw_data.stdout.read().decode()
-        //data_list = raw_data.split(",")
-        //model = data_list[0].split("=")[1]
-        //sn = data_list[2].split("=")[1].strip()
-        //
-        //size_data = subprocess.Popen("sudo fdisk -l /dev/sda | grep Disk|head -1", stdout=subprocess.PIPE, shell=True)
-        //size_data = size_data.stdout.read().decode()
-        //size = size_data.split(":")[1].strip().split(" ")[0]
-        //
-        //result = {'physical_disk_driver': []}
-        //disk_dict = dict()
-        //disk_dict["model"] = model
-        //disk_dict["size"] = size
-        //disk_dict["sn"] = sn
-        //result['physical_disk_driver'].append(disk_dict)
-        //
-        //return result
-        //
-        //get_disk_info()
-        //diskJson := `{"model": "VBOX HARDDISK","size": "50","sn": "VBeee1ba73-09085302"}`
-        diskJson := `[{"model": "KINGSTON SA400S37120G","size": "111.8","sn": "50026B777903D7A7"}]`
+        size := ""
+        shell = "sudo fdisk -l /dev/sda | grep Disk|head -1"
+        err, out, _ = shellOut(shell)
+        if err != nil {
+            fmt.Println(err)
+        }
+        items := strings.Split(out, " ")
+        size = items[2]
+        diskJson := fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
         fmt.Println(diskJson)
 
         // 采集网络接口
