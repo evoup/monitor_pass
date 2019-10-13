@@ -203,6 +203,7 @@ func ScheduleGrabAndPostAssetData() {
         }
         diskJsonStr := "[]"
         var size string
+        // todo 需要换成hdpram才能获取到序列号以及磁盘是SATA还是SAS，并且对于raid要用MegaCli
         shell = "sudo fdisk -l /dev/sda | grep Disk|head -1"
         err, out, _ = shellOut(shell)
         if err != nil {
@@ -211,7 +212,7 @@ func ScheduleGrabAndPostAssetData() {
         items := strings.Split(out, " ")
         if len(items) > 1 {
             size = items[2]
-            diskJsonStr = fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v"}]`, model, size, sn)
+            diskJsonStr = fmt.Sprintf(`[{"model": "%s","size": "%s","sn": "%v", "type": "SATA"}]`, model, size, "")
         }
 
         // 采集网络接口
