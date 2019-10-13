@@ -46,6 +46,7 @@ const (
 	MAX_CONNQ_SIZE = 1
 	RPC_SERVER_OK = 20000
 	RPC_SERVER_FAIL = 40000
+	POSITIVE_SEND_ASSET_API_URL = "http://monitor-web/mmsapi2.0/asset/agent_info"
 )
 
 type DefaultConf struct {
@@ -57,6 +58,7 @@ type DefaultConf struct {
 	EvictInterval string
 	DedupInterval string
     UserScripts   []string
+    AssetApiUrl string
 }
 
 type Conf DefaultConf

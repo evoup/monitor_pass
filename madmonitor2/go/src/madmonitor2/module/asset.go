@@ -13,6 +13,7 @@ import (
     "net/http"
     "io/ioutil"
     "time"
+    "madmonitor2/inc"
 )
 
 
@@ -239,7 +240,8 @@ func ScheduleGrabAndPostAssetData() {
         nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
         lastJsonStr := fmt.Sprintf(`{"cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
         fmt.Println(lastJsonStr)
-        jsonPost("http://www.baiduxx.com", []byte(lastJsonStr))
+        api, _ := inc.ConfObject.GetString("AssetApiUrl")
+        jsonPost(api, []byte(lastJsonStr))
     }
     job()
     _, err := scheduler.Every(20).Minutes().Run(job)
