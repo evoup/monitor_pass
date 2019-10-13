@@ -122,9 +122,17 @@ class AssetAgentInfo(APIView):
                                                                           os_version=request.data['base']['osv'])
                         pass
                     if _key == "disk":
-                        pass
+                        for disk in request.data[_key]:
+                            # todo add sn
+                            (object, created) = models.Disk.objects.get_or_create(model=disk['model'],
+                                                                                  capacity=disk['size'],
+                                                                                  pd_type=disk['type'],
+                                                                                  server_obj=server)
                     if _key == "nic":
-                        pass
+                        for nic in request.data[_key]:
+                            models.NIC.objects.get_or_create(name=nic['nic_name'], hwaddr=nic['mac_addr'],
+                                                             netmask=nic['netmask'], ipaddrs=nic['netmask'], up=True,
+                                                             server_obj=server)
         except:
             print(traceback.format_exc())
         return JsonResponse(ret, safe=False)
