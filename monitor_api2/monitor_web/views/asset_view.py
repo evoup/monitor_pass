@@ -79,12 +79,37 @@ class AssetAgentInfo(APIView):
             if records.count() == 1:
                 server = records.get()
                 for _key in request.data:
+                    # cpu
                     if _key == "cpu":
+                        # TODO 取出原先的cpu对比
                         models.Server.objects.filter(id=server.id).update(cpu_count=request.data['cpu']['cpu_count'],
-                                                                          cpu_physical_count=request.data['cpu']['cpu_physical'], cpu_model=request.data['cpu']['cpu_model_name'])
-                        pass
+                                                                          cpu_physical_count=request.data['cpu'][
+                                                                              'cpu_physical'],
+                                                                          cpu_model=request.data['cpu'][
+                                                                              'cpu_model_name'])
+                    # 内存
                     if _key == "mem":
-                        pass
+                        querySet = models.Memory.objects.filter(server_obj=server)
+                        if querySet.count() == 0:
+                            for memory in request.data[_key]:
+                                # TODO 取出原先的内存对比
+                                # "mem": [{
+                                #     "capacity": "8192 MB",
+                                #     "slot": "DIMM_A",
+                                #     "model": "DDR3",
+                                #     "speed": "1600 MHz",
+                                #     "manufacturer": "Kingston",
+                                #     "sn": "1F051A17"
+                                # }],
+                                (object, created) = models.Memory.objects.get_or_create(slot=memory['slot'],
+                                                                                        manufacturer=memory[
+                                                                                            'manufacturer'],
+                                                                                        model=memory['model'],
+                                                                                        capacity=convert_to_gb(
+                                                                                            memory['capacity']),
+                                                                                        sn=memory['sn'],
+                                                                                        speed=memory['speed'],
+                                                                                        server_obj=server)
                     if _key == "main_board":
                         pass
                     if _key == "disk":
@@ -94,3 +119,8 @@ class AssetAgentInfo(APIView):
         except:
             print(traceback.format_exc())
         return JsonResponse(ret, safe=False)
+
+
+def convert_to_gb(size_mb):
+    arr = str(size_mb).split("MB")
+    return int(str(arr[0]).strip()) / 1024

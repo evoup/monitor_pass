@@ -72,7 +72,7 @@ func ScheduleGrabAndPostAssetData() {
             }
             line := arr[i]
             splitItems := strings.Split(line, "\n\t")
-            capicity := ""
+            capacity := ""
             slot := ""
             model := ""
             speed := ""
@@ -84,7 +84,7 @@ func ScheduleGrabAndPostAssetData() {
                 }
                 kv := strings.Split(splitItems[j], ":")
                 if kv[0] == "Size" {
-                    capicity = strings.Trim(kv[1], " ")
+                    capacity = strings.Trim(kv[1], " ")
                     continue
                 }
                 if kv[0] == "Locator" {
@@ -108,7 +108,7 @@ func ScheduleGrabAndPostAssetData() {
                     continue
                 }
             }
-            memItemJson := fmt.Sprintf(`{"capicity":"%v", "slot":"%v", "model":"%v", "speed":"%v", "manufacturer":"%v", "sn":"%v"}`, capicity, slot, model, speed, manufacturer, sn)
+            memItemJson := fmt.Sprintf(`{"capacity":"%v", "slot":"%v", "model":"%v", "speed":"%v", "manufacturer":"%v", "sn":"%v"}`, capacity, slot, model, speed, manufacturer, sn)
             memArr = append(memArr, memItemJson)
         }
         if err != nil {
@@ -238,7 +238,9 @@ func ScheduleGrabAndPostAssetData() {
             }
         }
         nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
-        lastJsonStr := fmt.Sprintf(`{"cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
+        host, _ := inc.ConfObject.GetString("ServerName")
+        lastJsonStr := fmt.Sprintf(`{"host":"%v", "cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, host,
+            cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
         fmt.Println(lastJsonStr)
         api, _ := inc.ConfObject.GetString("AssetApiUrl")
         jsonPost(api, []byte(lastJsonStr))
