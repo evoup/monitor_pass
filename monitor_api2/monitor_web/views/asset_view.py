@@ -112,6 +112,14 @@ class AssetAgentInfo(APIView):
                                                                                         server_obj=server)
                                 # todo 新增也要写asset record
                     if _key == "main_board":
+                        # todo 取出原先的主板对比
+                        models.Server.objects.filter(id=server.id).update(sn=request.data['main_board']['sn'],
+                                                                          manufacturer=request.data['main_board'][
+                                                                              'manufacturer'],
+                                                                          model=request.data['main_board'][
+                                                                              'manufacturer'],
+                                                                          os_platform=request.data['base']['os'],
+                                                                          os_version=request.data['base']['osv'])
                         pass
                     if _key == "disk":
                         pass
