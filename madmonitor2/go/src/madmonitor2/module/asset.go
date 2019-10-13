@@ -36,6 +36,24 @@ func ScheduleGrabAndPostAssetData() {
     job := func() {
         //{"cpu_count":"6","cpu_physical": "6", "cpu_model_name": " Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz"}[{"capicity":"16384 MB", "slot":"ChannelA-DIMM1", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EA2C9791"},{"capicity":"16384 MB", "slot":"ChannelA-DIMM2", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EB2C5992"},{"capicity":"No Module Installed", "slot":"ChannelB-DIMM1", "model":"Unknown", "speed":"Unknown", "manufacturer":"Not Specified", "sn":"Not Specified"},{"capicity":"16384 MB", "slot":"ChannelB-DIMM2", "model":"DDR4", "speed":"2666 MT/s", "manufacturer":"Kingston", "sn":"EE2CA492"}]{"manufacturer":" System manufacturer", "model":" System Product Name", "sn"":" System Serial Number""}
         //[{"model": "WDC WD10EZEX-08WN4A0","size": "931.5","sn": "WD-WCC6Y1DN06AY"}]
+        // 采集基本信息
+        shell := "cat /etc/issue"
+        err, out, _ := shellOut(shell)
+        if err != nil {
+            fmt.Println(err)
+        }
+        osAndVersion := strings.Trim(strings.Split(strings.Split(out, "\n")[0], "\\n")[0], " ")
+        osv := strings.Split(osAndVersion, " ")
+        var osVersion string
+        //noinspection GoSnakeCaseUsage
+        _os := osv[0]
+        for i := range osv {
+            if i == 0 {
+                continue
+            }
+            osVersion = osVersion + osv[i]
+        }
+        baseJsonStr := fmt.Sprintf(`{"os": "%v", "osv": "%v"}`, _os, osVersion)
         // 采集CPU
         f, err := os.Open("/proc/cpuinfo")
         if err != nil {
@@ -61,8 +79,8 @@ func ScheduleGrabAndPostAssetData() {
         cpuJsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
 
         // 采集内存
-        var shell = "sudo dmidecode -q -t 17 2>/dev/null"
-        err, out, _ := shellOut(shell)
+        shell = "sudo dmidecode -q -t 17 2>/dev/null"
+        err, out, _ = shellOut(shell)
         // 根据Memory Device分成两段
         var memArr []string
         arr := strings.Split(out, "Memory Device")
@@ -239,8 +257,8 @@ func ScheduleGrabAndPostAssetData() {
         }
         nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
         host, _ := inc.ConfObject.GetString("ServerName")
-        lastJsonStr := fmt.Sprintf(`{"host":"%v", "cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, host,
-            cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
+        lastJsonStr := fmt.Sprintf(`{"host":"%v", "base":%v, "cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`,
+            host, baseJsonStr, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
         fmt.Println(lastJsonStr)
         api, _ := inc.ConfObject.GetString("AssetApiUrl")
         jsonPost(api, []byte(lastJsonStr))
