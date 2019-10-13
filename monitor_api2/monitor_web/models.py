@@ -79,8 +79,11 @@ class Server(models.Model):
     asset = models.OneToOneField('Asset', on_delete=models.CASCADE, null=True, blank=True)
 
     hostname = models.CharField(max_length=128, unique=True, null=True)
+    # 主板sn
     sn = models.CharField('SN号', max_length=64, db_index=True, default='', null=True)
+    # 主板制造商
     manufacturer = models.CharField(verbose_name='制造商', max_length=64, null=True, blank=True)
+    # 主板型号
     model = models.CharField('型号', max_length=64, null=True, blank=True)
 
     manage_ip = models.GenericIPAddressField('管理IP', null=True, blank=True)
