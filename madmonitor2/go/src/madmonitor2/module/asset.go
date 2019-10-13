@@ -10,6 +10,9 @@ import (
     "os"
     "os/exec"
     "strings"
+    "net/http"
+    "io/ioutil"
+    "time"
 )
 
 
@@ -236,10 +239,34 @@ func ScheduleGrabAndPostAssetData() {
         nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
         lastJsonStr := fmt.Sprintf(`{"cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
         fmt.Println(lastJsonStr)
+        jsonPost("http://www.baiduxx.com", []byte(lastJsonStr))
     }
     job()
     _, err := scheduler.Every(20).Minutes().Run(job)
     if err != nil {
         fmt.Printf("asset schedule err:%s", err)
     }
+}
+
+func jsonPost(url string, jsonStr []byte) {
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+    req.Header.Set("X-Custom-Header", "myvalue")
+    req.Header.Set("Content-Type", "application/json")
+    client := &http.Client{}
+    client.Timeout = time.Second * 15
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+    }
+    // panic 会报错，打断程序运行。 但是不会阻止defer运行，所以不管是不是内部抛panic，加个defer再说
+    defer func() {
+        if resp != nil {
+            resp.Body.Close()
+            fmt.Println("response Status:", resp.Status)
+            fmt.Println("response Headers:", resp.Header)
+            body, _ := ioutil.ReadAll(resp.Body)
+            fmt.Println("response Body:", string(body))
+        }
+    }()
+
 }
