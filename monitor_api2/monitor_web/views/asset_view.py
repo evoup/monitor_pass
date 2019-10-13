@@ -110,6 +110,7 @@ class AssetAgentInfo(APIView):
                                                                                         sn=memory['sn'],
                                                                                         speed=memory['speed'],
                                                                                         server_obj=server)
+                                # todo 新增也要写asset record
                     if _key == "main_board":
                         pass
                     if _key == "disk":
