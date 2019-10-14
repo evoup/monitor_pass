@@ -80,10 +80,12 @@ class AssetSerializer(serializers.ModelSerializer):
             n = models.NIC.objects.filter(server_obj=server)
             if n.count() > 0:
                 nic = n.get()
+
             return {'name': server.name, 'cpu_count': server.cpu_count, 'cpu_model': server.cpu_model,
                     'cpu_physical_count': server.cpu_physical_count, 'serial_number': server.sn,
                     'os_platform': server.os_platform, 'os_version': server.os_version, 'model': server.model,
-                    'manufacturer': server.manufacturer, 'nic_name': nic.name}
+                    'manufacturer': server.manufacturer, 'nic_name': nic.name if nic is not None else '',
+                    'nic_hwaddr': nic.hwaddr if nic is not None else '', 'nic_netmask': nic.netmask if nic is not None else ''}
         else:
             return {'name': None, 'cpu_count': None, 'cpu_model': None, 'cpu_physical_count': None,
                     'serial_number': None, 'os_platform': None, 'os_version': None, 'model': None, 'manufacturer': None,
