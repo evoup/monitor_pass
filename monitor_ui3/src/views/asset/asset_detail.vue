@@ -258,7 +258,7 @@ export default {
     return {
       form: {
         host_name: null,
-        serial_number: 'Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30',
+        serial_number: null,
         'ip': '172.12.11.3',
         'status': '上架',
         'update_time': '2019-07-17',
@@ -285,6 +285,7 @@ export default {
       read_asset({id: this.$route.query.asset_id}).then(response => {
         this.form.host_name = response.data.item.host_name
         this.form.idc = response.data.item.idc.name
+        this.form.serial_number = response.data.item.server.serial_number
         console.log(response)
       })
     }

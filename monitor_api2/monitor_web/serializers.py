@@ -64,12 +64,23 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class AssetSerializer(serializers.ModelSerializer):
+    server = serializers.SerializerMethodField()
     tag = TagSerializer(required=True)
     idc = IDCSerializer(required=True)
 
     class Meta:
         model = Asset
         fields = '__all__'
+
+    def get_server(self, obj):
+        s = models.Server.objects.filter(asset=obj)
+        if s.count() > 0:
+            server = s.get()
+            return {'name': server.name, 'cpu_count': server.cpu_count, 'cpu_model': server.cpu_model,
+                    'cpu_physical_count': server.cpu_physical_count, 'serial_number': server.sn}
+        else:
+            return {'name': None, 'cpu_count': None, 'cpu_model': None, 'cpu_physical_count': None,
+                    'serial_number': None}
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):
@@ -395,7 +406,8 @@ class OperationSerializer(serializers.ModelSerializer):
                 elif step.run_type == 2:
                     run_type = '执行命令'
                 try:
-                    messages = models.OperationMessage.objects.filter(operation_step=models.OperationStep.objects.get(id=step.id))
+                    messages = models.OperationMessage.objects.filter(
+                        operation_step=models.OperationStep.objects.get(id=step.id))
                     for message in messages.all():
                         users = models.RelationOperationMessageUser.objects.filter(operation_message=message)
                         if users.count() > 0:
@@ -409,7 +421,8 @@ class OperationSerializer(serializers.ModelSerializer):
                             elif message.send_type == 1:
                                 ms = "企业微信"
                             operation_items.append(
-                                {'id': message.id, 'name': '轮次(%s-%s)使用%s%s到用户%s' % (start_step, end_step, ms, run_type, u)})
+                                {'id': message.id,
+                                 'name': '轮次(%s-%s)使用%s%s到用户%s' % (start_step, end_step, ms, run_type, u)})
                 except models.OperationMessage.DoesNotExist:
                     pass
 
