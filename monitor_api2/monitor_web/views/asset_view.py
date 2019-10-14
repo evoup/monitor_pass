@@ -1,9 +1,12 @@
+import socket
+import struct
 import traceback
 
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -11,7 +14,6 @@ from monitor_web import models
 from monitor_web.serializers import AssetSerializer, AssetRecordSerializer
 from web.common import constant
 from web.common.paging import paging_request
-from rest_framework.permissions import AllowAny
 
 
 @permission_classes((IsAuthenticated,))
@@ -131,7 +133,9 @@ class AssetAgentInfo(APIView):
                     if _key == "nic":
                         for nic in request.data[_key]:
                             models.NIC.objects.get_or_create(name=nic['nic_name'], hwaddr=nic['mac_addr'],
-                                                             netmask=nic['netmask'], ipaddrs=nic['netmask'], up=True,
+                                                             netmask=cidr_to_netmask(nic['netmask']),
+                                                             ipaddrs=(nic['ip_addr']),
+                                                             up=nic['status'] == "UP",
                                                              server_obj=server)
         except:
             print(traceback.format_exc())
@@ -141,3 +145,9 @@ class AssetAgentInfo(APIView):
 def convert_to_gb(size_mb):
     arr = str(size_mb).split("MB")
     return int(str(arr[0]).strip()) / 1024
+
+
+def cidr_to_netmask(net_bits):
+    host_bits = 32 - int(net_bits)
+    netmask = socket.inet_ntoa(struct.pack('!I', (1 << 32) - (1 << host_bits)))
+    return netmask
