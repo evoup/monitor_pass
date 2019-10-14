@@ -15,3 +15,11 @@ export function asset_record_list(param) {
     params: param
   })
 }
+
+export function read_asset(param) {
+  return request({
+    url: '/asset/info',
+    method: 'get',
+    params: param
+  })
+}

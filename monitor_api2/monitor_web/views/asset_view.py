@@ -17,6 +17,24 @@ from web.common.paging import paging_request
 
 
 @permission_classes((IsAuthenticated,))
+class AssetInfo(APIView):
+    @method_decorator(permission_required('monitor_web.view_asset', raise_exception=True))
+    def get(self, request, pk=None, format=None):
+        """
+        获取资产详情
+        """
+        asset = models.Asset.objects.get(id=self.request.query_params['id'])
+        serializer = AssetSerializer(instance=asset, many=False)
+        ret = {
+            "code": constant.BACKEND_CODE_OK,
+            "data": {
+                "item": serializer.data
+            }
+        }
+        return JsonResponse(ret, safe=False)
+
+
+@permission_classes((IsAuthenticated,))
 class AssetList(APIView):
     @method_decorator(permission_required('monitor_web.view_asset', raise_exception=True))
     def get(self, request, pk=None, format=None):

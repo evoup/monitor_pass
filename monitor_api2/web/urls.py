@@ -84,6 +84,8 @@ urlpatterns = [
         url(r'^trigger/list$', trigger_view.TriggerList.as_view()),
         # 读取触发器
         url(r'^trigger/info$', trigger_view.TriggerInfo.as_view()),
+        # 资产详情
+        url(r'^asset/info', asset_view.AssetInfo.as_view()),
         # 资产列表
         url(r'^asset/list$', asset_view.AssetList.as_view()),
         # 资产变更记录列表
