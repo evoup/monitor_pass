@@ -216,47 +216,69 @@ func ScheduleGrabAndPostAssetData() {
         }
 
         // 采集网络接口
-        shell = "LANG=en_us_8859_1 && ifconfig -a"
+        shell = "LANG=en_us_8859_1 && ip addr"
+        //2: wlp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+        //link/ether 48:a4:72:59:66:9a brd ff:ff:ff:ff:ff:ff
+        //inet 192.168.31.45/24 brd 192.168.31.255 scope global dynamic wlp3s0
+        //valid_lft 32574sec preferred_lft 32574sec
+        //inet6 fe80::136f:f342:3125:4c88/64 scope link
+        //valid_lft forever preferred_lft forever
+
         err, out, _ = shellOut(shell)
         if err != nil {
-            fmt.Print(err)
+           fmt.Print(err)
         }
         splitItems = strings.Split(out, "\n")
+        fmt.Println(splitItems)
+        nextMacLine := false
         nextIpLine := false
-        var lastMacAddr string
+        var lastNicNameLine string
+        //var lastLinkLine string
+        var nicName string
+        var macAddr string
+        status := "DOWN"
         var nicArr []string
         for i := range splitItems {
-            line := splitItems[i]
-            if nextIpLine {
-                nextIpLine = false
-                nicName := strings.Split(lastMacAddr, " ")[0]
-                // 不好docker网络接口和虚拟网卡
-                if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
-                    continue
-                }
-                macAddr := strings.Trim(strings.Split(lastMacAddr, "HWaddr")[1], " ")
-                rawIpAddr := strings.Split(line, "inet addr:")
-                rawBcast := strings.Split(line, "Bcast:")
-                rawMask := strings.Split(line, "Mask:")
-
-                var ipAddr string
-                var network string
-                var netmask string
-                // fixme 这里没有ip，就算没有网卡？
-                if len(rawIpAddr) > 1 {
-                    ipAddr = strings.Split(rawIpAddr[1], " ")[0]
-                    network = strings.Split(rawBcast[1], " ")[0]
-                    netmask = strings.Split(rawMask[1], " ")[0]
-                    jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v"}`, nicName, macAddr, ipAddr, network, netmask)
-                    nicArr = append(nicArr, jsonStr)
-                }
-            }
-            if strings.Contains(line, "HWaddr") {
-                nextIpLine = true
-                lastMacAddr = line
-            }
+           line := splitItems[i]
+           if nextMacLine {
+               nicName = ""
+               nextMacLine = false
+               nicName = strings.Split(lastNicNameLine, " ")[1]
+               nicName = nicName[0:len(nicName)-1]
+               if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
+                   continue
+               }
+               fmt.Println(nicName)
+               if strings.Contains(lastNicNameLine, "state UP") {
+                   status = "UP"
+               } else {
+                   status = "DOWN"
+               }
+           }
+           if nextIpLine {
+               nextIpLine = false
+               //inet 192.168.31.45/24 brd 192.168.31.255 scope global dynamic wlp3s0
+               ipAndMask := strings.Split(strings.Trim(line, " "), " ")
+               split := strings.Split(ipAndMask[1], "/")
+               network := ipAndMask[3]
+               // nicName, macAddr, status, ip=>split[0], mask=>split[1]
+               jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v", "status": "%v"}`, nicName, macAddr, split[0], network, split[1], status)
+               nicArr = append(nicArr, jsonStr)
+           }
+           if strings.Contains(line, "mtu") {
+               lastNicNameLine = line
+               nextMacLine = true
+           }
+           if strings.Contains(line, "link/ether") {
+               //lastLinkLine = line
+               nextIpLine = true
+               macAddr = strings.Split(strings.Trim(line, " "), " ")[1]
+           } else {
+               continue
+           }
         }
-        nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
+
+        nicJsonStr:=""
         host, _ := inc.ConfObject.GetString("ServerName")
         lastJsonStr := fmt.Sprintf(`{"host":"%v", "base":%v, "cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`,
             host, baseJsonStr, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
