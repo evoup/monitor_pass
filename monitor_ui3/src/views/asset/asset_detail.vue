@@ -4,52 +4,52 @@
       <el-tab-pane label="基本信息" class="base-info">
         <el-row>
           <el-col>
-            主机名： {{ x.host_name }}
+            主机名： {{ form.host_name }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            序列号： {{ x.serial_number }}
+            序列号： {{ form.serial_number }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            IP： {{ x.ip }}
+            IP： {{ form.ip }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            状态： {{ x.status }}
+            状态： {{ form.status }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            更新时间： {{ x.update_time }}
+            更新时间： {{ form.update_time }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            机房： {{ x.idc }}
+            机房： {{ form.idc }}
           </el-col>
           <el-row>
             <el-col>
-              楼层： {{ x.floor }}
+              楼层： {{ form.floor }}
             </el-col>
           </el-row>
         </el-row>
         <el-row>
           <el-col>
-            机柜： {{ x.carinet }}
+            机柜： {{ form.carinet }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            柜上位置： {{ x.position }}
+            柜上位置： {{ form.position }}
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            业务线： {{ x.business_line }}
+            业务线： {{ form.business_line }}
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -247,17 +247,22 @@
 </template>
 
 <script>
+import { read_asset } from '../../api/asset'
+
 export default {
   name: 'AssetDetail',
+  created() {
+    this.fetchData()
+  },
   data() {
     return {
-      x: {
-        host_name: 'server1',
+      form: {
+        host_name: null,
         serial_number: 'Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30',
         'ip': '172.12.11.3',
         'status': '上架',
         'update_time': '2019-07-17',
-        'idc': '张江机房',
+        'idc': null,
         'carinet': '12s',
         'floor': '12f',
         'position': '5',
@@ -273,6 +278,15 @@ export default {
         content: '系统由变更为linux;系统版本由变更为CentOS release 6.6 (Final);主板SN号由asdfasdfasdfasdf变更为Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30;主板厂商由变更为Parallels Software International Inc.;主板型号由变更为Parallels Virtual Platform;CPU逻辑核数由None变更为24;CPU物理核数由None变更为2;CPU型号由变更为 Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz',
         timestamp: '2019-04-11'
       }]
+    }
+  },
+  methods: {
+    fetchData() {
+      read_asset({id: this.$route.query.asset_id}).then(response => {
+        this.form.host_name = response.data.item.host_name
+        this.form.idc = response.data.item.idc.name
+        console.log(response)
+      })
     }
   }
 }
