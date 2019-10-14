@@ -110,8 +110,8 @@
             <tr>
               <td>{{ form.nic_name }}</td>
               <td>{{ form.nic_hwaddr }}</td>
-              <td>10.211.55.4</td>
-              <td>255.255.255.0</td>
+              <td>{{ form.nic_ip }}</td>
+              <td>{{ form.nic_netmask }}</td>
               <td>是</td>
             </tr>
             <!-- 网卡信息结束 -->
@@ -272,7 +272,9 @@ export default {
         cpu_physical_count: null,
         cpu_model: null,
         nic_name: null,
-        nic_hwaddr: null
+        nic_hwaddr: null,
+        nic_ip: null,
+        nic_netmask: null
       },
       activities: [{
         content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
@@ -316,6 +318,8 @@ export default {
         this.form.cpu_model = response.data.item.server.cpu_model
         this.form.nic_name = response.data.item.server.nic_name
         this.form.nic_hwaddr = response.data.item.server.nic_hwaddr
+        this.form.nic_ip = response.data.item.server.nic_ip
+        this.form.nic_netmask = response.data.item.server.nic_netmask
       })
     }
   }
