@@ -260,7 +260,7 @@ export default {
         host_name: null,
         serial_number: null,
         'ip': '172.12.11.3',
-        'status': '上架',
+        status: null,
         'update_time': '2019-07-17',
         'idc': null,
         'carinet': '12s',
@@ -286,7 +286,18 @@ export default {
         this.form.host_name = response.data.item.host_name
         this.form.idc = response.data.item.idc.name
         this.form.serial_number = response.data.item.server.serial_number
-        console.log(response)
+        if (response.data.item.device_status_id ===1) {
+          this.form.status = '上架'
+        }
+        if (response.data.item.device_status_id ===2) {
+          this.form.status = '在线'
+        }
+        if (response.data.item.device_status_id ===3) {
+          this.form.status = '离线'
+        }
+        if (response.data.item.device_status_id ===4) {
+          this.form.status = '下架'
+        }
       })
     }
   }
