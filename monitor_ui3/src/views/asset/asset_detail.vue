@@ -65,35 +65,35 @@
             </tr>
             <tr>
               <td>操作系统</td>
-              <td colspan="4">Linux的</td>
+              <td colspan="4">{{ form.os_platform }}</td>
             </tr>
             <tr>
               <td>系统版本</td>
-              <td colspan="4">CentOS 6.6版（最终版）</td>
+              <td colspan="4">{{ form.os_version }}</td>
             </tr>
             <tr>
               <td>主板序列号</td>
-              <td colspan="4">Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30</td>
+              <td colspan="4">{{ form.serial_number }}</td>
             </tr>
             <tr>
               <td>主板型号</td>
-              <td colspan="4">Parallels虚拟平台</td>
+              <td colspan="4">{{ form.model }}</td>
             </tr>
             <tr>
               <td>主板厂商</td>
-              <td colspan="4">Parallels Software International Inc</td>
+              <td colspan="4">{{ form.manufacturer }}</td>
             </tr>
             <tr>
               <td>CPU逻辑核数</td>
-              <td colspan="4">24</td>
+              <td colspan="4">{{ form.cpu_count }}</td>
             </tr>
             <tr>
               <td>CPU物理核数</td>
-              <td colspan="4">2</td>
+              <td colspan="4">{{ form.cpu_count }}</td>
             </tr>
             <tr>
               <td>CPU型号</td>
-              <td colspan="4">英特尔（R）Xeon（R）CPU E5-2620 v2 @ 2.10GHz</td>
+              <td colspan="4">{{ form.cpu_model }}</td>
             </tr>
 
             <!-- 网卡信息开始 -->
@@ -108,7 +108,7 @@
               <td>UP</td>
             </tr>
             <tr>
-              <td>为eth0</td>
+              <td>{{ form.nic_name }}</td>
               <td>00：1c：42：a5：57：7a</td>
               <td>10.211.55.4</td>
               <td>255.255.255.0</td>
@@ -251,22 +251,27 @@ import { read_asset } from '../../api/asset'
 
 export default {
   name: 'AssetDetail',
-  created() {
-    this.fetchData()
-  },
   data() {
     return {
       form: {
         host_name: null,
         serial_number: null,
-        'ip': '172.12.11.3',
+        ip: '172.12.11.3',
         status: null,
-        'update_time': '2019-07-17',
-        'idc': null,
-        'carinet': '12s',
-        'floor': '12f',
-        'position': '5',
-        'business_line': '广告投放'
+        update_time: '2019-07-17',
+        idc: null,
+        carinet: '12s',
+        floor: '12f',
+        position: '5',
+        business_line: '广告投放',
+        os_platform: null,
+        os_version: null,
+        model: null,
+        manufacturer: null,
+        cpu_count: null,
+        cpu_physical_count: null,
+        cpu_model: null,
+        nic_name: null
       },
       activities: [{
         content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
@@ -280,24 +285,35 @@ export default {
       }]
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
     fetchData() {
-      read_asset({id: this.$route.query.asset_id}).then(response => {
+      read_asset({ id: this.$route.query.asset_id }).then(response => {
         this.form.host_name = response.data.item.host_name
         this.form.idc = response.data.item.idc.name
         this.form.serial_number = response.data.item.server.serial_number
-        if (response.data.item.device_status_id ===1) {
+        if (response.data.item.device_status_id === 1) {
           this.form.status = '上架'
         }
-        if (response.data.item.device_status_id ===2) {
+        if (response.data.item.device_status_id === 2) {
           this.form.status = '在线'
         }
-        if (response.data.item.device_status_id ===3) {
+        if (response.data.item.device_status_id === 3) {
           this.form.status = '离线'
         }
-        if (response.data.item.device_status_id ===4) {
+        if (response.data.item.device_status_id === 4) {
           this.form.status = '下架'
         }
+        this.form.os_platform = response.data.item.server.os_platform
+        this.form.os_version = response.data.item.server.os_version
+        this.form.model = response.data.item.server.model
+        this.form.manufacturer = response.data.item.server.manufacturer
+        this.form.cpu_count = response.data.item.server.cpu_count
+        this.form.cpu_physical_count = response.data.item.server.cpu_physical_count
+        this.form.cpu_model = response.data.item.server.cpu_model
+        this.form.nic_name = response.data.item.server.nic_name
       })
     }
   }
