@@ -1,4 +1,5 @@
 package module
+
 //package main
 
 import (
@@ -6,18 +7,15 @@ import (
     "bytes"
     "fmt"
     "github.com/carlescere/scheduler"
+    "io/ioutil"
+    "madmonitor2/inc"
     "madmonitor2/utils"
+    "net/http"
     "os"
     "os/exec"
     "strings"
-    "net/http"
-    "io/ioutil"
     "time"
-    "madmonitor2/inc"
 )
-
-
-
 
 func main() {
     ScheduleGrabAndPostAssetData()
@@ -31,6 +29,7 @@ func shellOut(command string) (error, string, string) {
     err := cmd.Run()
     return err, stdout.String(), stderr.String()
 }
+
 // 资产管理定时收集服务器信息的模块
 func ScheduleGrabAndPostAssetData() {
     job := func() {
@@ -73,7 +72,7 @@ func ScheduleGrabAndPostAssetData() {
             } else if key == "physical id" {
                 cpuPhysicalCount++
             } else if key == "model name" && cpuModelName == "" {
-                cpuModelName = kv[1]
+                cpuModelName = strings.Trim(kv[1], " ")
             }
         }
         cpuJsonStr := fmt.Sprintf(`{"cpu_count":"%v","cpu_physical": "%v", "cpu_model_name": "%v"}`, cpuCount, cpuPhysicalCount, cpuModelName)
@@ -132,8 +131,7 @@ func ScheduleGrabAndPostAssetData() {
         if err != nil {
             fmt.Print(err)
         }
-        memJsonStr := fmt.Sprintf("[%s]", strings.Join(memArr,","))
-
+        memJsonStr := fmt.Sprintf("[%s]", strings.Join(memArr, ","))
 
         // 采集主板
         shell = "sudo dmidecode -t1"
@@ -226,7 +224,7 @@ func ScheduleGrabAndPostAssetData() {
 
         err, out, _ = shellOut(shell)
         if err != nil {
-           fmt.Print(err)
+            fmt.Print(err)
         }
         splitItems = strings.Split(out, "\n")
         fmt.Println(splitItems)
@@ -239,46 +237,46 @@ func ScheduleGrabAndPostAssetData() {
         status := "DOWN"
         var nicArr []string
         for i := range splitItems {
-           line := splitItems[i]
-           if nextMacLine {
-               nicName = ""
-               nextMacLine = false
-               nicName = strings.Split(lastNicNameLine, " ")[1]
-               nicName = nicName[0:len(nicName)-1]
-               if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
-                   continue
-               }
-               fmt.Println(nicName)
-               if strings.Contains(lastNicNameLine, "state UP") {
-                   status = "UP"
-               } else {
-                   status = "DOWN"
-               }
-           }
-           if nextIpLine {
-               nextIpLine = false
-               //inet 192.168.31.45/24 brd 192.168.31.255 scope global dynamic wlp3s0
-               ipAndMask := strings.Split(strings.Trim(line, " "), " ")
-               split := strings.Split(ipAndMask[1], "/")
-               network := ipAndMask[3]
-               // nicName, macAddr, status, ip=>split[0], mask=>split[1]
-               jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v", "status": "%v"}`, nicName, macAddr, split[0], network, split[1], status)
-               nicArr = append(nicArr, jsonStr)
-           }
-           if strings.Contains(line, "mtu") {
-               lastNicNameLine = line
-               nextMacLine = true
-           }
-           if strings.Contains(line, "link/ether") {
-               //lastLinkLine = line
-               nextIpLine = true
-               macAddr = strings.Split(strings.Trim(line, " "), " ")[1]
-           } else {
-               continue
-           }
+            line := splitItems[i]
+            if nextMacLine {
+                nicName = ""
+                nextMacLine = false
+                nicName = strings.Split(lastNicNameLine, " ")[1]
+                nicName = nicName[0 : len(nicName)-1]
+                if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
+                    continue
+                }
+                fmt.Println(nicName)
+                if strings.Contains(lastNicNameLine, "state UP") {
+                    status = "UP"
+                } else {
+                    status = "DOWN"
+                }
+            }
+            if nextIpLine {
+                nextIpLine = false
+                //inet 192.168.31.45/24 brd 192.168.31.255 scope global dynamic wlp3s0
+                ipAndMask := strings.Split(strings.Trim(line, " "), " ")
+                split := strings.Split(ipAndMask[1], "/")
+                network := ipAndMask[3]
+                // nicName, macAddr, status, ip=>split[0], mask=>split[1]
+                jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v", "status": "%v"}`, nicName, macAddr, split[0], network, split[1], status)
+                nicArr = append(nicArr, jsonStr)
+            }
+            if strings.Contains(line, "mtu") {
+                lastNicNameLine = line
+                nextMacLine = true
+            }
+            if strings.Contains(line, "link/ether") {
+                //lastLinkLine = line
+                nextIpLine = true
+                macAddr = strings.Split(strings.Trim(line, " "), " ")[1]
+            } else {
+                continue
+            }
         }
 
-        nicJsonStr:=""
+        nicJsonStr := fmt.Sprintf("[%s]", strings.Join(nicArr,","))
         host, _ := inc.ConfObject.GetString("ServerName")
         lastJsonStr := fmt.Sprintf(`{"host":"%v", "base":%v, "cpu":%v, "mem":%v, "main_board":%v, "disk":%v, "nic":%v}`,
             host, baseJsonStr, cpuJsonStr, memJsonStr, mbJsonStr, diskJsonStr, nicJsonStr)
