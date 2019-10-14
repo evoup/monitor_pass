@@ -172,7 +172,7 @@ func ScheduleGrabAndPostAssetData() {
         //本脚本只针对ubuntu中使用sda，且只有一块硬盘的情况。
         //具体查看硬盘信息的命令，请根据实际情况，实际调整。
         //如果需要查看Raid信息，可以尝试MegaCli工具。
-        shell = "sudo hdparm -i /dev/sda | grep Model"
+        shell = "LANG=en_us_8859_1 && sudo hdparm -i /dev/sda | grep Model"
         err, out, _ = shellOut(shell)
         if err != nil {
             fmt.Print(err)
@@ -204,7 +204,7 @@ func ScheduleGrabAndPostAssetData() {
         diskJsonStr := "[]"
         var size string
         // todo 需要换成hdpram才能获取到序列号以及磁盘是SATA还是SAS，并且对于raid要用MegaCli
-        shell = "sudo fdisk -l /dev/sda | grep Disk|head -1"
+        shell = "LANG=en_us_8859_1 && sudo fdisk -l /dev/sda | grep Disk|head -1"
         err, out, _ = shellOut(shell)
         if err != nil {
             fmt.Println(err)
