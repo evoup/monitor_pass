@@ -227,11 +227,9 @@ func ScheduleGrabAndPostAssetData() {
             fmt.Print(err)
         }
         splitItems = strings.Split(out, "\n")
-        fmt.Println(splitItems)
         nextMacLine := false
         nextIpLine := false
         var lastNicNameLine string
-        //var lastLinkLine string
         var nicName string
         var macAddr string
         status := "DOWN"
@@ -246,7 +244,6 @@ func ScheduleGrabAndPostAssetData() {
                 if strings.HasPrefix(nicName, "br-") || strings.HasPrefix(nicName, "docker") || strings.HasPrefix(nicName, "veth") {
                     continue
                 }
-                fmt.Println(nicName)
                 if strings.Contains(lastNicNameLine, "state UP") {
                     status = "UP"
                 } else {
@@ -260,7 +257,12 @@ func ScheduleGrabAndPostAssetData() {
                 split := strings.Split(ipAndMask[1], "/")
                 network := ipAndMask[3]
                 // nicName, macAddr, status, ip=>split[0], mask=>split[1]
-                jsonStr := fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v", "status": "%v"}`, nicName, macAddr, split[0], network, split[1], status)
+                var jsonStr string
+                if len(split) < 2 {
+                    jsonStr = fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":null, "network":null, "netmask":null, "status": "%v"}`, nicName, macAddr, status)
+                } else {
+                    jsonStr = fmt.Sprintf(`{"nic_name":"%v", "mac_addr":"%v", "ip_addr":"%v", "network":"%v", "netmask":"%v", "status": "%v"}`, nicName, macAddr, split[0], network, split[1], status)
+                }
                 nicArr = append(nicArr, jsonStr)
             }
             if strings.Contains(line, "mtu") {
@@ -268,7 +270,6 @@ func ScheduleGrabAndPostAssetData() {
                 nextMacLine = true
             }
             if strings.Contains(line, "link/ether") {
-                //lastLinkLine = line
                 nextIpLine = true
                 macAddr = strings.Split(strings.Trim(line, " "), " ")[1]
             } else {
