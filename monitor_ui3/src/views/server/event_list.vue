@@ -139,8 +139,8 @@ export default {
         order: 'asc'
       },
       sortHelp: {
-        prop: '',
-        order: ''
+        prop: 'time',
+        order: 'descending'
       }
     }
   },
