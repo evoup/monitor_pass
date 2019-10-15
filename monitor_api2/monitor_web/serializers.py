@@ -77,10 +77,11 @@ class AssetSerializer(serializers.ModelSerializer):
         s = models.Server.objects.filter(asset=obj)
         if s.count() > 0:
             server = s.get()
-            nic = None
-            n = models.NIC.objects.filter(server_obj=server)
-            if n.count() > 0:
-                nic = n.get()
+            nics = []
+            nic = models.NIC.objects.filter(server_obj=server)
+            if nic.count() > 0:
+                for n in nic:
+                    nics.append({'name': n.name, 'hwaddr': n.hwaddr, 'ip': n.ipaddrs, 'netmask': n.netmask, 'up': n.up})
             disks = []
             ds = models.Disk.objects.filter(server_obj=server)
             if ds.count() > 0:
@@ -96,15 +97,9 @@ class AssetSerializer(serializers.ModelSerializer):
             return {'name': server.name, 'cpu_count': server.cpu_count, 'cpu_model': server.cpu_model,
                     'cpu_physical_count': server.cpu_physical_count, 'serial_number': server.sn,
                     'os_platform': server.os_platform, 'os_version': server.os_version, 'model': server.model,
-                    'manufacturer': server.manufacturer, 'nic_name': nic.name if nic is not None else '',
-                    'nic_hwaddr': nic.hwaddr if nic is not None else '',
-                    'nic_netmask': nic.netmask if nic is not None else '',
-                    'nic_ip': nic.ipaddrs if nic is not None else '', 'disks': disks if disks is not None else None,
-                    'memories': mems if mems is not None else None}
+                    'manufacturer': server.manufacturer, 'nics': nics, 'disks': disks, 'memories': mems}
         else:
-            return {'name': None, 'cpu_count': None, 'cpu_model': None, 'cpu_physical_count': None,
-                    'serial_number': None, 'os_platform': None, 'os_version': None, 'model': None, 'manufacturer': None,
-                    'nic_name': None, 'nic_netmask': None, 'nic_ip': None, 'disks': None, 'memories': None}
+            return None
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):
