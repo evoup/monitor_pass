@@ -127,42 +127,48 @@
               <td>接口类型</td>
               <td colspan="2">型号</td>
             </tr>
-            <tr>
-              <td>1</td>
-              <td>279.396</td>
-              <td>SAS</td>
-              <td colspan="2">希捷ST300MM0006 LS08S0K2B5AH</td>
+            <tr v-for="(item, index) in form.disks" :key="index">
+              <td>{{ item.slot }}</td>
+              <td>{{ item.size }}</td>
+              <td>{{ item.pd_type }}</td>
+              <td colspan="2">{{ item.model }}</td>
             </tr>
-            <tr>
-              <td>5</td>
-              <td>476.939</td>
-              <td>SATA</td>
-              <td colspan="2">S1AXNSAFB00549A三星SSD 840 PRO系列DXM06B0Q</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>476.939</td>
-              <td>SATA</td>
-              <td colspan="2">S1SZNSAFA01085L三星SSD 850 PRO 512GB EXM01B6Q</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>476.939</td>
-              <td>SATA</td>
-              <td colspan="2">S1AXNSAF912433K三星SSD 840 PRO系列DXM06B0Q</td>
-            </tr>
-            <tr>
-              <td>0</td>
-              <td>279.396</td>
-              <td>SAS</td>
-              <td colspan="2">希捷ST300MM0006 LS08S0K2B5NV</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>476.939</td>
-              <td>SATA</td>
-              <td colspan="2">S1AXNSAF303909M三星SSD 840 PRO系列DXM05B0Q</td>
-            </tr>
+            <!--<tr>-->
+            <!--<td>1</td>-->
+            <!--<td>279.396</td>-->
+            <!--<td>SAS</td>-->
+            <!--<td colspan="2">希捷ST300MM0006 LS08S0K2B5AH</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>5</td>-->
+            <!--<td>476.939</td>-->
+            <!--<td>SATA</td>-->
+            <!--<td colspan="2">S1AXNSAFB00549A三星SSD 840 PRO系列DXM06B0Q</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>2</td>-->
+            <!--<td>476.939</td>-->
+            <!--<td>SATA</td>-->
+            <!--<td colspan="2">S1SZNSAFA01085L三星SSD 850 PRO 512GB EXM01B6Q</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>3</td>-->
+            <!--<td>476.939</td>-->
+            <!--<td>SATA</td>-->
+            <!--<td colspan="2">S1AXNSAF912433K三星SSD 840 PRO系列DXM06B0Q</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>0</td>-->
+            <!--<td>279.396</td>-->
+            <!--<td>SAS</td>-->
+            <!--<td colspan="2">希捷ST300MM0006 LS08S0K2B5NV</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>4</td>-->
+            <!--<td>476.939</td>-->
+            <!--<td>SATA</td>-->
+            <!--<td colspan="2">S1AXNSAF303909M三星SSD 840 PRO系列DXM05B0Q</td>-->
+            <!--</tr>-->
             <!-- 硬盘信息结束 -->
             <!-- 内存信息开始 -->
             <tr>
@@ -274,7 +280,8 @@ export default {
         nic_name: null,
         nic_hwaddr: null,
         nic_ip: null,
-        nic_netmask: null
+        nic_netmask: null,
+        disks: []
       },
       activities: [{
         content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
@@ -320,6 +327,7 @@ export default {
         this.form.nic_hwaddr = response.data.item.server.nic_hwaddr
         this.form.nic_ip = response.data.item.server.nic_ip
         this.form.nic_netmask = response.data.item.server.nic_netmask
+        this.form.disks = response.data.item.server.disks
       })
     }
   }
