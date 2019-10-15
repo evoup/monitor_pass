@@ -107,12 +107,13 @@
               <td>掩码</td>
               <td colspan="2">UP</td>
             </tr>
-            <tr>
-              <td>{{ form.nic_name }}</td>
-              <td>{{ form.nic_hwaddr }}</td>
-              <td>{{ form.nic_ip }}</td>
-              <td>{{ form.nic_netmask }}</td>
-              <td colspan="2">是</td>
+            <tr v-for="(item, index) in form.nics" :key="'B'+ index">
+              <td>{{ item.name }}</td>
+              <td>{{ item.hwaddr }}</td>
+              <td>{{ item.ip }}</td>
+              <td>{{ item.netmask }}</td>
+              <td v-if="item.up==true" colspan="2">是</td>
+              <td v-if="item.up==false" colspan="2">否</td>
             </tr>
             <!-- 网卡信息结束 -->
             <!-- 硬盘信息开始 -->
@@ -288,10 +289,11 @@ export default {
         cpu_count: null,
         cpu_physical_count: null,
         cpu_model: null,
-        nic_name: null,
-        nic_hwaddr: null,
-        nic_ip: null,
-        nic_netmask: null,
+        // nic_name: null,
+        // nic_hwaddr: null,
+        // nic_ip: null,
+        // nic_netmask: null,
+        nics: [],
         disks: [],
         memories: []
       },
@@ -335,10 +337,11 @@ export default {
         this.form.cpu_count = response.data.item.server.cpu_count
         this.form.cpu_physical_count = response.data.item.server.cpu_physical_count
         this.form.cpu_model = response.data.item.server.cpu_model
-        this.form.nic_name = response.data.item.server.nic_name
-        this.form.nic_hwaddr = response.data.item.server.nic_hwaddr
-        this.form.nic_ip = response.data.item.server.nic_ip
-        this.form.nic_netmask = response.data.item.server.nic_netmask
+        this.form.nics = response.data.item.server.nics
+        // this.form.nic_name = response.data.item.server.nic_name
+        // this.form.nic_hwaddr = response.data.item.server.nic_hwaddr
+        // this.form.nic_ip = response.data.item.server.nic_ip
+        // this.form.nic_netmask = response.data.item.server.nic_netmask
         this.form.disks = response.data.item.server.disks
         this.form.memories = response.data.item.server.memories
       })
