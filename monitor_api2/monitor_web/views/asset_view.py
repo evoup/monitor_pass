@@ -150,9 +150,9 @@ class AssetAgentInfo(APIView):
                                                                                   server_obj=server)
                     if _key == "nic":
                         for nic in request.data[_key]:
-                            models.NIC.objects.get_or_create(name=nic['nic_name'], hwaddr=nic['mac_addr'],
-                                                             netmask=cidr_to_netmask(nic['netmask']),
-                                                             ipaddrs=(nic['ip_addr']),
+                            models.NIC.objects.get_or_create(name=nic['nic_name'], hwaddr="" if nic['mac_addr'] is None else nic['mac_addr'],
+                                                             netmask="" if nic['netmask'] is None else cidr_to_netmask(nic['netmask']),
+                                                             ipaddrs="" if nic['ip_addr'] is None else nic['ip_addr'],
                                                              up=nic['status'] == "UP",
                                                              server_obj=server)
         except:
