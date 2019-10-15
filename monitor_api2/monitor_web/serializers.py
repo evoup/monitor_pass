@@ -72,7 +72,8 @@ class AssetSerializer(serializers.ModelSerializer):
         model = Asset
         fields = '__all__'
 
-    def get_server(self, obj):
+    @staticmethod
+    def get_server(obj):
         s = models.Server.objects.filter(asset=obj)
         if s.count() > 0:
             server = s.get()
@@ -85,6 +86,12 @@ class AssetSerializer(serializers.ModelSerializer):
             if ds.count() > 0:
                 for d in ds:
                     disks.append({'slot': d.slot, 'model': d.model, 'size': d.capacity, 'pd_type': d.pd_type})
+            mems = []
+            mem = models.Memory.objects.filter(server_obj=server)
+            if mem.count() > 0:
+                for m in mem:
+                    mems.append({'slot': m.slot, 'size': m.capacity, 'model': m.model, 'serial_number': m.sn,
+                                 'manufacturer': m.manufacturer, 'speed': m.speed})
 
             return {'name': server.name, 'cpu_count': server.cpu_count, 'cpu_model': server.cpu_model,
                     'cpu_physical_count': server.cpu_physical_count, 'serial_number': server.sn,
@@ -92,11 +99,12 @@ class AssetSerializer(serializers.ModelSerializer):
                     'manufacturer': server.manufacturer, 'nic_name': nic.name if nic is not None else '',
                     'nic_hwaddr': nic.hwaddr if nic is not None else '',
                     'nic_netmask': nic.netmask if nic is not None else '',
-                    'nic_ip': nic.ipaddrs if nic is not None else '', 'disks': disks if disks is not None else None}
+                    'nic_ip': nic.ipaddrs if nic is not None else '', 'disks': disks if disks is not None else None,
+                    'memories': mems if mems is not None else None}
         else:
             return {'name': None, 'cpu_count': None, 'cpu_model': None, 'cpu_physical_count': None,
                     'serial_number': None, 'os_platform': None, 'os_version': None, 'model': None, 'manufacturer': None,
-                    'nic_name': None, 'nic_netmask': None, 'nic_ip': None, 'disk': None}
+                    'nic_name': None, 'nic_netmask': None, 'nic_ip': None, 'disks': None, 'memories': None}
 
 
 class AssetRecordSerializer(serializers.ModelSerializer):

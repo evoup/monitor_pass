@@ -54,70 +54,70 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="硬件信息">
-        <table class="guige-table">
+        <table class="guige-table" border="1">
           <tbody>
             <tr>
-              <th colspan="5" style="border-left:2px solid #0488cd;"><span class="padding-l-8">基础信息</span></th>
+              <th colspan="6" style="border-left:2px solid #0488cd;"><span class="padding-l-8">基础信息</span></th>
             </tr>
             <tr>
               <td>名称</td>
-              <td colspan="4">值</td>
+              <td colspan="5">值</td>
             </tr>
             <tr>
               <td>操作系统</td>
-              <td colspan="4">{{ form.os_platform }}</td>
+              <td colspan="5">{{ form.os_platform }}</td>
             </tr>
             <tr>
               <td>系统版本</td>
-              <td colspan="4">{{ form.os_version }}</td>
+              <td colspan="5">{{ form.os_version }}</td>
             </tr>
             <tr>
               <td>主板序列号</td>
-              <td colspan="4">{{ form.serial_number }}</td>
+              <td colspan="5">{{ form.serial_number }}</td>
             </tr>
             <tr>
               <td>主板型号</td>
-              <td colspan="4">{{ form.model }}</td>
+              <td colspan="5">{{ form.model }}</td>
             </tr>
             <tr>
               <td>主板厂商</td>
-              <td colspan="4">{{ form.manufacturer }}</td>
+              <td colspan="5">{{ form.manufacturer }}</td>
             </tr>
             <tr>
               <td>CPU逻辑核数</td>
-              <td colspan="4">{{ form.cpu_count }}</td>
+              <td colspan="5">{{ form.cpu_count }}</td>
             </tr>
             <tr>
               <td>CPU物理核数</td>
-              <td colspan="4">{{ form.cpu_count }}</td>
+              <td colspan="5">{{ form.cpu_count }}</td>
             </tr>
             <tr>
               <td>CPU型号</td>
-              <td colspan="4">{{ form.cpu_model }}</td>
+              <td colspan="5">{{ form.cpu_model }}</td>
             </tr>
 
             <!-- 网卡信息开始 -->
             <tr>
-              <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;"><span class="padding-l-8">网卡信息</span></th>
+              <th colspan="6" class="title f14" style="border-left:2px solid #0488cd;"><span class="padding-l-8">网卡信息</span></th>
             </tr>
             <tr>
               <td>名称</td>
               <td>MAC地址</td>
               <td>IP地址</td>
               <td>掩码</td>
-              <td>UP</td>
+              <td colspan="2">UP</td>
             </tr>
             <tr>
               <td>{{ form.nic_name }}</td>
               <td>{{ form.nic_hwaddr }}</td>
               <td>{{ form.nic_ip }}</td>
               <td>{{ form.nic_netmask }}</td>
-              <td>是</td>
+              <td colspan="2">是</td>
             </tr>
             <!-- 网卡信息结束 -->
             <!-- 硬盘信息开始 -->
             <tr>
-              <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;">
+              <th colspan="6" class="title f14" style="border-left:2px solid #0488cd;">
                 <span class="padding-l-8">硬盘信息</span>
               </th>
             </tr>
@@ -125,13 +125,13 @@
               <td>插槽</td>
               <td>容量</td>
               <td>接口类型</td>
-              <td colspan="2">型号</td>
+              <td colspan="3">型号</td>
             </tr>
-            <tr v-for="(item, index) in form.disks" :key="index">
+            <tr v-for="(item, index) in form.disks" :key="'A'+ index">
               <td>{{ item.slot }}</td>
-              <td>{{ item.size }}</td>
+              <td>{{ item.size }}G</td>
               <td>{{ item.pd_type }}</td>
-              <td colspan="2">{{ item.model }}</td>
+              <td colspan="3">{{ item.model }}</td>
             </tr>
             <!--<tr>-->
             <!--<td>1</td>-->
@@ -172,7 +172,7 @@
             <!-- 硬盘信息结束 -->
             <!-- 内存信息开始 -->
             <tr>
-              <th colspan="5" class="title f14" style="border-left:2px solid #0488cd;">
+              <th colspan="6" class="title f14" style="border-left:2px solid #0488cd;">
                 <span class="padding-l-8">内存信息</span>
               </th>
             </tr>
@@ -180,56 +180,67 @@
               <td>插槽</td>
               <td>容量</td>
               <td>频率</td>
-              <td colspan="2">型号</td>
+              <td>型号</td>
+              <td>制造商</td>
+              <td>sn</td>
             </tr>
-            <tr>
-              <td>DIMM＃2</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
+            <tr v-for="(item, index) in form.memories" :key="index">
+              <td>{{ item.slot }}</td>
+              <td>{{ item.size }}G</td>
+              <td>{{ item.speed }}</td>
+              <td>{{ item.model }}</td>
+              <td>{{ item.manufacturer }}</td>
+              <td>{{ item.serial_number }}</td>
+
             </tr>
-            <tr>
-              <td>DIMM＃5</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃7</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃3</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃6</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃4</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃0</td>
-              <td>1024.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
-            <tr>
-              <td>DIMM＃1</td>
-              <td>0.0</td>
-              <td>667 MHz</td>
-              <td colspan="2">DRAM</td>
-            </tr>
+            <!--<tr>-->
+            <!--<td>DIMM＃2</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃5</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃7</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃3</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃6</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃4</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃0</td>-->
+            <!--<td>1024.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>DIMM＃1</td>-->
+            <!--<td>0.0</td>-->
+            <!--<td>667 MHz</td>-->
+            <!--<td colspan="2">DRAM</td>-->
+            <!--</tr>-->
           <!-- 内存信息结束 -->
 
           </tbody>
@@ -281,7 +292,8 @@ export default {
         nic_hwaddr: null,
         nic_ip: null,
         nic_netmask: null,
-        disks: []
+        disks: [],
+        memories: []
       },
       activities: [{
         content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
@@ -328,6 +340,7 @@ export default {
         this.form.nic_ip = response.data.item.server.nic_ip
         this.form.nic_netmask = response.data.item.server.nic_netmask
         this.form.disks = response.data.item.server.disks
+        this.form.memories = response.data.item.server.memories
       })
     }
   }
