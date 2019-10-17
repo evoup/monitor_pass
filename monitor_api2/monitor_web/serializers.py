@@ -105,6 +105,7 @@ class AssetSerializer(serializers.ModelSerializer):
 class AssetRecordSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
+    create_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = AssetRecord
