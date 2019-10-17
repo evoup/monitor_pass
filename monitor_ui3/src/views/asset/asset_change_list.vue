@@ -7,6 +7,7 @@
       border
       tooltip-effect="dark"
       style="width: 100%;margin-top:10px"
+      @sort-change="sortChange"
     >
       <el-table-column prop="id" label="序号" type="index" width="80px" align="center" />
       <el-table-column
