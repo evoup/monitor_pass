@@ -28,7 +28,7 @@
         prop="creator"
         min-width="10%" >
         <template slot-scope="prop">
-          <span v-if="prop.row.creator === ''" type="success">自动采集</span>
+          <span v-if="prop.row.creator === null" type="success">自动采集</span>
         </template>
       </el-table-column>
       <el-table-column
