@@ -94,11 +94,11 @@ class AssetAgentInfo(APIView):
             "code": constant.BACKEND_CODE_OK
         }
         # TODO 数字签名认证
+        main_content = ""
         try:
             records = models.Server.objects.filter(name=request.data['host'])
             if records.count() == 1:
                 server = records.get()
-                main_content = ""
                 for _key in request.data:
                     if _key == "main_board":
                         # 取出原先的主板对比
@@ -173,6 +173,8 @@ class AssetAgentInfo(APIView):
                                                              server_obj=server)
         except:
             print(traceback.format_exc())
+        if main_content:
+            models.AssetRecord.objects.create(content=main_content)
         return JsonResponse(ret, safe=False)
 
 
