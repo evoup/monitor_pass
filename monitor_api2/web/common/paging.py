@@ -32,7 +32,7 @@ def paging_request(request, model, obj, filter=None):
     order_list, prop = getOrderList(request)
     # 获取所有数据
     if filter is None:
-        records = model.objects.all() if (prop == '' or getattr(model, prop, False)) else model.objects.order_by(*order_list)
+        records = model.objects.all() if (prop == '' or not getattr(model, prop, False)) else model.objects.order_by(*order_list)
     else:
         # https://stackoverflow.com/questions/2932648/how-do-i-use-a-string-as-a-keyword-argument
         if prop == '':
