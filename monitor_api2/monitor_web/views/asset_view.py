@@ -138,7 +138,7 @@ class AssetAgentInfo(APIView):
                         querySet = models.Memory.objects.filter(server_obj=server)
                         if querySet.count() == 0:
                             for memory in request.data[_key]:
-                                # TODO 取出原先的内存对比
+                                # 取出原先的内存对比
                                 # "mem": [{
                                 #     "capacity": "8192 MB",
                                 #     "slot": "DIMM_A",
@@ -147,30 +147,54 @@ class AssetAgentInfo(APIView):
                                 #     "manufacturer": "Kingston",
                                 #     "sn": "1F051A17"
                                 # }],
-                                (object, created) = models.Memory.objects.get_or_create(slot=memory['slot'],
-                                                                                        manufacturer=memory[
-                                                                                            'manufacturer'],
-                                                                                        model=memory['model'],
-                                                                                        capacity=convert_to_gb(
-                                                                                            memory['capacity']),
-                                                                                        sn=memory['sn'],
-                                                                                        speed=memory['speed'],
-                                                                                        server_obj=server)
+                                if models.Memory.objects.filter(
+                                        manufacturer=memory['manufacturer'], model=memory['model'],
+                                        capacity=convert_to_gb(memory['capacity']),
+                                        sn=memory['sn'], speed=memory['speed'],
+                                        server_obj=server).count():
+                                    (object, created) = models.Memory.objects.get_or_create(slot=memory['slot'],
+                                                                                            manufacturer=memory[
+                                                                                                'manufacturer'],
+                                                                                            model=memory['model'],
+                                                                                            capacity=convert_to_gb(
+                                                                                                memory['capacity']),
+                                                                                            sn=memory['sn'],
+                                                                                            speed=memory['speed'],
+                                                                                            server_obj=server)
+                                    mem_content = '[新增内存]插槽为:%s;容量为:%sG;速度为:%s;序列号为:%s;制造商为:%s;型号为:%s' % (
+                                        memory['slot'], memory['capacity'], memory['speed'], memory['sn'],
+                                        memory['manufacturer'], memory['model'])
+                                    models.AssetRecord.objects.create(content=mem_content)
                                 # todo 新增也要写asset record
                     if _key == "disk":
                         for disk in request.data[_key]:
                             # todo add sn
-                            (object, created) = models.Disk.objects.get_or_create(model=disk['model'],
-                                                                                  capacity=disk['size'],
-                                                                                  pd_type=disk['type'],
-                                                                                  server_obj=server)
+                            if models.Disk.objects.filter(model=disk['model'], capacity=disk['size'],
+                                                          pd_type=disk['type'], server_obj=server):
+                                (object, created) = models.Disk.objects.get_or_create(model=disk['model'],
+                                                                                      capacity=disk['size'],
+                                                                                      pd_type=disk['type'],
+                                                                                      server_obj=server)
+                                disk_content = '[新增硬盘]插槽为xx;容量为%sG;硬盘类型为%s;型号为%s' % (
+                                    disk['size'], disk['type'], disk['model'])
+                                models.AssetRecord.objects.create(content=disk_content)
                     if _key == "nic":
                         for nic in request.data[_key]:
-                            models.NIC.objects.get_or_create(name=nic['nic_name'], hwaddr="" if nic['mac_addr'] is None else nic['mac_addr'],
-                                                             netmask="" if nic['netmask'] is None else cidr_to_netmask(nic['netmask']),
-                                                             ipaddrs="" if nic['ip_addr'] is None else nic['ip_addr'],
-                                                             up=nic['status'] == "UP",
-                                                             server_obj=server)
+                            if models.NIC.objects.filter(name=nic['nic_name'],
+                                                         hwaddr="" if nic['mac_addr'] is None else nic['mac_addr'],
+                                                         server_obj=server):
+                                netmask = "" if nic['netmask'] is None else cidr_to_netmask(nic['netmask'])
+                                models.NIC.objects.get_or_create(name=nic['nic_name'],
+                                                                 hwaddr="" if nic['mac_addr'] is None else nic[
+                                                                     'mac_addr'],
+                                                                 netmask=netmask,
+                                                                 ipaddrs="" if nic['ip_addr'] is None else nic[
+                                                                     'ip_addr'],
+                                                                 up=nic['status'] == "UP",
+                                                                 server_obj=server)
+                                nic_content = '[新增网卡]%s:mac地址为%s;状态为%s;掩码为%s;IP地址为%s' % (
+                                    nic['nic_name'], nic['mac_addr'], nic['status'], netmask, nic['ip_addr'])
+                                models.AssetRecord.objects.create(content=nic_content)
         except:
             print(traceback.format_exc())
         if main_content:
