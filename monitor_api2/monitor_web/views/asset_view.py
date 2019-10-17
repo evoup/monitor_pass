@@ -98,10 +98,36 @@ class AssetAgentInfo(APIView):
             records = models.Server.objects.filter(name=request.data['host'])
             if records.count() == 1:
                 server = records.get()
+                main_content = ""
                 for _key in request.data:
+                    if _key == "main_board":
+                        # todo 取出原先的主板对比
+                        if not server.os_platform and request.data['base']['os']:
+                            main_content += '系统从无变更为%s;' % request.data['base']['os']
+                        if not server.os_version and request.data['base']['osv']:
+                            main_content += '系统版本从无变更为%s;' % request.data['base']['osv']
+                        if not server.sn and request.data['main_board']['sn']:
+                            main_content += '主板SN从无变更为%s;' % request.data['main_board']['sn']
+                        if not server.manufacturer and request.data['main_board']['manufacturer']:
+                            main_content += '主板厂商从无变更为%s;' % request.data['main_board']['manufacturer']
+                        if not server.model and request.data['main_board']['model']:
+                            main_content += '主板型号从无变更为%s;' % request.data['main_board']['model']
+                        models.Server.objects.filter(id=server.id).update(sn=request.data['main_board']['sn'],
+                                                                          manufacturer=request.data['main_board'][
+                                                                              'manufacturer'],
+                                                                          model=request.data['main_board'][
+                                                                              'model'],
+                                                                          os_platform=request.data['base']['os'],
+                                                                          os_version=request.data['base']['osv'])
                     # cpu
                     if _key == "cpu":
                         # TODO 取出原先的cpu对比
+                        if not server.cpu_count and request.data['cpu']['cpu_count']:
+                            main_content += 'CPU逻辑核数从无变更为%s;' % request.data['cpu']['cpu_count']
+                        if not server.cpu_physical_count and request.data['cpu']['cpu_physical']:
+                            main_content += 'CPU物理核数从无变更为%s;' % request.data['cpu']['cpu_physical']
+                        if not server.cpu_model and request.data['cpu']['cpu_model_name']:
+                            main_content += 'CPU型号从无变更为%s;' % request.data['cpu']['cpu_model_name']
                         models.Server.objects.filter(id=server.id).update(cpu_count=request.data['cpu']['cpu_count'],
                                                                           cpu_physical_count=request.data['cpu'][
                                                                               'cpu_physical'],
@@ -131,16 +157,6 @@ class AssetAgentInfo(APIView):
                                                                                         speed=memory['speed'],
                                                                                         server_obj=server)
                                 # todo 新增也要写asset record
-                    if _key == "main_board":
-                        # todo 取出原先的主板对比
-                        models.Server.objects.filter(id=server.id).update(sn=request.data['main_board']['sn'],
-                                                                          manufacturer=request.data['main_board'][
-                                                                              'manufacturer'],
-                                                                          model=request.data['main_board'][
-                                                                              'manufacturer'],
-                                                                          os_platform=request.data['base']['os'],
-                                                                          os_version=request.data['base']['osv'])
-                        pass
                     if _key == "disk":
                         for disk in request.data[_key]:
                             # todo add sn
