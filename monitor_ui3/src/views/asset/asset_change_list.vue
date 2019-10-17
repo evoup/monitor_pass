@@ -73,8 +73,8 @@ export default {
         order: 'asc'
       },
       sortHelp: {
-        prop: '',
-        order: ''
+        prop: 'create_at',
+        order: 'descending'
       },
       filters: {
         name: '',
