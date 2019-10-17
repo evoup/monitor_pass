@@ -118,17 +118,17 @@ class AssetRecordSerializer(serializers.ModelSerializer):
             return 0
 
     def get_name(self, obj):
-        a = models.Asset.objects.filter(id=obj.id).all()
-        if len(a):
+        a = obj.asset_obj
+        if a:
             # 服务器
-            if a[0].device_type_id == 1:
-                return a[0].server.name
+            if a.device_type_id == 1:
+                return a.server.name
             # 防火墙
-            elif a[0].device_type_id == 2:
-                return a[0].sn
+            elif a.device_type_id == 2:
+                return a.sn
             # 交换机
-            elif a[0].device_type_id == 3:
-                return a[0].sn
+            elif a.device_type_id == 3:
+                return a.sn
         else:
             return None
 
