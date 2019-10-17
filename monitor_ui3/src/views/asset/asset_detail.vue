@@ -265,7 +265,7 @@
 </template>
 
 <script>
-import { read_asset } from '../../api/asset'
+import { asset_record_list, read_asset } from '../../api/asset'
 
 export default {
   name: 'AssetDetail',
@@ -306,7 +306,16 @@ export default {
       }, {
         content: '系统由变更为linux;系统版本由变更为CentOS release 6.6 (Final);主板SN号由asdfasdfasdfasdf变更为Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30;主板厂商由变更为Parallels Software International Inc.;主板型号由变更为Parallels Virtual Platform;CPU逻辑核数由None变更为24;CPU物理核数由None变更为2;CPU型号由变更为 Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz',
         timestamp: '2019-04-11'
-      }]
+      }],
+      pageHelp: {
+        page: 1,
+        size: 99999,
+        order: 'asc'
+      },
+      sortHelp: {
+        prop: 'create_at',
+        order: 'decending'
+      }
     }
   },
   created() {
@@ -344,6 +353,12 @@ export default {
         // this.form.nic_netmask = response.data.item.server.nic_netmask
         this.form.disks = response.data.item.server.disks
         this.form.memories = response.data.item.server.memories
+        this.read_single_asset_record()
+      })
+    },
+    read_single_asset_record() {
+      asset_record_list(Object.assign(this.pageHelp, this.sortHelp, { asset_obj: this.$route.query.id })).then(response => {
+        this.form.activities = response.data.items
       })
     }
   }
