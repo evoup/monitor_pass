@@ -147,7 +147,7 @@ class AssetAgentInfo(APIView):
                                 #     "manufacturer": "Kingston",
                                 #     "sn": "1F051A17"
                                 # }],
-                                if models.Memory.objects.filter(
+                                if not models.Memory.objects.filter(
                                         manufacturer=memory['manufacturer'], model=memory['model'],
                                         capacity=convert_to_gb(memory['capacity']),
                                         sn=memory['sn'], speed=memory['speed'],
@@ -169,7 +169,7 @@ class AssetAgentInfo(APIView):
                     if _key == "disk":
                         for disk in request.data[_key]:
                             # todo add sn
-                            if models.Disk.objects.filter(model=disk['model'], capacity=disk['size'],
+                            if not models.Disk.objects.filter(model=disk['model'], capacity=disk['size'],
                                                           pd_type=disk['type'], server_obj=server):
                                 (object, created) = models.Disk.objects.get_or_create(model=disk['model'],
                                                                                       capacity=disk['size'],
@@ -180,7 +180,7 @@ class AssetAgentInfo(APIView):
                                 models.AssetRecord.objects.create(content=disk_content)
                     if _key == "nic":
                         for nic in request.data[_key]:
-                            if models.NIC.objects.filter(name=nic['nic_name'],
+                            if not models.NIC.objects.filter(name=nic['nic_name'],
                                                          hwaddr="" if nic['mac_addr'] is None else nic['mac_addr'],
                                                          server_obj=server):
                                 netmask = "" if nic['netmask'] is None else cidr_to_netmask(nic['netmask'])
