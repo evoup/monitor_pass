@@ -101,7 +101,7 @@ class AssetAgentInfo(APIView):
                 main_content = ""
                 for _key in request.data:
                     if _key == "main_board":
-                        # todo 取出原先的主板对比
+                        # 取出原先的主板对比
                         if not server.os_platform and request.data['base']['os']:
                             main_content += '系统从无变更为%s;' % request.data['base']['os']
                         if not server.os_version and request.data['base']['osv']:
@@ -121,7 +121,7 @@ class AssetAgentInfo(APIView):
                                                                           os_version=request.data['base']['osv'])
                     # cpu
                     if _key == "cpu":
-                        # TODO 取出原先的cpu对比
+                        # 取出原先的cpu对比
                         if not server.cpu_count and request.data['cpu']['cpu_count']:
                             main_content += 'CPU逻辑核数从无变更为%s;' % request.data['cpu']['cpu_count']
                         if not server.cpu_physical_count and request.data['cpu']['cpu_physical']:
