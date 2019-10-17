@@ -250,9 +250,9 @@
       <el-tab-pane label="变更记录">
         <el-timeline>
           <el-timeline-item
-            v-for="(activity, index) in activities"
+            v-for="(activity, index) in form.activities"
             :key="index"
-            :timestamp="activity.timestamp">
+            :timestamp="activity.create_at">
             <el-card>
               <h4>{{ activity.content }}</h4>
               <p>自动采集</p>
@@ -295,18 +295,18 @@ export default {
         // nic_netmask: null,
         nics: [],
         disks: [],
-        memories: []
+        memories: [],
+        activities: [{
+          content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
+          timestamp: '2019-04-15'
+        }, {
+          content: '[新增网卡]eth0:mac地址为00:1c:42:a5:57:7a;状态为True;掩码为255.255.255.0;IP地址为10.211.55.4',
+          timestamp: '2019-04-13'
+        }, {
+          content: '系统由变更为linux;系统版本由变更为CentOS release 6.6 (Final);主板SN号由asdfasdfasdfasdf变更为Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30;主板厂商由变更为Parallels Software International Inc.;主板型号由变更为Parallels Virtual Platform;CPU逻辑核数由None变更为24;CPU物理核数由None变更为2;CPU型号由变更为 Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz',
+          timestamp: '2019-04-11'
+        }]
       },
-      activities: [{
-        content: '[新增硬盘]插槽为4;容量为476.939;硬盘类型为SATA;型号为S1AXNSAF303909M Samsung SSD 840 PRO Series DXM05B0Q',
-        timestamp: '2019-04-15'
-      }, {
-        content: '[新增网卡]eth0:mac地址为00:1c:42:a5:57:7a;状态为True;掩码为255.255.255.0;IP地址为10.211.55.4',
-        timestamp: '2019-04-13'
-      }, {
-        content: '系统由变更为linux;系统版本由变更为CentOS release 6.6 (Final);主板SN号由asdfasdfasdfasdf变更为Parallels-1A 1B CB 3B 64 66 4B 13 86 B0 86 FF 7E 2B 20 30;主板厂商由变更为Parallels Software International Inc.;主板型号由变更为Parallels Virtual Platform;CPU逻辑核数由None变更为24;CPU物理核数由None变更为2;CPU型号由变更为 Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz',
-        timestamp: '2019-04-11'
-      }],
       pageHelp: {
         page: 1,
         size: 99999,
@@ -314,7 +314,7 @@ export default {
       },
       sortHelp: {
         prop: 'create_at',
-        order: 'decending'
+        order: 'descending'
       }
     }
   },

@@ -65,8 +65,9 @@ class AssetRecordList(APIView):
         """
         获取资产变更记录列表
         """
+        ft = {'asset_obj__in': request.query_params.get('asset_obj')} if 'asset_obj' in request.query_params else None
         from monitor_web import models
-        page_data, count = paging_request(request, models.AssetRecord, self)
+        page_data, count = paging_request(request, models.AssetRecord, self, filter=ft)
         # 对数据进行序列化
         serializer = AssetRecordSerializer(instance=page_data, many=True)
         ret = {
