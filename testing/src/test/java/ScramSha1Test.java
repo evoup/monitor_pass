@@ -43,10 +43,18 @@ public class ScramSha1Test {
                 System.out.println(nonce);
                 System.out.println(salt);
                 System.out.println(iterator);
+                // len is 10
                 int clientNonceLength = cNonce.length();
-
+                String remoteConce = nonce.substring(0, clientNonceLength);
+                if (!remoteConce.equals(cNonce)) {
+                    throw new Exception("auth fail");
+                }
+                String serverNonce = nonce.substring(clientNonceLength);
+                System.out.println(serverNonce);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
