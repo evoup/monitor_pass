@@ -1,12 +1,20 @@
+import exception.InvalidProtocolException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import utils.Base64;
+import utils.PasswordHash;
+import utils.ScramUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,10 +23,12 @@ public class ScramSha1Test {
     private static final Pattern SERVER_FIRST_MESSAGE = Pattern.compile("r=([^,]*),s=([^,]*),i=(.*)$");
 
     private static final String ClientHeader = "biws";
+    private static final String ClIENT_PASS = "pencil";
+    private static final int PBKDF2Length = 20;
 
     @SuppressWarnings("Duplicates")
     @Test
-    public void scramSha1Client() throws SocketException {
+    public void scramSha1Client() throws SocketException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, InvalidProtocolException {
         String cName = "host1";
         String cNonce = randStringBytesRmndr();
         System.out.println(cNonce);
@@ -50,6 +60,20 @@ public class ScramSha1Test {
                 String sNonce = nonce.substring(clientNonceLength);
                 String authMessage = authMessage(cName, cNonce, sNonce, ClientHeader, serverFirstMessageData);
                 byte[] decodeSalt = Base64.decode(salt);
+                byte[] saltedPassword = PasswordHash.pbkdf2(ClIENT_PASS.toCharArray(), decodeSalt, Integer.valueOf(iterator), PBKDF2Length);
+                System.out.println("saltedPassword:" + PasswordHash.toHex(saltedPassword));
+                byte[] clientKey = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Client Key");
+                System.out.println("clientKey0 hex:" + PasswordHash.toHex(clientKey));
+                byte[] storedKey = MessageDigest.getInstance("SHA-1").digest(clientKey);
+                System.out.println("storedKey hex:" + PasswordHash.toHex(storedKey));
+                byte[] clientSignature = ScramUtils.computeHmac(storedKey, "HmacSHA1", authMessage);
+                byte[] clientProof = new byte[1024];
+                for (int i=0; i<clientKey.length; i++) {
+                     int x = clientKey[i] ^ clientSignature[i];
+                    clientProof[i] = (byte) x;
+                }
+                String out = clientFinalMessageWithoutProof(ClientHeader, cNonce, sNonce);
+                System.out.println(out);
 
             }
         } catch (IOException e) {
