@@ -76,7 +76,8 @@ public class ScramSha1Test {
                 if (serverFinalMessage.contains(AUTH_FAIL_MESSAGE)) {
                     throw new InvalidProtocolException();
                 }
-                // 继续发数据就行了
+                // 认证基本完成，客户端想再认证一次就认证一次，这里是测试可略过，接下里继续发数据就行了
+                // 每隔15秒发送
             }
         } catch (IOException e) {
             e.printStackTrace();
