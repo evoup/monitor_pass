@@ -67,14 +67,23 @@ public class ScramSha1Test {
                 byte[] storedKey = MessageDigest.getInstance("SHA-1").digest(clientKey);
                 System.out.println("storedKey hex:" + PasswordHash.toHex(storedKey));
                 byte[] clientSignature = ScramUtils.computeHmac(storedKey, "HmacSHA1", authMessage);
-                byte[] clientProof = new byte[1024];
-                for (int i=0; i<clientKey.length; i++) {
-                     int x = clientKey[i] ^ clientSignature[i];
+                byte[] clientProof = new byte[20];
+                for (int i = 0; i < clientKey.length; i++) {
+                    int x = clientKey[i] ^ clientSignature[i];
                     clientProof[i] = (byte) x;
                 }
                 String out = clientFinalMessageWithoutProof(ClientHeader, cNonce, sNonce);
                 System.out.println(out);
+                out = String.format("%s,p=%s", out, Base64.encodeBytes(clientProof));
+                System.out.println(out);
+                // 发送客户端最后一次认证数据
+                sendMessage(out, socket);
 
+                // 读取服务端最后一次认证数据
+                String serverFinalMessage = receiveMessage(socket);
+                System.out.println(serverFinalMessage);
+
+                // 继续发数据就行了
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -120,7 +129,7 @@ public class ScramSha1Test {
         return String.format("n,,%s", clientFirstMessageBare(cName, cNonce));
     }
 
-//    func authMessage(cName string, cNonce []byte, sNonce []byte, cHeader string, serverFirstMessage string) (out []byte) {
+    //    func authMessage(cName string, cNonce []byte, sNonce []byte, cHeader string, serverFirstMessage string) (out []byte) {
 //        out = clientFirstMessageBare([]byte(cName), cNonce)
 //        out = append(out, ","...)
 //        out = append(out, serverFirstMessage...)
@@ -135,7 +144,7 @@ public class ScramSha1Test {
         return out;
     }
 
-//    func clientFinalMessageWithoutProof(cHeader, cNonce, sNonce []byte) (out []byte) {
+    //    func clientFinalMessageWithoutProof(cHeader, cNonce, sNonce []byte) (out []byte) {
 //        nonce := append(cNonce, sNonce...)
 //
 //        out = []byte("c=")
