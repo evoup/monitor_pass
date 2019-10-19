@@ -23,7 +23,7 @@ public class ScramSha1Test {
         System.out.println(clientFirstMessage);
         Socket socket = new Socket();
         socket.setSoTimeout(30000);
-        SocketAddress address = new InetSocketAddress("172.16.30.220", 8091);
+        SocketAddress address = new InetSocketAddress("data-collector", 8091);
         try {
             socket.connect(address);
             // 写数据,客户端第一次消息
