@@ -1,5 +1,6 @@
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
+import utils.Base64;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -12,6 +13,8 @@ import java.util.regex.Pattern;
 public class ScramSha1Test {
 
     private static final Pattern SERVER_FIRST_MESSAGE = Pattern.compile("r=([^,]*),s=([^,]*),i=(.*)$");
+
+    private static final String ClientHeader = "biws";
 
     @SuppressWarnings("Duplicates")
     @Test
@@ -44,6 +47,9 @@ public class ScramSha1Test {
                 System.out.println(salt);
                 System.out.println(iterator);
                 int clientNonceLength = cNonce.length();
+                String sNonce = nonce.substring(clientNonceLength);
+                String authMessage = authMessage(cName, cNonce, sNonce, ClientHeader, serverFirstMessageData);
+                byte[] decodeSalt = Base64.decode(salt);
 
             }
         } catch (IOException e) {
@@ -88,5 +94,34 @@ public class ScramSha1Test {
 
     private String clientFirstMessage(String cName, String cNonce) {
         return String.format("n,,%s", clientFirstMessageBare(cName, cNonce));
+    }
+
+//    func authMessage(cName string, cNonce []byte, sNonce []byte, cHeader string, serverFirstMessage string) (out []byte) {
+//        out = clientFirstMessageBare([]byte(cName), cNonce)
+//        out = append(out, ","...)
+//        out = append(out, serverFirstMessage...)
+//        out = append(out, ","...)
+//        out = append(out, clientFinalMessageWithoutProof([]byte(cHeader), cNonce, sNonce)...)
+//        return
+//    }
+    private String authMessage(String cName, String cNonce, String sNonce, String cHeader, String serverFirstMessage) {
+        String out = clientFirstMessageBare(cName, cNonce);
+        String clientFinalMessageWithoutProof = clientFinalMessageWithoutProof(cHeader, cNonce, sNonce);
+        out = String.format("%s,%s,%s", out, serverFirstMessage, clientFinalMessageWithoutProof);
+        return out;
+    }
+
+//    func clientFinalMessageWithoutProof(cHeader, cNonce, sNonce []byte) (out []byte) {
+//        nonce := append(cNonce, sNonce...)
+//
+//        out = []byte("c=")
+//        out = append(out, cHeader...)
+//        out = append(out, ",r="...)
+//        out = append(out, nonce...)
+//        return
+//    }
+    private String clientFinalMessageWithoutProof(String cHeader, String cNonce, String sNonce) {
+        String nonce = String.format("%s%s", cNonce, sNonce);
+        return String.format("c=%s,r=%s", cHeader, nonce);
     }
 }
