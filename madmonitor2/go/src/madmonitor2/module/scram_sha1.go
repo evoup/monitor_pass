@@ -111,7 +111,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 		snonce = nonce[0+cnonceLen:]
 		fmt.Println(snonce)
 		iter, _ := strconv.Atoi(iterator)
-		authMessage := authMessage(cname, cnonce, []byte(snonce), salt, ClientHeader, iter, string(serverFisrtMessage))
+		authMessage := authMessage(cname, cnonce, []byte(snonce), ClientHeader, string(serverFisrtMessage))
 		fmt.Println("salt64:" + salt)
 		salt = string(fromBase64([]byte(salt)))
 		//salt = "15a30400-a9f4-47d6-bcd6-89c47990eebf"
@@ -133,8 +133,7 @@ func scramSha1FinalMessage(serverFisrtMessage []byte, cname string, cnonce []byt
 	return
 }
 
-func authMessage(cName string, cNonce []byte, sNonce []byte, sSalt string, cHeader string, iterations int,
-	serverFirstMessage string) (out []byte) {
+func authMessage(cName string, cNonce []byte, sNonce []byte, cHeader string, serverFirstMessage string) (out []byte) {
 	out = clientFirstMessageBare([]byte(cName), cNonce)
 	out = append(out, ","...)
 	out = append(out, serverFirstMessage...)
@@ -202,7 +201,7 @@ func xor(a, b []byte) []byte {
 
 func isValidServer(cName string, cPass []byte, cNonce []byte, sNonce []byte, sSalt string, cHeader string, serverSignature []byte, iterations int,
 	serverFirstMessage string) bool {
-	authMessage := authMessage(cName, cNonce, sNonce, sSalt, cHeader, iterations, serverFirstMessage)
+	authMessage := authMessage(cName, cNonce, sNonce, cHeader, serverFirstMessage)
 	fmt.Println("--------------------------")
 	fmt.Println("salt:", sSalt)
 	saltedPassword := pbkdf2Sum(normalize(cPass), []byte(sSalt), iterations)
