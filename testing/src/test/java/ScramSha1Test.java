@@ -1,3 +1,4 @@
+import exception.InvalidProtocolException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import utils.Base64;
@@ -21,20 +22,20 @@ public class ScramSha1Test {
     private static final Pattern SERVER_FIRST_MESSAGE = Pattern.compile("r=([^,]*),s=([^,]*),i=(.*)$");
 
     private static final String ClientHeader = "biws";
-    private static final String ClIENT_PASS = "pen1cil";
+    private static final String ClIENT_PASS = "pencil";
     private static final int PBKDF2Length = 20;
 
     private static final String AUTH_FAIL_MESSAGE = "invalid protocol";
 
     @SuppressWarnings("Duplicates")
     @Test
-    public void scramSha1Client() throws SocketException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException {
+    public void scramSha1Client() throws SocketException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, InvalidProtocolException {
         String cName = "host1";
         String cNonce = randStringBytesRmndr();
         String clientFirstMessage = clientFirstMessage(cName, cNonce);
         Socket socket = new Socket();
         socket.setSoTimeout(3000000);
-        SocketAddress address = new InetSocketAddress("localhost", 8091);
+        SocketAddress address = new InetSocketAddress("data-collector", 8091);
         try {
             socket.connect(address);
             // 写数据,客户端第一次消息
@@ -72,7 +73,9 @@ public class ScramSha1Test {
                 String serverFinalMessage = receiveMessage(socket);
                 // v=3nL1m8VUvU6P1PQuimVgk02i5Ck=
                 System.out.println(serverFinalMessage);
-
+                if (serverFinalMessage.contains(AUTH_FAIL_MESSAGE)) {
+                    throw new InvalidProtocolException();
+                }
                 // 继续发数据就行了
             }
         } catch (IOException e) {
