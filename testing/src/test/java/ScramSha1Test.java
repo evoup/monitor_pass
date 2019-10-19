@@ -35,8 +35,8 @@ public class ScramSha1Test {
         String clientFirstMessage = clientFirstMessage(cName, cNonce);
         System.out.println(clientFirstMessage);
         Socket socket = new Socket();
-        socket.setSoTimeout(30000);
-        SocketAddress address = new InetSocketAddress("data-collector", 8091);
+        socket.setSoTimeout(3000000);
+        SocketAddress address = new InetSocketAddress("localhost", 8091);
         try {
             socket.connect(address);
             // 写数据,客户端第一次消息
@@ -81,6 +81,7 @@ public class ScramSha1Test {
 
                 // 读取服务端最后一次认证数据
                 String serverFinalMessage = receiveMessage(socket);
+                // v=3nL1m8VUvU6P1PQuimVgk02i5Ck=
                 System.out.println(serverFinalMessage);
 
                 // 继续发数据就行了
