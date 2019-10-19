@@ -1,4 +1,4 @@
-package jmeter;
+package jmeter.javarequest;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
@@ -28,6 +28,7 @@ public class JavaRequest extends AbstractJavaSamplerClient {
         super.setupTest(context);
     }
 
+    @Override
     public SampleResult runTest(JavaSamplerContext javaSamplerContext) {
         SampleResult result = new SampleResult();
 

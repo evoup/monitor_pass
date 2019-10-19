@@ -18,6 +18,11 @@
             <artifactId>ApacheJMeter_java</artifactId>
             <version>5.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.jmeter</groupId>
+            <artifactId>ApacheJMeter_tcp</artifactId>
+            <version>5.1.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
