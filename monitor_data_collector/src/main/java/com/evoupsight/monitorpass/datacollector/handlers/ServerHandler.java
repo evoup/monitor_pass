@@ -67,6 +67,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final Pattern
             CLIENT_GET_CONF_MESSAGE = Pattern.compile("getconf\\|(.*)");
 
+    private static final String AUTH_FAIL_MESSAGE = "invalid protocol";
+
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
@@ -88,8 +90,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             String clientName;
             Matcher m = CLIENT_FIRST_MESSAGE.matcher(msg.toString());
             if (!m.matches()) {
-                LOG.error("invalid protocol:" + msg.toString());
-                ctx.channel().write("invalid protocol\n");
+                LOG.error(AUTH_FAIL_MESSAGE + ":" + msg.toString());
+                ctx.channel().write(AUTH_FAIL_MESSAGE + "\n");
                 ctx.channel().close();
                 return;
             }
@@ -143,7 +145,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     UnsupportedEncodingException | InvalidKeyException e) {
                 LOG.error(e.getMessage(), e);
                 // 验证不通过
-                ctx.channel().write("invalid protocol\n");
+                ctx.channel().write(AUTH_FAIL_MESSAGE + "\n");
                 ctx.channel().attr(AttributeKey.valueOf("serverState")).set(ServerState.INITIAL);
                 return;
             }
