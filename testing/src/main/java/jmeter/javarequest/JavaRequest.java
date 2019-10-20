@@ -56,9 +56,10 @@ public class JavaRequest extends AbstractJavaSamplerClient {
             scramSha1SendData();
         } catch (SocketException | InvalidKeySpecException | InvalidKeyException | NoSuchAlgorithmException | InvalidProtocolException e) {
             e.printStackTrace();
-            result.setSuccessful(false);
+            success = false;
         } finally {
             result.sampleEnd();
+            result.setSuccessful(success);
         }
         return result;
     }
