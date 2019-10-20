@@ -30,6 +30,10 @@ public class JavaRequest extends AbstractJavaSamplerClient {
 
     @Override
     public SampleResult runTest(JavaSamplerContext javaSamplerContext) {
+        return getSampleResult();
+    }
+
+    private SampleResult getSampleResult() {
         SampleResult result = new SampleResult();
 
         boolean success = true;
