@@ -50,13 +50,13 @@ public class JavaRequest extends AbstractJavaSamplerClient {
     @Override
     public SampleResult runTest(JavaSamplerContext javaSamplerContext) {
         SampleResult result = new SampleResult();
-        boolean success = true;
+        boolean success = false;
         result.sampleStart();
         try {
             scramSha1SendData();
+            success = true;
         } catch (SocketException | InvalidKeySpecException | InvalidKeyException | NoSuchAlgorithmException | InvalidProtocolException e) {
             e.printStackTrace();
-            success = false;
         } finally {
             result.sampleEnd();
             result.setSuccessful(success);
