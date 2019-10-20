@@ -21,8 +21,8 @@ public class ScramSha1Test {
 
     private static final Pattern SERVER_FIRST_MESSAGE = Pattern.compile("r=([^,]*),s=([^,]*),i=(.*)$");
 
-    private static final String ClientHeader = "biws";
-    private static final String ClIENT_PASS = "pencil";
+    private static final String CLIENT_HEADER = "biws";
+    private static final String CLIENT_PASS = "pencil";
     private static final int PBKDF2Length = 20;
 
     private static final String AUTH_FAIL_MESSAGE = "invalid protocol";
@@ -53,9 +53,9 @@ public class ScramSha1Test {
                 String iterator = m.group(3);
                 int clientNonceLength = cNonce.length();
                 String sNonce = nonce.substring(clientNonceLength);
-                String authMessage = authMessage(cName, cNonce, sNonce, ClientHeader, serverFirstMessageData);
+                String authMessage = authMessage(cName, cNonce, sNonce, CLIENT_HEADER, serverFirstMessageData);
                 byte[] decodeSalt = Base64.decode(salt);
-                byte[] saltedPassword = PasswordHash.pbkdf2(ClIENT_PASS.toCharArray(), decodeSalt, Integer.valueOf(iterator), PBKDF2Length);
+                byte[] saltedPassword = PasswordHash.pbkdf2(CLIENT_PASS.toCharArray(), decodeSalt, Integer.valueOf(iterator), PBKDF2Length);
                 byte[] clientKey = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Client Key");
                 byte[] storedKey = MessageDigest.getInstance("SHA-1").digest(clientKey);
                 byte[] clientSignature = ScramUtils.computeHmac(storedKey, "HmacSHA1", authMessage);
@@ -64,7 +64,7 @@ public class ScramSha1Test {
                     int x = clientKey[i] ^ clientSignature[i];
                     clientProof[i] = (byte) x;
                 }
-                String out = clientFinalMessageWithoutProof(ClientHeader, cNonce, sNonce);
+                String out = clientFinalMessageWithoutProof(CLIENT_HEADER, cNonce, sNonce);
                 out = String.format("%s,p=%s", out, Base64.encodeBytes(clientProof));
                 // 发送客户端最后一次认证数据
                 sendMessage(out, socket);
