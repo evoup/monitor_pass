@@ -36,7 +36,7 @@ public class JavaRequest extends AbstractJavaSamplerClient {
         result.sampleStart();
         // Write your test code here.
         Socket socket = new Socket();
-        SocketAddress address = new InetSocketAddress("172.16.30.220", 8091);
+        SocketAddress address = new InetSocketAddress("data-collector", 8091);
         try {
             socket.connect(address);
         } catch (IOException e) {
