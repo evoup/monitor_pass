@@ -55,7 +55,7 @@ public class JavaRequest extends AbstractJavaSamplerClient {
         try {
             scramSha1SendData();
             success = true;
-        } catch (SocketException | InvalidKeySpecException | InvalidKeyException | NoSuchAlgorithmException | InvalidProtocolException e) {
+        } catch (SocketException | InvalidKeySpecException | InvalidKeyException | NoSuchAlgorithmException | InvalidProtocolException | InterruptedException e) {
             e.printStackTrace();
         } finally {
             result.sampleEnd();
@@ -64,8 +64,8 @@ public class JavaRequest extends AbstractJavaSamplerClient {
         return result;
     }
 
-    private void scramSha1SendData() throws SocketException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, InvalidProtocolException {
-        String cName = "host1";
+    private void scramSha1SendData() throws SocketException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, InvalidProtocolException, InterruptedException {
+        String cName = "testing_host";
         String cNonce = randStringBytesRmndr();
         String clientFirstMessage = clientFirstMessage(cName, cNonce);
         Socket socket = new Socket();
@@ -113,6 +113,13 @@ public class JavaRequest extends AbstractJavaSamplerClient {
                 }
                 // 认证基本完成，客户端想再认证一次就认证一次，这里是测试可略过，接下里继续发数据就行了
                 // 每隔15秒发送
+                long currentTs = System.currentTimeMillis();
+                while (System.currentTimeMillis() - currentTs < currentTs + 300000) {
+                    for (int i = 0; i < 100; i++) {
+                        sendMessage("test message, test message, test message\n", socket);
+                        Thread.sleep(5);
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
