@@ -114,7 +114,7 @@ public class JavaRequest extends AbstractJavaSamplerClient {
                 // 认证基本完成，客户端想再认证一次就认证一次，这里是测试可略过，接下里继续发数据就行了
                 // todo 每隔15秒发送
                 long currentTs = System.currentTimeMillis();
-                while (System.currentTimeMillis() - currentTs < currentTs + 10000) {
+                while (System.currentTimeMillis() < currentTs + 10000) {
                     for (int i = 0; i < 100; i++) {
                         sendMessage("test message, test message, test message\n", socket);
                         Thread.sleep(5);
