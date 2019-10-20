@@ -23,7 +23,8 @@ public class ScramSha1Test {
 
     private static final String CLIENT_HEADER = "biws";
     private static final String CLIENT_PASS = "pencil";
-    private static final int PBKDF2Length = 20;
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final int PBKDF2_LEN = 20;
 
     private static final String AUTH_FAIL_MESSAGE = "invalid protocol";
 
@@ -55,7 +56,7 @@ public class ScramSha1Test {
                 String sNonce = nonce.substring(clientNonceLength);
                 String authMessage = authMessage(cName, cNonce, sNonce, CLIENT_HEADER, serverFirstMessageData);
                 byte[] decodeSalt = Base64.decode(salt);
-                byte[] saltedPassword = PasswordHash.pbkdf2(CLIENT_PASS.toCharArray(), decodeSalt, Integer.valueOf(iterator), PBKDF2Length);
+                byte[] saltedPassword = PasswordHash.pbkdf2(CLIENT_PASS.toCharArray(), decodeSalt, Integer.valueOf(iterator), PBKDF2_LEN);
                 byte[] clientKey = ScramUtils.computeHmac(saltedPassword, "HmacSHA1", "Client Key");
                 byte[] storedKey = MessageDigest.getInstance("SHA-1").digest(clientKey);
                 byte[] clientSignature = ScramUtils.computeHmac(storedKey, "HmacSHA1", authMessage);
