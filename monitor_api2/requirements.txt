@@ -8,7 +8,7 @@ django-cors-headers==2.4.0
 django_extensions
 requests
 django-unixdatetimefield
-celery==4.2.0
+celery==5.2.2
 paramiko
 redis
 django-redis
